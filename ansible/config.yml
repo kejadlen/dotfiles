@@ -1,0 +1,28 @@
+- hosts: all
+  tasks:
+    - group_by: key={{ ansible_distribution }}
+- hosts: MacOSX
+  gather_facts: false
+  tasks:
+    - name: install dependencies
+      homebrew: name={{ item }} state=present
+      with_items:
+        - git
+        - stow
+- hosts: Debian
+  gather_facts: false
+  tasks:
+  - name: install dependencies
+    apt: pkg={{ item }} state=present
+    with_items:
+      - git
+      - stow
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: clone dotfiles
+      git: repo=https://github.com/kejadlen/dotfiles.git dest=~/.dotfiles
+    - name: stow files
+      command: stow --target={{ ansible_env.HOME }} --stow {{ ansible_env.HOME }}/.dotfiles/{{ item }}
+      with_items:
+        - git
