@@ -22,6 +22,7 @@
   vars:
     stow_packages:
     - git
+    - tmux
   tasks:
   - name: clone dotfiles
     git: repo=https://github.com/kejadlen/dotfiles.git dest=~/.dotfiles
