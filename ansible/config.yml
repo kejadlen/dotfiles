@@ -1,16 +1,11 @@
-- hosts: all
-  tasks:
-  - group_by: key={{ ansible_distribution }}
-- hosts: MacOSX
-  gather_facts: false
+- hosts: dev
   tasks:
   - name: install dependencies
     homebrew: name={{ item }} state=present
     with_items:
     - git
     - stow
-- hosts: Debian
-  gather_facts: false
+- hosts: prgmr
   tasks:
   - name: install dependencies
     apt: pkg={{ item }} state=present
@@ -18,17 +13,26 @@
     - git
     - stow
 - hosts: all
-  gather_facts: false
   vars:
     stow_packages:
     - git
     - tmux
+    ln_packages:
+      tmux/.tmux.conf: .tmux.conf
   tasks:
-  - name: clone dotfiles
+  - name: clone/update dotfiles
     git: repo=https://github.com/kejadlen/dotfiles.git dest=~/.dotfiles
+  - shell: hash stow 2> /dev/null
+    register: stow_exists
+    ignore_errors: True
   - name: stow files
     command: chdir={{ ansible_env.HOME }}/.dotfiles stow --target={{ ansible_env.HOME }} --stow {{ item }}
     with_items: stow_packages
+    when: stow_exists|success
+  - name: link files
+    command: ln -fs {{ ansible_env.HOME }}/.dotfiles/{{ item.key }} {{ ansible_env.HOME }}/{{ item.value }}
+    with_dict: ln_packages
+    when: stow_exists|failed
   - name: link unstowable files
     file: src={{ ansible_env.HOME }}/.dotfiles/{{ item.key }} dest={{ ansible_env.HOME}}/{{ item.value }} state=link
     with_dict:
