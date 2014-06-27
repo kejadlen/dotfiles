@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/Users/alpha/Dropbox/conf_dir/Alfred 2/Alfred.alfredpreferences/workflows'
+let g:netrw_dirhist_2='/Users/alpha/src/sm/sm-cap/.bundle/gems/chef-api-0.2.1'
+let g:netrw_dirhist_3='/Users/alpha/Dropbox/src/github.com/kejadlen/dotfiles/ansible'
+let g:netrw_dirhist_4='/Users/alpha/src/sm/sd-worker'
