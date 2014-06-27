@@ -1,0 +1,3 @@
+---
+- name: clone/update dotfiles
+  git: repo=https://github.com/kejadlen/dotfiles.git dest=~/.dotfiles

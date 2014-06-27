@@ -1,0 +1,32 @@
+---
+- hosts: all
+  vars:
+    dnsmasq_conf: "{{ ansible_env.HOME }}/Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist"
+  tasks:
+  - include: tasks/update_dotfiles.yml
+  - name: Install Dnsmasq
+    homebrew: name=dnsmasq state=present
+  - name: Stow dnsmasq.conf
+    command: chdir={{ ansible_env.HOME }}/.dotfiles stow --target=/usr/local/etc --stow dnsmasq
+  - name: Make local LaunchDaemons directory
+    file: path={{ ansible_env.HOME }}/Library/LaunchDaemons state=directory
+  - name: Delete old launchd config
+    sudo: True
+    file: path={{ dnsmasq_conf }} state=absent
+    # Copy the config instead of linking since it needs to be owned by root.
+  - name: Copy launchd config
+    sudo: True
+    command: cp /usr/local/opt/dnsmasq/homebrew.mxcl.dnsmasq.plist {{ dnsmasq_conf }}
+  - name: Fix launchd config permissions
+    sudo: True
+    file: path={{ ansible_env.HOME }}/Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist owner=root
+  - name: Load Dnsmasq
+    sudo: True
+    command: launchctl load {{ dnsmasq_conf }}
+  - name: Create /etc/resolver
+    sudo: True
+    file: path=/etc/resolver state=directory
+    # Link instead of stow since there's a stow bug with relative paths.
+  - name: Symlink /etc/resolver/dev
+    sudo: True
+    file: src={{ ansible_env.HOME }}/.dotfiles/resolver/dev dest=/etc/resolver/dev state=link
