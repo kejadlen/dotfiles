@@ -97,3 +97,6 @@
 [submodule "vim/.vim/bundle/vim-pandoc-syntax"]
 	path = vim/.vim/bundle/vim-pandoc-syntax
 	url = git@github.com:vim-pandoc/vim-pandoc-syntax.git
+[submodule "src/powerline"]
+	path = src/powerline
+	url = git@github.com:Lokaltog/powerline.git
