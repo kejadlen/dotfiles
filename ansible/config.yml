@@ -31,5 +31,5 @@
     with_dict:
       git/.gitignore: .gitignore
   - name: setup ssh keys
-    local_action: ruby ~/.dotfiles/setup_ssh_keys.rb
+    local_action: command ruby ~/.dotfiles/scripts/setup_ssh_keys.rb
     when: ansible_domain == "local"
