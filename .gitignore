@@ -1,2 +1,4 @@
 *.hosts
 *.private
+
+config/.config

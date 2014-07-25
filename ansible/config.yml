@@ -15,6 +15,7 @@
 - hosts: all
   vars:
     stow_packages:
+    - config
     - git
     - ruby
     - ssh
