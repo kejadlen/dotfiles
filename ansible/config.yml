@@ -17,6 +17,7 @@
     stow_packages:
     - git
     - ruby
+    - ssh
     - tmux
     - vim
   tasks:
@@ -29,3 +30,6 @@
     file: src={{ ansible_env.HOME }}/.dotfiles/{{ item.key }} dest={{ ansible_env.HOME}}/{{ item.value }} state=link
     with_dict:
       git/.gitignore: .gitignore
+  - name: setup ssh keys
+    local_action: ruby ~/.dotfiles/setup_ssh_keys.rb
+    when: ansible_domain == "local"
