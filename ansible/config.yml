@@ -1,17 +1,17 @@
-- hosts: dev
+- hosts: all
+  vars:
+    dependencies:
+    - git
+    - stow
   tasks:
-  - name: install dependencies
+  - name: install dependencies with homebrew
     homebrew: name={{ item }} state=present
-    with_items:
-    - git
-    - stow
-- hosts: prgmr
-  tasks:
-  - name: install dependencies
+    with_items: dependencies
+    when: ansible_distribution == "MacOSX"
+  - name: install dependencies with apt
     apt: pkg={{ item }} state=present
-    with_items:
-    - git
-    - stow
+    with_items: dependencies
+    when: ansible_distribution == "Debian"
 - hosts: all
   vars:
     stow_packages:

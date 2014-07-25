@@ -1,0 +1,10 @@
+- hosts: all
+  tasks:
+  - name: symlink dotfiles
+    file: src={{ ansible_env.HOME }}/Dropbox/dotfiles dest={{ ansible_env.HOME}}/.dotfiles state=link
+- include: config.yml
+- hosts: all
+  tasks:
+  - name: setup ssh keys
+    local_action: command ruby ~/.dotfiles/scripts/setup_ssh_keys.rb
+    when: ansible_domain == "local"
