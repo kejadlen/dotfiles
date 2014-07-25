@@ -13,9 +13,13 @@ end
 cd File.expand_path('~/.ssh')
 
 with_mount "~/Dropbox/sekritz.sparseimage" do |mountpoint|
-  Dir["#{mountpoint}/ssh keys/*"].each do |file|
-    cp file, File.basename(file)
-    puts `chmod go-r #{File.basename(file)}`
-    puts `ssh-add -K #{File.basename(file)}`
+  from = Dir["#{mountpoint}/ssh keys/*"]
+  to = from.map {|file| File.basename(file) }
+  from.zip(to).each do |from, to|
+    next if File.exist?(to)
+
+    cp from, to
+    puts `chmod go-r #{to}`
+    puts `ssh-add -K #{to}`
   end
 end
