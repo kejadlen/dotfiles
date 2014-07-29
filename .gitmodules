@@ -100,3 +100,6 @@
 [submodule "src/powerline"]
 	path = src/powerline
 	url = git@github.com:Lokaltog/powerline.git
+[submodule "src/prezto"]
+	path = src/prezto
+	url = git@github.com:kejadlen/prezto.git
