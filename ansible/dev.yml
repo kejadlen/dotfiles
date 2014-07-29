@@ -5,9 +5,6 @@
 - include: config.yml
 - hosts: all
   tasks:
-  - name: set zsh as default shell
-    user: name=alpha shell=zsh
-    sudo: yes
   - name: symlink zprezto
     file: src={{ ansible_env.HOME }}/Dropbox/dotfiles/src/prezto dest={{ ansible_env.HOME}}/.zprezto state=link
   - name: symlink zsh runcoms
