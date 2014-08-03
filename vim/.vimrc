@@ -252,12 +252,12 @@ if v:version >= 703
   set undodir=$HOME/.vim_undo//
 
   " omnicomplete
-  set completeopt=longest,menuone
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
-  inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
-        \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<cr>'
-  highlight Pmenu ctermbg=grey ctermfg=black
-  highlight PmenuSel ctermbg=magenta ctermfg=black
+  " set completeopt=longest,menuone
+  " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
+  " inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+  "       \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<cr>'
+  " highlight Pmenu ctermbg=grey ctermfg=black
+  " highlight PmenuSel ctermbg=magenta ctermfg=black
 
   " set colorcolumn=81
 endif
