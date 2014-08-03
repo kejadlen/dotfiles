@@ -80,11 +80,11 @@ set fileencoding=utf8
 set fileformat=unix
 
 " indent/tabbing
-set smartindent
-set expandtab
-set shiftwidth=2
+" set smartindent
+" set expandtab
+" set shiftwidth=2
 " set softtabstop=2
-set tabstop=2
+" set tabstop=2
 
 " reading
 set linebreak
