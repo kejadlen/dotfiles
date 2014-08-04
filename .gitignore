@@ -2,3 +2,4 @@
 *.private
 
 config/.config
+vim/.vim/.netrwhist
