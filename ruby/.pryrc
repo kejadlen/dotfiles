@@ -16,7 +16,7 @@ rescue LoadError
 end
 
 def pbcopy(str)
-  IO::popen(%w[pbcopy], 'w') {|io| io.write str }
+  IO.popen(%w[pbcopy], 'w') {|io| io.write str }
 end
 
 def tic; @_tic = Time.now; end
