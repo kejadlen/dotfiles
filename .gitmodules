@@ -97,3 +97,6 @@
 [submodule "vim/.vim/bundle/vim-sleuth"]
 	path = vim/.vim/bundle/vim-sleuth
 	url = git@github.com:tpope/vim-sleuth.git
+[submodule "vim/.vim/bundle/treetop.vim"]
+	path = vim/.vim/bundle/treetop.vim
+	url = git@github.com:nanki/treetop.vim.git
