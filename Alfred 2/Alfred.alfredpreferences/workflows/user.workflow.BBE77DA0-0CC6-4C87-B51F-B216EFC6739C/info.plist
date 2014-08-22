@@ -36,7 +36,7 @@
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>Airmail</string>
+	<string>Mailbox</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -71,7 +71,7 @@
 			<dict>
 				<key>paths</key>
 				<array>
-					<string>/Applications/Airmail.app</string>
+					<string>~/Applications/Mailbox (Beta).app</string>
 				</array>
 				<key>toggle</key>
 				<false/>
