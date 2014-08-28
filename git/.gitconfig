@@ -8,6 +8,7 @@
 	safecrlf = true
 	excludesfile = /Users/alpha/.gitignore
 	quotepath = false
+	pager = less -S
 [alias]
 	; hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 	co = checkout
@@ -50,3 +51,5 @@
 	algorithm = patience
 [fetch]
 	prune = true
+[tag]
+	sort = version:refname
