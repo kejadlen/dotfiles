@@ -23,28 +23,11 @@
 	<key>description</key>
 	<string></string>
 	<key>disabled</key>
-	<false/>
+	<true/>
 	<key>name</key>
 	<string>WeatherSpark</string>
 	<key>objects</key>
 	<array>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argumenttype</key>
-				<integer>2</integer>
-				<key>keyword</key>
-				<string>ws</string>
-				<key>text</key>
-				<string>WeatherSpark</string>
-				<key>withspace</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.keyword</string>
-			<key>uid</key>
-			<string>7B72027E-5733-4561-9B5A-1B7EC6ADB482</string>
-		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
@@ -61,6 +44,27 @@
 			<string>alfred.workflow.action.openurl</string>
 			<key>uid</key>
 			<string>BF10B845-468E-4A88-A9D9-8E4C589E387C</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>ws</string>
+				<key>text</key>
+				<string>WeatherSpark</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>7B72027E-5733-4561-9B5A-1B7EC6ADB482</string>
+			<key>version</key>
+			<integer>0</integer>
 		</dict>
 	</array>
 	<key>readme</key>

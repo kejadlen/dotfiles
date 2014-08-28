@@ -23,7 +23,7 @@
 	<key>description</key>
 	<string></string>
 	<key>disabled</key>
-	<false/>
+	<true/>
 	<key>name</key>
 	<string>Vimwiki</string>
 	<key>objects</key>
