@@ -17,7 +17,7 @@ the dotfiles repo into `~/Dropbox/dotfiles`, and creates a symlink to that repo
 in `~/.dotfiles`.
 
 ``` shell
-curl https://raw.github.com/kejadlen/dotfiles/master/bootstrap.sh | sh
+curl -L https://raw.github.com/kejadlen/dotfiles/master/bootstrap.sh | sh
 ```
 
 ``` shell
