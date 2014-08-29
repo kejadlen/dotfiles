@@ -21,6 +21,6 @@ curl -L https://raw.github.com/kejadlen/dotfiles/master/bootstrap.sh | sh
 ```
 
 ``` shell
-ansible-playbook personal.yml
-ansible-playbook config.yml
+/usr/local/bin/ansible-playbook personal.yml
+/usr/local/bin/ansible-playbook config.yml
 ```
