@@ -1,0 +1,5 @@
+---
+- homebrew: update_homebrew=yes
+- include: homebrew.yml
+- include: casks.yml
+- include: fonts.yml

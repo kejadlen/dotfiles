@@ -1,0 +1,4 @@
+---
+- homebrew_tap: tap=caskroom/fonts
+- homebrew_cask: name={{ item }}
+  with_items: fonts

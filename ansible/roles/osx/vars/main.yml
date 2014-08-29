@@ -1,0 +1,28 @@
+---
+formulae:
+  - chruby
+  - ctags
+  - fasd
+  - git
+  # - macvim # Needs install_options=override-system-vim
+  - ruby-install
+  - reattach-to-user-namespace
+  - the_silver_searcher
+  - tmux
+  - youtube-dl
+casks:
+  - adium
+  - dropbox
+  - google-chrome
+  - firefox
+  - moom
+  - plug
+  - qlmarkdown
+  - qlstephen
+  - quicklook-csv
+  - quicklook-json
+  - steam
+  - things
+  - ynab
+fonts:
+  - font-sauce-code-powerline
