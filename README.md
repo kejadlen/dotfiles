@@ -12,6 +12,15 @@ files that can be symlinked.
 
 # Usage
 
+On a fresh install, the bootstrap script installs Homebrew and Ansible, clones
+the dotfiles repo into `~/Dropbox/dotfiles`, and creates a symlink to that repo
+in `~/.dotfiles`.
+
 ``` shell
-ansible-playbook [playbook].yml
+curl https://raw.github.com/kejadlen/dotfiles/master/bootstrap.sh | sh
+```
+
+``` shell
+ansible-playbook personal.yml
+ansible-playbook config.yml
 ```
