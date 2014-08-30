@@ -17,6 +17,7 @@
     stow_packages:
     - config
     - git
+    - pentadactyl
     - ruby
     - ssh
     - tmux

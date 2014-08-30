@@ -1,0 +1,44 @@
+set runtimepath=/Users/alphach/.pentadactyl
+
+set! browser.download.manager.showWhenStarting=false
+set! browser.startup.homepage="about:blank"
+" set! browser.tabs.loadDivertedInBackground=true
+set! image.animation_mode="once"
+set! plugins.hide_infobar_for_missing_plugin=true
+set! ui.key.contentAccess=0
+set! signon.rememberSignons=false
+
+set activate-=diverted
+" set mapleader=','
+map , <Leader>
+" set hlfind
+set newtab=help
+
+nmap -builtin A <nop>
+nmap -builtin a <nop>
+nmap -builtin j 6j
+nmap -builtin k 6k
+nmap -builtin <bs> <nop>
+nmap -builtin <leader>/ <esc>:noh<cr>
+map -modes=base <C-c> <esc>
+
+" go to the second search field
+nmap -builtin gI 2gi
+
+set passkeys+=mail.google.com:'!#*+-./<C-Down><C-s><Enter>?INU[]acefjk lmnopqrsuvxyz',*a,*n,*r,*s,*t,*u,ga,gc,gd,gi,gl,gs,gt,yo
+set passkeys+=www.google.com/reader:ajkmsvANOPSTX?/,ga,gs,gF,gS
+" set passkeys+=google.com:jk
+set passkeys+=boston.com/bigpicture:jk
+
+set strictfocus-=*:moderate
+set strictfocus+=mail.google.com:laissez-faire
+set strictfocus+=plus.google.com:laissez-faire
+set strictfocus+=twitter.com:despotic
+set strictfocus+=facebook.com:despotic
+set strictfocus+=trello.com:despotic
+set strictfocus+=*:moderate
+
+command chrome -js io.run("open", ["-a", "Google Chrome", buffer.URL]);gBrowser.removeCurrentTab();
+command safari -js io.run("open", ["-a", "Safari", buffer.URL]);
+
+" vim: set ft=pentadactyl:
