@@ -1,0 +1,43 @@
+# reconfigure keys for incremental searching
+"\ep": history-search-backward
+"\en": history-search-forward
+# "\e[3~": delete-char
+
+# set up magic space
+$if Bash
+  Space: magic-space
+$endif
+
+# tab completion settings
+set match-hidden-files off
+set visible-stats on
+# set show-all-if-ambiguous on
+# set wildmode=longest:list
+set completion-ignore-case on
+set completion-map-case on
+set completion-prefix-display-length 2
+
+# vi editing mode
+# set editing-mode vi
+# set keymap vi
+# set keymap vi-insert
+# Control-a: beginning-of-line
+# Control-b: backward-char
+# Control-d: delete-char
+# Control-e: end-of-line
+# Control-f: forward-char
+# Control-k: kill-line
+# Control-n: next-history
+# Control-p: previous-history
+# set keymap emacs-ctlx
+# v: vi-editing-mode
+# Control-v: "\C-xv\e"
+
+# unicode
+set meta-flag on
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# delete key
+# "\e[3~": delete-char
