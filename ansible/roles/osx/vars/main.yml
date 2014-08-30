@@ -10,6 +10,7 @@ formulae:
   - the_silver_searcher
   - tmux
   - youtube-dl
+  - zsh
 casks:
   - adium
   - dropbox
