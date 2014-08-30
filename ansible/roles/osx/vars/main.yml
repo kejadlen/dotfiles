@@ -13,10 +13,15 @@ formulae:
   - zsh
 casks:
   - adium
+  - alfred
+  - black-ink
   - dropbox
   - google-chrome
+  - fantastical
   - firefox
+  - f-lux
   - moom
+  - onepassword
   - plug
   - qlmarkdown
   - qlstephen
@@ -24,6 +29,7 @@ casks:
   - quicklook-json
   - steam
   - things
+  - vlc
   - ynab
 fonts:
   - font-sauce-code-powerline
