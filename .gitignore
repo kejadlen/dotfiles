@@ -2,4 +2,5 @@
 *.private
 
 config/.config
+pentadactyl/.pentadactyl/info
 vim/.vim/.netrwhist
