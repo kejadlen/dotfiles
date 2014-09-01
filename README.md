@@ -21,5 +21,6 @@ curl -L https://raw.github.com/kejadlen/dotfiles/master/bootstrap.sh | sh
 ```
 
 ``` shell
-cd ~/.dotfiles/ansible && /usr/local/bin/ansible-playbook main.yml --inventory=hosts --ask-sudo-pass
+cd ~/.dotfiles/ansible && /usr/local/bin/ansible-playbook main.yml --ask-sudo-pass
+rm -f ~/*.retry
 ```
