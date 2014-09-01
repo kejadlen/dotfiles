@@ -1,4 +1,4 @@
 ---
-- homebrew_tap: tap=caskroom/fonts
-- homebrew_cask: name={{ item }}
+- homebrew_tap: tap=caskroom/fonts state=present
+- homebrew_cask: name={{ item }} state=installed
   with_items: fonts

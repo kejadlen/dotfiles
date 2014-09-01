@@ -1,5 +1,5 @@
 ---
-- homebrew: name={{ item }}
+- homebrew: name={{ item }} state=present
   with_items: formulae
-- homebrew: name=macvim install_options=override-system-vim
+- homebrew: name=macvim install_options=override-system-vim state=present
 - command: brew linkapps

@@ -1,7 +1,7 @@
 ---
-- homebrew: name=stow
+- homebrew: name=stow state=present
   # when: ansible_distribution == "MacOSX"
-# - apt: pkg=stow
+# - apt: pkg=stow state=present
   # when: ansible_distribution == "Debian"
 - command: >
     chdir={{ ansible_env.HOME }}/.dotfiles

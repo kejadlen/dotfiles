@@ -1,5 +1,5 @@
 ---
 # - homebrew: name=caskroom/cask/brew-cask state=upgraded
 - command: brew install caskroom/cask/brew-cask
-- homebrew_cask: name={{ item }}
+- homebrew_cask: name={{ item }} state=installed
   with_items: casks

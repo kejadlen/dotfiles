@@ -1,5 +1,5 @@
 ---
-- homebrew: name=zsh
+- homebrew: name=zsh state=present
 - file:
     src: "{{ ansible_env.HOME }}/.dotfiles/src/prezto"
     dest: "{{ ansible_env.HOME}}/.zprezto"
