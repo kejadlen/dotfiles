@@ -1,6 +1,6 @@
 ---
 - homebrew: name=stow
-- git: repo=https://github.com/kejadlen/dotfiles.git dest=~/.dotfiles force=no
+# - git: repo=https://github.com/kejadlen/dotfiles.git dest=~/.dotfiles force=no
 - command: >
     chdir={{ ansible_env.HOME }}/.dotfiles
     stow --stow --target={{ ansible_env.HOME }} {{ item }}

@@ -1,5 +1,0 @@
-- hosts: test
-  sudo: True
-  tasks:
-  - name: apt-get update
-    apt: update_cache=yes
