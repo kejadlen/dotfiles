@@ -1,0 +1,13 @@
+---
+- homebrew: name=zsh
+- file:
+    src: "{{ ansible_env.HOME }}/.dotfiles/src/prezto"
+    dest: "{{ ansible_env.HOME}}/.zprezto"
+    state: link
+- file:
+    src: "{{ ansible_env.HOME }}/.zprezto/runcoms/{{ item }}"
+    dest: "{{ ansible_env.HOME}}/.{{ item }}"
+    state: link
+  with_lines: ls ~/.zprezto/runcoms | grep -v README.md
+- command: chsh -s zsh alpha
+  sudo: True
