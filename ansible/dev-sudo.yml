@@ -1,6 +1,0 @@
-- hosts: all
-  sudo: yes
-  tasks:
-  - name: set zsh as default shell
-    # user: name=alpha shell=zsh
-    command: chsh -s zsh alpha
