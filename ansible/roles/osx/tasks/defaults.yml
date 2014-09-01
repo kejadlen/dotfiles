@@ -3,3 +3,8 @@
   sudo: True
 - command: defaults write {{ item }}
   with_items: defaults
+- command: killall {{ item }}
+  with_items:
+    - Finder
+    - Dock
+    - SystemUIServer
