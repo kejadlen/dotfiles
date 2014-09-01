@@ -6,8 +6,8 @@
     stow --stow --target={{ ansible_env.HOME }} {{ item }}
   with_items: stow
 - file:
-    src: {{ ansible_env.HOME }}/.dotfiles/{{ item.key }}
-    dest: {{ ansible_env.HOME}}/{{ item.value }}
+    src: "{{ ansible_env.HOME }}/.dotfiles/{{ item.key }}"
+    dest: "{{ ansible_env.HOME}}/{{ item.value }}"
     state: link
   with_dict: ln
 - local_action: command ruby setup_ssh_keys.rb
