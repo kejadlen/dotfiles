@@ -8,3 +8,4 @@
     - Finder
     - Dock
     - SystemUIServer
+- command: open ~/.dotfiles/Alpha.terminal
