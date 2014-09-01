@@ -1,5 +1,8 @@
 ---
 - homebrew: name=stow
+  # when: ansible_distribution == "MacOSX"
+# - apt: pkg=stow
+  # when: ansible_distribution == "Debian"
 - command: >
     chdir={{ ansible_env.HOME }}/.dotfiles
     stow --stow --target={{ ansible_env.HOME }} {{ item }}
@@ -10,3 +13,4 @@
     state: link
   with_dict: ln
 - local_action: command ruby scripts/setup_ssh_keys.rb
+  # when: ansible_domain == "local"
