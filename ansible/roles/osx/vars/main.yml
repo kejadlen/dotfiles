@@ -29,6 +29,7 @@ casks:
   - quicklook-json
   - steam
   - things
+  - transmission
   - vlc
   - ynab
 fonts:
