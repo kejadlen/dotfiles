@@ -9,5 +9,5 @@
     dest: "{{ ansible_env.HOME}}/.{{ item }}"
     state: link
   with_lines: ls ~/.zprezto/runcoms | grep -v README.md
-- command: chsh -s zsh alpha
+- command: chsh -s zsh {{ ansible_env.USER }}
   sudo: True
