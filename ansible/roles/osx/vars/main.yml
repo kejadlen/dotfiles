@@ -33,3 +33,36 @@ casks:
   - ynab
 fonts:
   - font-sauce-code-powerline
+defaults:
+  - -g NSDisableAutomaticTermination -bool true # Don't quit idle applications
+
+  - NSGlobalDomain AppleFontSmoothing -int 2 # subpixel rendering on non-Apple LCDs
+  - NSGlobalDomain AppleKeyboardUIMode -int 3 # full keyboard access
+  - NSGlobalDomain KeyRepeat -int 0 # max the keyboard repeat rate
+  - NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false # disable resume
+  - NSGlobalDomain WebKitDeveloperExtras -bool true # add debug menu in web views
+
+  - com.apple.Safari IncludeInternalDebugMenu -bool true # enable Debug menu in Safari
+  - com.apple.dashboard mcx-disabled -bool true # disable dashboard
+  - com.apple.desktopservices DSDontWriteNetworkStores true # don't write .DS_Store to network volumes
+  - com.apple.dock autohide -bool true # automatically hide and show the dock
+  # - com.apple.dock itunes-notifications -bool true
+  - com.apple.dock mineffect -string scale # minimize windows using the scale effect
+  - com.apple.dock no-glass -bool true # 2D dock
+  - com.apple.dock orientation -string left
+  - com.apple.dock pinning -string start # don't center the dock
+  - com.apple.dock showhidden -bool true # translucent icons for hidden apps
+  - com.apple.dock wvous-bl-corner -int 10 # set the bottom left hot corner to sleep the display
+  - com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
+  - com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 1
+  - com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
+  - com.apple.dt.Xcode DVTTextAutoSuggestCompletionsDelay 0.1 # Xcode autocomplete delay
+  - com.apple.finder FXEnableExtensionChangeWarning -bool false # don't ask when changing file extension
+  - com.apple.finder QLEnableTextSelection -bool true # enable text selection in QuickLook
+  - com.apple.finder _FXShowPosixPathInTitle -bool true # show full path in Finder
+  - com.apple.gamed Disabled -bool true
+  - com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" "@F" # remap cmd+f to find in iTunes
+  - com.apple.iTunes invertStoreLinks -bool true
+  - com.apple.screencapture disable-shadow -bool true # no window shadows when capturing windows
+  - com.apple.screencapture location ~/Downloads
+  - com.apple.terminal StringEncodings -array 4 # UTF-8 in Terminal

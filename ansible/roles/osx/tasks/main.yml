@@ -3,5 +3,6 @@
 - include: homebrew.yml
 - include: casks.yml
 - include: fonts.yml
+- include: defaults.yml
 - file: path=~/Library/KeyBindings state=directory
 - copy: src=DefaultKeyBinding.dict dest=~/Library/KeyBindings/DefaultKeyBinding.dict

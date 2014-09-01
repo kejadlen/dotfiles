@@ -1,0 +1,5 @@
+---
+- command: defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
+  sudo: True
+- command: defaults write {{ item }}
+  with_items: defaults
