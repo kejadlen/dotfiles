@@ -1,0 +1,10 @@
+stow:
+  - config
+  - git
+  - pentadactyl
+  - ruby
+  - ssh
+  - tmux
+  - vim
+ln:
+  git/.gitignore: .gitignore
