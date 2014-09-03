@@ -1,0 +1,23 @@
+---
+casks:
+  - adium
+  - alfred
+  - bittorrent-sync
+  - black-ink
+  - dropbox
+  - google-chrome
+  - fantastical
+  - firefox
+  - flux
+  - moom
+  - onepassword
+  - plug
+  - qlmarkdown
+  - qlstephen
+  - quicklook-csv
+  - quicklook-json
+  - steam
+  - things
+  - transmission
+  - vlc
+  - ynab

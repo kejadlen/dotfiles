@@ -1,6 +1,6 @@
 ---
 - homebrew: update_homebrew=yes
-- include: homebrew.yml
+- include: formulae.yml
 - include: casks.yml
 - include: fonts.yml
 - include: defaults.yml

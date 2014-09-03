@@ -1,4 +1,5 @@
 ---
+- include_vars: fonts.yml
 - homebrew_tap: tap=caskroom/fonts state=present
 - homebrew_cask: name={{ item }} state=installed
   with_items: fonts
