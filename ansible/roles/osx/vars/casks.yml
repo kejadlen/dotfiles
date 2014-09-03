@@ -5,7 +5,7 @@ casks:
   - bittorrent-sync
   - black-ink
   - dropbox
-  - fantastical
+  # - fantastical
   - firefox
   - flux
   - google-chrome
