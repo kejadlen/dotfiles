@@ -1,5 +1,5 @@
 ---
-defaults:
+osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - -g NSDisableAutomaticTermination -bool true # Don't quit idle applications
 
   - NSGlobalDomain AppleFontSmoothing -int 2 # subpixel rendering on non-Apple LCDs
