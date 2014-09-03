@@ -1,4 +1,5 @@
 ---
 # - git: repo=https://github.com/kejadlen/dotfiles.git dest=~/.dotfiles force=no
 - include: dotfiles.yml
+- include: powerline.yml
 - include: prezto.yml
