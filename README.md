@@ -14,6 +14,7 @@ and the Command Line Tools.
 ``` shell
 sudo xcode-select --install
 open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'
+sudo xcodebuild -license
 ```
 
 Then run the bootstrapping script. This installs Homebrew and Ansible, clones
