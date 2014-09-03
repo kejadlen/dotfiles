@@ -17,9 +17,8 @@ open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'
 sudo xcodebuild -license
 ```
 
-Then run the bootstrapping script. This installs Homebrew and Ansible, clones
-the dotfiles repo into `~/Dropbox/dotfiles`, and creates a symlink to that repo
-in `~/.dotfiles`.
+Then run the bootstrapping script. This installs Homebrew and Ansible, and
+clones the dotfiles repo into `~/.dotfiles`.
 
 ``` shell
 curl -L https://raw.github.com/kejadlen/dotfiles/master/bootstrap.sh | sh
@@ -30,4 +29,10 @@ Now ansible can be run to set up mostly everything.
 ``` shell
 cd ~/.dotfiles/ansible && ansible-playbook main.yml --ask-sudo-pass
 rm -f ~/*.retry
+```
+
+# Post-Ansible
+
+``` shell
+ln -sF ~/Dropbox/dotfiles ~/.dotfiles
 ```
