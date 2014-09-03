@@ -5,10 +5,11 @@ casks:
   - bittorrent-sync
   - black-ink
   - dropbox
-  - google-chrome
   - fantastical
   - firefox
   - flux
+  - google-chrome
+  - handbrake
   - moom
   - onepassword
   - plug
