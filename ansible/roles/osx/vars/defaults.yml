@@ -5,6 +5,7 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - NSGlobalDomain AppleFontSmoothing -int 2 # subpixel rendering on non-Apple LCDs
   - NSGlobalDomain AppleKeyboardUIMode -int 3 # full keyboard access
   - NSGlobalDomain KeyRepeat -int 0 # max the keyboard repeat rate
+  - NSGlobalDomain NSTableViewDefaultSizeMode -int 1 # set sidebar item size to small
   - NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false # disable resume
   - NSGlobalDomain WebKitDeveloperExtras -bool true # add debug menu in web views
 
@@ -13,10 +14,12 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - com.apple.desktopservices DSDontWriteNetworkStores true # don't write .DS_Store to network volumes
   - com.apple.dock autohide -bool true # automatically hide and show the dock
   - com.apple.dock mineffect -string scale # minimize windows using the scale effect
+  - com.apple.dock mru-spaces -bool false # don't rearrange spaces
   - com.apple.dock no-glass -bool true # 2D dock
   - com.apple.dock orientation -string left
   - com.apple.dock pinning -string start # don't center the dock
   - com.apple.dock showhidden -bool true # translucent icons for hidden apps
+  - com.apple.dock workspaces-auto-swoosh -bool false # don't switch to a space w/open windows for the app
   - com.apple.dock wvous-bl-corner -int 10 # set the bottom left hot corner to sleep the display
   - com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
   - com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 1
@@ -24,6 +27,8 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - com.apple.dt.Xcode DVTTextAutoSuggestCompletionsDelay 0.1 # Xcode autocomplete delay
   - com.apple.finder FXEnableExtensionChangeWarning -bool false # don't ask when changing file extension
   - com.apple.finder QLEnableTextSelection -bool true # enable text selection in QuickLook
+  # - com.apple.finder ShowPathbar -bool true # show path bar
+  # - com.apple.finder ShowStatusBar -bool true # show status bar
   - com.apple.finder _FXShowPosixPathInTitle -bool true # show full path in Finder
   # - com.apple.gamed Disabled -bool true
   # - com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" "@F" # remap cmd+f to find in iTunes
