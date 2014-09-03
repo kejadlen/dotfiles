@@ -4,7 +4,7 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
 
   - NSGlobalDomain AppleFontSmoothing -int 2 # subpixel rendering on non-Apple LCDs
   - NSGlobalDomain AppleKeyboardUIMode -int 3 # full keyboard access
-  - NSGlobalDomain KeyRepeat -int 0 # max the keyboard repeat rate
+  - NSGlobalDomain KeyRepeat -int 2 # keyboard repeat rate
   - NSGlobalDomain NSTableViewDefaultSizeMode -int 1 # set sidebar item size to small
   - NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false # disable resume
   - NSGlobalDomain WebKitDeveloperExtras -bool true # add debug menu in web views
