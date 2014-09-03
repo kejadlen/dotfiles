@@ -4,6 +4,10 @@
   sudo: True
 - command: defaults write {{ item }}
   with_items: osx_defaults
+- shell: ioreg -n IOHIDKeyboard -r | grep -e VendorID\" -e ProductID | ruby -e 'print ARGF.read.scan(/\d+/).join(?-)'
+  register: keyboard_id
+- debug: var=keyboard_id.stdout
+- command: defaults -currentHost write -g com.apple.keyboard.modifiermapping.{{ keyboard_id.stdout }}-0 -array-add '<dict><key>HIDKeyboardModifierMappingDst</key><integer>2</integer><key>HIDKeyboardModifierMappingSrc</key><integer>0</integer></dict>'
 - command: killall {{ item }}
   with_items:
     - Finder
