@@ -57,10 +57,10 @@
 	url = git://github.com/majutsushi/tagbar.git
 [submodule ".vim/bundle/ctrlp"]
 	path = vim/.vim/bundle/ctrlp
-	url = git@github.com:kien/ctrlp.vim.git
+	url = git://github.com/kien/ctrlp.vim.git
 [submodule ".vim/bundle/sensible"]
 	path = vim/.vim/bundle/sensible
-	url = git@github.com:tpope/vim-sensible.git
+	url = git://github.com/tpope/vim-sensible.git
 [submodule ".vim/bundle/base16"]
 	path = vim/.vim/bundle/base16
 	url = git://github.com/chriskempson/base16-vim.git
@@ -69,7 +69,7 @@
 	url = https://github.com/kana/vim-fakeclip
 [submodule "vim/.vim/bundle/ag"]
 	path = vim/.vim/bundle/ag
-	url = git@github.com:rking/ag.vim.git
+	url = git://github.com/rking/ag.vim.git
 [submodule "vim/.vim/bundle/vimwiki"]
 	path = vim/.vim/bundle/vimwiki
 	url = https://github.com/vimwiki/vimwiki
@@ -81,19 +81,19 @@
 	url = https://github.com/fatih/vim-go.git
 [submodule "vim/.vim/bundle/vim-tmux-navigator"]
 	path = vim/.vim/bundle/vim-tmux-navigator
-	url = git@github.com:christoomey/vim-tmux-navigator.git
+	url = git://github.com/christoomey/vim-tmux-navigator.git
 [submodule "vim/.vim/bundle/vim-pandoc-syntax"]
 	path = vim/.vim/bundle/vim-pandoc-syntax
-	url = git@github.com:vim-pandoc/vim-pandoc-syntax.git
+	url = git://github.com/vim-pandoc/vim-pandoc-syntax.git
 [submodule "src/powerline"]
 	path = src/powerline
-	url = git@github.com:Lokaltog/powerline.git
+	url = git://github.com/Lokaltog/powerline.git
 [submodule "src/prezto"]
 	path = src/prezto
-	url = git@github.com:kejadlen/prezto.git
+	url = git://github.com/kejadlen/prezto.git
 [submodule "vim/.vim/bundle/vim-endwise"]
 	path = vim/.vim/bundle/vim-endwise
-	url = git@github.com:tpope/vim-endwise.git
+	url = git://github.com/tpope/vim-endwise.git
 [submodule "vim/.vim/bundle/vim-sleuth"]
 	path = vim/.vim/bundle/vim-sleuth
-	url = git@github.com:tpope/vim-sleuth.git
+	url = git://github.com/tpope/vim-sleuth.git
