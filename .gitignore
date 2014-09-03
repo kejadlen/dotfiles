@@ -2,5 +2,6 @@
 
 config/.config
 pentadactyl/.pentadactyl/info
+ssh/.ssh/*_rsa
 ssh/.ssh/known_hosts
 vim/.vim/.netrwhist
