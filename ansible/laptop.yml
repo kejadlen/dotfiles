@@ -1,0 +1,10 @@
+tasks:
+  - file: path={{ ansible_env.HOME }}/Applications state=directory
+  # - homebrew: name=caskroom/cask/brew-cask state=upgraded
+  - command: brew install caskroom/cask/brew-cask
+  - homebrew_cask: name={{ item }} state=installed
+    with_items:
+      - slimbatterymonitor
+  - shell: ioreg -n IOHIDKeyboard -r | grep -e VendorID\" -e ProductID | ruby -e 'print ARGF.read.scan(/\d+/).join(?-)'
+    register: keyboard_id
+  - command: defaults -currentHost write -g com.apple.keyboard.modifiermapping.{{ keyboard_id.stdout }}-0 -array-add '<dict><key>HIDKeyboardModifierMappingDst</key><integer>2</integer><key>HIDKeyboardModifierMappingSrc</key><integer>0</integer></dict>'

@@ -17,7 +17,6 @@ casks:
   - qlstephen
   - quicklook-csv
   - quicklook-json
-  # - slimbatterymonitor
   - steam
   - things
   - transmission
