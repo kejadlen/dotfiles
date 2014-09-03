@@ -1,5 +1,6 @@
 *.private
 
+Alfred\ 2/Alfred.alfredpreferences/preferences/local
 config/.config
 pentadactyl/.pentadactyl/info
 ssh/.ssh/*_rsa
