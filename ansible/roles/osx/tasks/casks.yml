@@ -1,5 +1,6 @@
 ---
 - include_vars: casks.yml
+- file: path={{ ansible_env.HOME }}/Applications state=directory
 # - homebrew: name=caskroom/cask/brew-cask state=upgraded
 - command: brew install caskroom/cask/brew-cask
 - homebrew_cask: name={{ item }} state=installed
