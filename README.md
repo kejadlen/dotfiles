@@ -9,13 +9,27 @@ files that can be symlinked.
 # Usage
 
 ``` shell
+# Install Homebrew
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+
+# Install ansible
+brew install ansible
+
+# Clone dotfiles
+git clone --recursive https://github.com/kejadlen/dotfiles.git ~/.dotfiles
+
+# Xcode
 sudo xcode-select --install
 open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'
 sudo xcodebuild -license
-curl -L https://raw.github.com/kejadlen/dotfiles/master/bootstrap.sh | sh
+
+# Run Ansible
 cd ~/.dotfiles/ansible && ansible-playbook main.yml --ask-sudo-pass
 rm -f ~/*.retry
-ln -sF ~/Dropbox/dotfiles ~/.dotfiles
+
+# Post-Dropbox syncing
+rm -rf ~/.dotfiles
+ln -s ~/Dropbox/dotfiles ~/.dotfiles
 ```
 
 # Caveats
