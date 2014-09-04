@@ -97,3 +97,6 @@
 [submodule "vim/.vim/bundle/vim-sleuth"]
 	path = vim/.vim/bundle/vim-sleuth
 	url = git://github.com/tpope/vim-sleuth.git
+[submodule "vim/.vim/bundle/vim-startify"]
+	path = vim/.vim/bundle/vim-startify
+	url = https://github.com/mhinz/vim-startify.git
