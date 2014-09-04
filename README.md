@@ -43,5 +43,7 @@ There are some things that aren't automated.
 
 ## Preferences
 
+Various application preferences - Dropbox, 1Password, etc.
+
 - Tap to click
 - Drag lock
