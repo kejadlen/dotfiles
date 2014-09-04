@@ -8,31 +8,26 @@ files that can be symlinked.
 
 # Usage
 
-First, install [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
-and the Command Line Tools.
-
 ``` shell
 sudo xcode-select --install
 open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'
 sudo xcodebuild -license
-```
-
-Then run the bootstrapping script. This installs Homebrew and Ansible, and
-clones the dotfiles repo into `~/.dotfiles`.
-
-``` shell
 curl -L https://raw.github.com/kejadlen/dotfiles/master/bootstrap.sh | sh
-```
-
-Now ansible can be run to set up mostly everything.
-
-``` shell
 cd ~/.dotfiles/ansible && ansible-playbook main.yml --ask-sudo-pass
 rm -f ~/*.retry
-```
-
-# Post-Ansible
-
-``` shell
 ln -sF ~/Dropbox/dotfiles ~/.dotfiles
 ```
+
+# Caveats
+
+There are some things that aren't automated.
+
+## App Store
+
+- Fantastical
+- Reeder
+
+## Preferences
+
+- Tap to click
+- Drag lock
