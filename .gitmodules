@@ -100,3 +100,6 @@
 [submodule "vim/.vim/bundle/vim-startify"]
 	path = vim/.vim/bundle/vim-startify
 	url = https://github.com/mhinz/vim-startify.git
+[submodule "src/tmux-colors-solarized"]
+	path = src/tmux-colors-solarized
+	url = https://github.com/seebi/tmux-colors-solarized.git
