@@ -19,7 +19,7 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - com.apple.dock orientation -string left
   - com.apple.dock pinning -string start # don't center the dock
   - com.apple.dock showhidden -bool true # translucent icons for hidden apps
-  - com.apple.dock workspaces-auto-swoosh -bool false # don't switch to a space w/open windows for the app
+  # - com.apple.dock workspaces-auto-swoosh -bool false # don't switch to a space w/open windows for the app
   - com.apple.dock wvous-bl-corner -int 10 # set the bottom left hot corner to sleep the display
   # - com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
   # - com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 1
