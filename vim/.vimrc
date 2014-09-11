@@ -11,16 +11,15 @@ if empty($GOPATH)
   call add(g:pathogen_disabled, 'go')
 endif
 execute pathogen#infect()
-filetype plugin indent on
 
 """ mappings
 
 let mapleader=','
-" let maplocalleader='\\'
 noremap <up> <nop>
 noremap <down> <nop>
 noremap <left> <nop>
 noremap <right> <nop>
+
 nnoremap ' `
 nnoremap ` '
 " nnoremap \ ,
@@ -79,18 +78,11 @@ set encoding=utf8
 set fileencoding=utf8
 set fileformat=unix
 
-" indent/tabbing
-" set smartindent
-" set expandtab
-" set shiftwidth=2
-" set softtabstop=2
-" set tabstop=2
-
 " reading
 set linebreak
 " set ttyfast
 set list
- let &listchars = "tab:\u21e5 ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
+let &listchars = "tab:\u21e5 ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
 
 " autogroups
 

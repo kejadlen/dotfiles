@@ -106,3 +106,9 @@
 [submodule "vim/.vim/bundle/vim-rsi"]
 	path = vim/.vim/bundle/vim-rsi
 	url = https://github.com/tpope/vim-rsi.git
+[submodule "vim/.vim/bundle/vim-sensible"]
+	path = vim/.vim/bundle/vim-sensible
+	url = https://github.com/tpope/vim-sensible.git
+[submodule "vim/.vim/bundle/vim-unimpaired"]
+	path = vim/.vim/bundle/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired.git
