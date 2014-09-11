@@ -1,5 +1,7 @@
 set runtimepath=/Users/alphach/.pentadactyl
 
+highlight FontFixed -append font-size: 8pt !important;
+
 set! browser.download.manager.showWhenStarting=false
 set! browser.startup.homepage="about:blank"
 " set! browser.tabs.loadDivertedInBackground=true
