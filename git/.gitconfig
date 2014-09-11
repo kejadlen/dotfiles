@@ -53,6 +53,3 @@
 	prune = true
 [tag]
 	sort = version:refname
-[user]
-	name = Alpha Chen
-	email = alpha.chen@gmail.com
