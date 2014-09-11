@@ -103,3 +103,6 @@
 [submodule "src/tmux-colors-solarized"]
 	path = src/tmux-colors-solarized
 	url = https://github.com/seebi/tmux-colors-solarized.git
+[submodule "vim/.vim/bundle/vim-rsi"]
+	path = vim/.vim/bundle/vim-rsi
+	url = https://github.com/tpope/vim-rsi.git
