@@ -4,6 +4,7 @@ formulae:
   - ctags
   - fasd
   - git
+  - hub
   # - macvim # Needs install_options=override-system-vim
   - ruby-install
   - reattach-to-user-namespace
