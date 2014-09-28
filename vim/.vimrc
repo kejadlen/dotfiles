@@ -140,7 +140,7 @@ set directory=$HOME/.vim_tmp//
 " highlight clear Search
 " highlight Search ctermfg=6 ctermbg=9 term=underline cterm=underline gui=underline
 
-set wildignore+=*.pyc,*/bower_components/*,*/python2.7/*,*/share/doc/*
+set wildignore+=*.pyc,*/bower_components/*,*/python2.7/*,*/share/doc/*,*/target/*
 
 " ack
 set grepprg=ack
