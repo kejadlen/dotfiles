@@ -447,7 +447,7 @@
 			<dict>
 				<key>paths</key>
 				<array>
-					<string>/opt/homebrew-cask/Caskroom/mailbox/0.3.8/Mailbox (Beta).app</string>
+					<string>~/Applications/Mailbox (Beta).app</string>
 				</array>
 				<key>toggle</key>
 				<false/>
