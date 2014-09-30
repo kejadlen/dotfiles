@@ -1,0 +1,7 @@
+---
+- homebrew: name=dockutil state=present
+- command: dockutil --remove all
+- command: dockutil --add ~/Downloads --view list
+                                      --display stack
+                                      --sort datemodified
+- homebrew: name=dockutil state=absent
