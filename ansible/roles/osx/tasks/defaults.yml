@@ -4,6 +4,16 @@
 #   sudo: True
 - command: defaults write {{ item }}
   with_items: osx_defaults
+- command: defaults write {{ item }} dontAutoLoad -array
+    /System/Library/CoreServices/Menu Extras/TimeMachine.menu
+    /System/Library/CoreServices/Menu Extras/Bluetooth.menu
+    /System/Library/CoreServices/Menu Extras/Battery.menu
+  with_lines: ls ~/Library/Preferences/ByHost/com.apple.systemuiserver.*
+- command: /usr/libexec/PlistBuddy -c "{{ item }}" ~/Library/Preferences/com.apple.finder.plist
+  with_items:
+    - Set :DesktopViewSettings:IconViewSettings:arrangeBy grid
+    - Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid
+    - Set :StandardViewSettings:IconViewSettings:arrangeBy grid
 - command: killall {{ item }}
   with_items:
     - Finder

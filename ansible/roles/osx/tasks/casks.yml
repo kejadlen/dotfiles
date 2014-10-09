@@ -5,3 +5,6 @@
 - command: brew install caskroom/cask/brew-cask
 - homebrew_cask: name={{ item }} state=installed
   with_items: casks
+- command: defaults write {{ item }}
+  with_items:
+    - com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false

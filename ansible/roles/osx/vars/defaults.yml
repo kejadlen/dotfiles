@@ -4,6 +4,7 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
 
   - NSGlobalDomain AppleFontSmoothing -int 2 # subpixel rendering on non-Apple LCDs
   - NSGlobalDomain AppleKeyboardUIMode -int 3 # full keyboard access
+  - NSGlobalDomain AppleShowAllExtensions -bool true # show all extensions by default
   - NSGlobalDomain KeyRepeat -int 2 # keyboard repeat rate
   - NSGlobalDomain NSTableViewDefaultSizeMode -int 1 # set sidebar item size to small
   - NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false # disable resume
@@ -26,6 +27,7 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   # - com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
   - com.apple.dt.Xcode DVTTextAutoSuggestCompletionsDelay 0.1 # Xcode autocomplete delay
   - com.apple.finder FXEnableExtensionChangeWarning -bool false # don't ask when changing file extension
+  - com.apple.finder FXPreferredViewStyle -string Nlsv # default to list view
   - com.apple.finder QLEnableTextSelection -bool true # enable text selection in QuickLook
   # - com.apple.finder ShowPathbar -bool true # show path bar
   # - com.apple.finder ShowStatusBar -bool true # show status bar
@@ -35,4 +37,9 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   # - com.apple.iTunes invertStoreLinks -bool true
   - com.apple.screencapture disable-shadow -bool true # no window shadows when capturing windows
   - com.apple.screencapture location ~/Downloads
+  - com.apple.screensaver askForPassword -int 1
+  - com.apple.systemuiserver menuExtras -array
+    "/System/Library/CoreServices/Menu Extras/AirPort.menu"
+    "/System/Library/CoreServices/Menu Extras/Volume.menu"
+    "/System/Library/CoreServices/Menu Extras/Clock.menu"
   # - com.apple.terminal StringEncodings -array 4 # UTF-8 in Terminal
