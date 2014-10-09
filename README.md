@@ -32,18 +32,6 @@ rm -rf ~/.dotfiles
 ln -s ~/Dropbox/dotfiles ~/.dotfiles
 ```
 
-# Caveats
+# TODO
 
-There are some things that aren't automated.
-
-## App Store
-
-- Fantastical
-- Reeder
-
-## Preferences
-
-Various application preferences - Dropbox, 1Password, etc.
-
-- Tap to click
-- Drag lock
+See [issues](https://github.com/kejadlen/dotfiles/issues).
