@@ -32,6 +32,19 @@ rm -rf ~/.dotfiles
 ln -s ~/Dropbox/dotfiles ~/.dotfiles
 ```
 
+# Development
+
+Ansible tags are indispensible when tweaking the config.
+
+```
+- command: echo debug
+  tags: debug
+```
+
+``` shell
+ansible-playbook main.yml --ask-sudo-pass --tags debug
+```
+
 # TODO
 
 See [issues](https://github.com/kejadlen/dotfiles/issues).
