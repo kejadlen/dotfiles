@@ -19,6 +19,21 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>F548AE26-C2CD-485A-A0EA-6386E713D11C</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>spl</string>
+			<key>plusSpaces</key>
+			<false/>
+			<key>text</key>
+			<string>Search Seattle Public Library for '{query}'</string>
+			<key>url</key>
+			<string>http://seattle.bibliocommons.com/search?where=catalog&amp;t=smart&amp;q={query}&amp;search_category=keyword&amp;commit=search</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
 	</dict>
 </dict>
 </plist>
