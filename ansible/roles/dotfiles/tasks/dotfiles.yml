@@ -7,6 +7,7 @@
     chdir={{ ansible_env.HOME }}/.dotfiles
     stow --stow --target={{ ansible_env.HOME }} {{ item }}
   with_items: stow
+  tags: stow
 - file:
     src: "{{ ansible_env.HOME }}/.dotfiles/{{ item.key }}"
     dest: "{{ ansible_env.HOME}}/{{ item.value }}"
