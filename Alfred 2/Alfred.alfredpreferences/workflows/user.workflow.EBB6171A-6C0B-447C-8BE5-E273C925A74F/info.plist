@@ -315,7 +315,7 @@
 			<dict>
 				<key>paths</key>
 				<array>
-					<string>/Applications/Osfoora.app</string>
+					<string>~/Applications/YoruFukurou.app</string>
 				</array>
 				<key>toggle</key>
 				<false/>
