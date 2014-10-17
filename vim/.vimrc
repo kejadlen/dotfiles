@@ -96,7 +96,7 @@ if v:version >= 700
   augroup BufferScrolling
     au!
     au BufLeave * if !&diff | let b:winview = winsaveview() | endif
-    au BufEnter * if exists('b:winview') && !&diff | call winrestview(b:winview) | endif
+    au BufEnter * if exists('b:winview') && !&diff | call winrestview(b:winview) | unlet! b:winview | endif
   augroup END
 endif
 
@@ -108,8 +108,8 @@ set foldlevel=3
 " view
 set viewdir=$HOME/.vim_view//
 " " au BufWinLeave ?* mkview
-au BufWritePost,BufLeave,WinLeave ?* mkview " for tabs
-au BufWinEnter ?* silent loadview
+" au BufWritePost,BufLeave,WinLeave ?* mkview " for tabs
+" au BufWinEnter ?* silent loadview
 
 " jump to last cursor position when opening a file
 autocmd BufReadPost *
