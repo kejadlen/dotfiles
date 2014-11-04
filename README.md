@@ -32,6 +32,12 @@ rm -rf ~/.dotfiles
 ln -s ~/Dropbox/dotfiles ~/.dotfiles
 ```
 
+To update submodules:
+
+``` shell
+git submodule foreach git pull
+```
+
 # Development
 
 Ansible tags are indispensible when tweaking the config.
