@@ -4,6 +4,21 @@
 <dict>
 	<key>customSites</key>
 	<dict>
+		<key>120CD8AD-75B3-4067-93D1-2F371AE02264</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>goodreads</string>
+			<key>plusSpaces</key>
+			<true/>
+			<key>text</key>
+			<string>Goodreads</string>
+			<key>url</key>
+			<string>https://www.goodreads.com/search?utf8=%E2%9C%93&amp;query={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
 		<key>491B807D-42B3-4CB4-861F-2ADF20727F53</key>
 		<dict>
 			<key>enabled</key>
@@ -15,7 +30,7 @@
 			<key>text</key>
 			<string>Search Amazon Smile for '{query}'</string>
 			<key>url</key>
-			<string>http://smile.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords={query}</string>
+			<string>https://smile.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords={query}</string>
 			<key>utf8</key>
 			<true/>
 		</dict>
