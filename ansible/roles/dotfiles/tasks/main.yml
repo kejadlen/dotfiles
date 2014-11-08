@@ -1,5 +1,4 @@
 ---
-# - git: repo=https://github.com/kejadlen/dotfiles.git dest=~/.dotfiles force=no
 - include: dotfiles.yml
   tags: dotfiles
 - include: powerline.yml

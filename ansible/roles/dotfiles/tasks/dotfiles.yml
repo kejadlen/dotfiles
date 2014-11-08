@@ -1,8 +1,18 @@
 ---
 - homebrew: name=stow state=present
-  # when: ansible_distribution == "MacOSX"
-# - apt: pkg=stow state=present
-  # when: ansible_distribution == "Debian"
+  when: ansible_distribution == "MacOSX"
+- apt: pkg={{ item }} state=present
+  with_items:
+    - git
+    - stow
+  sudo: True
+  when: ansible_os_family == "Debian"
+- git:
+    repo: https://github.com/kejadlen/dotfiles.git
+    depth: 1
+    dest: ~/.dotfiles
+    recursive: yes
+    # force: no
 - command: >
     chdir={{ ansible_env.HOME }}/.dotfiles
     stow --stow --target={{ ansible_env.HOME }} {{ item }}
