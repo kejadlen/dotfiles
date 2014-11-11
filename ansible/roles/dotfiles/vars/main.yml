@@ -3,7 +3,6 @@ stow:
   - git
   - pentadactyl
   - ruby
-  - ssh
   - tmux
   - vim
   - osx

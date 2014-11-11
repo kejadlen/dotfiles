@@ -23,5 +23,3 @@
     dest: "{{ ansible_env.HOME}}/{{ item.value }}"
     state: link
   with_dict: ln
-- local_action: command ruby scripts/setup_ssh_keys.rb
-  # when: ansible_domain == "local"
