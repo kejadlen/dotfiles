@@ -5,6 +5,5 @@ stow:
   - ruby
   - tmux
   - vim
-  - osx
 ln:
   git/.gitignore: .gitignore

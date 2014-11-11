@@ -12,11 +12,16 @@
     depth: 1
     dest: ~/.dotfiles
     recursive: yes
-    # force: no
+    force: no
 - command: >
     chdir={{ ansible_env.HOME }}/.dotfiles
     stow --stow --target={{ ansible_env.HOME }} {{ item }}
   with_items: stow
+  tags: stow
+- command: >
+    chdir={{ ansible_env.HOME }}/.dotfiles
+    stow --stow --target={{ ansible_env.HOME }} osx
+  when: ansible_distribution == "MacOSX"
   tags: stow
 - file:
     src: "{{ ansible_env.HOME }}/.dotfiles/{{ item.key }}"
