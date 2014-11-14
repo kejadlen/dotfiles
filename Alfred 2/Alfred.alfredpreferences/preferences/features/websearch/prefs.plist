@@ -13,9 +13,24 @@
 			<key>plusSpaces</key>
 			<true/>
 			<key>text</key>
-			<string>Goodreads</string>
+			<string>Search Goodreads for '{query}'</string>
 			<key>url</key>
 			<string>https://www.goodreads.com/search?utf8=%E2%9C%93&amp;query={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+		<key>1B744577-C743-466D-9B65-8A45F55F7BE3</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>inbox</string>
+			<key>plusSpaces</key>
+			<false/>
+			<key>text</key>
+			<string>Search Google Inbox for '{query}'</string>
+			<key>url</key>
+			<string>https://inbox.google.com/search/{query}?pli=1</string>
 			<key>utf8</key>
 			<true/>
 		</dict>
