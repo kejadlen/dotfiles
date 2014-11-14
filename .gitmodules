@@ -112,3 +112,6 @@
 [submodule "vim/.vim/bundle/rust.vim"]
 	path = vim/.vim/bundle/rust.vim
 	url = https://github.com/wting/rust.vim.git
+[submodule "vim/.vim/bundle/incsearch.vim"]
+	path = vim/.vim/bundle/incsearch.vim
+	url = https://github.com/haya14busa/incsearch.vim
