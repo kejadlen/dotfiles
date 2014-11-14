@@ -1,5 +1,9 @@
 ---
 - homebrew: name=zsh state=present
+  when: ansible_distribution == "MacOSX"
+- apt: name=zsh state=present
+  sudo: True
+  when: ansible_os_family == "Debian"
 - file:
     src: "{{ ansible_env.HOME }}/.dotfiles/src/prezto"
     dest: "{{ ansible_env.HOME}}/.zprezto"

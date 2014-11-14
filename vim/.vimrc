@@ -81,6 +81,7 @@ set fileformat=unix
 
 " reading
 set linebreak
+set autoread
 " set ttyfast
 set list
 let &listchars = "tab:\u21e5 ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"

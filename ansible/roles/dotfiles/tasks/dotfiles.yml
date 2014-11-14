@@ -1,17 +1,30 @@
 ---
 - homebrew: name=stow state=present
-  # when: ansible_distribution == "MacOSX"
-# - apt: pkg=stow state=present
-  # when: ansible_distribution == "Debian"
+  when: ansible_distribution == "MacOSX"
+- apt: pkg={{ item }} state=present
+  with_items:
+    - git
+    - stow
+  sudo: True
+  when: ansible_os_family == "Debian"
+- git:
+    repo: https://github.com/kejadlen/dotfiles.git
+    depth: 1
+    dest: ~/.dotfiles
+    recursive: yes
+    force: no
 - command: >
     chdir={{ ansible_env.HOME }}/.dotfiles
     stow --stow --target={{ ansible_env.HOME }} {{ item }}
   with_items: stow
+  tags: stow
+- command: >
+    chdir={{ ansible_env.HOME }}/.dotfiles
+    stow --stow --target={{ ansible_env.HOME }} osx
+  when: ansible_distribution == "MacOSX"
   tags: stow
 - file:
     src: "{{ ansible_env.HOME }}/.dotfiles/{{ item.key }}"
     dest: "{{ ansible_env.HOME}}/{{ item.value }}"
     state: link
   with_dict: ln
-- local_action: command ruby scripts/setup_ssh_keys.rb
-  # when: ansible_domain == "local"

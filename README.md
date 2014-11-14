@@ -51,6 +51,13 @@ Ansible tags are indispensible when tweaking the config.
 ansible-playbook main.yml --ask-sudo-pass --tags debug
 ```
 
+# Vagrant
+
+``` shell
+vagrant up
+ansible vagrant -m ping
+```
+
 # TODO
 
 See [issues](https://github.com/kejadlen/dotfiles/issues).

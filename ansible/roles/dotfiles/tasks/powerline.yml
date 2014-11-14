@@ -1,3 +1,10 @@
 ---
 - homebrew: name=python state=present
+  when: ansible_distribution == "MacOSX"
+- apt: name={{ item }} state=present
+  sudo: True
+  with_items:
+    - python
+    - python-pip
+  when: ansible_os_family == "Debian"
 - command: pip install --user -e ~/.dotfiles/src/powerline
