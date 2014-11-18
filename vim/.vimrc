@@ -63,6 +63,7 @@ let g:solarized_termcolors=256
 set background=dark
 colorscheme solarized
 highlight Normal ctermbg=235
+highlight rubyDefine ctermbg=235
 
 " has to go after solarized, wtf?
 highlight LongLine term=reverse cterm=reverse ctermfg=1 guifg=Black guibg=Yellow
