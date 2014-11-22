@@ -15,7 +15,8 @@ begin
 rescue LoadError
 end
 
-def pbcopy(str)
+def pbcopy(str=nil)
+  str = yield if block_given?
   IO.popen(%w[pbcopy], 'w') {|io| io.write str }
 end
 
