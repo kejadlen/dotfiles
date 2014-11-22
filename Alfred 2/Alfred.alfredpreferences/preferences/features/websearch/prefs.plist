@@ -49,6 +49,36 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>A5E2DBA1-C7F6-4F89-8348-987E767FC291</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>pb</string>
+			<key>plusSpaces</key>
+			<false/>
+			<key>text</key>
+			<string>Search Pinboard for '{query}'</string>
+			<key>url</key>
+			<string>https://pinboard.in/search/u:kejadlen?query={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+		<key>D70178D9-628A-4910-9C32-9FDA059AA75F</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>pbt</string>
+			<key>plusSpaces</key>
+			<false/>
+			<key>text</key>
+			<string>Search Pinboard tags for '{query}'</string>
+			<key>url</key>
+			<string>https://pinboard.in/u:kejadlen/t:{query}/</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
 		<key>F548AE26-C2CD-485A-A0EA-6386E713D11C</key>
 		<dict>
 			<key>enabled</key>
