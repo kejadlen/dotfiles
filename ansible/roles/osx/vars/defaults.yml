@@ -24,8 +24,8 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   # - com.apple.dock workspaces-auto-swoosh -bool false # don't switch to a space w/open windows for the app
   - com.apple.dock wvous-bl-corner -int 10 # set the bottom left hot corner to sleep the display
   - com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-  # - com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 1
-  # - com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
+  - com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 1
+  - com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
   - com.apple.dt.Xcode DVTTextAutoSuggestCompletionsDelay 0.1 # Xcode autocomplete delay
   - com.apple.finder FXEnableExtensionChangeWarning -bool false # don't ask when changing file extension
   - com.apple.finder FXPreferredViewStyle -string Nlsv # default to list view
