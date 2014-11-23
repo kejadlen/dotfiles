@@ -1,7 +1,7 @@
 tasks:
   - file: path={{ ansible_env.HOME }}/Applications state=directory
   # - homebrew: name=caskroom/cask/brew-cask state=upgraded
-  - homebrew-tap: name=caskroom/cask state=present
+  - homebrew_tap: name=caskroom/cask state=present
   - homebrew: name=brew-cask state=present
   # - homebrew_cask: name={{ item }} state=installed
   #   with_items:
