@@ -10,6 +10,7 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - NSGlobalDomain NSTableViewDefaultSizeMode -int 1 # set sidebar item size to small
   - NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false # disable resume
   - NSGlobalDomain WebKitDeveloperExtras -bool true # add debug menu in web views
+  - NSGlobalDomain com.apple.mouse.tapBehavior -bool true # tap to click
 
   - com.apple.Safari IncludeInternalDebugMenu -bool true # enable Debug menu in Safari
   - com.apple.dashboard mcx-disabled -bool true # disable dashboard
@@ -18,11 +19,11 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - com.apple.dock mineffect -string scale # minimize windows using the scale effect
   - com.apple.dock mru-spaces -bool false # don't rearrange spaces
   - com.apple.dock orientation -string left
-  - com.apple.dock pinning -string start # don't center the dock
+  # - com.apple.dock pinning -string start # don't center the dock
   # - com.apple.dock showhidden -bool true # translucent icons for hidden apps
   # - com.apple.dock workspaces-auto-swoosh -bool false # don't switch to a space w/open windows for the app
   - com.apple.dock wvous-bl-corner -int 10 # set the bottom left hot corner to sleep the display
-  # - com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
+  - com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
   # - com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 1
   # - com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
   - com.apple.dt.Xcode DVTTextAutoSuggestCompletionsDelay 0.1 # Xcode autocomplete delay
@@ -38,8 +39,8 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - com.apple.screencapture disable-shadow -bool true # no window shadows when capturing windows
   - com.apple.screencapture location ~/Downloads
   - com.apple.screensaver askForPassword -int 1
-  - com.apple.systemuiserver menuExtras -array
-    "/System/Library/CoreServices/Menu Extras/AirPort.menu"
-    "/System/Library/CoreServices/Menu Extras/Volume.menu"
-    "/System/Library/CoreServices/Menu Extras/Clock.menu"
+  # - com.apple.systemuiserver menuExtras -array
+  #   "/System/Library/CoreServices/Menu Extras/AirPort.menu"
+  #   "/System/Library/CoreServices/Menu Extras/Volume.menu"
+  #   "/System/Library/CoreServices/Menu Extras/Clock.menu"
   # - com.apple.terminal StringEncodings -array 4 # UTF-8 in Terminal

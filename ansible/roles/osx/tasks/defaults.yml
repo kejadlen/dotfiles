@@ -4,6 +4,7 @@
 #   sudo: True
 - command: defaults write {{ item }}
   with_items: osx_defaults
+- command: defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -bool true # tap to click
 # - command: defaults write {{ item }} dontAutoLoad -array
 #     /System/Library/CoreServices/Menu Extras/TimeMachine.menu
 #     /System/Library/CoreServices/Menu Extras/Bluetooth.menu
