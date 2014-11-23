@@ -1,4 +1,5 @@
-tasks:
+- hosts: local
+  tasks:
   - file: path={{ ansible_env.HOME }}/Applications state=directory
   # - homebrew: name=caskroom/cask/brew-cask state=upgraded
   - homebrew_tap: name=caskroom/cask state=present
