@@ -3,5 +3,4 @@
   tags: dotfiles
 - include: powerline.yml
 - include: zsh.yml
-# - include: ssh.yml
-#   when: ansible_domain == "local"
+- include: ssh.yml
