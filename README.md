@@ -19,7 +19,6 @@ brew install ansible
 git clone --recursive https://github.com/kejadlen/dotfiles.git ~/.dotfiles
 
 # Xcode
-sudo xcode-select --install
 open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'
 sudo xcodebuild -license
 
