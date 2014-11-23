@@ -29,6 +29,7 @@ rm -f ~/*.retry
 # Post-Dropbox syncing
 rm -rf ~/.dotfiles
 ln -s ~/Dropbox/dotfiles ~/.dotfiles
+ruby ~/.dotfiles/ansible/scripts/setup_ssh_keys.rb
 ```
 
 To update submodules:

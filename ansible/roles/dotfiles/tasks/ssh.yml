@@ -4,5 +4,5 @@
     stow --stow --target={{ ansible_env.HOME }} ssh
   tags: stow
   when: ansible_domain == "local"
-- local_action: command ruby scripts/setup_ssh_keys.rb
-  when: ansible_domain == "local"
+# - local_action: command ruby scripts/setup_ssh_keys.rb
+#   when: ansible_domain == "local"
