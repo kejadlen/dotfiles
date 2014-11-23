@@ -2,6 +2,7 @@
 
 Alfred\ 2/Alfred.alfredpreferences/preferences/local
 config/.config
+osx
 pentadactyl/.pentadactyl/info
 ssh/.ssh/*_rsa
 ssh/.ssh/known_hosts
