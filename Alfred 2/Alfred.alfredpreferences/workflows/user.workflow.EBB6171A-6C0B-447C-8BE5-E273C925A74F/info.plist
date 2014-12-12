@@ -20,16 +20,7 @@
 			</dict>
 		</array>
 		<key>2E57B3A5-B65F-4AB6-93B2-183BB082414B</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>30CDA5F5-6107-44A7-8A5D-551DFBD599B6</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-			</dict>
-		</array>
+		<array/>
 		<key>960E961A-2EF3-44C4-BFF2-B8BA1466C8EA</key>
 		<array>
 			<dict>
@@ -442,23 +433,6 @@
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>paths</key>
-				<array>
-					<string>~/Applications/Mailbox (Beta).app</string>
-				</array>
-				<key>toggle</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.launchfiles</string>
-			<key>uid</key>
-			<string>30CDA5F5-6107-44A7-8A5D-551DFBD599B6</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
 	</array>
 	<key>readme</key>
 	<string></string>
@@ -488,11 +462,6 @@
 		<dict>
 			<key>ypos</key>
 			<real>250</real>
-		</dict>
-		<key>30CDA5F5-6107-44A7-8A5D-551DFBD599B6</key>
-		<dict>
-			<key>ypos</key>
-			<real>850</real>
 		</dict>
 		<key>43DCD79F-94B0-4F0D-B7C2-4F04DC7ECE20</key>
 		<dict>
