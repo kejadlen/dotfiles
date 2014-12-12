@@ -20,9 +20,9 @@ IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 #   end
 # end
 
-def history
-  Readline::HISTORY.to_a
-end
+# def history
+#   Readline::HISTORY.to_a
+# end
 
 irbrc_local = File.expand_path('../.irbrc.local', __FILE__)
 require irbrc_local if File.exists?(irbrc_local)
