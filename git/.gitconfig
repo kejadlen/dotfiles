@@ -22,9 +22,10 @@
 	s = status -sb
 	latest = for-each-ref --count=20 --sort=-committerdate --format='%(committerdate:short) %(refname:short)'
 	root = !pwd
+[difftool]
+	prompt = false
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
@@ -35,6 +36,8 @@
 [mergetool "kaleidoscope"]
 	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
+[difftool "icdiff"]
+	cmd = icdiff --line-numbers --no-bold \"$LOCAL\" \"$REMOTE\"
 [grep]
 	extendRegexp = true
 	lineNumber = true
@@ -49,6 +52,7 @@
 	templatedir = /Users/alpha/.git_templates
 [diff]
 	algorithm = patience
+	tool = icdiff
 [fetch]
 	prune = true
 [tag]
