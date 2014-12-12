@@ -2,6 +2,7 @@
 formulae:
   - chruby
   - ctags
+  - direnv
   - fasd
   - git
   - hub
