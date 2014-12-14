@@ -67,9 +67,6 @@
 [submodule "vim/.vim/bundle/ag"]
 	path = vim/.vim/bundle/ag
 	url = git://github.com/rking/ag.vim.git
-[submodule "vim/.vim/bundle/vimwiki"]
-	path = vim/.vim/bundle/vimwiki
-	url = https://github.com/vimwiki/vimwiki
 [submodule "vim/.vim/bundle/vinegar"]
 	path = vim/.vim/bundle/vinegar
 	url = git://github.com/tpope/vim-vinegar.git
