@@ -115,6 +115,3 @@
 [submodule "vim/.vim/bundle/incsearch.vim"]
 	path = vim/.vim/bundle/incsearch.vim
 	url = https://github.com/haya14busa/incsearch.vim
-[submodule "Alfred 2/Alfred.alfredpreferences/workflows/user.workflow.8694C3FC-8218-4B98-BB1F-F1CEC686477C"]
-	path = Alfred 2/Alfred.alfredpreferences/workflows/user.workflow.8694C3FC-8218-4B98-BB1F-F1CEC686477C
-	url = git://github.com/kejadlen/forecast.alfredworkflow.git
