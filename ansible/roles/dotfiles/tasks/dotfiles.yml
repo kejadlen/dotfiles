@@ -19,7 +19,7 @@
   with_items: stow
   tags: stow
 - file:
-    src: "{{ ansible_env.HOME }}/.dotfiles/{{ item.key }}"
-    dest: "{{ ansible_env.HOME}}/{{ item.value }}"
+    src: ~/.dotfiles/{{ item.key }}
+    dest: "{{ item.value }}"
     state: link
   with_dict: ln

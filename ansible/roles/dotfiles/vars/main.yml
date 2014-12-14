@@ -6,4 +6,5 @@ stow:
   - tmux
   - vim
 ln:
-  git/.gitignore: .gitignore
+  gitignore: ~/.gitignore
+  .hammerspoon: ~/.hammerspoon
