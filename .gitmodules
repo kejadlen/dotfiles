@@ -22,9 +22,6 @@
 [submodule ".vim/bundle/vim-colors-solarized"]
 	path = vim/.vim/bundle/vim-colors-solarized
 	url = git://github.com/altercation/vim-colors-solarized.git
-[submodule ".vim/bundle/vim-commentary"]
-	path = vim/.vim/bundle/vim-commentary
-	url = git://github.com/tpope/vim-commentary.git
 [submodule ".vim/bundle/vim-repeat"]
 	path = vim/.vim/bundle/vim-repeat
 	url = git://github.com/tpope/vim-repeat.git
@@ -115,3 +112,6 @@
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/user.workflow.8694C3FC-8218-4B98-BB1F-F1CEC686477C"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/user.workflow.8694C3FC-8218-4B98-BB1F-F1CEC686477C
 	url = https://github.com/kejadlen/forecast.alfredworkflow.git
+[submodule "vim/.vim/bundle/nerdcommenter"]
+	path = vim/.vim/bundle/nerdcommenter
+	url = https://github.com/scrooloose/nerdcommenter.git
