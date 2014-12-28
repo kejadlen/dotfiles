@@ -64,6 +64,7 @@ set background=dark
 colorscheme solarized
 highlight Normal ctermbg=235
 highlight rubyDefine ctermbg=235
+set noshowmode
 
 " has to go after solarized, wtf?
 highlight LongLine term=reverse cterm=reverse ctermfg=1 guifg=Black guibg=Yellow
@@ -201,6 +202,7 @@ let g:ctrlp_map = '<leader>p'
 let g:ctrlp_match_window='bottom,order:btt,min:1,max:20'
 let g:ctrlp_reuse_window='startify'
 let g:ctrlp_working_path_mode='ra'
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
 " Startify
 let g:startify_change_to_vcs_root = 1
@@ -232,6 +234,9 @@ nmap <leader>vw<leader>i <plug>VimwikiDiaryGenerateLinks
 " map <leader>vp :VimuxPromptCommand<cr>
 " map <leader>vl :VimuxRunLastCommand<cr>
 " map <leader>vq :VimuxCloseRunner<cr>
+
+" NERDCommenter
+let NERDSpaceDelims = 1
 
 " gui stuff
 set guioptions-=T

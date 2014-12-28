@@ -7,4 +7,4 @@
     - python
     - python-pip
   when: ansible_os_family == "Debian"
-- command: pip install --user -e ~/.dotfiles/src/powerline
+- command: pip install --user --editable=~/.dotfiles/src/powerline
