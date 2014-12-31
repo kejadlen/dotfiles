@@ -34,6 +34,21 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>2A6135C2-8865-4D79-ADC0-B6D1D8EA2BEC</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>canistreamit</string>
+			<key>plusSpaces</key>
+			<false/>
+			<key>text</key>
+			<string>Search Can I Stream It for '{query}'</string>
+			<key>url</key>
+			<string>http://www.canistream.it/search/movie/{query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
 		<key>491B807D-42B3-4CB4-861F-2ADF20727F53</key>
 		<dict>
 			<key>enabled</key>
