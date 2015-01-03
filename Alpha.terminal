@@ -180,12 +180,14 @@
 	</data>
 	<key>FontAntialias</key>
 	<true/>
+	<key>FontHeightSpacing</key>
+	<real>0.93999999999999995</real>
 	<key>FontWidthSpacing</key>
-	<real>0.99596774193548387</real>
+	<real>1</real>
 	<key>Linewrap</key>
 	<true/>
 	<key>ProfileCurrentVersion</key>
-	<real>2.02</real>
+	<real>2.04</real>
 	<key>SelectionColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
@@ -217,6 +219,8 @@
 	<false/>
 	<key>VisualBell</key>
 	<true/>
+	<key>VisualBellOnlyWhenMuted</key>
+	<false/>
 	<key>deleteSendsBackspace</key>
 	<false/>
 	<key>keyMapBoundKeys</key>
@@ -237,14 +241,6 @@
 		<string>[33~</string>
 		<key>$F70F</key>
 		<string>[34~</string>
-		<key>$F729</key>
-		<string>[H</string>
-		<key>$F72B</key>
-		<string>[F</string>
-		<key>$F72C</key>
-		<string>[5~</string>
-		<key>$F72D</key>
-		<string>[6~</string>
 		<key>F704</key>
 		<string>OP</string>
 		<key>F705</key>
@@ -287,14 +283,6 @@
 		<string>[34~</string>
 		<key>F728</key>
 		<string></string>
-		<key>F729</key>
-		<string>scrollToBeginningOfDocument:</string>
-		<key>F72B</key>
-		<string>scrollToEndOfDocument:</string>
-		<key>F72C</key>
-		<string>scrollPageUp:</string>
-		<key>F72D</key>
-		<string>scrollPageDown:</string>
 		<key>^F702</key>
 		<string>[5D</string>
 		<key>^F703</key>
