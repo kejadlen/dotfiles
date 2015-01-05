@@ -1,19 +1,9 @@
 ---
-- homebrew: name=stow state=present
-  when: ansible_distribution == "MacOSX"
-- apt: pkg={{ item }} state=present
+- file: path={{ item }} state=directory # TODO Do this automatically
   with_items:
-    - git
-    - stow
-  sudo: True
-  when: ansible_os_family == "Debian"
-- command: >
-    chdir={{ ansible_env.HOME }}/.dotfiles
-    stow --stow --target={{ ansible_env.HOME }} {{ item }}
-  with_items: stow
-  tags: stow
-- file:
-    src: ~/.dotfiles/{{ item.key }}
-    dest: "{{ item.value }}"
-    state: link
-  with_dict: ln
+    - ~/.bundle
+    - ~/.ssh
+- file: src=~/.dotfiles/{{ item.key }} dest={{ item.value }} state=link
+  with_dict: dotfiles
+- file: src=~/.dotfiles/.ssh/{{ item }} dest=~/.ssh/{{ item }} state=link
+  with_lines: ls ~/.dotfiles/.ssh

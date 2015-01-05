@@ -1,10 +1,10 @@
 *.private
 
 Alfred\ 2/Alfred.alfredpreferences/preferences/local
-config/.config
-pentadactyl/.pentadactyl/info
-ssh/.ssh/*_rsa
-ssh/.ssh/known_hosts
-vim/.vim/.netrwhist
-vim/.vim/.scratch
-vim/.vim/.VimballRecord
+.config
+.pentadactyl/info
+.ssh/*_rsa
+.ssh/known_hosts
+.vim/.netrwhist
+.vim/.scratch
+.vim/.VimballRecord

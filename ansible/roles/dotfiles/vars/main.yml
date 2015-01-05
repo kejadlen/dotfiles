@@ -1,10 +1,15 @@
-stow:
-  - config
-  - git
-  - pentadactyl
-  - ruby
-  - tmux
-  - vim
-ln:
+dotfiles:
   gitignore: ~/.gitignore
+  .bundle/config: ~/.bundle/config
+  .config: ~/.config
+  .gemrc: ~/.gemrc
+  .git_templates: ~/.git_templates
+  .gitconfig.private: ~/.gitconfig.private
+  .gitconfig: ~/.gitconfig
   .hammerspoon: ~/.hammerspoon
+  # .pentadactyl: ~/.pentadactyl
+  .pentadactylrc: ~/.pentadactylrc
+  .pryrc: ~/.pryrc
+  .tmux.conf: ~/.tmux.conf
+  .vim: ~/.vim
+  .vimrc: ~/.vimrc
