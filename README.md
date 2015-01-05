@@ -3,10 +3,33 @@ A new beginning for what used to be my
 appears to be the conventional name of these types of repos nowadays.
 
 This uses [Ansible](https://github.com/ansible/ansible) to provision new
-machines and [stow](http://www.gnu.org/software/stow/) for managing conf
-files that can be symlinked.
+machines.
 
 # Usage
+
+There are two ways to go about using this - either locally or remotely. The main
+difference is that OS X application settings are only copied over when running
+this on a remote machine.
+
+Either way, we start with installing Xcode:
+
+``` shell
+xcode-select --install
+open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'
+sudo xcodebuild -license
+```
+
+**After running Ansible**, the bootstrap `~/.dotfiles` directory can be removed
+and replaced with a symlink to the canonical repo location on Dropbox and SSH
+keys can be populated with the included script:
+
+``` shell
+rm -rf ~/.dotfiles
+ln -s ~/Dropbox/dotfiles ~/.dotfiles
+ruby ~/.dotfiles/ansible/scripts/setup_ssh_keys.rb
+```
+
+## Local
 
 ``` shell
 # Install Homebrew
@@ -18,19 +41,22 @@ brew install ansible
 # Clone dotfiles
 git clone --recursive https://github.com/kejadlen/dotfiles.git ~/.dotfiles
 
-# Xcode
-open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'
-sudo xcodebuild -license
-
 # Run Ansible
 cd ~/.dotfiles/ansible && ansible-playbook main.yml --ask-sudo-pass
 rm -f ~/*.retry
-
-# Post-Dropbox syncing
-rm -rf ~/.dotfiles
-ln -s ~/Dropbox/dotfiles ~/.dotfiles
-ruby ~/.dotfiles/ansible/scripts/setup_ssh_keys.rb
 ```
+
+## Remote
+
+On the remote machine, SSH access must first be enabled (under System
+Preferences -> Sharing) and the Xcode Command Line Tools need to be installed
+(`xcode-select --install`).
+
+``` shell
+cd ~/.dotfiles/ansible && ansible-playbook main.yml --ask-pass --ask-sudo-pass
+```
+
+# Misc
 
 To update submodules:
 

@@ -1,5 +1,5 @@
-- hosts: local
-  connection: local
+- hosts: all
   roles:
+    - bootstrap
     - osx
-    - dotfiles
+    # - dotfiles

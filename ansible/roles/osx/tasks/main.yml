@@ -1,11 +1,14 @@
 ---
-- homebrew: update_homebrew=yes
+- include: bootstrap.yml
 - include: formulae.yml
 - include: dock.yml
 - include: casks.yml
 - include: fonts.yml
 - include: defaults.yml
-- file: path=~/Library/KeyBindings state=directory
-- copy: src=.tmux.conf.local dest=~/.tmux.conf.local
-- copy: src=DefaultKeyBinding.dict dest=~/Library/KeyBindings/DefaultKeyBinding.dict
-- command: open ~/.dotfiles/Alpha.terminal
+
+# - copy: src=.tmux.conf.local dest=~/.tmux.conf.local
+
+# - file: path=~/Library/KeyBindings state=directory
+# - copy: src=DefaultKeyBinding.dict dest=~/Library/KeyBindings/DefaultKeyBinding.dict
+
+# - command: open ~/.dotfiles/Alpha.terminal

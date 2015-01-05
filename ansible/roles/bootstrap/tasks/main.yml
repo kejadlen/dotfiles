@@ -1,0 +1,9 @@
+---
+- git:
+    repo: https://github.com/kejadlen/dotfiles.git
+    recursive: yes
+    dest: ~/.dotfiles
+    force: no
+- name: no-op so that sudo works in Homebrew later
+  ping:
+  sudo: True

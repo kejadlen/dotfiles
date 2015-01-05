@@ -1,6 +1,8 @@
 ---
 - include_vars: formulae.yml
-- homebrew: name={{ item }} state=present
+- homebrew:
+    name: "{{ item.name }}"
+    install_options: "{{ item.install_options | default(omit) }}"
+    state: present
   with_items: formulae
-- homebrew: name=macvim install_options=override-system-vim state=present
-- command: brew linkapps
+- command: /usr/local/bin/brew linkapps

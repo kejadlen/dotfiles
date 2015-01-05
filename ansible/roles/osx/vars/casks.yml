@@ -1,5 +1,6 @@
 ---
 casks:
+  - 1password
   - adium
   - alfred
   - bittorrent-sync
@@ -11,7 +12,6 @@ casks:
   - google-chrome
   - mailbox
   - moom
-  - onepassword
   - plug
   - qlmarkdown
   - qlstephen

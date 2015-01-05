@@ -1,5 +1,8 @@
 ---
-osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
+osx_defaults:
+  # This is named `osx_defaults` since there's an Ansible conflict when this key
+  # is named just `defaults`.
+
   - -g NSDisableAutomaticTermination -bool true # Don't quit idle applications
 
   - NSGlobalDomain AppleFontSmoothing -int 2 # subpixel rendering on non-Apple LCDs
@@ -19,9 +22,6 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - com.apple.dock mineffect -string scale # minimize windows using the scale effect
   - com.apple.dock mru-spaces -bool false # don't rearrange spaces
   - com.apple.dock orientation -string left
-  # - com.apple.dock pinning -string start # don't center the dock
-  # - com.apple.dock showhidden -bool true # translucent icons for hidden apps
-  # - com.apple.dock workspaces-auto-swoosh -bool false # don't switch to a space w/open windows for the app
   - com.apple.dock wvous-bl-corner -int 10 # set the bottom left hot corner to sleep the display
   - com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
   - com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 1
@@ -30,17 +30,9 @@ osx_defaults: # named osx_defaults since there's an Ansible conflict w/defaults
   - com.apple.finder FXEnableExtensionChangeWarning -bool false # don't ask when changing file extension
   - com.apple.finder FXPreferredViewStyle -string Nlsv # default to list view
   - com.apple.finder QLEnableTextSelection -bool true # enable text selection in QuickLook
-  # - com.apple.finder ShowPathbar -bool true # show path bar
-  # - com.apple.finder ShowStatusBar -bool true # show status bar
   - com.apple.finder _FXShowPosixPathInTitle -bool true # show full path in Finder
-  # - com.apple.gamed Disabled -bool true
-  # - com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" "@F" # remap cmd+f to find in iTunes
-  # - com.apple.iTunes invertStoreLinks -bool true
   - com.apple.screencapture disable-shadow -bool true # no window shadows when capturing windows
   - com.apple.screencapture location ~/Downloads
   - com.apple.screensaver askForPassword -int 1
-  # - com.apple.systemuiserver menuExtras -array
-  #   "/System/Library/CoreServices/Menu Extras/AirPort.menu"
-  #   "/System/Library/CoreServices/Menu Extras/Volume.menu"
-  #   "/System/Library/CoreServices/Menu Extras/Clock.menu"
-  # - com.apple.terminal StringEncodings -array 4 # UTF-8 in Terminal
+
+  - com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false

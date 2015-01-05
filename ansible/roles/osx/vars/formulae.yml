@@ -1,16 +1,16 @@
 ---
 formulae:
-  - chruby
-  - ctags
-  - direnv
-  - fasd
-  - git
-  - hub
-  # - macvim # Needs install_options=override-system-vim
-  - ruby-install
-  - reattach-to-user-namespace
-  - the_silver_searcher
-  - tmux
-  - tree
-  - youtube-dl
-  - zsh
+  - name: chruby
+  - name: ctags
+  - name: direnv
+  - name: fasd
+  - name: git
+  - name: macvim
+    install_options: override-system-vim
+  - name: ruby-install
+  - name: reattach-to-user-namespace
+  - name: the_silver_searcher
+  - name: tmux
+  - name: tree
+  - name: youtube-dl
+  - name: zsh
