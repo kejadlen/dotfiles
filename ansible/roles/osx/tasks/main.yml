@@ -6,7 +6,7 @@
 - include: fonts.yml
 - include: defaults.yml
 
-# - copy: src=.tmux.conf.local dest=~/.tmux.conf.local
+- file: src=~/.dotfiles/osx/.tmux.conf.local dest=~/.tmux.conf.local state=link
 
 # - file: path=~/Library/KeyBindings state=directory
 # - copy: src=DefaultKeyBinding.dict dest=~/Library/KeyBindings/DefaultKeyBinding.dict
