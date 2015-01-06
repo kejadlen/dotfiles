@@ -5,6 +5,7 @@
 - include: casks.yml
 - include: fonts.yml
 - include: defaults.yml
+  tags: defaults
 
 - file: path=~/Library/KeyBindings state=directory
 - file:

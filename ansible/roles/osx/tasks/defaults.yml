@@ -1,10 +1,16 @@
 ---
 - include_vars: defaults.yml
 
-- command: defaults write {{ item }}
+# - command: defaults write {{ item }}
+- osx_defaults:
+    domain: "{{ item.domain | default(omit) }}"
+    key: "{{ item.key }}"
+    type: "{{ item.type }}"
+    value: "{{ item.value }}"
   with_items: osx_defaults
 
-- command: defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -bool true # tap to click
+# - command: defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -bool true # tap to click
+
 # - command: defaults write {{ item }} dontAutoLoad -array
 #     /System/Library/CoreServices/Menu Extras/TimeMachine.menu
 #     /System/Library/CoreServices/Menu Extras/Bluetooth.menu
@@ -16,8 +22,8 @@
 #     - Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid
 #     - Set :StandardViewSettings:IconViewSettings:arrangeBy grid
 
-- command: killall {{ item }}
-  with_items:
-    - Finder
-    - Dock
-    - SystemUIServer
+# - command: killall {{ item }}
+#   with_items:
+#     - Finder
+#     - Dock
+#     - SystemUIServer
