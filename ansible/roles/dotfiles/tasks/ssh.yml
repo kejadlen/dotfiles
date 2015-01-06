@@ -1,7 +1,0 @@
----
-- command: >
-    chdir={{ ansible_env.HOME }}/.dotfiles
-    stow --stow --target={{ ansible_env.HOME }} --no-folding ssh
-  tags: stow
-# - local_action: command ruby scripts/setup_ssh_keys.rb
-#   when: ansible_domain == "local"

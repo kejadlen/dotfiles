@@ -5,5 +5,11 @@
     - ~/.ssh
 - file: src=~/.dotfiles/{{ item.key }} dest={{ item.value }} state=link
   with_dict: dotfiles
+- file:
+    src: ~/Dropbox/dotfiles/{{ item.key }}
+    dest: "{{ item.value }}"
+    state: link
+    force: yes # Since these won't exist until later.
+  with_dict: private
 - file: src=~/.dotfiles/.ssh/{{ item }} dest=~/.ssh/{{ item }} state=link
   with_lines: ls ~/.dotfiles/.ssh

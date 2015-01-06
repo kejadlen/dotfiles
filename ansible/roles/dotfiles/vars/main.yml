@@ -1,10 +1,8 @@
 dotfiles:
   gitignore: ~/.gitignore
   .bundle/config: ~/.bundle/config
-  .config: ~/.config
   .gemrc: ~/.gemrc
   .git_templates: ~/.git_templates
-  .gitconfig.private: ~/.gitconfig.private
   .gitconfig: ~/.gitconfig
   .hammerspoon: ~/.hammerspoon
   # .pentadactyl: ~/.pentadactyl
@@ -13,3 +11,6 @@ dotfiles:
   .tmux.conf: ~/.tmux.conf
   .vim: ~/.vim
   .vimrc: ~/.vimrc
+private:
+  .config: ~/.config
+  .gitconfig.private: ~/.gitconfig.private

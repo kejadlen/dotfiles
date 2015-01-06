@@ -4,6 +4,7 @@
     recursive: yes
     dest: ~/.dotfiles
     force: no
+  ignore_errors: True
 - name: no-op so that sudo works in Homebrew later
   ping:
   sudo: True
