@@ -19,14 +19,18 @@ open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'
 sudo xcodebuild -license
 ```
 
-**After running Ansible**, the bootstrap `~/.dotfiles` directory can be removed
-and replaced with a symlink to the canonical repo location on Dropbox and SSH
-keys can be populated with the included script:
+**After running Ansible**, there are some optional tasks for full desktop setup:
 
 ``` shell
+# Remove the bootstrap directory for the canonical one in Dropbox
 rm -rf ~/.dotfiles
 ln -s ~/Dropbox/dotfiles ~/.dotfiles
-ruby ~/.dotfiles/ansible/scripts/setup_ssh_keys.rb
+
+# Apply personal Terminal settings
+open ~/.dotfiles/Alpha.terminal
+
+# Add private SSH keys
+ruby ~/.dotfiles/scripts/setup_ssh_keys.rb
 ```
 
 ## Local
