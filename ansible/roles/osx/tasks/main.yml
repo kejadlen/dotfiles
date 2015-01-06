@@ -2,6 +2,7 @@
 - include: bootstrap.yml
 - include: formulae.yml
 - include: dock.yml
+  tags: dock
 - include: casks.yml
 - include: fonts.yml
 - include: defaults.yml
