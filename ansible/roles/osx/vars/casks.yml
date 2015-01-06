@@ -22,3 +22,9 @@ casks:
   - transmission
   - vlc
   - yorufukurou
+prefs:
+  - ~/Library/Application Support/Adium 2.0/
+  - ~/Library/Preferences/com.adiumX.adiumX.plist
+  - ~/Library/Preferences/com.adiumX.adiumX.plist
+  - ~/Library/Preferences/com.culturedcode.things.plist
+  - ~/Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist

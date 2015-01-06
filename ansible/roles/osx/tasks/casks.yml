@@ -9,3 +9,9 @@
 
 - homebrew_cask: name={{ item }} state=installed
   with_items: casks
+
+- synchronize:
+    src: "{{ item }}"
+    dest: "{{ item | regex_replace(' ', '\ ') }}"
+    rsync_opts: --ignore-existing
+  with_items: prefs
