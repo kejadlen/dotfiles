@@ -1,0 +1,6 @@
+- name: restart osx system services
+  command: killall {{ item }}
+  with_items:
+    - Finder
+    - Dock
+    - SystemUIServer

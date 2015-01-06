@@ -1,29 +1,10 @@
 ---
 - include_vars: defaults.yml
 
-# - command: defaults write {{ item }}
 - osx_defaults:
     domain: "{{ item.domain | default(omit) }}"
     key: "{{ item.key }}"
     type: "{{ item.type }}"
     value: "{{ item.value }}"
   with_items: osx_defaults
-
-# - command: defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -bool true # tap to click
-
-# - command: defaults write {{ item }} dontAutoLoad -array
-#     /System/Library/CoreServices/Menu Extras/TimeMachine.menu
-#     /System/Library/CoreServices/Menu Extras/Bluetooth.menu
-#     /System/Library/CoreServices/Menu Extras/Battery.menu
-#   with_lines: ls ~/Library/Preferences/ByHost/com.apple.systemuiserver.*
-# - command: /usr/libexec/PlistBuddy -c "{{ item }}" ~/Library/Preferences/com.apple.finder.plist
-#   with_items:
-#     - Set :DesktopViewSettings:IconViewSettings:arrangeBy grid
-#     - Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid
-#     - Set :StandardViewSettings:IconViewSettings:arrangeBy grid
-
-# - command: killall {{ item }}
-#   with_items:
-#     - Finder
-#     - Dock
-#     - SystemUIServer
+  notify: restart osx system services
