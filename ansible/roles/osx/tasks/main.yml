@@ -8,8 +8,9 @@
 
 - file: path=~/Library/KeyBindings state=directory
 - file:
-    src: ../osx/DefaultKeyBinding.dict
+    src: ~/.dotfiles/osx/DefaultKeyBinding.dict
     dest: ~/Library/KeyBindings/DefaultKeyBinding.dict
+    state: link
 
 # TODO This should probably be moved to the dotfiles role.
 - file: src=~/.dotfiles/osx/.tmux.conf.local dest=~/.tmux.conf.local state=link
