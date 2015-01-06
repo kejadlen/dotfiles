@@ -3,6 +3,7 @@
   with_items:
     - ~/.bundle
     - ~/.ssh
+    - ~/.vim_tmp
 - file: src=~/.dotfiles/{{ item.key }} dest={{ item.value }} state=link
   with_dict: dotfiles
 - file:
