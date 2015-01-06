@@ -8,5 +8,12 @@
     - python-pip
   when: ansible_os_family == "Debian"
 - command: >
-    /usr/local/bin/pip install --user
-    --editable={{ ansible_env.HOME }}/.dotfiles/src/powerline
+    /usr/local/bin/pip
+      install
+      --user
+      --editable={{ ansible_env.HOME }}/.dotfiles/src/powerline
+- file:
+    src: ~/.dotfiles/src/powerline/scripts/{{ item }}
+    dest: /usr/local/bin/{{ item }}
+    state: link
+  with_lines: ls ~/.dotfiles/src/powerline/scripts
