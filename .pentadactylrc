@@ -31,6 +31,7 @@ set passkeys+=mail.google.com:'!#*+-./<C-Down><C-s><Enter>?INU[]acefjk lmnopqrsu
 set passkeys+=www.google.com/reader:ajkmsvANOPSTX?/,ga,gs,gF,gS
 " set passkeys+=google.com:jk
 set passkeys+=boston.com/bigpicture:jk
+set passkeys+=parley.rubyrogues.com:.
 
 set strictfocus-=*:moderate
 set strictfocus+=mail.google.com:laissez-faire
