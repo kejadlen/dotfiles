@@ -238,6 +238,11 @@ nmap <leader>vw<leader>i <plug>VimwikiDiaryGenerateLinks
 " NERDCommenter
 let NERDSpaceDelims = 1
 
+" Powerline
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
+
 " gui stuff
 set guioptions-=T
 set guifont=Consolas:h9:cANSI
