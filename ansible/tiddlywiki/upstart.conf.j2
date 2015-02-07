@@ -1,0 +1,12 @@
+description "TiddlyWiki"
+author "Alpha Chen"
+
+start on started network-services
+stop on stopping network-services
+
+setuid {{ user }}
+setgid {{ group }}
+
+console log
+
+exec tiddlywiki /home/{{ user }}/tiddlywiki --server 8080 $:/core/save/all text/plain text/html alpha "{{ password }}"

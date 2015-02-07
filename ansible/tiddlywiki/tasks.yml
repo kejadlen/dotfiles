@@ -1,0 +1,16 @@
+- include_vars: tiddlywiki/vars.yml.private
+- apt: name={{ item }} state=present
+  sudo: true
+  with_items:
+    - nodejs
+    - nodejs-legacy
+    - npm
+- npm: name=tiddlywiki global=yes state=present
+  sudo: true
+- file: path=~/tiddlywiki state=directory
+- copy: src=tiddlywiki/nginx.conf dest=/etc/nginx/conf.d/tiddlywiki.conf
+  sudo: true
+  notify: reload nginx
+- template: src=tiddlywiki/upstart.conf.j2 dest=/etc/init/tiddlywiki.conf
+  sudo: true
+  notify: restart tiddlywiki
