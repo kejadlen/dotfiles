@@ -1,3 +1,0 @@
-- name: restart tiddlywiki
-  service: name=tiddlywiki state=restarted
-  sudo: true

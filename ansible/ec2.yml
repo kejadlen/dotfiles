@@ -5,13 +5,18 @@
   tasks:
     - apt: update_cache=yes
       sudo: true
-    - apt: name=nginx state=present
+    - apt: name={{ item }} state=present
       sudo: true
+      with_items:
+        - nginx
+        - git
+
     - file: path=/etc/nginx/sites-enabled/default state=absent
       sudo: true
       notify: reload nginx
+
     - include: tiddlywiki/tasks.yml
+
   handlers:
     - name: reload nginx
       service: name=nginx state=reloaded
-    - include: tiddlywiki/handlers.yml
