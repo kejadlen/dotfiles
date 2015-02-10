@@ -2,9 +2,7 @@
 - name: ensure that Xcode is installed
   command: command -v xcodebuild
 
-- stat: path=/usr/local/bin/brew
-  register: brew
-  ignore_errors: True
 - name: install homebrew
   shell: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  when: brew.stat.exists == False
+  args:
+    creates: /usr/local/bin/brew
