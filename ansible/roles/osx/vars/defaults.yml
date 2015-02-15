@@ -45,6 +45,10 @@ osx_defaults:
     key: com.apple.mouse.tapBehavior
     type: bool
     value: true
+  - # only show scrollbars when scrolling
+    key: AppleShowScrollBars
+    type: string
+    value: WhenScrolling
 
   - # enable Debug menu in Safari
     domain: com.apple.Safari
