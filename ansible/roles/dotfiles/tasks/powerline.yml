@@ -14,3 +14,5 @@
       --editable={{ ansible_env.HOME }}/.dotfiles/src/powerline
 - file: src={{ item }} dest=/usr/local/bin/{{ item | basename }} state=link
   with_fileglob: ~/.dotfiles/src/powerline/scripts/*
+- file: path=~/.config state=directory
+- file: src=~/.dotfiles/powerline dest=~/.config/powerline state=link
