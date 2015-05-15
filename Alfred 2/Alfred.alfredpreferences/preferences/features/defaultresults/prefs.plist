@@ -4,5 +4,12 @@
 <dict>
 	<key>applicationFuzzyType</key>
 	<integer>1</integer>
+	<key>fallbacks</key>
+	<array>
+		<string>features.websearch.duckduckgo.fallback</string>
+		<string>features.websearch.google.fallback</string>
+		<string>features.websearch.amazon.fallback</string>
+		<string>features.websearch.wiki.fallback</string>
+	</array>
 </dict>
 </plist>
