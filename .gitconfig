@@ -11,17 +11,18 @@
 	pager = less -S
 [alias]
 	; hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-	co = checkout
+	; co = checkout
 	g = grep --break --heading --line-number
 	standup = "!git log --all --date=short --no-merges --pretty=format:\"%h %ad %s%d\" --since=1.weeks --author=`git config user.email`"
 	; ready = rebase -i @{u}
-	ready = rebase -i develop
+	; ready = rebase -i develop
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	; ancestor = merge-base
 	s = status -sb
 	latest = for-each-ref --count=20 --sort=-committerdate --format='%(committerdate:short) %(refname:short)'
 	root = !pwd
+	push-f = push --force-with-lease
 [difftool]
 	prompt = false
 [difftool "sourcetree"]
@@ -57,3 +58,5 @@
 	prune = true
 [tag]
 	sort = version:refname
+[rebase]
+	autosquash = true
