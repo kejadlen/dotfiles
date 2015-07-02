@@ -24,6 +24,7 @@ namespace :sync do
     Dir.chdir 'src/prezto' do
       sh 'git fetch upstream'
       sh 'git rebase upstream/master'
+      sh 'git submodule update --init --recursive'
     end
   end
 end
