@@ -44,5 +44,6 @@ set strictfocus+=*:moderate
 
 command chrome -js io.run("open", ["-a", "Google Chrome", buffer.URL]);gBrowser.removeCurrentTab();
 command safari -js io.run("open", ["-a", "Safari", buffer.URL]);
+command reader emenu View.Enter Reader View
 
 " vim: set ft=pentadactyl:
