@@ -1,6 +1,0 @@
-- hosts: dev
-  tasks:
-  - name: install dnsmasq
-    homebrew: name=dnsmasq state=present
-  - name: link conf files
-    command: chdir={{ ansible_env.HOME }}/.dotfiles stow --target=/usr/local/etc/dnsmasq.conf --stow {{ item }}
