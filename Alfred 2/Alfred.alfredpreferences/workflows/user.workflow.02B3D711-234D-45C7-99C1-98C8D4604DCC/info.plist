@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string></string>
+	<key>connections</key>
+	<dict>
+		<key>64D4866F-5048-4D9D-B4E4-E718528E7C30</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>DEB68CED-3830-4241-9EDD-5A6FA36C567E</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>DEB68CED-3830-4241-9EDD-5A6FA36C567E</key>
+		<array/>
+	</dict>
+	<key>createdby</key>
+	<string></string>
+	<key>description</key>
+	<string></string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>QuickCursor</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>1</integer>
+				<key>hotkey</key>
+				<integer>9</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>V</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>64D4866F-5048-4D9D-B4E4-E718528E7C30</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<true/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>require "fileutils"
+
+def osascript(script)
+  lines = script.split("\s*\n\s*")
+  args = lines.map {|line| "-e '#{line}'" }
+  `osascript #{args.join(' ')}`
+end
+
+query = "{query}"
+
+timestamp = Time.now.strftime("%Y.%m.%d-%H.%M")
+filename = File.expand_path("~/.quickcursor.#{timestamp}")
+app = osascript(&lt;&lt;SCRIPT).strip
+  tell application "System Events"
+    set frontApp to name of first application process whose frontmost is true
+  end tell
+SCRIPT
+
+File.write(filename, query)
+begin
+  `/usr/local/bin/mvim --nofork #{filename}`
+  `cat #{filename} | pbcopy`
+  osascript(&lt;&lt;-SCRIPT)
+    tell application "#{app}"
+      activate
+      tell application "System Events"
+        keystroke "v" using {command down}
+      end tell
+    end tell
+  SCRIPT
+ensure
+  FileUtils.mv(filename, File.expand_path("~/.Trash"))
+end</string>
+				<key>type</key>
+				<integer>2</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>DEB68CED-3830-4241-9EDD-5A6FA36C567E</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>64D4866F-5048-4D9D-B4E4-E718528E7C30</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+		<key>DEB68CED-3830-4241-9EDD-5A6FA36C567E</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string></string>
+</dict>
+</plist>
