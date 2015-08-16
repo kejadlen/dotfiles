@@ -56,7 +56,7 @@
 	<key>description</key>
 	<string></string>
 	<key>disabled</key>
-	<true/>
+	<false/>
 	<key>name</key>
 	<string>Volume</string>
 	<key>objects</key>
@@ -78,17 +78,21 @@
 				<false/>
 				<key>modsmode</key>
 				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.trigger.hotkey</string>
 			<key>uid</key>
 			<string>938650FD-681C-48DE-B900-C8D11D7D7D82</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
 				<key>escaping</key>
 				<integer>127</integer>
 				<key>script</key>
@@ -130,17 +134,21 @@ puts ('|' * (volume / 5)).ljust(20, '.')</string>
 				<false/>
 				<key>modsmode</key>
 				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.trigger.hotkey</string>
 			<key>uid</key>
 			<string>41AB37FB-6209-484C-AF15-6A5A996DD257</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
 				<key>escaping</key>
 				<integer>127</integer>
 				<key>script</key>
