@@ -32,6 +32,7 @@
 	trustExitCode = true
 [push]
 	default = current
+	followTags = true
 [difftool "kaleidoscope"]
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [mergetool "kaleidoscope"]
@@ -60,3 +61,5 @@
 	sort = version:refname
 [rebase]
 	autosquash = true
+[interactive]
+	singlekey = true
