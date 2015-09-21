@@ -3,6 +3,7 @@ casks:
   - 1password
   - adium
   - alfred
+  - anybar
   - bartender
   - bittorrent-sync
   - black-ink
@@ -19,6 +20,7 @@ casks:
   - quicklook-csv
   - quicklook-json
   - steam
+  - terminal-notifier
   - things
   - transmission
   - vlc
