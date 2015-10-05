@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string></string>
+	<string>com.arbitrarydefintions.quickapp</string>
 	<key>category</key>
 	<string>Tools</string>
 	<key>connections</key>
@@ -20,7 +20,16 @@
 			</dict>
 		</array>
 		<key>2E57B3A5-B65F-4AB6-93B2-183BB082414B</key>
-		<array/>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>CDB226D8-A880-4D6D-81DB-E44DEF05A972</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>960E961A-2EF3-44C4-BFF2-B8BA1466C8EA</key>
 		<array>
 			<dict>
@@ -306,7 +315,7 @@
 			<dict>
 				<key>paths</key>
 				<array>
-					<string>~/Applications/YoruFukurou.app</string>
+					<string>/opt/homebrew-cask/Caskroom/night-owl/latest/Night Owl.app</string>
 				</array>
 				<key>toggle</key>
 				<false/>
@@ -414,11 +423,11 @@
 				<key>argument</key>
 				<integer>0</integer>
 				<key>hotkey</key>
-				<integer>101</integer>
+				<integer>100</integer>
 				<key>hotmod</key>
 				<integer>8388608</integer>
 				<key>hotstring</key>
-				<string>F9</string>
+				<string>F8</string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -433,9 +442,26 @@
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>paths</key>
+				<array>
+					<string>/opt/homebrew-cask/Caskroom/omnifocus/2.2.5/OmniFocus.app</string>
+				</array>
+				<key>toggle</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.launchfiles</string>
+			<key>uid</key>
+			<string>CDB226D8-A880-4D6D-81DB-E44DEF05A972</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 	</array>
 	<key>readme</key>
-	<string></string>
+	<string>Icon by Designify.me</string>
 	<key>uidata</key>
 	<dict>
 		<key>1EA28BFD-4D7A-444E-8904-EF68D0CBDC8C</key>
@@ -492,6 +518,11 @@
 		<dict>
 			<key>ypos</key>
 			<real>250</real>
+		</dict>
+		<key>CDB226D8-A880-4D6D-81DB-E44DEF05A972</key>
+		<dict>
+			<key>ypos</key>
+			<real>850</real>
 		</dict>
 		<key>D0DA2B6C-006F-47D0-8776-9FD4521B12FC</key>
 		<dict>
