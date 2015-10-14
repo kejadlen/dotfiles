@@ -5,7 +5,7 @@ scratch.*
 doc/tags
 
 # direnv
-.envrc
+*.envrc
 
 # Ruby
 .bundle
