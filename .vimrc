@@ -14,7 +14,7 @@ execute pathogen#infect()
 
 """ mappings
 
-let mapleader=','
+let mapleader="\<Space>"
 noremap <up> <nop>
 noremap <down> <nop>
 noremap <left> <nop>
