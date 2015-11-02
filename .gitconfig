@@ -63,3 +63,5 @@
 	autosquash = true
 [interactive]
 	singlekey = true
+[url "git@github.com:"]
+	insteadof = https://github.com/
