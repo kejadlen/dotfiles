@@ -68,7 +68,7 @@ set noshowmode
 
 " has to go after solarized, wtf?
 highlight LongLine term=reverse cterm=reverse ctermfg=1 guifg=Black guibg=Yellow
-match LongLine /\%81v./
+match LongLine /\%101v./
 
 " searching
 set gdefault
