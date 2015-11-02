@@ -30,6 +30,17 @@
 				<string></string>
 			</dict>
 		</array>
+		<key>750E1C6D-84B5-4AC1-B727-CA1DA4013008</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>39AD610C-ACB2-4BD8-ACCF-966226C3ADA5</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>960E961A-2EF3-44C4-BFF2-B8BA1466C8EA</key>
 		<array>
 			<dict>
@@ -459,6 +470,50 @@
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>hotkey</key>
+				<integer>101</integer>
+				<key>hotmod</key>
+				<integer>8388608</integer>
+				<key>hotstring</key>
+				<string>F9</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>750E1C6D-84B5-4AC1-B727-CA1DA4013008</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>paths</key>
+				<array>
+					<string>/opt/homebrew-cask/Caskroom/slack/1.1.4/Slack.app</string>
+				</array>
+				<key>toggle</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.launchfiles</string>
+			<key>uid</key>
+			<string>39AD610C-ACB2-4BD8-ACCF-966226C3ADA5</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>Icon by Designify.me</string>
@@ -489,6 +544,11 @@
 			<key>ypos</key>
 			<real>250</real>
 		</dict>
+		<key>39AD610C-ACB2-4BD8-ACCF-966226C3ADA5</key>
+		<dict>
+			<key>ypos</key>
+			<real>970</real>
+		</dict>
 		<key>43DCD79F-94B0-4F0D-B7C2-4F04DC7ECE20</key>
 		<dict>
 			<key>ypos</key>
@@ -498,6 +558,11 @@
 		<dict>
 			<key>ypos</key>
 			<real>610</real>
+		</dict>
+		<key>750E1C6D-84B5-4AC1-B727-CA1DA4013008</key>
+		<dict>
+			<key>ypos</key>
+			<real>970</real>
 		</dict>
 		<key>960E961A-2EF3-44C4-BFF2-B8BA1466C8EA</key>
 		<dict>

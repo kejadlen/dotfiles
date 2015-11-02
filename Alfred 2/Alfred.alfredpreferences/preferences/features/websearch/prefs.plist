@@ -64,6 +64,21 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>78F38D7E-7CF4-41FC-AD5F-C4017FFCA0AE</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>giphy</string>
+			<key>plusSpaces</key>
+			<false/>
+			<key>text</key>
+			<string>Search Giphy for '{query}'</string>
+			<key>url</key>
+			<string>http://giphy.com/search/?q={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
 		<key>A5E2DBA1-C7F6-4F89-8348-987E767FC291</key>
 		<dict>
 			<key>enabled</key>
