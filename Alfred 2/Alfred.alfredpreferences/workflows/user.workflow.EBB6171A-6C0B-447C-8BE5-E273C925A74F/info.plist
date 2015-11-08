@@ -9,7 +9,16 @@
 	<key>connections</key>
 	<dict>
 		<key>1FB4AA4F-276E-4B9E-B48B-D6119EE1B6AE</key>
-		<array/>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>43DCD79F-94B0-4F0D-B7C2-4F04DC7ECE20</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>2E57B3A5-B65F-4AB6-93B2-183BB082414B</key>
 		<array>
 			<dict>

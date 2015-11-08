@@ -67,7 +67,7 @@
 		<key>78F38D7E-7CF4-41FC-AD5F-C4017FFCA0AE</key>
 		<dict>
 			<key>enabled</key>
-			<true/>
+			<false/>
 			<key>keyword</key>
 			<string>giphy</string>
 			<key>plusSpaces</key>
