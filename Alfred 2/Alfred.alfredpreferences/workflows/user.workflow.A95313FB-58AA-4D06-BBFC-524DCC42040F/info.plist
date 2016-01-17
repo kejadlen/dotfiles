@@ -42,6 +42,28 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>63</integer>
+				<key>script</key>
+				<string>url = ARGV.first || `pbpaste`.chomp
+# url = `pbpaste`.chomp if url.nil? || url.empty?
+url = "http://#{url}" unless url =~ %r|^[\w]+://|
+`open -a "Google Chrome" "#{url}"`</string>
+				<key>type</key>
+				<integer>2</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>24E5AD4A-C4E8-43EA-8FBF-47621D8A8829</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
@@ -65,28 +87,6 @@
 			<string>DC0E1A2B-DB5E-4AB4-9CFD-73ECD9B473DB</string>
 			<key>version</key>
 			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>63</integer>
-				<key>script</key>
-				<string>url = ARGV.first || `pbpaste`.chomp
-# url = `pbpaste`.chomp if url.nil? || url.empty?
-url = "http://#{url}" unless url =~ %r|^[\w]+://|
-`open -a "Google Chrome" "#{url}"`</string>
-				<key>type</key>
-				<integer>2</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>24E5AD4A-C4E8-43EA-8FBF-47621D8A8829</string>
-			<key>version</key>
-			<integer>0</integer>
 		</dict>
 		<dict>
 			<key>config</key>
