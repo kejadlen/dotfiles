@@ -271,6 +271,7 @@ if has("gui_running")
   set macmeta
   set background=light
   set guifont=Source\ Code\ Pro\ for\ Powerline:h13
+  set macligatures
 " else
   " fix Command-T's selection in Terminal.app
   " hi Visual term=reverse cterm=reverse ctermfg=187 ctermbg=235 guifg=Black guibg=Yellow
