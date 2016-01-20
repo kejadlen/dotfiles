@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+# Default to a five minute timeout
+timeout = 5
+unit = ?M
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{__FILE__} [options]"
+
+  opts.on("-tTIMEOUT", "--t=TIMEOUT",
+          "Default timeout: #{timeout}") { |t| timeout = t.to_i }
+  opts.on("-uUNIT", "--u=UNIT",
+         "Default unit: #{unit}") { |u| unit = u }
+end.parse!
+
+def with_mount(image)
+  out = `hdiutil mount "#{image}"`
+  mountpoint = out.split(/\s+/).last
+  yield mountpoint
+ensure
+  puts `hdiutil unmount "#{mountpoint}"`
+end
+
+keyz = File.expand_path("../keyz.sparsebundle", __FILE__)
+with_mount(keyz) do |mountpoint|
+  `ssh-add -t #{timeout}#{unit} "#{File.join(mountpoint, "id_rsa")}"`
+end
