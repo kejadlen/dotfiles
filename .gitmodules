@@ -111,7 +111,7 @@
 	url = git://github.com/tpope/vim-commentary.git
 [submodule ".vim/bundle/vim-scala"]
 	path = .vim/bundle/vim-scala
-	url = git://github.com:derekwyatt/vim-scala.git
+	url = git://github.com/derekwyatt/vim-scala.git
 [submodule ".vim/bundle/rust.vim"]
 	path = .vim/bundle/rust.vim
 	url = git://github.com/rust-lang/rust.vim.git
@@ -120,19 +120,19 @@
 	url = git://github.com/tpope/vim-projectionist.git
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/alphred.alfredworkflow"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/alphred.alfredworkflow
-	url = git://github.com:kejadlen/alphred.alfredworkflow.git
+	url = git://github.com/kejadlen/alphred.alfredworkflow.git
 [submodule ".vim/bundle/elm.vim"]
 	path = .vim/bundle/elm.vim
-	url = git://github.com:lambdatoast/elm.vim.git
+	url = git://github.com/lambdatoast/elm.vim.git
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/emoji.alfredworkflow"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/emoji.alfredworkflow
-	url = git://github.com:kejadlen/emoji.alfredworkflow.git
+	url = git://github.com/kejadlen/emoji.alfredworkflow.git
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/faker.alfredworkflow
-	url = git://github.com:kejadlen/faker.alfredworkflow.git
+	url = git://github.com/kejadlen/faker.alfredworkflow.git
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/forecast.alfredworkflow"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/forecast.alfredworkflow
-	url = git://github.com:kejadlen/forecast.alfredworkflow.git
+	url = git://github.com/kejadlen/forecast.alfredworkflow.git
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/giphy.alfredworkflow"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/giphy.alfredworkflow
-	url = git://github.com:kejadlen/giphy.alfredworkflow.git
+	url = git://github.com/kejadlen/giphy.alfredworkflow.git
