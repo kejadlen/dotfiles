@@ -60,7 +60,7 @@
 	url = git://github.com/chriskempson/base16-vim.git
 [submodule ".vim/bundle/fakeclip"]
 	path = .vim/bundle/fakeclip
-	url = https://github.com/kana/vim-fakeclip
+	url = git://github.com/kana/vim-fakeclip
 [submodule ".vim/bundle/ag"]
 	path = .vim/bundle/ag
 	url = git://github.com/rking/ag.vim.git
@@ -69,7 +69,7 @@
 	url = git://github.com/tpope/vim-vinegar.git
 [submodule ".vim/bundle/go"]
 	path = .vim/bundle/go
-	url = https://github.com/fatih/vim-go.git
+	url = git://github.com/fatih/vim-go.git
 [submodule ".vim/bundle/vim-tmux-navigator"]
 	path = .vim/bundle/vim-tmux-navigator
 	url = git://github.com/christoomey/vim-tmux-navigator.git
@@ -90,40 +90,43 @@
 	url = git://github.com/tpope/vim-sleuth.git
 [submodule ".vim/bundle/vim-startify"]
 	path = .vim/bundle/vim-startify
-	url = https://github.com/mhinz/vim-startify.git
+	url = git://github.com/mhinz/vim-startify.git
 [submodule ".vim/bundle/vim-rsi"]
 	path = .vim/bundle/vim-rsi
-	url = https://github.com/tpope/vim-rsi.git
+	url = git://github.com/tpope/vim-rsi.git
 [submodule ".vim/bundle/vim-sensible"]
 	path = .vim/bundle/vim-sensible
-	url = https://github.com/tpope/vim-sensible.git
+	url = git://github.com/tpope/vim-sensible.git
 [submodule ".vim/bundle/vim-unimpaired"]
 	path = .vim/bundle/vim-unimpaired
-	url = https://github.com/tpope/vim-unimpaired.git
+	url = git://github.com/tpope/vim-unimpaired.git
 [submodule ".vim/bundle/incsearch.vim"]
 	path = .vim/bundle/incsearch.vim
-	url = https://github.com/haya14busa/incsearch.vim
+	url = git://github.com/haya14busa/incsearch.vim
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/user.workflow.8694C3FC-8218-4B98-BB1F-F1CEC686477C"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/user.workflow.8694C3FC-8218-4B98-BB1F-F1CEC686477C
-	url = https://github.com/kejadlen/forecast.alfredworkflow.git
+	url = git://github.com/kejadlen/forecast.alfredworkflow.git
 [submodule ".vim/bundle/vim-commentary"]
 	path = .vim/bundle/vim-commentary
-	url = https://github.com/tpope/vim-commentary.git
+	url = git://github.com/tpope/vim-commentary.git
 [submodule ".vim/bundle/vim-scala"]
 	path = .vim/bundle/vim-scala
-	url = git@github.com:derekwyatt/vim-scala.git
+	url = git://github.com:derekwyatt/vim-scala.git
 [submodule ".vim/bundle/rust.vim"]
 	path = .vim/bundle/rust.vim
-	url = https://github.com/rust-lang/rust.vim.git
+	url = git://github.com/rust-lang/rust.vim.git
 [submodule ".vim/bundle/vim-projectionist"]
 	path = .vim/bundle/vim-projectionist
 	url = git://github.com/tpope/vim-projectionist.git
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/alphred.alfredworkflow"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/alphred.alfredworkflow
-	url = git@github.com:kejadlen/alphred.alfredworkflow.git
+	url = git://github.com:kejadlen/alphred.alfredworkflow.git
 [submodule ".vim/bundle/elm.vim"]
 	path = .vim/bundle/elm.vim
-	url = git@github.com:lambdatoast/elm.vim.git
+	url = git://github.com:lambdatoast/elm.vim.git
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/emoji.alfredworkflow"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/emoji.alfredworkflow
-	url = git@github.com:kejadlen/emoji.alfredworkflow.git
+	url = git://github.com:kejadlen/emoji.alfredworkflow.git
+[submodule "Alfred 2/Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
+	path = Alfred 2/Alfred.alfredpreferences/workflows/faker.alfredworkflow
+	url = git://github.com:kejadlen/faker.alfredworkflow.git
