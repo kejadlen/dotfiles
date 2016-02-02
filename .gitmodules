@@ -130,3 +130,6 @@
 [submodule "Alfred 2/Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
 	path = Alfred 2/Alfred.alfredpreferences/workflows/faker.alfredworkflow
 	url = git://github.com:kejadlen/faker.alfredworkflow.git
+[submodule "Alfred 2/Alfred.alfredpreferences/workflows/forecast.alfredworkflow"]
+	path = Alfred 2/Alfred.alfredpreferences/workflows/forecast.alfredworkflow
+	url = git://github.com:kejadlen/forecast.alfredworkflow.git
