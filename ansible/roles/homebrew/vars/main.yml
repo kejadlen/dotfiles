@@ -1,0 +1,50 @@
+formulae:
+  - name: ctags
+  - name: direnv
+  - name: fasd
+  - name: git
+  - name: macvim
+    install_options: with-override-system-vim
+  - name: reattach-to-user-namespace
+  - name: terminal-notifier
+  - name: the_silver_searcher
+  - name: tmux
+  - name: tree
+  - name: youtube-dl
+  - name: zsh
+
+casks:
+  - 1password
+  - acorn
+  - adium
+  - alfred
+  # - anybar
+  - arq
+  - bartender
+  - bittorrent-sync
+  - black-ink
+  - disk-inventory-x
+  - dropbox
+  - fantastical
+  - firefox
+  - flux
+  - google-chrome
+  - little-snitch
+  # - moom
+  - night-owl
+  - omnifocus
+  - openscad
+  - plug
+  - qlmarkdown
+  - qlstephen
+  - quicklook-csv
+  - quicklook-json
+  - slack
+  - steam
+  # - things
+  - transmission
+  - vlc
+
+fonts:
+  - hack
+  - sauce-code-powerline

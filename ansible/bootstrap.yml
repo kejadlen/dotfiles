@@ -1,0 +1,25 @@
+- hosts: all
+  tasks:
+  - name: Clone dotfiles repo into ~/.dotfiles
+    git:
+      repo: https://github.com/kejadlen/dotfiles.git
+      recursive: yes
+      dest: ~/.dotfiles
+      accept_hostkey: yes
+      version: ansible-2 # TODO Don't check this in
+
+  - name: create ~/.ssh
+    file: dest=~/.ssh state=directory
+
+  - name: symlink ~/.ssh/authorized_keys so future plays don't need a password
+    file: src=~/.dotfiles/.ssh/authorized_keys dest=~/.ssh/authorized_keys state=link
+
+  # This is necessary since we want to enable sudo when running the Homebrew
+  # install script but don't want to run it as root. Yeah, I know.
+  - name: authenticate sudo
+    ping:
+    become: yes
+
+  - name: install Homebrew
+    shell: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null
+    when: ansible_distribution == "MacOSX"

@@ -1,4 +1,4 @@
-- name: restart osx system services
+- name: restart OS X system services
   command: killall {{ item }}
   with_items:
     - Finder

@@ -1,20 +1,28 @@
----
-- include: bootstrap.yml
-- include: formulae.yml
+- name: copy application preferences
+  synchronize:
+    src: "{{ item }}"
+    dest: "{{ item | regex_replace(' ', '\ ') }}"
+    rsync_opts: --ignore-existing
+  with_items: "{{ app_prefs }}"
+
 - include: dock.yml
-  tags: dock
-- include: casks.yml
-  tags: casks
-- include: fonts.yml
-- include: defaults.yml
-  tags: defaults
+
+- name: set OS X defaults
+  osx_defaults:
+    domain: "{{ item.domain | default(omit) }}"
+    key: "{{ item.key }}"
+    type: "{{ item.type }}"
+    value: "{{ item.value }}"
+  with_items: "{{ osx_defaults }}"
+  notify: restart OS X system services
 
 - file: path=~/Library/KeyBindings state=directory
-- file:
+- name: Symlink Emacs-style keybindings for OS X
+  file:
     src: ~/.dotfiles/osx/DefaultKeyBinding.dict
     dest: ~/Library/KeyBindings/DefaultKeyBinding.dict
     state: link
-- file: src=~/.dotfiles/osx/Colors dest=~/Library/Colors state=link
 
-# TODO This should probably be moved to the dotfiles role.
-- file: src=~/.dotfiles/osx/.tmux.conf.local dest=~/.tmux.conf.local state=link
+- name: symlink OS X colors palettes
+  file: src={{ item }} dest=~/Library/Colors/{{ item | basename }} state=link
+  with_fileglob: ~/.dotfiles/osx/Colors/*

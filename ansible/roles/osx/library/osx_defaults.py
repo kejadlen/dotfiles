@@ -19,14 +19,14 @@
 DOCUMENTATION = '''
 ---
 module: osx_defaults
-author: Franck Nijhof
+author: Franck Nijhof (@frenck)
 short_description: osx_defaults allows users to read, write, and delete Mac OS X user defaults from Ansible
 description:
   - osx_defaults allows users to read, write, and delete Mac OS X user defaults from Ansible scripts.
     Mac OS X applications and other programs use the defaults system to record user preferences and other
     information that must be maintained when the applications aren't running (such as default font for new
     documents, or the position of an Info panel).
-version_added: 1.8
+version_added: "2.0"
 options:
   domain:
     description:
@@ -47,7 +47,7 @@ options:
     description:
       - Add new elements to the array for a key which has an array as its value.
     required: false
-    default: string
+    default: false
     choices: [ "true", "false" ]
   value:
     description:
@@ -124,9 +124,11 @@ class OSXDefaults(object):
         if type == "string":
             return str(value)
         elif type in ["bool", "boolean"]:
-            if value.lower() in [True, 1, "true", "1", "yes"]:
+            if isinstance(value, basestring):
+                value = value.lower()
+            if value in [True, 1, "true", "1", "yes"]:
                 return True
-            elif value.lower() in [False, 0, "false", "0", "no"]:
+            elif value in [False, 0, "false", "0", "no"]:
                 return False
             raise OSXDefaultsException("Invalid boolean value: {0}".format(repr(value)))
         elif type == "date":
@@ -209,13 +211,16 @@ class OSXDefaults(object):
 
         # We need to convert some values so the defaults commandline understands it
         if type(self.value) is bool:
-            value = "TRUE" if self.value else "FALSE"
+            if self.value:
+                value = "TRUE"
+            else:
+                value = "FALSE"
         elif type(self.value) is int or type(self.value) is float:
             value = str(self.value)
         elif self.array_add and self.current_value is not None:
             value = list(set(self.value) - set(self.current_value))
-        elif isinstance(self.value, datetime):
-            value = self.value.strftime('%Y-%m-%d %H:%M:%S')
+        # elif isinstance(self.value, datetime):
+        #     value = self.value.strftime('%Y-%m-%d %H:%M:%S')
         else:
             value = self.value
 
@@ -306,7 +311,7 @@ def main():
             array_add=dict(
                 default=False,
                 required=False,
-                choices=BOOLEANS,
+                type='bool',
             ),
             value=dict(
                 default=None,
@@ -340,7 +345,7 @@ def main():
                                array_add=array_add, value=value, state=state, path=path)
         changed = defaults.run()
         module.exit_json(changed=changed)
-    except OSXDefaultsException as e:
+    except OSXDefaultsException, e:
         module.fail_json(msg=e.message)
 
 # /main ------------------------------------------------------------------- }}}

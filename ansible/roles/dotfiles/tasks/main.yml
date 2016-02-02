@@ -1,6 +1,23 @@
----
-- include: dotfiles.yml
-  tags: dotfiles
-- include: powerline.yml
-  tags: powerline
-- include: zsh.yml
+- name: create config directories
+  file: path={{ item }} state=directory
+  with_items: "{{ conf_dirs }}"
+
+- name: symlink configs
+  file: src=~/.dotfiles/{{ item.key }} dest={{ item.value }} state=link
+  with_dict: "{{ conf_symlinks }}"
+
+- name: force-symlink private configs
+  file:
+    src: ~/Dropbox/dotfiles/{{ item.key }}
+    dest: "{{ item.value }}"
+    state: link
+    force: yes # Since these won't exist until later.
+  with_dict: "{{ private_symlinks }}"
+
+- name: symlink SSH configs
+  file: src={{ item }} dest=~/.ssh/{{ item | basename }} state=link
+  with_fileglob: ~/.dotfiles/.ssh/*
+
+- name: symlink ~/.tmux.conf.local
+  file: src=~/.dotfiles/osx/.tmux.conf.local dest=~/.tmux.conf.local state=link
+  when: ansible_distribution == "MacOSX"

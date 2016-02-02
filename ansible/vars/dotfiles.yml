@@ -1,16 +1,21 @@
-dotfiles:
+conf_dirs:
+  - ~/.bundle
+  - ~/.ssh
+  - ~/.vim_tmp
+
+conf_symlinks:
   gitignore: ~/.gitignore
   .bundle/config: ~/.bundle/config
+  .config: ~/.config
   .gemrc: ~/.gemrc
   .git_templates: ~/.git_templates
   .gitconfig: ~/.gitconfig
   .hammerspoon: ~/.hammerspoon
-  # .pentadactyl: ~/.pentadactyl
   .pentadactylrc: ~/.pentadactylrc
   .pryrc: ~/.pryrc
   .tmux.conf: ~/.tmux.conf
   .vim: ~/.vim
   .vimrc: ~/.vimrc
-private:
-  .config: ~/.config
+
+private_symlinks:
   .gitconfig.private: ~/.gitconfig.private

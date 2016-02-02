@@ -1,0 +1,27 @@
+- name: install ZSH
+  homebrew: name=zsh state=present
+
+- name: symlink ~/.zprezto
+  file:
+    src: "{{ ansible_env.HOME }}/.dotfiles/src/prezto"
+    dest: "{{ ansible_env.HOME}}/.zprezto"
+    state: link
+
+- name: get Prezto runcoms from dotfiles
+  shell: ls ~/.zprezto/runcoms | grep -v README.md
+  register: prezto_runcoms
+
+- name: symlink Prezto runcoms
+  file:
+    src: "{{ ansible_env.HOME }}/.zprezto/runcoms/{{ item }}"
+    dest: "{{ ansible_env.HOME}}/.{{ item }}"
+    state: link
+  with_items: "{{ prezto_runcoms.stdout_lines }}"
+
+- name: add /usr/local/bin/zsh to /etc/shells
+  lineinfile: dest=/etc/shells line=/usr/local/bin/zsh state=present
+  become: yes
+
+- name: set the default user shell to zsh
+  user: name={{ ansible_env.USER }} shell=/usr/local/bin/zsh
+  become: yes

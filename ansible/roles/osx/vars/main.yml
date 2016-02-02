@@ -1,4 +1,3 @@
----
 osx_defaults:
   # This is named `osx_defaults` since there's an Ansible conflict when this key
   # is named just `defaults`.
@@ -101,12 +100,12 @@ osx_defaults:
     value: true
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
     key: DragLock
-    type: int
-    value: 1
+    type: bool
+    value: true
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
     key: Dragging
-    type: int
-    value: 1
+    type: bool
+    value: true
 
   # Finder defaults
   - # don't ask when changing file extension
@@ -150,3 +149,12 @@ osx_defaults:
     key: AppleEnableSwipeNavigateWithScrolls
     type: bool
     value: false
+
+app_prefs:
+  - ~/Library/Application Support/Adium 2.0/
+  - ~/Library/Preferences/com.adiumX.adiumX.plist
+  - ~/Library/Preferences/com.culturedcode.things.plist
+  - ~/Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist
+  - ~/Library/Preferences/com.surteesstudios.Bartender.plist
+  - ~/Library/Preferences/com.flexibits.fantastical.plist
+  - ~/Library/Preferences/org.herf.Flux.plist

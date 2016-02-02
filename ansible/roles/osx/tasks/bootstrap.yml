@@ -1,8 +1,0 @@
----
-- name: ensure that Xcode is installed
-  command: command -v xcodebuild
-
-- name: install homebrew
-  shell: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  args:
-    creates: /usr/local/bin/brew

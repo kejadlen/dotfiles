@@ -1,0 +1,31 @@
+- name: install Formulae
+  homebrew:
+    name: "{{ item.name }}"
+    install_options: "{{ item.install_options | default(omit) }}"
+    state: present
+  with_items: "{{ formulae }}"
+
+- name: link Homebrew apps
+  command: /usr/local/bin/brew linkapps
+
+- name: create ~/Applications
+  file: path={{ ansible_env.HOME }}/Applications state=directory
+
+# This is necessary since we want to enable sudo when setting up Homebrew-Cask.
+- name: authenticate sudo
+  ping:
+  become: yes
+
+- name: setup Homebrew-Cask
+  command: /usr/local/bin/brew cask
+
+- name: install casks
+  homebrew_cask: name={{ item }} state=installed
+  with_items: "{{ casks }}"
+
+- name: tap caskroom/fonts
+  homebrew_tap: tap=caskroom/fonts state=present
+
+- name: install fonts
+  homebrew_cask: name=font-{{ item }} state=installed
+  with_items: "{{ fonts }}"

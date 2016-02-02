@@ -1,0 +1,8 @@
+- name: install chruby
+  homebrew: name={{ item }} state=present
+  with_items:
+    - chruby
+    - ruby-install
+
+- name: install Ruby
+  command: /usr/local/bin/ruby-install ruby

@@ -1,39 +1,66 @@
-A new beginning for what used to be my
-[conf_dir](https://github.com/kejadlen/conf_dir) project, since `dotfiles`
-appears to be the conventional name of these types of repos nowadays.
+# Dotfiles
 
-This uses [Ansible](https://github.com/ansible/ansible) to provision new
-machines.
+This repo contains both my dotfiles as well as [Ansible][ansible] playbooks to
+provision new machines.
+
+**Use at your own risk.** Untested except on my own El Capitan installs.
+
+[ansible]: https://github.com/ansible/ansible
+
+# Playbooks
+
+- `bootstrap.yml`: SSH and Homebrew setup
+- `main.yml`: Pretty much everything else
+- `imac.yml`: For quieting down the broken HDD fan on my iMac
+- `macbook_pro.yml`: Remap Caps Lock to Control on the laptop
 
 # Usage
 
-There are two ways to go about using this - either locally or remotely. The main
-difference is that OS X application settings are only copied over when running
-this on a remote machine.
+First, some steps need to be performed on the remote machine that I couldn't
+figure out how to automate:
 
-Either way, we start with installing Xcode:
+- Enable Remote Login in System Preferences -> Sharing.
+- Install the command line developer tools: `xcode-select --install`. (It looks
+like the Homebrew installer [_should_][xcode-select-cli] be able to handle
+this, but I haven't been able to get it to work headless.)
+- Install Xcode: `open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'`
+- Accept the Xcode license: `sudo xcodebuild -license`
+- Accept the sudo disclaimer: `sudo -v`
 
-``` shell
-xcode-select --install
-open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'
-sudo xcodebuild -license
+[xcode-select-cli]: https://github.com/Homebrew/install/blob/master/install#L207-L216
+
+On the control machine:
+
+```
+brew install ansible
+git clone --recursive git@github.com:kejadlen/dotfiles
+cd dotfiles/ansible
+
+echo HOST > hosts.private
+
+ansible-playbook bootstrap.yml --ask-pass --ask-become-pass
+ansible-playbook main.yml --ask-become-pass
 ```
 
-**After running Ansible**, there are some optional tasks for full desktop setup:
+A couple items that I haven't gotten around to automating yet that need to be
+manually run post-provisioning:
 
 ``` shell
-# Remove the bootstrap directory for the canonical one in Dropbox
-rm -rf ~/.dotfiles
-ln -s ~/Dropbox/dotfiles ~/.dotfiles
-
 # Apply personal Terminal settings
 open ~/.dotfiles/Alpha.terminal
+
+# Symlink ~/.dotfiles to Dropbox
+rm -rf ~/.dotfiles
+ln -s ~/Dropbox/dotfiles ~/.dotfiles
 
 # Add private SSH keys
 ruby ~/.dotfiles/scripts/setup_ssh_keys.rb
 ```
 
-## Local
+## Provisioning Locally
+
+You can also use this to provision a machine by itself, although this won't
+be able to copy over OS X application settings, for obvious reasons.
 
 ``` shell
 # Install Homebrew
@@ -46,31 +73,14 @@ brew install ansible
 git clone --recursive https://github.com/kejadlen/dotfiles.git ~/.dotfiles
 
 # Run Ansible
-cd ~/.dotfiles/ansible && ansible-playbook main.yml --ask-sudo-pass
-rm -f ~/*.retry
-```
-
-## Remote
-
-On the remote machine, SSH access must first be enabled (under System
-Preferences -> Sharing) and the Xcode Command Line Tools need to be installed
-(`xcode-select --install`).
-
-``` shell
-cd ~/.dotfiles/ansible && ansible-playbook main.yml --ask-pass --ask-sudo-pass
-```
-
-# Misc
-
-To update submodules:
-
-``` shell
-git submodule foreach git pull
+cd ~/.dotfiles/ansible
+echo localhost > hosts.private
+ansible-playbook main.yml --ask-pass --ask-become-pass
 ```
 
 # Development
 
-Ansible tags are indispensible when tweaking the config.
+Ansible tags are indispensible when tweaking the config:
 
 ```
 - command: echo debug
@@ -78,14 +88,7 @@ Ansible tags are indispensible when tweaking the config.
 ```
 
 ``` shell
-ansible-playbook main.yml --ask-sudo-pass --tags debug
-```
-
-# Vagrant
-
-``` shell
-vagrant up
-ansible vagrant -m ping
+ansible-playbook main.yml --ask-become-pass --tags=debug
 ```
 
 # TODO

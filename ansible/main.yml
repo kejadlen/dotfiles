@@ -1,5 +1,28 @@
+---
+- hosts: all
+  tasks:
+    - group_by: key=os_{{ ansible_distribution }}
+
+- hosts: all
+  pre_tasks:
+    - name: update dotfiles repo
+      git:
+        repo: https://github.com/kejadlen/dotfiles.git
+        dest: ~/.dotfiles
+        version: ansible-2 # TODO Don't check this in
+    - name: Update Homebrew
+      homebrew: update_homebrew=yes
+
+- hosts: os_MacOSX
+  roles:
+    - role: homebrew
+      when: ansible_distribution == "MacOSX"
+    - role: osx
+      when: ansible_distribution == "MacOSX"
+
 - hosts: all
   roles:
-    - bootstrap
-    - { role: osx, when: ansible_distribution == "MacOSX" }
     - dotfiles
+    - ruby
+    - powerline
+    - zsh
