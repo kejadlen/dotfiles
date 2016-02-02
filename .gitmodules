@@ -124,3 +124,6 @@
 [submodule ".vim/bundle/elm.vim"]
 	path = .vim/bundle/elm.vim
 	url = git@github.com:lambdatoast/elm.vim.git
+[submodule "Alfred 2/Alfred.alfredpreferences/workflows/emoji.alfredworkflow"]
+	path = Alfred 2/Alfred.alfredpreferences/workflows/emoji.alfredworkflow
+	url = git@github.com:kejadlen/emoji.alfredworkflow.git
