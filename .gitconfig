@@ -28,7 +28,7 @@
 [push]
 	default = current
 	followTags = true
-	recurseSubmodules = check
+	recurseSubmodules = on-demand
 [difftool "kaleidoscope"]
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [mergetool "kaleidoscope"]
