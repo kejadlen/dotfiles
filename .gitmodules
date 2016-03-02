@@ -10,9 +10,6 @@
 [submodule ".vim/bundle/argtextobj.vim"]
 	path = .vim/bundle/argtextobj.vim
 	url = git://github.com/vim-scripts/argtextobj.vim.git
-[submodule ".vim/bundle/gist-vim"]
-	path = .vim/bundle/gist-vim
-	url = git://github.com/mattn/gist-vim.git
 [submodule ".vim/bundle/vim-textobj-rubyblock"]
 	path = .vim/bundle/vim-textobj-rubyblock
 	url = git://github.com/nelstrom/vim-textobj-rubyblock.git
@@ -34,9 +31,6 @@
 [submodule ".vim/bundle/vim-ruby"]
 	path = .vim/bundle/vim-ruby
 	url = git://github.com/vim-ruby/vim-ruby.git
-[submodule ".vim/bundle/vim-fugitive"]
-	path = .vim/bundle/vim-fugitive
-	url = git://github.com/tpope/vim-fugitive.git
 [submodule ".vim/bundle/vim-coffee-script"]
 	path = .vim/bundle/vim-coffee-script
 	url = git://github.com/kchmck/vim-coffee-script.git
@@ -49,18 +43,9 @@
 [submodule ".vim/bundle/vim-dispatch"]
 	path = .vim/bundle/vim-dispatch
 	url = git://github.com/tpope/vim-dispatch.git
-[submodule ".vim/bundle/tagbar"]
-	path = .vim/bundle/tagbar
-	url = git://github.com/majutsushi/tagbar.git
 [submodule ".vim/bundle/ctrlp"]
 	path = .vim/bundle/ctrlp
 	url = git://github.com/kien/ctrlp.vim.git
-[submodule ".vim/bundle/base16"]
-	path = .vim/bundle/base16
-	url = git://github.com/chriskempson/base16-vim.git
-[submodule ".vim/bundle/fakeclip"]
-	path = .vim/bundle/fakeclip
-	url = git://github.com/kana/vim-fakeclip
 [submodule ".vim/bundle/ag"]
 	path = .vim/bundle/ag
 	url = git://github.com/rking/ag.vim.git
@@ -88,9 +73,6 @@
 [submodule ".vim/bundle/vim-sleuth"]
 	path = .vim/bundle/vim-sleuth
 	url = git://github.com/tpope/vim-sleuth.git
-[submodule ".vim/bundle/vim-startify"]
-	path = .vim/bundle/vim-startify
-	url = git://github.com/mhinz/vim-startify.git
 [submodule ".vim/bundle/vim-rsi"]
 	path = .vim/bundle/vim-rsi
 	url = git://github.com/tpope/vim-rsi.git
