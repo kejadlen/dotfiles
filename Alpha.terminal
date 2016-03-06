@@ -183,7 +183,7 @@
 	AQEAAAAAAAAAHAAAAAAAAAAAAAAAAAAAAN0=
 	</data>
 	<key>FontAntialias</key>
-	<false/>
+	<true/>
 	<key>FontHeightSpacing</key>
 	<real>0.93999999999999995</real>
 	<key>FontWidthSpacing</key>
@@ -201,6 +201,24 @@
 	cmNoaXZlctEXGFRyb290gAEIERojLTI3O0FITltikJKUmaSttbjB09bbAAAAAAAAAQEA
 	AAAAAAAAGQAAAAAAAAAAAAAAAAAAAN0=
 	</data>
+	<key>ShowActiveProcessInTabTitle</key>
+	<false/>
+	<key>ShowActiveProcessInTitle</key>
+	<true/>
+	<key>ShowComponentsWhenTabHasCustomTitle</key>
+	<false/>
+	<key>ShowDimensionsInTitle</key>
+	<false/>
+	<key>ShowRepresentedURLInTabTitle</key>
+	<false/>
+	<key>ShowRepresentedURLInTitle</key>
+	<true/>
+	<key>ShowRepresentedURLPathInTitle</key>
+	<false/>
+	<key>ShowShellCommandInTitle</key>
+	<false/>
+	<key>ShowTTYNameInTabTitle</key>
+	<false/>
 	<key>TextBoldColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
@@ -222,7 +240,7 @@
 	<key>UseBoldFonts</key>
 	<false/>
 	<key>UseBrightBold</key>
-	<false/>
+	<true/>
 	<key>VisualBell</key>
 	<true/>
 	<key>VisualBellOnlyWhenMuted</key>
@@ -287,8 +305,6 @@
 		<string>[33~</string>
 		<key>F717</key>
 		<string>[34~</string>
-		<key>F728</key>
-		<string></string>
 		<key>^F702</key>
 		<string>[5D</string>
 		<key>^F703</key>
