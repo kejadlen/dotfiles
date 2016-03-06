@@ -9,8 +9,7 @@
       git:
         repo: https://github.com/kejadlen/dotfiles.git
         dest: ~/.dotfiles
-        version: ansible-2 # TODO Don't check this in
-    - name: Update Homebrew
+    - name: update homebrew
       homebrew: update_homebrew=yes
 
 - hosts: os_MacOSX

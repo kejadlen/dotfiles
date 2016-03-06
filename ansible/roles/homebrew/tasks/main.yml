@@ -1,11 +1,11 @@
-- name: install Formulae
+- name: install formulae
   homebrew:
     name: "{{ item.name }}"
     install_options: "{{ item.install_options | default(omit) }}"
     state: present
   with_items: "{{ formulae }}"
 
-- name: link Homebrew apps
+- name: link homebrew apps
   command: /usr/local/bin/brew linkapps
 
 - name: create ~/Applications
@@ -16,7 +16,7 @@
   ping:
   become: yes
 
-- name: setup Homebrew-Cask
+- name: setup homebrew/cask
   command: /usr/local/bin/brew cask
 
 - name: install casks
@@ -29,3 +29,6 @@
 - name: install fonts
   homebrew_cask: name=font-{{ item }} state=installed
   with_items: "{{ fonts }}"
+
+- name: tap personal homebrew repo
+  homebrew_tap: tap=kejadlen/personal
