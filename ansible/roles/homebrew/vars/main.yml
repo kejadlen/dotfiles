@@ -30,7 +30,7 @@ casks:
   - flux
   - google-chrome
   - little-snitch
-  # - moom
+  - moom
   - night-owl
   - omnifocus
   - openscad

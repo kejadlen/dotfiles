@@ -97,6 +97,11 @@ osx_defaults:
     key: tilesize
     type: int
     value: 36
+  - # no dock delay
+    domain: com.apple.dock
+    key: autohide-delay
+    type: float
+    value: 0
 
   # Trackpad settings
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
@@ -157,6 +162,7 @@ osx_defaults:
 
 app_prefs:
   - ~/Library/Application Support/Adium 2.0/
+  - ~/Library/Containers/com.reederapp.rkit2.mac
   - ~/Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist
   - ~/Library/Preferences/com.adiumX.adiumX.plist
   - ~/Library/Preferences/com.culturedcode.things.plist
