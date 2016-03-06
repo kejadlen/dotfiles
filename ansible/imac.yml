@@ -2,7 +2,11 @@
   tasks:
     - name: install sleepwatcher
       homebrew_cask: name=sleepwatcher state=installed
+
     - name: install smcfancontrol
       homebrew_cask: name=smcfancontrol state=installed
+
+    # TODO Install launchd scripts, etc. for sleepwatcher
+
     - name: link ~/.wakeup
       file: src=~/.dotfiles/scripts/kill_imac_hdd_fan.rb dest=~/.wakeup state=link

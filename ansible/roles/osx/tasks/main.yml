@@ -1,7 +1,7 @@
 - name: copy application preferences
   synchronize:
     src: "{{ item }}"
-    dest: "{{ item | regex_replace(' ', '\ ') }}"
+    dest: "{{ item }}"
     rsync_opts: --ignore-existing
   with_items: "{{ app_prefs }}"
 

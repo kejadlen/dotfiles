@@ -92,6 +92,11 @@ osx_defaults:
     key: wvous-bl-corner
     type: int
     value: 10
+  - # set the icon size to 36 pixels
+    domain: com.apple.dock
+    key: tilesize
+    type: int
+    value: 36
 
   # Trackpad settings
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
@@ -152,9 +157,9 @@ osx_defaults:
 
 app_prefs:
   - ~/Library/Application Support/Adium 2.0/
+  - ~/Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist
   - ~/Library/Preferences/com.adiumX.adiumX.plist
   - ~/Library/Preferences/com.culturedcode.things.plist
-  - ~/Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist
-  - ~/Library/Preferences/com.surteesstudios.Bartender.plist
   - ~/Library/Preferences/com.flexibits.fantastical.plist
+  - ~/Library/Preferences/com.surteesstudios.Bartender.plist
   - ~/Library/Preferences/org.herf.Flux.plist
