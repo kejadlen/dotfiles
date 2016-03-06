@@ -326,7 +326,7 @@
 			<dict>
 				<key>paths</key>
 				<array>
-					<string>/opt/homebrew-cask/Caskroom/night-owl/latest/Night Owl.app</string>
+					<string>~/Applications/Night Owl.app</string>
 				</array>
 				<key>toggle</key>
 				<false/>
