@@ -4,6 +4,7 @@
     dest: "{{ item }}"
     rsync_opts: --ignore-existing
   with_items: "{{ app_prefs }}"
+  when: inventory_hostname != "localhost"
 
 - include: dock.yml
 

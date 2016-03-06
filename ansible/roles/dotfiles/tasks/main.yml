@@ -1,3 +1,4 @@
+---
 - name: create config directories
   file: path={{ item }} state=directory
   with_items: "{{ conf_dirs }}"

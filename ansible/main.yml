@@ -9,6 +9,7 @@
       git:
         repo: https://github.com/kejadlen/dotfiles.git
         dest: ~/.dotfiles
+      ignore_errors: yes
     - name: update homebrew
       homebrew: update_homebrew=yes
 
