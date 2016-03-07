@@ -1,12 +1,16 @@
 - name: install Python
   homebrew: name=python state=present
 
+- name: check if Powerline is already installed
+  shell: /usr/local/bin/pip list  | grep Powerline
+  register: powerline_installed
 - name: install Powerline
   command: >
     /usr/local/bin/pip
       install
       --user
       --editable={{ ansible_env.HOME }}/.dotfiles/src/powerline
+  when: powerlined_installed|failed
 
 - name: symlink Powerline configs
   file: src={{ item }} dest=/usr/local/bin/{{ item | basename }} state=link

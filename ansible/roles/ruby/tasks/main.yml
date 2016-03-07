@@ -5,4 +5,4 @@
     - ruby-install
 
 - name: install Ruby
-  command: /usr/local/bin/ruby-install ruby
+  command: /usr/local/bin/ruby-install ruby creates=~/.rubies/ruby-*
