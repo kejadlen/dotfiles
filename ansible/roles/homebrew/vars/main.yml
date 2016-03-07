@@ -23,6 +23,7 @@ casks:
   - bartender
   - bittorrent-sync
   - black-ink
+  - dash
   - disk-inventory-x
   - dropbox
   - fantastical

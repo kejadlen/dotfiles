@@ -167,5 +167,6 @@ app_prefs:
   - ~/Library/Preferences/com.adiumX.adiumX.plist
   - ~/Library/Preferences/com.culturedcode.things.plist
   - ~/Library/Preferences/com.flexibits.fantastical.plist
+  - ~/Library/Preferences/com.kapeli.dashdoc.plist
   - ~/Library/Preferences/com.surteesstudios.Bartender.plist
   - ~/Library/Preferences/org.herf.Flux.plist
