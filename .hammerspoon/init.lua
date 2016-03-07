@@ -3,13 +3,13 @@ local mash = {"cmd", "alt", "ctrl", "shift"}
 
 -- Application shortcuts
 
-hs.hotkey.bind({"cmd", "shift"}, "[", function()
-  current_app():selectMenuItem({"Window", "Select Previous Tab"})
-end)
+-- hs.hotkey.bind({"cmd", "shift"}, "[", function()
+--   current_app():selectMenuItem({"Window", "Select Previous Tab"})
+-- end)
 
-hs.hotkey.bind({"cmd", "shift"}, "]", function()
-  current_app():selectMenuItem({"Window", "Select Next Tab"})
-end)
+-- hs.hotkey.bind({"cmd", "shift"}, "]", function()
+--   current_app():selectMenuItem({"Window", "Select Next Tab"})
+-- end)
 
 -- Window management
 
