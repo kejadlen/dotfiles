@@ -50,3 +50,18 @@ namespace :sync do
     # end
   end
 end
+
+namespace :bitbar do
+  FILE = 'onebusaway.30s.rb'
+
+  desc 'Toggle OneBusAway BitBar plugin'
+  task :oba do
+    if File.exist?(File.expand_path("../bitbar/enabled/#{FILE}", __FILE__))
+      rm File.expand_path("../bitbar/enabled/#{FILE}", __FILE__)
+    else
+      ln_s File.expand_path("../bitbar/#{FILE}", __FILE__),
+           File.expand_path("../bitbar/enabled/#{FILE}", __FILE__)
+    end
+    sh 'open bitbar://refreshPlugin?name=onebusaway.*'
+  end
+end

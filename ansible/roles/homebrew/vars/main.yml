@@ -18,9 +18,9 @@ casks:
   - acorn
   - adium
   - alfred
-  # - anybar
   - arq
   - bartender
+  - bitbar
   - bittorrent-sync
   - black-ink
   - dash
