@@ -3,6 +3,14 @@ local mash = {"cmd", "alt", "ctrl", "shift"}
 
 -- Application shortcuts
 
+hs.hotkey.bind({}, "escape", function()
+  if current_app():name() == "Safari" then
+    hs.eventtap.keyStroke({"alt"}, "escape")
+  else
+    hs.eventtap.keyStroke({}, "escape")
+  end
+end)
+
 -- hs.hotkey.bind({"cmd", "shift"}, "[", function()
 --   current_app():selectMenuItem({"Window", "Select Previous Tab"})
 -- end)
@@ -13,31 +21,31 @@ local mash = {"cmd", "alt", "ctrl", "shift"}
 
 -- Window management
 
-hs.hotkey.bind(mash, "h", function()
-  local win = hs.window.focusedWindow()
-  local f = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
+-- hs.hotkey.bind(mash, "h", function()
+--   local win = hs.window.focusedWindow()
+--   local f = win:frame()
+--   local screen = win:screen()
+--   local max = screen:frame()
 
-  f.x = max.x
-  f.y = max.y
-  f.w = max.w / 2
-  f.h = max.h
-  win:setFrame(f)
-end)
+--   f.x = max.x
+--   f.y = max.y
+--   f.w = max.w / 2
+--   f.h = max.h
+--   win:setFrame(f)
+-- end)
 
-hs.hotkey.bind(mash, "l", function()
-  local win = hs.window.focusedWindow()
-  local f = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
+-- hs.hotkey.bind(mash, "l", function()
+--   local win = hs.window.focusedWindow()
+--   local f = win:frame()
+--   local screen = win:screen()
+--   local max = screen:frame()
 
-  f.x = max.x + (max.w / 2)
-  f.y = max.y
-  f.w = max.w / 2
-  f.h = max.h
-  win:setFrame(f)
-end)
+--   f.x = max.x + (max.w / 2)
+--   f.y = max.y
+--   f.w = max.w / 2
+--   f.h = max.h
+--   win:setFrame(f)
+-- end)
 
 function current_app()
   return hs.application.frontmostApplication()
