@@ -9,7 +9,7 @@ COLOR_MAP = {
   arrivalStatusEarly: :red,
   arrivalStatusDelayed: :blue,
   arrivalStatusDepartedOnTime: :green,
-  arrivalStatusDepartedNoInfo: :black,
+  arrivalStatusDepartedNoInfo: :white,
   arrivalStatusDepartedEarly: :red,
   arrivalStatusDepartedDelayed: :blue,
   arrivalStatusCancelled: :red,
@@ -19,7 +19,7 @@ html = open('http://pugetsound.onebusaway.org/where/standard/stop.action?id=1_73
 doc = REXML::Document.new(html)
 status = doc.elements['//td[contains(@class, "arrivalsStatusEntry")]']
 
-minutes = status.elements['//span'].text
+minutes = status.elements['.//span'].text
 color = COLOR_MAP[status.attributes['class'].split(/\s+/).last.to_sym]
 times = doc.elements.to_a('//div[@class="arrivalsTimePanel"]')
 
