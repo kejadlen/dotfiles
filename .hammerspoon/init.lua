@@ -1,5 +1,5 @@
 local mash = {"cmd", "alt", "ctrl"}
-local mash = {"cmd", "alt", "ctrl", "shift"}
+local smash = {"cmd", "alt", "ctrl", "shift"}
 
 -- Application shortcuts
 
@@ -57,9 +57,8 @@ function current_app()
   return hs.application.frontmostApplication()
 end
 
-function reload_config(files)
-    hs.reload()
-end
+hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", function()
+  hs.reload()
+end):start()
 
-hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reload_config):start()
 hs.alert.show("Config loaded")
