@@ -2,17 +2,17 @@
 
 require 'optparse'
 
-# Default to a one hour timeout
-timeout = 1
-unit = ?H
+timeout = [12*60+30, 18*60+00].map { |timeout|
+  now = Time.now
+  timeout - (now.hour*60 + now.min)
+}.find(60*60) {|timeout| timeout > 0 }
+timeout = timeout.divmod(60).zip(%w[ h m ]).map(&:join).join
 
 OptionParser.new do |opts|
   opts.banner = "Usage: #{__FILE__} [options]"
 
   opts.on("-tTIMEOUT", "--t=TIMEOUT",
-          "Default timeout: #{timeout}") { |t| timeout = t.to_i }
-  opts.on("-uUNIT", "--u=UNIT",
-          "Default unit: #{unit}") { |u| unit = u }
+          "Default timeout: #{timeout}") { |t| timeout = t }
 end.parse!
 
 def with_mount(image)
@@ -25,6 +25,6 @@ end
 
 keyz = File.expand_path("../keyz.sparsebundle", __FILE__)
 with_mount(keyz) do |mountpoint|
-  `ssh-add -t #{timeout}#{unit} "#{File.join(mountpoint, "id_rsa")}"`
+  `ssh-add -t #{timeout} "#{File.join(mountpoint, "id_rsa")}"`
 end
 # `hdiutil eject "#{File.dirname(__FILE__)}"`
