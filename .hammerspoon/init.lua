@@ -1,6 +1,10 @@
 local mash = {"cmd", "alt", "ctrl"}
 local smash = {"cmd", "alt", "ctrl", "shift"}
 
+function current_app()
+  return hs.application.frontmostApplication()
+end
+
 -- Application shortcuts
 
 local wf = hs.window.filter
@@ -16,7 +20,6 @@ end):subscribe(wf.windowUnfocused, function()
   safari_esc:disable()
 end)
 
-
 -- hs.hotkey.bind({"cmd", "shift"}, "[", function()
 --   current_app():selectMenuItem({"Window", "Select Previous Tab"})
 -- end)
@@ -27,35 +30,34 @@ end)
 
 -- Window management
 
--- hs.hotkey.bind(mash, "h", function()
---   local win = hs.window.focusedWindow()
---   local f = win:frame()
---   local screen = win:screen()
---   local max = screen:frame()
+local throw_left = function()
+  local win = hs.window.focusedWindow()
+  local f = win:frame()
+  local screen = win:screen()
+  local max = screen:frame()
 
---   f.x = max.x
---   f.y = max.y
---   f.w = max.w / 2
---   f.h = max.h
---   win:setFrame(f)
--- end)
-
--- hs.hotkey.bind(mash, "l", function()
---   local win = hs.window.focusedWindow()
---   local f = win:frame()
---   local screen = win:screen()
---   local max = screen:frame()
-
---   f.x = max.x + (max.w / 2)
---   f.y = max.y
---   f.w = max.w / 2
---   f.h = max.h
---   win:setFrame(f)
--- end)
-
-function current_app()
-  return hs.application.frontmostApplication()
+  f.x = max.x
+  f.y = max.y
+  f.w = max.w / 2
+  f.h = max.h
+  win:setFrame(f)
 end
+
+local throw_right = function()
+  local win = hs.window.focusedWindow()
+  local f = win:frame()
+  local screen = win:screen()
+  local max = screen:frame()
+
+  f.x = max.x + (max.w / 2)
+  f.y = max.y
+  f.w = max.w / 2
+  f.h = max.h
+  win:setFrame(f)
+end
+
+hs.hotkey.bind(mash, "h", throw_left)
+hs.hotkey.bind(mash, "l", throw_right)
 
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", function()
   hs.reload()
