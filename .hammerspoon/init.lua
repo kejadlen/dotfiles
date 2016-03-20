@@ -57,7 +57,9 @@ local throw_right = function()
 end
 
 hs.hotkey.bind(mash, "h", throw_left)
+hs.hotkey.bind(mash, "left", throw_left)
 hs.hotkey.bind(mash, "l", throw_right)
+hs.hotkey.bind(mash, "right", throw_right)
 
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", function()
   hs.reload()
