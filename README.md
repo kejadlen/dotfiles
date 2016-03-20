@@ -23,9 +23,8 @@ figure out how to automate:
 - Install the command line developer tools: `xcode-select --install`. (It looks
 like the Homebrew installer [_should_][xcode-select-cli] be able to handle
 this, but I haven't been able to get it to work headless.)
-- Install Xcode: `open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'`
+- Install [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12): `open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'`
 - Accept the Xcode license: `sudo xcodebuild -license`
-- Accept the sudo disclaimer: `sudo -v`
 
 [xcode-select-cli]: https://github.com/Homebrew/install/blob/master/install#L207-L216
 
@@ -55,6 +54,9 @@ ln -s ~/Dropbox/dotfiles ~/.dotfiles
 
 # Add private SSH keys
 ruby ~/.dotfiles/scripts/setup_ssh_keys.rb
+
+# Install Reeder 3
+open 'https://itunes.apple.com/us/app/reeder-3/id880001334?ls=1&mt=12'
 ```
 
 ## Provisioning Locally
