@@ -2,6 +2,7 @@
 - hosts: all
   tasks:
     - group_by: key=os_{{ ansible_distribution }}
+      tags: always
 
 - hosts: all
   pre_tasks:
@@ -16,9 +17,7 @@
 - hosts: os_MacOSX
   roles:
     - role: homebrew
-      when: ansible_distribution == "MacOSX"
     - role: osx
-      when: ansible_distribution == "MacOSX"
 
 - hosts: all
   roles:
