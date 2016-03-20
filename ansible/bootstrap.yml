@@ -6,7 +6,6 @@
       recursive: yes
       dest: ~/.dotfiles
       accept_hostkey: yes
-      version: ansible-2 # TODO Don't check this in
 
   - name: create ~/.ssh
     file: dest=~/.ssh state=directory
