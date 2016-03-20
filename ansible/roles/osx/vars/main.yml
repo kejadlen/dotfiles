@@ -27,7 +27,7 @@ osx_defaults:
   - # delay before keyboard repeat
     key: InitialKeyRepeat
     type: int
-    value: 15
+    value: 25
   - # set sidebar item size to small
     key: NSTableViewDefaultSizeMode
     type: int
@@ -106,16 +106,24 @@ osx_defaults:
   # Trackpad settings
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
     key: Clicking
-    type: bool
-    value: true
+    type: int
+    value: 1
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
-    key: DragLock
-    type: bool
-    value: true
+    key: TrackpadFourFingerVertSwipeGesture
+    type: int
+    value: 0
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
-    key: Dragging
-    type: bool
-    value: true
+    key: TrackpadThreeFingerDrag
+    type: int
+    value: 1
+  - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
+    key: TrackpadThreeFingerHorizSwipeGesture
+    type: int
+    value: 0
+  - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
+    key: TrackpadThreeFingerVertSwipeGesture
+    type: int
+    value: 0
 
   # Finder defaults
   - # don't ask when changing file extension
@@ -138,6 +146,12 @@ osx_defaults:
     key: _FXShowPosixPathInTitle
     type: bool
     value: true
+
+  - # set date format in menubar
+    domain: com.apple.menuextra.clock
+    key: DateFormat
+    type: string
+    value: h:mm
 
   - # no window shadows when capturing windows
     domain: com.apple.screencapture

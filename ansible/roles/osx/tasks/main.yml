@@ -9,7 +9,7 @@
 - include: dock.yml
 
 - name: set OS X defaults
-  osx_defaults:
+  my_defaults:
     domain: "{{ item.domain | default(omit) }}"
     key: "{{ item.key }}"
     type: "{{ item.type }}"
