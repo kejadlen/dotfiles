@@ -175,7 +175,7 @@ osx_defaults:
     value: false
 
 app_prefs:
-  - ~/Library/Application Support/Adium 2.0/
+  - ~/Library/Application Support/Adium 2.0
   - ~/Library/Containers/com.reederapp.rkit2.mac
   - ~/Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist
   - ~/Library/Preferences/com.adiumX.adiumX.plist
