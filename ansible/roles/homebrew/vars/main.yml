@@ -30,6 +30,7 @@ casks:
   - firefox
   - flux
   - google-chrome
+  - hammerspoon
   - little-snitch
   - moom
   - night-owl
