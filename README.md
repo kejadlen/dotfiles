@@ -55,8 +55,9 @@ ln -s ~/Dropbox/dotfiles ~/.dotfiles
 # Add private SSH keys
 ruby ~/.dotfiles/scripts/setup_ssh_keys.rb
 
-# Install Reeder 3
+# Install apps from the Mac App Store
 open 'https://itunes.apple.com/us/app/reeder-3/id880001334?ls=1&mt=12'
+open 'https://itunes.apple.com/us/app/paprika-recipe-manager/id451907568?mt=12'
 ```
 
 ## Provisioning Locally
