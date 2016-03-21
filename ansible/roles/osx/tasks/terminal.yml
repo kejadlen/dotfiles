@@ -1,0 +1,12 @@
+- name: import terminal profile
+  command: open ~/.dotfiles/Alpha.terminal
+
+- name: set terminal profile to be the default
+  my_defaults:
+    domain: com.apple.Terminal
+    key: "{{ item }} Window Settings"
+    type: string
+    value: Alpha
+  with_items:
+    - Default
+    - Startup

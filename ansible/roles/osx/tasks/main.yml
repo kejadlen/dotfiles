@@ -7,6 +7,7 @@
   when: inventory_hostname != "localhost"
 
 - include: dock.yml
+- include: terminal.yml
 
 - name: set OS X defaults
   my_defaults:
