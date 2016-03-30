@@ -9,7 +9,7 @@ COLOR_MAP = {
   arrivalStatusEarly: :red,
   arrivalStatusDelayed: :blue,
   arrivalStatusDepartedOnTime: :green,
-  arrivalStatusDepartedNoInfo: :white,
+  arrivalStatusDepartedNoInfo: :black,
   arrivalStatusDepartedEarly: :red,
   arrivalStatusDepartedDelayed: :blue,
   arrivalStatusCancelled: :red,
