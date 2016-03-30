@@ -18,8 +18,8 @@ set newtab=help
 
 nmap -builtin A <nop>
 nmap -builtin a <nop>
-nmap -builtin j 6j
-nmap -builtin k 6k
+nmap -builtin j 3j
+nmap -builtin k 3k
 nmap -builtin <bs> <nop>
 nmap -builtin <leader>/ <esc>:noh<cr>
 map -modes=base <C-c> <esc>
