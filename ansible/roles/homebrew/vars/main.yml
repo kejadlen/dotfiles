@@ -34,7 +34,7 @@ casks:
   - little-snitch
   - moom
   - night-owl
-  - omnifocus
+  # - omnifocus
   - openscad
   - plug
   - qlmarkdown
@@ -43,7 +43,8 @@ casks:
   - quicklook-json
   - slack
   - steam
-  # - things
+  - taskpaper
+  - things
   - transmission
   - vlc
 
