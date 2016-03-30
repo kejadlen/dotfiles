@@ -28,3 +28,6 @@
 - name: symlink OS X colors palettes
   file: src={{ item }} dest=~/Library/Colors/{{ item | basename }} state=link
   with_fileglob: ~/.dotfiles/osx/Colors/*
+
+- name: disable gamed
+  command: launchctl unload -w /System/Library/LaunchAgents/com.apple.gamed.plist
