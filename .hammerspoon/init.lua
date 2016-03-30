@@ -8,16 +8,27 @@ end
 -- Application shortcuts
 
 local wf = hs.window.filter
-local safari_esc = hs.hotkey.new({}, "escape", function() end, function()
+safari_esc = hs.hotkey.new({}, "escape", function() end, function()
   if current_app():name() == "Safari" then
+    safari_opt_esc:disable()
     hs.eventtap.keyStroke({"alt"}, "escape")
+    safari_opt_esc:enable()
+  end
+end)
+safari_opt_esc = hs.hotkey.new({"alt"}, "escape", function() end, function()
+  if current_app():name() == "Safari" then
+    safari_esc:disable()
+    hs.eventtap.keyStroke({}, "escape")
+    safari_esc:enable()
   end
 end)
 
 wf.new("Safari"):subscribe(wf.windowFocused, function()
   safari_esc:enable()
+  safari_opt_esc:enable()
 end):subscribe(wf.windowUnfocused, function()
   safari_esc:disable()
+  safari_opt_esc:disable()
 end)
 
 -- hs.hotkey.bind({"cmd", "shift"}, "[", function()
