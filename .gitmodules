@@ -103,3 +103,6 @@
 [submodule ".vim/bundle/elm.vim"]
 	path = .vim/bundle/elm.vim
 	url = git://github.com/lambdatoast/elm.vim.git
+[submodule ".vim/bundle/vim-rake"]
+	path = .vim/bundle/vim-rake
+	url = git@github.com:tpope/vim-rake.git
