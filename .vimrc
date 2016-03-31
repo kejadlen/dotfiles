@@ -25,10 +25,10 @@ nnoremap ` '
 " nnoremap \ ,
 nnoremap Y y$
 nnoremap <leader>/ :noh<cr>
-nnoremap gt :exec tabpagenr('$') == 1 ? 'bn' : 'tabnext'<cr>
-nnoremap gT :exec tabpagenr('$') == 1 ? 'bp' : 'tabprevious'<cr>
-nnoremap <C-n> :exec tabpagenr('$') == 1 ? 'bn' : 'tabnext'<cr>
-nnoremap <C-p> :exec tabpagenr('$') == 1 ? 'bp' : 'tabprevious'<cr>
+" nnoremap gt :exec tabpagenr('$') == 1 ? 'bn' : 'tabnext'<cr>
+" nnoremap gT :exec tabpagenr('$') == 1 ? 'bp' : 'tabprevious'<cr>
+" nnoremap <C-n> :exec tabpagenr('$') == 1 ? 'bn' : 'tabnext'<cr>
+" nnoremap <C-p> :exec tabpagenr('$') == 1 ? 'bp' : 'tabprevious'<cr>
 cnoremap w!! w !sudo tee % > /dev/null
 " inoremap <bs> <nop>
 inoremap <esc> <nop>
@@ -197,6 +197,9 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclu
 python from powerline.vim import setup as powerline_setup
 python powerline_setup()
 python del powerline_setup
+
+" vim-projectionist
+nnoremap <leader>a :A<cr>
 
 " gui stuff
 set guioptions-=T
