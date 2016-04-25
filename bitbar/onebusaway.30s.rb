@@ -20,7 +20,7 @@ doc = REXML::Document.new(html)
 status = doc.elements['//td[contains(@class, "arrivalsStatusEntry")]']
 
 minutes = status.elements['.//span'].text
-color = COLOR_MAP[status.attributes['class'].split(/\s+/).last.to_sym]
+color = COLOR_MAP.fetch(status.attributes['class'].split(/\s+/).last.to_sym, :black)
 times = doc.elements.to_a('//div[@class="arrivalsTimePanel"]')
 
 puts "#{minutes} | color=#{color}"
