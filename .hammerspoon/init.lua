@@ -13,11 +13,19 @@ local safari_esc = hs.hotkey.new({}, "escape", function() end, function()
   end
 end)
 
+local safari_esc = hs.hotkey.new({"cmd"}, "w", function() end, function()
+  if current_app():name() == "Safari" then
+    current_app():selectMenuItem({"File", "Close Tab"})
+  end
+end)
+
 local wf = hs.window.filter
 wf.new("Safari"):subscribe(wf.windowFocused, function()
   safari_esc:enable()
+  safari_close_tab:enable()
 end):subscribe(wf.windowUnfocused, function()
   safari_esc:disable()
+  safari_close_tab:disable()
 end)
 
 -- hs.hotkey.bind({"cmd", "shift"}, "[", function()
