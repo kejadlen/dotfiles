@@ -8,7 +8,7 @@
 	safecrlf = true
 	excludesfile = /Users/alpha/.gitignore
 	quotepath = false
-	pager = less -S
+	pager = diff-so-fancy | less --tabs=4 -RFX
 [alias]
 	g = grep --break --heading --line-number
 	standup = "!git log --all --date=short --no-merges --pretty=format:\"%h %ad %s%d\" --since=1.weeks --author=`git config user.email`"
@@ -51,6 +51,7 @@
 [diff]
 	algorithm = patience
 	tool = icdiff
+	compactionHeuristic = true
 [fetch]
 	prune = true
 [tag]
@@ -63,3 +64,7 @@
 ; 	insteadof = https://github.com/
 [transfer]
 	fsckobjects = true
+[submodule]
+	fetchJobs = 4
+[commit]
+	verbose = true
