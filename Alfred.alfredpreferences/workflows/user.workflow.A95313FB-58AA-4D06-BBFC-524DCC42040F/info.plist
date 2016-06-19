@@ -15,17 +15,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
-			</dict>
-		</array>
-		<key>DC0E1A2B-DB5E-4AB4-9CFD-73ECD9B473DB</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>24E5AD4A-C4E8-43EA-8FBF-47621D8A8829</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 	</dict>
@@ -42,59 +33,12 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>63</integer>
-				<key>script</key>
-				<string>url = ARGV.first || `pbpaste`.chomp
-# url = `pbpaste`.chomp if url.nil? || url.empty?
-url = "http://#{url}" unless url =~ %r|^[\w]+://|
-`open -a "Google Chrome" "#{url}"`</string>
-				<key>type</key>
-				<integer>2</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>24E5AD4A-C4E8-43EA-8FBF-47621D8A8829</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>action</key>
-				<integer>0</integer>
-				<key>argument</key>
-				<integer>2</integer>
-				<key>hotkey</key>
-				<integer>8</integer>
-				<key>hotmod</key>
-				<integer>1835008</integer>
-				<key>hotstring</key>
-				<string>C</string>
-				<key>leftcursor</key>
-				<false/>
-				<key>modsmode</key>
-				<integer>0</integer>
-				<key>relatedAppsMode</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.hotkey</string>
-			<key>uid</key>
-			<string>DC0E1A2B-DB5E-4AB4-9CFD-73ECD9B473DB</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>argumenttype</key>
 				<integer>1</integer>
 				<key>keyword</key>
 				<string>c</string>
+				<key>subtext</key>
+				<string></string>
 				<key>text</key>
 				<string>Open in Chrome</string>
 				<key>withspace</key>
@@ -105,7 +49,33 @@ url = "http://#{url}" unless url =~ %r|^[\w]+://|
 			<key>uid</key>
 			<string>98E2E165-F282-4876-AFF5-CD0DE474E024</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>63</integer>
+				<key>script</key>
+				<string>url = ARGV.first || `pbpaste`.chomp
+# url = `pbpaste`.chomp if url.nil? || url.empty?
+url = "http://#{url}" unless url =~ %r|^[\w]+://|
+`open -a "Google Chrome" "#{url}"`</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>2</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>24E5AD4A-C4E8-43EA-8FBF-47621D8A8829</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -114,18 +84,17 @@ url = "http://#{url}" unless url =~ %r|^[\w]+://|
 	<dict>
 		<key>24E5AD4A-C4E8-43EA-8FBF-47621D8A8829</key>
 		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
 		<key>98E2E165-F282-4876-AFF5-CD0DE474E024</key>
 		<dict>
+			<key>xpos</key>
+			<integer>240</integer>
 			<key>ypos</key>
-			<real>80</real>
-		</dict>
-		<key>DC0E1A2B-DB5E-4AB4-9CFD-73ECD9B473DB</key>
-		<dict>
-			<key>ypos</key>
-			<real>10</real>
+			<integer>10</integer>
 		</dict>
 	</dict>
 	<key>webaddress</key>

@@ -19,36 +19,6 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
-		<key>1B744577-C743-466D-9B65-8A45F55F7BE3</key>
-		<dict>
-			<key>enabled</key>
-			<true/>
-			<key>keyword</key>
-			<string>inbox</string>
-			<key>plusSpaces</key>
-			<false/>
-			<key>text</key>
-			<string>Search Google Inbox for '{query}'</string>
-			<key>url</key>
-			<string>https://inbox.google.com/search/{query}?pli=1</string>
-			<key>utf8</key>
-			<true/>
-		</dict>
-		<key>2A6135C2-8865-4D79-ADC0-B6D1D8EA2BEC</key>
-		<dict>
-			<key>enabled</key>
-			<true/>
-			<key>keyword</key>
-			<string>canistreamit</string>
-			<key>plusSpaces</key>
-			<false/>
-			<key>text</key>
-			<string>Search Can I Stream It for '{query}'</string>
-			<key>url</key>
-			<string>http://www.canistream.it/search/movie/{query}</string>
-			<key>utf8</key>
-			<true/>
-		</dict>
 		<key>491B807D-42B3-4CB4-861F-2ADF20727F53</key>
 		<dict>
 			<key>enabled</key>
@@ -61,21 +31,6 @@
 			<string>Search Amazon Smile for '{query}'</string>
 			<key>url</key>
 			<string>https://smile.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords={query}</string>
-			<key>utf8</key>
-			<true/>
-		</dict>
-		<key>78F38D7E-7CF4-41FC-AD5F-C4017FFCA0AE</key>
-		<dict>
-			<key>enabled</key>
-			<false/>
-			<key>keyword</key>
-			<string>giphy</string>
-			<key>plusSpaces</key>
-			<false/>
-			<key>text</key>
-			<string>Search Giphy for '{query}'</string>
-			<key>url</key>
-			<string>http://giphy.com/search/?q={query}</string>
 			<key>utf8</key>
 			<true/>
 		</dict>
