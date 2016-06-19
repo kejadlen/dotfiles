@@ -85,9 +85,6 @@
 [submodule ".vim/bundle/incsearch.vim"]
 	path = .vim/bundle/incsearch.vim
 	url = git://github.com/haya14busa/incsearch.vim
-[submodule "Alfred 2/Alfred.alfredpreferences/workflows/user.workflow.8694C3FC-8218-4B98-BB1F-F1CEC686477C"]
-	path = Alfred 2/Alfred.alfredpreferences/workflows/user.workflow.8694C3FC-8218-4B98-BB1F-F1CEC686477C
-	url = git://github.com/kejadlen/forecast.alfredworkflow.git
 [submodule ".vim/bundle/vim-commentary"]
 	path = .vim/bundle/vim-commentary
 	url = git://github.com/tpope/vim-commentary.git
@@ -106,3 +103,15 @@
 [submodule ".vim/bundle/vim-rake"]
 	path = .vim/bundle/vim-rake
 	url = git@github.com:tpope/vim-rake.git
+[submodule "Alfred.alfredpreferences/workflows/emoji.alfredworkflow"]
+	path = Alfred.alfredpreferences/workflows/emoji.alfredworkflow
+	url = git@github.com:kejadlen/emoji.alfredworkflow
+[submodule "Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
+	path = Alfred.alfredpreferences/workflows/faker.alfredworkflow
+	url = git@github.com:kejadlen/faker.alfredworkflow
+[submodule "Alfred.alfredpreferences/workflows/forecast.alfredworkflow"]
+	path = Alfred.alfredpreferences/workflows/forecast.alfredworkflow
+	url = git@github.com:kejadlen/forecast.alfredworkflow
+[submodule "Alfred.alfredpreferences/workflows/giphy.alfredworkflow"]
+	path = Alfred.alfredpreferences/workflows/giphy.alfredworkflow
+	url = git@github.com:kejadlen/giphy.alfredworkflow
