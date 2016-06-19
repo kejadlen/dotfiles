@@ -201,6 +201,9 @@ python del powerline_setup
 " vim-projectionist
 nnoremap <leader>a :A<cr>
 
+" rust.vim
+let g:rustfmt_autosave = 1
+
 " gui stuff
 set guioptions-=T
 set guifont=Consolas:h9:cANSI
