@@ -118,3 +118,6 @@
 [submodule "Alfred.alfredpreferences/workflows/alphred.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/alphred.alfredworkflow
 	url = git@github.com:kejadlen/alphred.alfredworkflow.git
+[submodule "src/swift"]
+	path = src/swift
+	url = git@github.com:apple/swift.git
