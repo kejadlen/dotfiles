@@ -1,13 +1,19 @@
 #!/usr/bin/env ruby
 
-require 'rexml/document'
+require 'tempfile'
 
-doc = REXML::Document.new(ARGF.read, ignore_whitespace_nodes: :all)
-xpath = '//dict/key[text()="variablesdontexport"]/following-sibling::array'
-vars = doc.elements[xpath].map(&:text)
+plist = ARGF.read
+Tempfile.create('info.plist') do |f|
+  f << plist
+  f.flush
 
-vars.each do |var|
-  doc.elements["//key[text()='#{var}']/following-sibling::string"].text = ''
+  vars = `/usr/libexec/PlistBuddy -c "Print :variablesdontexport" #{f.path}`
+  vars = vars.split("\n")[1..-2].map(&:strip)
+
+  vars.each do |var|
+    `/usr/libexec/PlistBuddy -c "Set :variables:#{var} ''" #{f.path}`
+  end
+
+  f.rewind
+  puts f.read
 end
-
-doc.write
