@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'rexml/document'
+
+doc = REXML::Document.new(ARGF.read, ignore_whitespace_nodes: :all)
+xpath = '//dict/key[text()="variablesdontexport"]/following-sibling::array'
+vars = doc.elements[xpath].map(&:text)
+
+vars.each do |var|
+  doc.elements["//key[text()='#{var}']/following-sibling::string"].text = ''
+end
+
+doc.write

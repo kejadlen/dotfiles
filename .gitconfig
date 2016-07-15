@@ -69,3 +69,5 @@
 	fetchJobs = 4
 [commit]
 	verbose = true
+[filter "alfredworkflow"]
+	clean = clean_alfred_workflow
