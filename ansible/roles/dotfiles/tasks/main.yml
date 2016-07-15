@@ -19,6 +19,9 @@
   file: src={{ item }} dest=~/.ssh/{{ item | basename }} state=link
   with_fileglob: ~/.dotfiles/.ssh/*
 
+- name: symlink ~bin
+  file: src=~/.dotfiles/bin dest=~/bin state=link
+
 - name: symlink ~/.tmux.conf.local
   file: src=~/.dotfiles/osx/.tmux.conf.local dest=~/.tmux.conf.local state=link
   when: ansible_distribution == "MacOSX"
