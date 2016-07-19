@@ -70,4 +70,4 @@
 [commit]
 	verbose = true
 [filter "alfredworkflow"]
-	clean = alfred_workflow.clean
+	clean = alfredworkflow.clean
