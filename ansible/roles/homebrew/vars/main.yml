@@ -23,6 +23,7 @@ casks:
   - bitbar
   - bittorrent-sync
   - black-ink
+  - colloquy
   - dash
   - disk-inventory-x
   - dropbox
@@ -35,7 +36,6 @@ casks:
   - little-snitch
   - moom
   - night-owl
-  # - omnifocus
   - openscad
   - plug
   - qlmarkdown
