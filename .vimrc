@@ -204,6 +204,9 @@ nnoremap <leader>a :A<cr>
 " rust.vim
 let g:rustfmt_autosave = 1
 
+" vim-markdown
+let g:markdown_fenced_languages = ['ruby']
+
 " gui stuff
 set guioptions-=T
 set guifont=Consolas:h9:cANSI
