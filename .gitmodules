@@ -31,9 +31,6 @@
 [submodule ".vim/bundle/vim-coffee-script"]
 	path = .vim/bundle/vim-coffee-script
 	url = git://github.com/kchmck/vim-coffee-script.git
-[submodule ".vim/bundle/vim-haml"]
-	path = .vim/bundle/vim-haml
-	url = git://github.com/tpope/vim-haml.git
 [submodule ".vim/bundle/gundo"]
 	path = .vim/bundle/gundo
 	url = git://github.com/sjl/gundo.vim.git
@@ -82,9 +79,6 @@
 [submodule ".vim/bundle/vim-commentary"]
 	path = .vim/bundle/vim-commentary
 	url = git://github.com/tpope/vim-commentary.git
-[submodule ".vim/bundle/vim-scala"]
-	path = .vim/bundle/vim-scala
-	url = git://github.com/derekwyatt/vim-scala.git
 [submodule ".vim/bundle/rust.vim"]
 	path = .vim/bundle/rust.vim
 	url = git://github.com/rust-lang/rust.vim.git
