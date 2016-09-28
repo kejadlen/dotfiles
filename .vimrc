@@ -169,9 +169,6 @@ set directory=$HOME/.vim_tmp//
 
 set wildignore+=*.pyc,*/bower_components/*,*/python2.7/*,*/share/doc/*,*/target/*
 
-" ack
-set grepprg=ack
-
 " blessed silence
 set visualbell
 " set t_vb
@@ -214,6 +211,15 @@ set mousehide
 
 " Expand %% into the directory of the current file
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'  
+
+" ripgrep
+if executable('rg')
+  set grepprg=rg\ --no-heading\ --vimgrep
+  set grepformat=%f:%l:%c:%m
+endif
+
+" vim-dispatch
+nnoremap <leader>d :Dispatch<CR>
 
 if has("gui_running")
   " au GUIEnter * simalt ~x " fullscreen
