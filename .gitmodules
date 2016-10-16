@@ -91,9 +91,9 @@
 [submodule "Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/faker.alfredworkflow
 	url = git@github.com:kejadlen/faker.alfredworkflow
-[submodule "Alfred.alfredpreferences/workflows/forecast.alfredworkflow"]
-	path = Alfred.alfredpreferences/workflows/forecast.alfredworkflow
-	url = git@github.com:kejadlen/forecast.alfredworkflow
+[submodule "Alfred.alfredpreferences/workflows/dark-sky.alfredworkflow"]
+	path = Alfred.alfredpreferences/workflows/dark-sky.alfredworkflow
+	url = git@github.com:kejadlen/dark-sky.alfredworkflow
 [submodule "Alfred.alfredpreferences/workflows/giphy.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/giphy.alfredworkflow
 	url = git@github.com:kejadlen/giphy.alfredworkflow
