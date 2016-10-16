@@ -333,7 +333,7 @@
 			<dict>
 				<key>paths</key>
 				<array>
-					<string>~/Applications/Night Owl.app</string>
+					<string>/Applications/Night Owl.app</string>
 				</array>
 				<key>toggle</key>
 				<false/>
