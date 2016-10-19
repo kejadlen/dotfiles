@@ -180,6 +180,9 @@ set virtualedit=block
 set splitbelow
 set splitright
 
+" http://stackoverflow.com/questions/2158516/delay-before-o-opens-a-new-line
+set noesckeys
+
 " scratch
 noremap <leader>s :Scratch<cr>
 let g:scratchBackupFile='$HOME/.vim/.scratch'
