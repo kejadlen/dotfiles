@@ -4,14 +4,6 @@ if filereadable(glob("~/.vimrc.before"))
   source ~/.vimrc.before
 endif
 
-" pathogen
-filetype off
-if empty($GOPATH)
-  let g:pathogen_disabled = []
-  call add(g:pathogen_disabled, 'go')
-endif
-execute pathogen#infect()
-
 """ mappings
 
 let mapleader="\<Space>"
@@ -206,6 +198,11 @@ let g:rustfmt_autosave = 1
 
 " vim-markdown
 let g:markdown_fenced_languages = ['ruby']
+
+" vim-go
+if !empty($GOPATH)
+  packadd vim-go
+endif
 
 " gui stuff
 set guioptions-=T
