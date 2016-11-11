@@ -194,7 +194,7 @@ python del powerline_setup
 nnoremap <leader>a :A<cr>
 
 " rust.vim
-let g:rustfmt_autosave = 1
+" let g:rustfmt_autosave = 1
 
 " vim-markdown
 let g:markdown_fenced_languages = ['ruby']
@@ -203,11 +203,6 @@ let g:markdown_fenced_languages = ['ruby']
 if !empty($GOPATH)
   packadd vim-go
 endif
-
-" gui stuff
-set guioptions-=T
-set guifont=Consolas:h9:cANSI
-set mousehide
 
 " Expand %% into the directory of the current file
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'  
@@ -222,19 +217,15 @@ endif
 nnoremap <leader>d :Dispatch<CR>
 
 if has("gui_running")
-  " au GUIEnter * simalt ~x " fullscreen
-  " set transparency=10
-  set macmeta
   set background=light
   set guifont=Source\ Code\ Pro\ for\ Powerline:h13
+  set guioptions-=T
   set macligatures
-" else
-  " fix Command-T's selection in Terminal.app
-  " hi Visual term=reverse cterm=reverse ctermfg=187 ctermbg=235 guifg=Black guibg=Yellow
+  set macmeta
+  set mousehide
 end
 
 if v:version >= 703
-  " set relativenumber
   set undofile
   set undodir=$HOME/.vim_undo//
 endif
