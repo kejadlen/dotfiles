@@ -22,7 +22,18 @@
 			</dict>
 		</array>
 		<key>2E57B3A5-B65F-4AB6-93B2-183BB082414B</key>
-		<array/>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>435A8633-0FBE-49F1-9922-94FCED6AB643</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>750E1C6D-84B5-4AC1-B727-CA1DA4013008</key>
 		<array>
 			<dict>
@@ -463,6 +474,23 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>paths</key>
+				<array>
+					<string>/Applications/Safari.app</string>
+				</array>
+				<key>toggle</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.launchfiles</string>
+			<key>uid</key>
+			<string>435A8633-0FBE-49F1-9922-94FCED6AB643</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
@@ -550,6 +578,13 @@
 			<integer>500</integer>
 			<key>ypos</key>
 			<real>970</real>
+		</dict>
+		<key>435A8633-0FBE-49F1-9922-94FCED6AB643</key>
+		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
+			<key>ypos</key>
+			<integer>850</integer>
 		</dict>
 		<key>43DCD79F-94B0-4F0D-B7C2-4F04DC7ECE20</key>
 		<dict>
