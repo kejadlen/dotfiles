@@ -106,3 +106,6 @@
 [submodule ".vim/bundle/vim-fugitive"]
 	path = .vim/pack/kejadlen/start/vim-fugitive
 	url = git@github.com:tpope/vim-fugitive.git
+[submodule ".vim/pack/kejadlen/start/elm-vim"]
+	path = .vim/pack/kejadlen/start/elm-vim
+	url = git@github.com:ElmCast/elm-vim.git
