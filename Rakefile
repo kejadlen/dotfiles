@@ -29,25 +29,31 @@ namespace :sync do
     end
   end
 
-  desc "Sync crosswords from ~/Downloads"
-  task :crosswords do
-    # Dir[File.expand_path('~/Downloads/*.puz')].each do |puz|
-    #   crossword = File.basename(puz, '.puz')
-    #   dir = case crossword
-    #         when /av\d{6}/
-    #           'AV'
-    #         when /\d{3}[a-zA-Z]+/
-    #           'BEQ'
-    #         when /mgwcc\d{3}/
-    #           'MGWCC'
-    #         when /[A-Z][a-z]{2}\d{4}/
-    #           'NYT'
-    #         else
-    #           'etc'
-    #         end
-    #   dir = File.expand_path("~/Dropbox/Shared/Crosswords/#{dir}")
-    #   FileUtils.mv puz, to, verbose: true
-    # end
+  desc "Sync puzzles from ~/Downloads"
+  task :puzzles do
+    Dir[File.expand_path("~/Downloads/*")].each do |file|
+      dir = case file.pathmap("%f")
+            when /^Diagramless\d+.pdf$/
+              "diagramless"
+            when /^201\dW\d.*/
+              "GM"
+            end
+      next if dir.nil?
+
+      dir = File.expand_path(File.join("~/Dropbox/Shared/Puzzles", dir))
+      mv file, dir
+    end
+  end
+
+  desc "Sync a config"
+  task :config, [:config] do |t, args|
+    config = args[:config]
+
+    dotfiles = File.expand_path("..", __FILE__)
+    to = path.sub(Dir.home, dotfiles)
+
+    mv config, to
+    ln_s to, config
   end
 end
 
