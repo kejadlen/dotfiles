@@ -38,23 +38,33 @@ values."
      ;; ----------------------------------------------------------------
      ivy
      ;; auto-completion
-     ;; better-defaults
+     better-defaults
      emacs-lisp
      ;; git
-     ;; markdown
-     ;; org
+     markdown
+     org
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     ;; spell-checking
+     spell-checking
      ;; syntax-checking
      ;; version-control
+     evil-commentary
+     vim-powerline
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages
+   '(
+     adaptive-wrap
+     epresent
+     evil-surround
+     (evil-unimpaired :location
+                      (recipe :fetcher file
+                              :path ~/.emacs.d/layers/+spacemacs/spacemacs-evil/local/evil-unimpaired/evil-unimpaired.el))
+     )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -110,7 +120,7 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
@@ -119,7 +129,7 @@ values."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
    ;; (default nil)
-   dotspacemacs-startup-lists '()
+   dotspacemacs-startup-lists '(recents agenda todos)
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t
    ;; Default major mode of the scratch buffer (default `text-mode')
@@ -133,7 +143,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
+   dotspacemacs-default-font '("Source Code Pro for Powerline"
                                :size 13
                                :weight normal
                                :width normal
@@ -300,7 +310,39 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  (use-package evil-unimpaired)
+  (global-evil-surround-mode 1)
+  (fset 'evil-visual-update-x-selection 'ignore)
+  (setq org-cycle-separator-lines 1)
+  (setq org-catch-invisible-edits 'smart)
+  (setq org-startup-folded 'content)
+  (setq org-startup-indented t)
+  (setq vc-follow-symlinks t)
+  (with-eval-after-load 'adaptive-wrap
+    (setq-default global-adaptive-wrap-prefix-mode 1))
+  (add-hook 'visual-line-mode-hook
+            (lambda ()
+              (adaptive-wrap-prefix-mode +1)
+              (diminish 'visual-line-mode)))
+  (global-visual-line-mode +1)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files
+   (quote
+    ("~/Dropbox/org/pivotal.org" "~/Dropbox/org/todo.org")))
+ '(package-selected-packages
+   (quote
+    (epresent org adaptive-wrap which-key wgrep use-package spacemacs-theme smex quelpa powerline pcre2el org-projectile org-present org-pomodoro org-download mwim mmm-mode markdown-toc macrostep ivy-hydra htmlize help-fns+ helm-make gnuplot gh-md flyspell-correct-ivy flx exec-path-from-shell evil-visualstar evil-unimpaired evil-surround evil-escape evil-commentary elisp-slime-nav counsel-projectile bind-map auto-dictionary auto-compile ace-window))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
