@@ -49,11 +49,22 @@ osx_defaults:
     type: string
     value: WhenScrolling
 
+  # Safari
   - # enable Debug menu in Safari
     domain: com.apple.Safari
     key: IncludeInternalDebugMenu
     type: bool
     value: true
+  - # disable Java
+    domain: com.apple.Safari
+    key: com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabled
+    type: bool
+    value: false
+  - # disable Java
+    domain: com.apple.Safari
+    key: com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabledForLocalFiles
+    type: bool
+    value: false
 
   - # disable dashboard
     domain: com.apple.dashboard
