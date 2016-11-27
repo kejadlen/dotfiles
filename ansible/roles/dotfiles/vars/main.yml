@@ -2,6 +2,7 @@ conf_dirs:
   - ~/.bundle
   - ~/.ssh
   - ~/.vim_tmp
+  - ~/.vim_undo
 
 conf_symlinks:
   gitignore: ~/.gitignore
