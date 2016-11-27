@@ -225,10 +225,8 @@ if has("gui_running")
   set mousehide
 end
 
-if v:version >= 703
-  set undofile
-  set undodir=$HOME/.vim_undo//
-endif
+set undofile
+set undodir=$HOME/.vim_undo//
 
 if filereadable(glob("~/.vimrc.local"))
   source ~/.vimrc.local
