@@ -53,7 +53,8 @@
 [diff]
 	algorithm = patience
 	tool = icdiff
-	compactionHeuristic = true
+	; compactionHeuristic = true
+	indentHeuristic = true
 [fetch]
 	prune = true
 [tag]
