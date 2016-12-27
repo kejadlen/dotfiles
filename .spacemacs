@@ -51,6 +51,7 @@ values."
      ;; version-control
      evil-commentary
      vim-powerline
+     vinegar
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -339,7 +340,7 @@ you should place your code here."
     ("~/Dropbox/org/pivotal.org" "~/Dropbox/org/todo.org")))
  '(package-selected-packages
    (quote
-    (epresent org adaptive-wrap which-key wgrep use-package spacemacs-theme smex quelpa powerline pcre2el org-projectile org-present org-pomodoro org-download mwim mmm-mode markdown-toc macrostep ivy-hydra htmlize help-fns+ helm-make gnuplot gh-md flyspell-correct-ivy flx exec-path-from-shell evil-visualstar evil-unimpaired evil-surround evil-escape evil-commentary elisp-slime-nav counsel-projectile bind-map auto-dictionary auto-compile ace-window))))
+    (flyspell-correct epresent org adaptive-wrap which-key wgrep use-package spacemacs-theme smex quelpa powerline pcre2el org-projectile org-present org-pomodoro org-download mwim mmm-mode markdown-toc macrostep ivy-hydra htmlize help-fns+ helm-make gnuplot gh-md flyspell-correct-ivy flx exec-path-from-shell evil-visualstar evil-unimpaired evil-surround evil-escape evil-commentary elisp-slime-nav counsel-projectile bind-map auto-dictionary auto-compile ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
