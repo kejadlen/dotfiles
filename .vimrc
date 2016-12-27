@@ -216,6 +216,9 @@ endif
 " vim-dispatch
 nnoremap <leader>d :Dispatch<CR>
 
+" vim-startify
+let g:startify_custom_header = []
+
 if has("gui_running")
   set background=light
   set guifont=Source\ Code\ Pro\ for\ Powerline:h13

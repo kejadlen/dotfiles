@@ -109,3 +109,6 @@
 [submodule ".vim/pack/kejadlen/start/elm-vim"]
 	path = .vim/pack/kejadlen/start/elm-vim
 	url = git@github.com:ElmCast/elm-vim.git
+[submodule ".vim/pack/kejadlen/start/vim-startify"]
+	path = .vim/pack/kejadlen/start/vim-startify
+	url = git@github.com:mhinz/vim-startify.git
