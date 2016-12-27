@@ -58,7 +58,7 @@ highlight Normal ctermbg=235
 highlight rubyDefine ctermbg=235
 set noshowmode
 
-" has to go after solarized, wtf?
+" has to go after solarized
 highlight LongLine term=reverse cterm=reverse ctermfg=1 guifg=Black guibg=Yellow
 match LongLine /\%101v./
 
@@ -153,10 +153,11 @@ set directory=$HOME/.vim_tmp//
 " set titleold=
 
 " customize syntax highlighting
+highlight MatchParen term=inverse gui=inverse
 " highlight MatchParen cterm=bold ctermbg=none ctermfg=none
 " highlight Folded ctermfg=1 ctermbg=NONE
 " highlight FoldColumn ctermfg=1 ctermbg=NONE
-" highlight clear Search
+highlight clear Search
 " highlight Search ctermfg=6 ctermbg=9 term=underline cterm=underline gui=underline
 
 set wildignore+=*.pyc,*/bower_components/*,*/python2.7/*,*/share/doc/*,*/target/*
@@ -221,6 +222,7 @@ let g:startify_custom_header = []
 
 if has("gui_running")
   set background=light
+  set guicursor+=a:blinkon0 " disable blinking
   set guifont=Source\ Code\ Pro\ for\ Powerline:h13
   set guioptions-=T
   set macligatures
