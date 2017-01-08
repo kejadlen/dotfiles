@@ -1,11 +1,13 @@
 *.private
 
-Alfred\ 2/Alfred.alfredpreferences/preferences/local
 .config
 .pentadactyl/info
 .ssh/*_rsa
 .ssh/known_hosts
+.vim/.VimballRecord
 .vim/.netrwhist
 .vim/.scratch
-.vim/.VimballRecord
 .vim/spell
+.weechat/**/*.*log
+.weechat/set.conf
+Alfred\ 2/Alfred.alfredpreferences/preferences/local
