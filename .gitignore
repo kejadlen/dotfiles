@@ -9,5 +9,5 @@
 .vim/.scratch
 .vim/spell
 .weechat/**/*.*log
-.weechat/set.conf
+.weechat/sec.conf
 Alfred\ 2/Alfred.alfredpreferences/preferences/local
