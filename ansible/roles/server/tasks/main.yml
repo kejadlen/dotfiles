@@ -1,0 +1,23 @@
+- authorized_key:
+    user: alpha
+    state: present
+    key: "{{ lookup('file', '~/.ssh/pressure_drop_rsa.pub') }}"
+
+- name: apt update cache
+  apt: update_cache=yes
+  become: true
+- name: apt upgrade dist
+  apt: upgrade=dist
+  become: true
+- name: install/upgrade packages
+  apt: name={{ item }} state=present
+  become: true
+  with_items:
+    - libpam-systemd
+    - vim
+
+- file:
+    path: ~/.config/systemd/user
+    state: directory
+
+- include: znc.yml

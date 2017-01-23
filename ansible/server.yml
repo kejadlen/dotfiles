@@ -1,22 +1,4 @@
 ---
-- name: Setup SSH key
-  hosts: servers
-  tasks:
-    - authorized_key:
-        user: alpha
-        state: present
-        key: "{{ lookup('file', '~/.ssh/pressure_drop_rsa.pub') }}"
-
-- name: Update apt
-  hosts: servers
-  tasks:
-    - apt: update_cache=yes
-      become: true
-    - apt: upgrade=dist
-      become: true
-
-- name: Setup ZNC
-  hosts: servers
-  tasks:
-    - apt: name=znc state=present
-      become: true
+- hosts: servers
+  roles:
+    - role: server

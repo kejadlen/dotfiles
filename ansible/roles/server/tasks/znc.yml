@@ -1,0 +1,24 @@
+- name: install/upgrade znc
+  apt: name=znc state=latest
+  become: true
+
+- name: znc config
+  copy:
+    src: znc/{{ item }}
+    dest: ~/.znc/{{ item | splitext | first }}
+  with_items:
+    - configs/znc.conf.private
+    - znc.pem.private
+
+- name: znc systemd
+  copy:
+    src: znc/znc.service
+    dest: ~/.config/systemd/user/znc.service
+
+- name: restart znc
+  systemd:
+    name: znc
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+    user: yes
