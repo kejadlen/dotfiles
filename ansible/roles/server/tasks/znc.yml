@@ -15,6 +15,9 @@
     src: znc/znc.service
     dest: ~/.config/systemd/user/znc.service
 
+- command: loginctl enable-linger {{ ansible_env.USER }}
+  become: true
+
 - name: restart znc
   systemd:
     name: znc
