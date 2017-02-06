@@ -44,7 +44,7 @@ inoremap # X#
 set hidden
 
 " programming
-syntax on
+syntax enable
 set number
 set ttyfast
 set lazyredraw
@@ -121,7 +121,7 @@ endif
 
 " folding
 " set foldmethod=indent
-set foldlevel=3
+" set foldlevel=3
 " set nofoldenable
 
 " view
@@ -153,7 +153,7 @@ set directory=$HOME/.vim_tmp//
 " set titleold=
 
 " customize syntax highlighting
-highlight MatchParen term=inverse gui=inverse
+" highlight MatchParen ctermbg=
 " highlight MatchParen cterm=bold ctermbg=none ctermfg=none
 " highlight Folded ctermfg=1 ctermbg=NONE
 " highlight FoldColumn ctermfg=1 ctermbg=NONE
