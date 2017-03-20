@@ -12,8 +12,10 @@ namespace :sync do
   task :dlanham do
     rm_rf File.expand_path("~/Dropbox/wallpapers/dlanham wallpapers/Newest Additions")
     FileList[File.expand_path("~/Downloads/dlanham*")].each do |dir|
+      cmd = %w[ rsync -avz --exclude *.DS_Store . ]
+      cmd << File.expand_path(dir.pathmap("~/Dropbox/wallpapers/%f"))
       Dir.chdir dir do
-        sh 'rsync -avz --exclude "*.DS_Store" . ~/Dropbox/wallpapers/dlanham\ wallpapers'
+        sh *cmd
       end
       rm_r dir
     end
@@ -33,9 +35,9 @@ namespace :sync do
   task :puzzles do
     Dir[File.expand_path("~/Downloads/*")].each do |file|
       dir = case file.pathmap("%f")
-            when /^Diagramless\d+.pdf$/
+            when /^diagramless\d+.pdf$/i
               "diagramless"
-            when /^201\dW\d.*/
+            when /^201\dW(?:eek)?\d.*/
               "GM"
             end
       next if dir.nil?
@@ -47,10 +49,8 @@ namespace :sync do
 
   desc "Sync a config"
   task :config, [:config] do |t, args|
-    config = args[:config]
-
-    dotfiles = File.expand_path("..", __FILE__)
-    to = path.sub(Dir.home, dotfiles)
+    config = File.expand_path(args[:config])
+    to = config.sub(Dir.home, '\1/.dotfiles')
 
     mv config, to
     ln_s to, config
