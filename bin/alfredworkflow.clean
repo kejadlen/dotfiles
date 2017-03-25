@@ -2,8 +2,15 @@
 
 require 'tempfile'
 
+def with_tempfile(name)
+  file = Tempfile.new(name)
+  yield file
+ensure
+  file.close
+end
+
 plist = ARGF.read
-Tempfile.create('info.plist') do |f|
+with_tempfile('info.plist') do |f|
   f << plist
   f.flush
 
