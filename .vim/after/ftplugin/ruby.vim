@@ -1,2 +1,2 @@
-setlocal foldmethod=syntax
-setlocal foldlevelstart=5
+highlight rubyDefine ctermbg=235
+set foldmethod=syntax

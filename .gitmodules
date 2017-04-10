@@ -1,90 +1,9 @@
-[submodule ".vim/bundle/vim-textobj-user"]
-	path = .vim/pack/kejadlen/start/vim-textobj-user
-	url = git://github.com/kana/vim-textobj-user.git
-[submodule ".vim/bundle/vim-textobj-line"]
-	path = .vim/pack/kejadlen/start/vim-textobj-line
-	url = git://github.com/kana/vim-textobj-line.git
-[submodule ".vim/bundle/argtextobj.vim"]
-	path = .vim/pack/kejadlen/start/argtextobj.vim
-	url = git://github.com/vim-scripts/argtextobj.vim.git
-[submodule ".vim/bundle/vim-textobj-rubyblock"]
-	path = .vim/pack/kejadlen/start/vim-textobj-rubyblock
-	url = git://github.com/nelstrom/vim-textobj-rubyblock.git
-[submodule ".vim/bundle/vim-indent-object"]
-	path = .vim/pack/kejadlen/start/vim-indent-object
-	url = git://github.com/michaeljsmith/vim-indent-object.git
-[submodule ".vim/bundle/vim-colors-solarized"]
-	path = .vim/pack/kejadlen/start/vim-colors-solarized
-	url = git://github.com/altercation/vim-colors-solarized.git
-[submodule ".vim/bundle/vim-repeat"]
-	path = .vim/pack/kejadlen/start/vim-repeat
-	url = git://github.com/tpope/vim-repeat.git
-[submodule ".vim/bundle/vim-surround"]
-	path = .vim/pack/kejadlen/start/vim-surround
-	url = git://github.com/tpope/vim-surround.git
-[submodule ".vim/bundle/tabular"]
-	path = .vim/pack/kejadlen/start/tabular
-	url = git://github.com/godlygeek/tabular.git
-[submodule ".vim/bundle/vim-ruby"]
-	path = .vim/pack/kejadlen/start/vim-ruby
-	url = git://github.com/vim-ruby/vim-ruby.git
-[submodule ".vim/bundle/vim-coffee-script"]
-	path = .vim/pack/kejadlen/start/vim-coffee-script
-	url = git://github.com/kchmck/vim-coffee-script.git
-[submodule ".vim/bundle/gundo"]
-	path = .vim/pack/kejadlen/start/gundo
-	url = git://github.com/sjl/gundo.vim.git
-[submodule ".vim/bundle/vim-dispatch"]
-	path = .vim/pack/kejadlen/start/vim-dispatch
-	url = git://github.com/tpope/vim-dispatch.git
-[submodule ".vim/bundle/ctrlp"]
-	path = .vim/pack/kejadlen/start/ctrlp
-	url = git://github.com/ctrlpvim/ctrlp.vim.git
-[submodule ".vim/bundle/vinegar"]
-	path = .vim/pack/kejadlen/start/vinegar
-	url = git://github.com/tpope/vim-vinegar.git
-[submodule ".vim/bundle/go"]
-	path = .vim/pack/kejadlen/opt/vim-go
-	url = git://github.com/fatih/vim-go.git
-[submodule ".vim/bundle/vim-tmux-navigator"]
-	path = .vim/pack/kejadlen/start/vim-tmux-navigator
-	url = git://github.com/christoomey/vim-tmux-navigator.git
 [submodule "src/powerline"]
 	path = src/powerline
-	url = git://github.com/powerline/powerline.git
+	url = https://github.com/powerline/powerline.git
 [submodule "src/prezto"]
 	path = src/prezto
-	url = git://github.com/kejadlen/prezto.git
-[submodule ".vim/bundle/vim-endwise"]
-	path = .vim/pack/kejadlen/start/vim-endwise
-	url = git://github.com/tpope/vim-endwise.git
-[submodule ".vim/bundle/vim-sleuth"]
-	path = .vim/pack/kejadlen/start/vim-sleuth
-	url = git://github.com/tpope/vim-sleuth.git
-[submodule ".vim/bundle/vim-rsi"]
-	path = .vim/pack/kejadlen/start/vim-rsi
-	url = git://github.com/tpope/vim-rsi.git
-[submodule ".vim/bundle/vim-sensible"]
-	path = .vim/pack/kejadlen/start/vim-sensible
-	url = git://github.com/tpope/vim-sensible.git
-[submodule ".vim/bundle/vim-unimpaired"]
-	path = .vim/pack/kejadlen/start/vim-unimpaired
-	url = git://github.com/tpope/vim-unimpaired.git
-[submodule ".vim/bundle/incsearch.vim"]
-	path = .vim/pack/kejadlen/start/incsearch.vim
-	url = git://github.com/haya14busa/incsearch.vim
-[submodule ".vim/bundle/vim-commentary"]
-	path = .vim/pack/kejadlen/start/vim-commentary
-	url = git://github.com/tpope/vim-commentary.git
-[submodule ".vim/bundle/rust.vim"]
-	path = .vim/pack/kejadlen/start/rust.vim
-	url = git://github.com/rust-lang/rust.vim.git
-[submodule ".vim/bundle/vim-projectionist"]
-	path = .vim/pack/kejadlen/start/vim-projectionist
-	url = git://github.com/tpope/vim-projectionist.git
-[submodule ".vim/bundle/vim-rake"]
-	path = .vim/pack/kejadlen/start/vim-rake
-	url = git@github.com:tpope/vim-rake.git
+	url = https://github.com/kejadlen/prezto.git
 [submodule "Alfred.alfredpreferences/workflows/emoji.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/emoji.alfredworkflow
 	url = git@github.com:kejadlen/emoji.alfredworkflow
@@ -100,15 +19,51 @@
 [submodule "Alfred.alfredpreferences/workflows/alphred.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/alphred.alfredworkflow
 	url = git@github.com:kejadlen/alphred.alfredworkflow.git
-[submodule "src/swift"]
-	path = src/swift
-	url = git@github.com:apple/swift.git
-[submodule ".vim/bundle/vim-fugitive"]
-	path = .vim/pack/kejadlen/start/vim-fugitive
-	url = git@github.com:tpope/vim-fugitive.git
-[submodule ".vim/pack/kejadlen/start/elm-vim"]
-	path = .vim/pack/kejadlen/start/elm-vim
-	url = git@github.com:ElmCast/elm-vim.git
-[submodule ".vim/pack/kejadlen/start/vim-startify"]
-	path = .vim/pack/kejadlen/start/vim-startify
-	url = git@github.com:mhinz/vim-startify.git
+[submodule ".vim/pack/alpha/start/vim-commentary"]
+	path = .vim/pack/alpha/start/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule ".vim/pack/alpha/start/vim-sensible"]
+	path = .vim/pack/alpha/start/vim-sensible
+	url = https://github.com/tpope/vim-sensible.git
+[submodule ".vim/pack/alpha/start/vim-surround"]
+	path = .vim/pack/alpha/start/vim-surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule ".vim/pack/alpha/start/vim-sleuth"]
+	path = .vim/pack/alpha/start/vim-sleuth
+	url = https://github.com/tpope/vim-sleuth.git
+[submodule ".vim/pack/alpha/start/vim-tmux-navigator"]
+	path = .vim/pack/alpha/start/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator.git
+[submodule ".vim/pack/alpha/start/vim-unimpaired"]
+	path = .vim/pack/alpha/start/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired.git
+[submodule ".vim/pack/alpha/start/vim-colors-solarized"]
+	path = .vim/pack/alpha/start/vim-colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule ".vim/pack/alpha/start/rust.vim"]
+	path = .vim/pack/alpha/start/rust.vim
+	url = https://github.com/rust-lang/rust.vim.git
+[submodule ".vim/pack/alpha/start/incsearch.vim"]
+	path = .vim/pack/alpha/start/incsearch.vim
+	url = https://github.com/haya14busa/incsearch.vim.git
+[submodule ".vim/pack/alpha/start/vim-vinegar"]
+	path = .vim/pack/alpha/start/vim-vinegar
+	url = https://github.com/tpope/vim-vinegar.git
+[submodule ".vim/pack/alpha/start/vim-dispatch"]
+	path = .vim/pack/alpha/start/vim-dispatch
+	url = https://github.com/tpope/vim-dispatch.git
+[submodule ".vim/pack/alpha/start/vim-endwise"]
+	path = .vim/pack/alpha/start/vim-endwise
+	url = https://github.com/tpope/vim-endwise.git
+[submodule ".vim/pack/alpha/start/vim-ruby"]
+	path = .vim/pack/alpha/start/vim-ruby
+	url = https://github.com/vim-ruby/vim-ruby.git
+[submodule ".vim/pack/alpha/start/vim-repeat"]
+	path = .vim/pack/alpha/start/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule ".vim/pack/alpha/start/vim-textobj-user"]
+	path = .vim/pack/alpha/start/vim-textobj-user
+	url = https://github.com/kana/vim-textobj-user.git
+[submodule ".vim/pack/alpha/start/vim-textobj-rubyblock"]
+	path = .vim/pack/alpha/start/vim-textobj-rubyblock
+	url = https://github.com/nelstrom/vim-textobj-rubyblock.git
