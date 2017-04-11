@@ -77,7 +77,7 @@ git clone --recursive https://github.com/kejadlen/dotfiles.git ~/.dotfiles
 
 # Run Ansible
 cd ~/.dotfiles/ansible
-echo localhost > hosts.private
+echo "localhost ansible_connection=local" > hosts.private
 ansible-playbook main.yml --ask-pass --ask-become-pass
 ```
 

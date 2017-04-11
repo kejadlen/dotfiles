@@ -58,9 +58,9 @@ namespace :sync do
 end
 
 namespace :bitbar do
-  FILE = 'onebusaway.30s.rb'
+  FILE = "onebusaway.30s.rb"
 
-  desc 'Toggle OneBusAway BitBar plugin'
+  desc "Toggle OneBusAway BitBar plugin"
   task :oba do
     if File.exist?(File.expand_path("../bitbar/enabled/#{FILE}", __FILE__))
       rm File.expand_path("../bitbar/enabled/#{FILE}", __FILE__)
@@ -68,6 +68,43 @@ namespace :bitbar do
       ln_s File.expand_path("../bitbar/#{FILE}", __FILE__),
            File.expand_path("../bitbar/enabled/#{FILE}", __FILE__)
     end
-    sh 'open bitbar://refreshPlugin?name=onebusaway.*'
+    sh "open bitbar://refreshPlugin?name=onebusaway.*"
+  end
+end
+
+namespace :pave do
+  PATHS = %w[
+    BTSync/
+    Downloads/
+    Dropbox/
+    Library/Application\ Support/Adium\ 2.0
+    Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist
+    Library/Preferences/com.adiumX.adiumX.plist
+  ]
+
+  desc "Backup files for paving"
+  task :backup, [:to_dir] do |t, args|
+    to_dir = args[:to_dir]
+
+    PATHS.each do |path|
+      from = File.expand_path("~/#{path}")
+      to = File.expand_path("#{to_dir}/#{path}")
+
+      mkdir_p to.pathmap("%d")
+      sh *%W[ rsync --archive --delete --verbose #{from} #{to} ]
+    end
+  end
+
+  desc "Restore files for paving"
+  task :restore, [:from_dir] do |t, args|
+    from_dir = args[:from_dir]
+
+    PATHS.each do |path|
+      from = File.expand_path("#{from_dir}/#{path}")
+      to = File.expand_path("~/#{path}")
+
+      mkdir_p to.pathmap("%d")
+      sh *%W[ rsync --archive --delete --verbose #{from} #{to} ]
+    end
   end
 end

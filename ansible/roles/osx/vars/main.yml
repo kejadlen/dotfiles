@@ -125,8 +125,8 @@ osx_defaults:
     value: 0
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
     key: TrackpadThreeFingerDrag
-    type: int
-    value: 1
+    type: bool
+    value: true
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
     key: TrackpadThreeFingerHorizSwipeGesture
     type: int
@@ -184,14 +184,3 @@ osx_defaults:
     key: AppleEnableSwipeNavigateWithScrolls
     type: bool
     value: false
-
-app_prefs:
-  - ~/Library/Application Support/Adium 2.0
-  - ~/Library/Containers/com.reederapp.rkit2.mac
-  - ~/Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist
-  - ~/Library/Preferences/com.adiumX.adiumX.plist
-  - ~/Library/Preferences/com.culturedcode.things.plist
-  - ~/Library/Preferences/com.flexibits.fantastical.plist
-  - ~/Library/Preferences/com.kapeli.dashdoc.plist
-  - ~/Library/Preferences/com.surteesstudios.Bartender.plist
-  - ~/Library/Preferences/org.herf.Flux.plist
