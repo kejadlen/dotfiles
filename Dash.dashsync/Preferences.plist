@@ -124,12 +124,12 @@
 			<key>http://kapeli.com/feeds/CSS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2016-08-24T15:28:52Z</date>
+				<date>2017-04-12T14:52:12Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Markdown.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2016-08-24T15:25:07Z</date>
+				<date>2017-04-12T14:52:01Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
 			<dict>
@@ -144,7 +144,7 @@
 			<key>http://kapeli.com/feeds/Vim.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2016-08-24T15:25:04Z</date>
+				<date>2017-04-12T14:52:02Z</date>
 			</dict>
 		</dict>
 		<key>uninstalled</key>
