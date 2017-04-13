@@ -220,7 +220,7 @@
 			<dict>
 				<key>paths</key>
 				<array>
-					<string>~/Applications/Firefox.app</string>
+					<string>/Applications/Firefox.app</string>
 				</array>
 				<key>toggle</key>
 				<false/>
@@ -381,7 +381,7 @@
 			<dict>
 				<key>paths</key>
 				<array>
-					<string>~/Applications/Adium.app</string>
+					<string>/Applications/Adium.app</string>
 				</array>
 				<key>toggle</key>
 				<false/>
@@ -429,7 +429,7 @@
 			<dict>
 				<key>paths</key>
 				<array>
-					<string>/opt/homebrew-cask/Caskroom/google-chrome/latest/Google Chrome.app</string>
+					<string>/Applications/Google Chrome.app</string>
 				</array>
 				<key>toggle</key>
 				<false/>
