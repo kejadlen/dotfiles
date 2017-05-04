@@ -1,16 +1,16 @@
 tap 'caskroom/cask'
 tap 'caskroom/fonts'
+tap 'caskroom/versions'
 tap 'homebrew/bundle'
 tap 'homebrew/core'
 tap 'kejadlen/personal'
-
 brew 'ansible'
 brew 'chruby'
-brew 'git'
 brew 'direnv'
-brew 'emacs', args: ['with-cocoa']
 brew 'fasd'
+brew 'git'
 brew 'macvim', args: ['with-override-system-vim']
+brew 'mas'
 brew 'reattach-to-user-namespace'
 brew 'ripgrep'
 brew 'ruby-install'
@@ -18,9 +18,9 @@ brew 'selecta'
 brew 'terminal-notifier'
 brew 'tmux'
 brew 'tree'
+brew 'weechat', args: ['with-aspell', 'with-curl', 'with-perl', 'with-python', 'with-ruby']
 brew 'youtube-dl'
 brew 'zsh'
-
 cask '1password'
 cask 'acorn'
 cask 'adium'
@@ -52,3 +52,6 @@ cask 'resilio-sync'
 cask 'slack'
 cask 'steam'
 cask 'vlc'
+mas 'iPulse', id: 1028916583
+mas 'Paprika Recipe Manager', id: 451907568
+mas 'Reeder', id: 880001334
