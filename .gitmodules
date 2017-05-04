@@ -67,3 +67,9 @@
 [submodule ".vim/pack/alpha/start/vim-textobj-rubyblock"]
 	path = .vim/pack/alpha/start/vim-textobj-rubyblock
 	url = https://github.com/nelstrom/vim-textobj-rubyblock.git
+[submodule ".vim/pack/alpha/start/vim-indent-object"]
+	path = .vim/pack/alpha/start/vim-indent-object
+	url = https://github.com/michaeljsmith/vim-indent-object.git
+[submodule ".vim/pack/alpha/start/tabular"]
+	path = .vim/pack/alpha/start/tabular
+	url = https://github.com/godlygeek/tabular.git
