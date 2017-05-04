@@ -47,6 +47,7 @@ augroup END
 
 """ Editing
 
+" set hidden
 set noesckeys
 set virtualedit=block
 
