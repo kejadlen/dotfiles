@@ -1,0 +1,109 @@
+# https://docs.docker.com/engine/installation/linux/debian/
+
+- hosts: congenital-optimist
+  become: yes
+  tasks:
+
+  - name: Uninstall old versions
+    apt:
+      name: "{{ item }}"
+      state: absent
+    with_items:
+      - docker
+      - docker-engine
+
+  - name: Set up the repository
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-curl
+      - gnupg2
+      - software-properties-common
+
+  - name: Add Docker’s official GPG key
+    apt_key:
+      keyserver: https://download.docker.com/linux/debian/gpg
+      id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+
+  - command: lsb_release --codename --short
+    register: codename
+
+  - name: Set up the stable repository
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/debian {{ codename.stdout }} stable
+      state: present
+
+  - name: Update apt cache
+    apt:
+      update_cache: yes
+
+  - name: Install Docker CE
+    apt:
+      name: docker-ce
+      state: present
+
+  - name: Install pip
+    easy_install:
+      name: pip
+      state: latest
+
+  - name: Install docker-py
+    pip:
+      name: docker-py
+
+  - name: Create ZNC mounted volumes
+    file:
+      path: ~/znc/configs
+      state: directory
+      recurse: yes
+
+  - name: Set up ZNC
+    copy:
+      src: congenital-optimist/znc/{{ item }}.private
+      dest: ~/znc/{{ item }}
+    with_items:
+      - configs/znc.conf
+      - znc.pem
+
+  - name: Run ZNC container
+    docker_container:
+      name: znc
+      image: znc
+      state: started
+      restart: yes
+      ports:
+        - "6667:6667"
+      volumes:
+        - "{{ ansible_env.HOME }}/znc:/znc-data"
+
+  - name: Get public IP
+    ipify_facts:
+
+  - name: Create pi-hole mounted volumes
+    file:
+      path: ~/pihole/{{ item }}
+      state: directory
+      recurse: yes
+    with_items:
+      - pihole
+      - dnsmasq.d
+
+  - name: Run pi-hole container
+    docker_container:
+      name: pihole
+      image: diginc/pi-hole:alpine
+      state: started
+      restart: yes
+      env:
+        ServerIP: "{{ ipify_public_ip }}"
+      ports:
+        - "53:53/tcp"
+        - "53:53/udp"
+        - "80:80"
+      volumes:
+        - "{{ ansible_env.HOME }}/pihole/pihole:/etc/pihole"
+        - "{{ ansible_env.HOME }}/pihole/dnsmasq.d:/etc/dnsmasq.d"
