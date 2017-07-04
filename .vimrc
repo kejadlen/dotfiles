@@ -22,10 +22,19 @@ set wildmode=list:longest,full
 
 """ Display
 
+set background=dark
 let g:solarized_termcolors=256
 colorscheme solarized
-set background=dark
-highlight Normal ctermbg=235
+
+fun! s:highlight()
+  highlight Normal ctermbg=235
+endfun
+
+augroup MyHighlight
+  autocmd!
+  autocmd ColorScheme * call s:highlight()
+augroup end
+call s:highlight()
 
 " highlight LongLine term=reverse cterm=reverse ctermfg=1 guifg=Black guibg=Yellow
 " match LongLine /\%101v./
