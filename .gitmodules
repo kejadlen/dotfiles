@@ -73,3 +73,12 @@
 [submodule ".vim/pack/alpha/start/tabular"]
 	path = .vim/pack/alpha/start/tabular
 	url = https://github.com/godlygeek/tabular.git
+[submodule ".vim/pack/alpha/start/vim-projectionist"]
+	path = .vim/pack/alpha/start/vim-projectionist
+	url = git@github.com:tpope/vim-projectionist.git
+[submodule ".vim/pack/alpha/start/vim-rake"]
+	path = .vim/pack/alpha/start/vim-rake
+	url = git@github.com:tpope/vim-rake.git
+[submodule ".vim/pack/alpha/start/elm-vim"]
+	path = .vim/pack/alpha/start/elm-vim
+	url = git@github.com:ElmCast/elm-vim.git
