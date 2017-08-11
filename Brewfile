@@ -7,6 +7,7 @@ tap 'kejadlen/personal'
 brew 'ansible'
 brew 'chruby'
 brew 'direnv'
+brew 'exa'
 brew 'fasd'
 brew 'git'
 brew 'macvim', args: ['with-override-system-vim']
