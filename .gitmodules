@@ -13,9 +13,6 @@
 [submodule "Alfred.alfredpreferences/workflows/dark-sky.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/dark-sky.alfredworkflow
 	url = git@github.com:kejadlen/dark-sky.alfredworkflow
-[submodule "Alfred.alfredpreferences/workflows/giphy.alfredworkflow"]
-	path = Alfred.alfredpreferences/workflows/giphy.alfredworkflow
-	url = git@github.com:kejadlen/giphy.alfredworkflow
 [submodule "Alfred.alfredpreferences/workflows/alphred.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/alphred.alfredworkflow
 	url = git@github.com:kejadlen/alphred.alfredworkflow.git
@@ -82,3 +79,6 @@
 [submodule ".vim/pack/alpha/start/elm-vim"]
 	path = .vim/pack/alpha/start/elm-vim
 	url = git@github.com:ElmCast/elm-vim.git
+[submodule "src/giphy.alfredworkflow"]
+	path = src/giphy.alfredworkflow
+	url = git@github.com:kejadlen/giphy.alfredworkflow.git
