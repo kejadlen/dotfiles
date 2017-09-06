@@ -82,3 +82,6 @@
 [submodule "src/giphy.alfredworkflow"]
 	path = src/giphy.alfredworkflow
 	url = git@github.com:kejadlen/giphy.alfredworkflow.git
+[submodule ".vim/pack/alpha/start/vim-racket"]
+	path = .vim/pack/alpha/start/vim-racket
+	url = https://github.com/wlangstroth/vim-racket.git
