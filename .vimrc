@@ -70,7 +70,17 @@ endfunction
 augroup RestoreCursor
   autocmd!
   autocmd BufWinEnter * call RestoreCursor()
-augroup END
+augroup end
+
+augroup netrw_buf_hidden_fix
+  autocmd!
+
+  " Set all non-netrw buffers to bufhidden=hide
+  autocmd BufWinEnter *
+        \  if &ft != 'netrw'
+        \|     set bufhidden=hide
+        \| endif
+augroup end
 
 """ GUI
 
@@ -126,6 +136,9 @@ if executable('rg')
   set grepprg=rg\ --no-heading\ --vimgrep
   set grepformat=%f:%l:%c:%m
 endif
+
+" projectionist
+nnoremap <leader>a :A<cr>
 
 """ Selecta
 
