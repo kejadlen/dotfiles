@@ -85,3 +85,6 @@
 [submodule ".vim/pack/alpha/start/vim-racket"]
 	path = .vim/pack/alpha/start/vim-racket
 	url = https://github.com/wlangstroth/vim-racket.git
+[submodule ".vim/pack/alpha/start/paredit.vim"]
+	path = .vim/pack/alpha/start/paredit.vim
+	url = git@github.com:vim-scripts/paredit.vim.git
