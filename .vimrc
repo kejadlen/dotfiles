@@ -25,6 +25,7 @@ set wildmode=list:longest,full
 set background=dark
 let g:solarized_termcolors=256
 colorscheme solarized
+set background=dark
 
 fun! s:highlight()
   highlight Normal ctermbg=235
@@ -57,8 +58,11 @@ augroup END
 """ Editing
 
 " set hidden
-set noesckeys
+if !has("nvim")
+  set noesckeys
+endif
 set virtualedit=block
+set noshowmode
 
 function! RestoreCursor()
   if line("'\"") <= line("$")
@@ -93,7 +97,9 @@ end
 set guicursor+=a:blinkon0 " disable blinking
 set guifont=Source\ Code\ Pro\ for\ Powerline:h13
 set guioptions-=T
-set macmeta
+if !has("nvim")
+  set macmeta
+endif
 set mousehide
 
 """ Persistence
@@ -126,11 +132,6 @@ map #  <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
-" Powerline
-python from powerline.vim import setup as powerline_setup
-python powerline_setup()
-python del powerline_setup
-
 " ripgrep
 if executable('rg')
   set grepprg=rg\ --no-heading\ --vimgrep
@@ -140,23 +141,30 @@ endif
 " projectionist
 nnoremap <leader>a :A<cr>
 
-""" Selecta
+" dispatch
+nnoremap <leader>d :Dispatch<cr>
 
-" Run a given vim command on the results of fuzzy selecting from a given shell
-" command. See usage below.
-function! SelectaCommand(choice_command, selecta_args, vim_command)
-  try
-    let selection = system(a:choice_command . " | selecta " . a:selecta_args)
-  catch /Vim:Interrupt/
-    " Swallow the ^C so that the redraw below happens; otherwise there will be
-    " leftovers from selecta on the screen
-    redraw!
-    return
-  endtry
-  redraw!
-  exec a:vim_command . " " . selection
+" lightline
+let g:lightline = {
+      \ 'component': {
+      \   'lineinfo': ' %3l:%-2v',
+      \ },
+      \ 'component_function': {
+      \   'readonly': 'LightlineReadonly',
+      \   'fugitive': 'LightlineFugitive'
+      \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
+      \ }
+
+function! LightlineReadonly()
+  return &readonly ? '' : ''
 endfunction
 
-" Find all files in all non-dot directories starting in the working directory.
-" Fuzzy select one of those. Open the selected file with :e.
-nnoremap <leader>f :call SelectaCommand("find * -type f", "", ":e")<cr>
+function! LightlineFugitive()
+  if exists('*fugitive#head')
+    let branch = fugitive#head()
+    return branch !=# '' ? ''.branch : ''
+  endif
+  return ''
+endfunction
