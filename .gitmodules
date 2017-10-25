@@ -10,9 +10,6 @@
 [submodule "Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/faker.alfredworkflow
 	url = git@github.com:kejadlen/faker.alfredworkflow
-[submodule "Alfred.alfredpreferences/workflows/dark-sky.alfredworkflow"]
-	path = Alfred.alfredpreferences/workflows/dark-sky.alfredworkflow
-	url = git@github.com:kejadlen/dark-sky.alfredworkflow
 [submodule "Alfred.alfredpreferences/workflows/alphred.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/alphred.alfredworkflow
 	url = git@github.com:kejadlen/alphred.alfredworkflow.git
@@ -88,3 +85,6 @@
 [submodule ".vim/pack/alpha/start/paredit.vim"]
 	path = .vim/pack/alpha/start/paredit.vim
 	url = git@github.com:vim-scripts/paredit.vim.git
+[submodule "src/dark-sky.alfredworkflow"]
+	path = src/dark-sky.alfredworkflow
+	url = git@github.com:kejadlen/dark-sky.alfredworkflow.git
