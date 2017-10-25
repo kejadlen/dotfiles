@@ -91,3 +91,6 @@
 [submodule ".vim/pack/alpha/start/vim-qf"]
 	path = .vim/pack/alpha/start/vim-qf
 	url = git@github.com:romainl/vim-qf.git
+[submodule ".vim/pack/alpha/start/vim-sexp"]
+	path = .vim/pack/alpha/start/vim-sexp
+	url = git@github.com:guns/vim-sexp.git
