@@ -82,9 +82,12 @@
 [submodule ".vim/pack/alpha/start/vim-racket"]
 	path = .vim/pack/alpha/start/vim-racket
 	url = https://github.com/wlangstroth/vim-racket.git
-[submodule ".vim/pack/alpha/start/paredit.vim"]
-	path = .vim/pack/alpha/start/paredit.vim
-	url = git@github.com:vim-scripts/paredit.vim.git
 [submodule "src/dark-sky.alfredworkflow"]
 	path = src/dark-sky.alfredworkflow
 	url = git@github.com:kejadlen/dark-sky.alfredworkflow.git
+[submodule ".vim/pack/alpha/start/lightline.vim"]
+	path = .vim/pack/alpha/start/lightline.vim
+	url = git@github.com:itchyny/lightline.vim.git
+[submodule ".vim/pack/alpha/start/vim-qf"]
+	path = .vim/pack/alpha/start/vim-qf
+	url = git@github.com:romainl/vim-qf.git
