@@ -103,3 +103,6 @@
 [submodule ".vim/pack/alpha/start/rainbow"]
 	path = .vim/pack/alpha/start/rainbow
 	url = git@github.com:luochen1990/rainbow.git
+[submodule ".vim/pack/alpha/start/gundo.vim"]
+	path = .vim/pack/alpha/start/gundo.vim
+	url = git@github.com:sjl/gundo.vim.git

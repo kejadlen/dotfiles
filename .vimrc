@@ -1,4 +1,6 @@
-""" Mappings
+" vim:foldmethod=marker:foldlevel=0
+
+" Mappings {{{
 
 let mapleader="\<Space>"
 
@@ -15,12 +17,16 @@ nnoremap <leader>/ :nohlsearch<cr>
 " don't unindent lines starting with #
 inoremap # X#
 
-""" Commands
+" }}}
+
+" Commands {{{
 
 set undolevels=1000
 set wildmode=list:longest,full
 
-""" Display
+"}}}
+
+" Display {{{
 
 set background=dark
 let g:solarized_termcolors=256
@@ -29,6 +35,8 @@ set background=dark
 
 fun! s:highlight()
   highlight Normal ctermbg=235
+  highlight CursorLine ctermbg=236
+  highlight MatchParen ctermbg=238
 endfun
 
 augroup MyHighlight
@@ -40,22 +48,27 @@ call s:highlight()
 " highlight LongLine term=reverse cterm=reverse ctermfg=1 guifg=Black guibg=Yellow
 " match LongLine /\%101v./
 
-set foldlevelstart=4
+set foldlevelstart=6
+set foldmethod=indent
 set linebreak
 set list
 let &listchars="tab:\u21e5 ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
 set number
-" set ttyfast
+set ttyfast
 set splitbelow
 set splitright
+set lazyredraw
 
+" only show cursorline in current window
 augroup CursorLine
   au!
   au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
   au WinLeave * setlocal nocursorline
 augroup END
 
-""" Editing
+" }}}
+
+" Editing {{{
 
 " set hidden
 if !has("nvim")
@@ -86,7 +99,9 @@ augroup netrw_buf_hidden_fix
         \| endif
 augroup end
 
-""" GUI
+" }}}
+
+" GUI {{{
 
 if has("gui_running")
   set background=light
@@ -102,7 +117,9 @@ if !has("nvim")
 endif
 set mousehide
 
-""" Persistence
+" }}}
+
+" Persistence {{{
 
 set directory=~/.vim_tmp
 set encoding=utf8
@@ -112,13 +129,17 @@ set nobackup
 set undodir=~/.vim_undo
 set undofile
 
-""" Search
+" }}}
+
+" Search {{{
 
 set gdefault
 set hlsearch
 set smartcase
 
-""" Plugins
+" }}}
+
+" Plugins {{{
 
 " incsearch
 let g:incsearch#auto_nohlsearch = 1
@@ -151,3 +172,11 @@ if isdirectory('/usr/local/opt/fzf')
   nmap <Leader>f :Files<CR>
   nmap <Leader>t :Tags<CR>
 endif
+
+" rainbow
+let g:rainbow_active = 0
+
+" gundo
+nnoremap <leader>u :GundoToggle<CR>
+
+" }}}
