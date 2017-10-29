@@ -1,1 +1,1 @@
-au VimEnter * RainbowParenthesesToggle
+au VimEnter * RainbowToggleOn
