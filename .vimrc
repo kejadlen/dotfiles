@@ -144,27 +144,10 @@ nnoremap <leader>a :A<cr>
 " dispatch
 nnoremap <leader>d :Dispatch<cr>
 
-" lightline
-let g:lightline = {
-      \ 'component': {
-      \   'lineinfo': ' %3l:%-2v',
-      \ },
-      \ 'component_function': {
-      \   'readonly': 'LightlineReadonly',
-      \   'fugitive': 'LightlineFugitive'
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
-      \ }
-
-function! LightlineReadonly()
-  return &readonly ? '' : ''
-endfunction
-
-function! LightlineFugitive()
-  if exists('*fugitive#head')
-    let branch = fugitive#head()
-    return branch !=# '' ? ''.branch : ''
-  endif
-  return ''
-endfunction
+" fzf
+if isdirectory('/usr/local/opt/fzf')
+  set rtp+=/usr/local/opt/fzf
+  nmap <Leader>b :Buffers<CR>
+  nmap <Leader>f :Files<CR>
+  nmap <Leader>t :Tags<CR>
+endif

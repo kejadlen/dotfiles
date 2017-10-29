@@ -94,3 +94,12 @@
 [submodule ".vim/pack/alpha/start/vim-sexp"]
 	path = .vim/pack/alpha/start/vim-sexp
 	url = git@github.com:guns/vim-sexp.git
+[submodule ".vim/pack/alpha/start/fzf.vim"]
+	path = .vim/pack/alpha/start/fzf.vim
+	url = git@github.com:junegunn/fzf.vim.git
+[submodule ".vim/pack/alpha/start/scribble.vim"]
+	path = .vim/pack/alpha/start/scribble.vim
+	url = git@github.com:vim-scripts/scribble.vim.git
+[submodule ".vim/pack/alpha/start/rainbow_parentheses.vim"]
+	path = .vim/pack/alpha/start/rainbow_parentheses.vim
+	url = git@github.com:kien/rainbow_parentheses.vim.git
