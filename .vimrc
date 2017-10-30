@@ -48,7 +48,7 @@ call s:highlight()
 " highlight LongLine term=reverse cterm=reverse ctermfg=1 guifg=Black guibg=Yellow
 " match LongLine /\%101v./
 
-set foldlevelstart=6
+set foldlevelstart=10
 set foldmethod=indent
 set linebreak
 set list
