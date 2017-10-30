@@ -72,7 +72,7 @@
 			<key>rake</key>
 			<dict>
 				<key>date</key>
-				<date>2017-09-11T02:52:05Z</date>
+				<date>2017-10-26T01:54:33Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -121,6 +121,11 @@
 	<dict>
 		<key>installed</key>
 		<dict>
+			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2017-09-29T15:33:02Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/CSS.xml</key>
 			<dict>
 				<key>date</key>
@@ -135,6 +140,11 @@
 			<dict>
 				<key>date</key>
 				<date>2017-04-12T14:52:01Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Racket.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2017-10-08T21:07:33Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
 			<dict>
