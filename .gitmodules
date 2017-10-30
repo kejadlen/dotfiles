@@ -1,6 +1,3 @@
-[submodule "src/powerline"]
-	path = src/powerline
-	url = https://github.com/powerline/powerline.git
 [submodule "src/prezto"]
 	path = src/prezto
 	url = https://github.com/kejadlen/prezto.git
