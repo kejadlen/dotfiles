@@ -103,3 +103,9 @@
 [submodule ".vim/pack/alpha/start/gundo.vim"]
 	path = .vim/pack/alpha/start/gundo.vim
 	url = git@github.com:sjl/gundo.vim.git
+[submodule ".vim/pack/alpha/start/vim-operator-flashy"]
+	path = .vim/pack/alpha/start/vim-operator-flashy
+	url = git@github.com:haya14busa/vim-operator-flashy.git
+[submodule ".vim/pack/alpha/start/vim-operator-user"]
+	path = .vim/pack/alpha/start/vim-operator-user
+	url = git@github.com:kana/vim-operator-user.git

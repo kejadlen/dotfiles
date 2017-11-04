@@ -11,7 +11,7 @@ noremap <right> <nop>
 
 nnoremap ' `
 nnoremap ` '
-nnoremap Y y$
+" nnoremap Y y$
 nnoremap <leader>/ :nohlsearch<cr>
 
 " don't unindent lines starting with #
@@ -178,5 +178,9 @@ let g:rainbow_active = 0
 
 " gundo
 nnoremap <leader>u :GundoToggle<CR>
+
+" operator-flashy
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$
 
 " }}}
