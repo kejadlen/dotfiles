@@ -48,8 +48,8 @@ call s:highlight()
 " highlight LongLine term=reverse cterm=reverse ctermfg=1 guifg=Black guibg=Yellow
 " match LongLine /\%101v./
 
-set foldlevelstart=10
-set foldmethod=indent
+" set foldlevelstart=10
+" set foldmethod=indent
 set linebreak
 set list
 let &listchars="tab:\u21e5 ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
@@ -66,6 +66,16 @@ augroup CursorLine
   au WinLeave * setlocal nocursorline
 augroup END
 
+" }}}
+
+" {{{ Folding
+set foldclose=all " Close folds if you leave them in any way
+" set foldcolumn=1 " Show the foldcolumn
+" set foldenable " Turn on folding
+set foldlevel=1 " Autofold everything by default
+set foldmethod=syntax " Fold on the syntax
+set foldnestmax=1 " I only like to fold outer functions
+set foldopen=all " Open folds if you touch them in any way
 " }}}
 
 " Editing {{{
