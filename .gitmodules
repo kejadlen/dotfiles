@@ -1,9 +1,6 @@
 [submodule "src/prezto"]
 	path = src/prezto
 	url = https://github.com/kejadlen/prezto.git
-[submodule "Alfred.alfredpreferences/workflows/emoji.alfredworkflow"]
-	path = Alfred.alfredpreferences/workflows/emoji.alfredworkflow
-	url = git@github.com:kejadlen/emoji.alfredworkflow
 [submodule "Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/faker.alfredworkflow
 	url = git@github.com:kejadlen/faker.alfredworkflow
@@ -109,3 +106,6 @@
 [submodule ".vim/pack/alpha/start/vim-operator-user"]
 	path = .vim/pack/alpha/start/vim-operator-user
 	url = git@github.com:kana/vim-operator-user.git
+[submodule "src/emoji.alfredworkflow"]
+	path = src/emoji.alfredworkflow
+	url = git@github.com:kejadlen/emoji.alfredworkflow.git
