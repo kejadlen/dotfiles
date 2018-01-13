@@ -2,6 +2,8 @@
 
 - hosts: congenital-optimist
   become: yes
+  vars_files:
+    - congenital-optimist/vars.yml.private
   tasks:
 
   - name: Uninstall old versions
@@ -80,9 +82,6 @@
       volumes:
         - "{{ ansible_env.HOME }}/znc:/znc-data"
 
-  - name: Get public IP
-    ipify_facts:
-
   - name: Create pi-hole mounted volumes
     file:
       path: ~/pihole/{{ item }}
@@ -92,14 +91,19 @@
       - pihole
       - dnsmasq.d
 
+  - name: Get public IP
+    ipify_facts:
+
   - name: Run pi-hole container
     docker_container:
       name: pihole
       image: diginc/pi-hole:alpine
       state: started
+      pull: yes
       restart: yes
       env:
         ServerIP: "{{ ipify_public_ip }}"
+        WEBPASSWORD: "{{ pi_hole_password }}"
       ports:
         - "53:53/tcp"
         - "53:53/udp"
