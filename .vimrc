@@ -88,7 +88,8 @@ set virtualedit=block
 set noshowmode
 
 function! RestoreCursor()
-  if line("'\"") <= line("$")
+  let pos = line("'\"")
+  if pos > 0 && pos <= line("$")
     normal! g`"zz
     return 1
   endif
