@@ -63,13 +63,13 @@
 	url = https://github.com/godlygeek/tabular.git
 [submodule ".vim/pack/alpha/start/vim-projectionist"]
 	path = .vim/pack/alpha/start/vim-projectionist
-	url = git@github.com:tpope/vim-projectionist.git
+	url = https://github.com/tpope/vim-projectionist.git
 [submodule ".vim/pack/alpha/start/vim-rake"]
 	path = .vim/pack/alpha/start/vim-rake
-	url = git@github.com:tpope/vim-rake.git
+	url = https://github.com/tpope/vim-rake.git
 [submodule ".vim/pack/alpha/start/elm-vim"]
 	path = .vim/pack/alpha/start/elm-vim
-	url = git@github.com:ElmCast/elm-vim.git
+	url = https://github.com/ElmCast/elm-vim.git
 [submodule "src/giphy.alfredworkflow"]
 	path = src/giphy.alfredworkflow
 	url = git@github.com:kejadlen/giphy.alfredworkflow.git
@@ -81,31 +81,31 @@
 	url = git@github.com:kejadlen/dark-sky.alfredworkflow.git
 [submodule ".vim/pack/alpha/start/lightline.vim"]
 	path = .vim/pack/alpha/start/lightline.vim
-	url = git@github.com:itchyny/lightline.vim.git
+	url = https://github.com/itchyny/lightline.vim.git
 [submodule ".vim/pack/alpha/start/vim-qf"]
 	path = .vim/pack/alpha/start/vim-qf
-	url = git@github.com:romainl/vim-qf.git
+	url = https://github.com/romainl/vim-qf.git
 [submodule ".vim/pack/alpha/start/vim-sexp"]
 	path = .vim/pack/alpha/start/vim-sexp
-	url = git@github.com:guns/vim-sexp.git
+	url = https://github.com/guns/vim-sexp.git
 [submodule ".vim/pack/alpha/start/fzf.vim"]
 	path = .vim/pack/alpha/start/fzf.vim
-	url = git@github.com:junegunn/fzf.vim.git
+	url = https://github.com/junegunn/fzf.vim.git
 [submodule ".vim/pack/alpha/start/scribble.vim"]
 	path = .vim/pack/alpha/start/scribble.vim
-	url = git@github.com:vim-scripts/scribble.vim.git
+	url = https://github.com/vim-scripts/scribble.vim.git
 [submodule ".vim/pack/alpha/start/rainbow"]
 	path = .vim/pack/alpha/start/rainbow
-	url = git@github.com:luochen1990/rainbow.git
+	url = https://github.com/luochen1990/rainbow.git
 [submodule ".vim/pack/alpha/start/gundo.vim"]
 	path = .vim/pack/alpha/start/gundo.vim
-	url = git@github.com:sjl/gundo.vim.git
+	url = https://github.com/sjl/gundo.vim.git
 [submodule ".vim/pack/alpha/start/vim-operator-flashy"]
 	path = .vim/pack/alpha/start/vim-operator-flashy
-	url = git@github.com:haya14busa/vim-operator-flashy.git
+	url = https://github.com/haya14busa/vim-operator-flashy.git
 [submodule ".vim/pack/alpha/start/vim-operator-user"]
 	path = .vim/pack/alpha/start/vim-operator-user
-	url = git@github.com:kana/vim-operator-user.git
+	url = https://github.com/kana/vim-operator-user.git
 [submodule "src/emoji.alfredworkflow"]
 	path = src/emoji.alfredworkflow
 	url = git@github.com:kejadlen/emoji.alfredworkflow.git
