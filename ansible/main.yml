@@ -11,6 +11,9 @@
         repo: https://github.com/kejadlen/dotfiles.git
         dest: ~/.dotfiles
       ignore_errors: yes
+
+- hosts: os_MacOSX
+  tasks:
     - name: update homebrew
       homebrew: update_homebrew=yes
 
