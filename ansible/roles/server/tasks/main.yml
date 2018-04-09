@@ -20,4 +20,4 @@
     path: ~/.config/systemd/user
     state: directory
 
-- include: znc.yml
+- import_tasks: znc.yml
