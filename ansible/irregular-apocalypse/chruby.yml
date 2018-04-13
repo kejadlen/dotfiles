@@ -1,0 +1,21 @@
+- name: create ~/src
+  file:
+    path: ~/src
+    state: directory
+
+- name: download chruby
+  get_url:
+    url: https://github.com/postmodern/chruby/archive/v{{ version }}.tar.gz
+    dest: ~/src/chruby-{{ version }}.tar.gz
+
+- name: extract chruby
+  unarchive:
+    src: ~/src/chruby-{{ version }}.tar.gz
+    dest: ~/src
+    remote_src: yes
+
+- name: install chruby
+  command: make install
+  args:
+    chdir: "{{ ansible_env.HOME }}/src/chruby-{{ version }}"
+  become: yes

@@ -1,0 +1,48 @@
+---
+- hosts: all
+  pre_tasks:
+    - name: update dotfiles repo
+      git:
+        repo: https://github.com/kejadlen/dotfiles.git
+        dest: ~/.dotfiles
+      ignore_errors: yes
+
+- hosts: all
+  tasks:
+    - name: install dependencies
+      apt:
+        name: "{{ item }}"
+        update_cache: yes
+      with_items:
+        - make
+        - python-pip
+        - zsh
+      become: yes
+
+- hosts: all
+  roles:
+    - dotfiles
+    - zsh
+
+- hosts: all
+  tasks:
+    - stat: path=/usr/bin/local/chruby-exec
+      register: chruby
+    - import_tasks: irregular-apocalypse/chruby.yml
+      vars:
+        version: 0.3.9
+      when: chruby.stat.exists == False
+
+- hosts: all
+  tasks:
+    - stat: path=/usr/bin/local/ruby-install
+      register: ruby_install
+    - import_tasks: irregular-apocalypse/ruby-install.yml
+      vars:
+        version: 0.6.1
+      when: ruby_install.stat.exists == True
+
+- hosts: all
+  tasks:
+    - name: install Ruby
+      command: ruby-install ruby

@@ -16,7 +16,7 @@
   with_dict: "{{ private_symlinks }}"
 
 - name: symlink SSH configs
-  file: src={{ item }} dest=~/.ssh/{{ item | basename }} state=link
+  file: src=~/.dotfiles/.ssh/{{ item | basename }} dest=~/.ssh/{{ item | basename }} state=link
   with_fileglob: ~/.dotfiles/.ssh/*
 
 - name: symlink ~bin

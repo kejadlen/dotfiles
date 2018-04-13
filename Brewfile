@@ -13,6 +13,8 @@ brew 'fzf'
 brew 'git'
 brew 'macvim', args: ['with-override-system-vim']
 brew 'mas'
+brew 'pip'
+brew 'python'
 brew 'reattach-to-user-namespace'
 brew 'ripgrep'
 brew 'ruby-install'

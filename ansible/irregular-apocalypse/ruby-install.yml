@@ -1,0 +1,16 @@
+- name: download ruby-install
+  get_url:
+    url: https://github.com/postmodern/ruby-install/archive/v{{ version }}.tar.gz
+    dest: ~/src/ruby-install-{{ version }}.tar.gz
+
+- name: extract ruby-install
+  unarchive:
+    src: ~/src/ruby-install-{{ version }}.tar.gz
+    dest: ~/src
+    remote_src: yes
+
+- name: install ruby-install
+  command: make install
+  args:
+    chdir: "{{ ansible_env.HOME }}/src/ruby-install-{{ version }}"
+  become: yes
