@@ -123,7 +123,7 @@ end
 set guicursor+=a:blinkon0 " disable blinking
 set guifont=Source\ Code\ Pro\ for\ Powerline:h13
 set guioptions-=T
-if !has("nvim")
+if has("mac") && !has("nvim")
   set macmeta
 endif
 set mousehide
