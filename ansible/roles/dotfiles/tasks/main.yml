@@ -7,13 +7,13 @@
   file: src=~/.dotfiles/{{ item.key }} dest={{ item.value }} state=link
   with_dict: "{{ conf_symlinks }}"
 
-- name: force-symlink private configs
-  file:
-    src: ~/Dropbox/dotfiles/{{ item.key }}
-    dest: "{{ item.value }}"
-    state: link
-    force: yes # Since these won't exist until later.
-  with_dict: "{{ private_symlinks }}"
+# - name: force-symlink private configs
+#   file:
+#     src: ~/Dropbox/dotfiles/{{ item.key }}
+#     dest: "{{ item.value }}"
+#     state: link
+#     force: yes # Since these won't exist until later.
+#   with_dict: "{{ private_symlinks }}"
 
 - name: symlink SSH configs
   file: src=~/.dotfiles/.ssh/{{ item | basename }} dest=~/.ssh/{{ item | basename }} state=link

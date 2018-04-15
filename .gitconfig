@@ -73,3 +73,6 @@
 	verbose = true
 [filter "alfredworkflow"]
 	clean = alfredworkflow.clean
+[user]
+	email = alpha.chen@gmail.com
+	name = Alpha Chen
