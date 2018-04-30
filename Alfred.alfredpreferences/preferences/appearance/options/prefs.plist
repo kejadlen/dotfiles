@@ -8,5 +8,7 @@
 	<true/>
 	<key>hidemenu</key>
 	<true/>
+	<key>showOnScreen</key>
+	<integer>2</integer>
 </dict>
 </plist>
