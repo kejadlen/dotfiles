@@ -14,6 +14,8 @@
         name: "{{ item }}"
         update_cache: yes
       with_items:
+        - cmake
+        - direnv
         - make
         - mosh
         - libterm-readkey-perl
@@ -92,3 +94,11 @@
       with_items:
         - exa
         - ripgrep
+
+- hosts: all
+  name: install fzf
+  tasks:
+    - git:
+        repo: https://github.com/junegunn/fzf.git
+        dest: ~/.fzf
+    - command: ~/.fzf/install
