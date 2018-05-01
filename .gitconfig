@@ -49,7 +49,7 @@
 	conflictstyle = diff3
 	ff = false
 [init]
-	templatedir = /Users/alpha/.git_templates
+	templatedir = ~/.git_templates
 [diff]
 	algorithm = patience
 	tool = icdiff
