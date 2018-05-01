@@ -1,6 +1,6 @@
 [submodule "src/prezto"]
 	path = src/prezto
-	url = https://github.com/kejadlen/prezto.git
+	url = git@github.com:kejadlen/prezto.git
 [submodule "Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/faker.alfredworkflow
 	url = git@github.com:kejadlen/faker.alfredworkflow
