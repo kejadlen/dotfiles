@@ -181,8 +181,12 @@ nnoremap <leader>a :A<cr>
 nnoremap <leader>d :Dispatch<cr>
 
 " fzf
-if isdirectory('/usr/local/opt/fzf')
-  set rtp+=/usr/local/opt/fzf
+if executable('fzf')
+  if isdirectory('/usr/local/opt/fzf')
+    set rtp+=~/usr/local/opt/fzf
+  elseif isdirectory('/home/alpha/.fzf')
+    set rtp+=~/.fzf
+  endif
   nmap <Leader>b :Buffers<CR>
   nmap <Leader>f :Files<CR>
   nmap <Leader>t :Tags<CR>
