@@ -17,6 +17,10 @@ nnoremap <leader>/ :nohlsearch<cr>
 " don't unindent lines starting with #
 inoremap # X#
 
+" rerun the last command
+nnoremap !! :!!<cr>
+inoremap !! <esc>:!!<cr>
+
 " }}}
 
 " Commands {{{
