@@ -1,4 +1,10 @@
 {
-  "^w" = "deleteWordBackward:";
   "^u" = "deleteToBeginningOfLine:";
+  "^w" = "deleteWordBackward:";
+  "~d" = "deleteWordForward:";
+  "~b" = "moveWordBackward:";
+  "~f" = "moveWordForward:";
+  "~<" = "moveToBeginningOfDocument:";
+  "~>" = "moveToEndOfDocument:";
+  "~v" = "pageUp:";
 }
