@@ -19,6 +19,7 @@
         - make
         - mosh
         - libterm-readkey-perl
+        - pkg-config
         - python-pip
         - software-properties-common
         - zsh
