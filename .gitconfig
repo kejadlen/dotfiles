@@ -6,7 +6,7 @@
 [core]
 	autocrlf = false
 	safecrlf = true
-	excludesfile = /Users/alpha/.gitignore
+	excludesfile = ~/.gitignore
 	quotepath = false
 	sparecheckout = true
 [alias]
