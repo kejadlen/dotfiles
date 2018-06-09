@@ -35,7 +35,6 @@ set wildmode=list:longest,full
 set background=dark
 let g:solarized_termcolors=256
 colorscheme solarized
-set background=dark
 
 fun! s:highlight()
   highlight Normal ctermbg=235
