@@ -1,0 +1,4 @@
+bundle() {
+  PATH_add .bundle/bin
+  export GEM_HOME="`pwd`/.bundle"
+}
