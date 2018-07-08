@@ -1,61 +1,62 @@
-tap 'caskroom/cask'
-tap 'caskroom/fonts'
-tap 'caskroom/versions'
-tap 'homebrew/bundle'
-tap 'homebrew/core'
-tap 'kejadlen/personal'
-brew 'ansible'
-brew 'chruby'
-brew 'direnv'
-brew 'exa'
-brew 'fasd'
-brew 'fzf'
-brew 'git'
-brew 'macvim', args: ['with-override-system-vim']
-brew 'mas'
-brew 'mosh'
-brew 'pip'
-brew 'python'
-brew 'reattach-to-user-namespace'
-brew 'ripgrep'
-brew 'ruby-install'
-brew 'terminal-notifier'
-brew 'tmux'
-brew 'tree'
-brew 'weechat', args: ['with-aspell', 'with-curl', 'with-perl', 'with-python', 'with-ruby']
-brew 'youtube-dl'
-brew 'zsh'
-cask '1password'
-cask 'acorn'
-cask 'adium'
-cask 'alfred'
-cask 'arq'
-cask 'bartender'
-cask 'encryptme'
-cask 'daisydisk'
-cask 'dash'
-cask 'dropbox'
-cask 'fantastical'
-cask 'firefox'
-cask 'flux'
-cask 'font-fira-mono'
-cask 'font-hack'
-cask 'font-source-code-pro'
-cask 'google-chrome'
-cask 'hammerspoon'
-cask 'logitech-options'
-cask 'moom'
-cask 'night-owl'
-cask 'omnifocus'
-cask 'qlmarkdown'
-cask 'qlstephen'
-cask 'quicklook-csv'
-cask 'quicklook-json'
-cask 'resilio-sync'
-cask 'slack'
-cask 'steam'
-cask 'vlc'
-mas 'iPulse', id: 1028916583
-mas 'Paprika Recipe Manager', id: 451907568
-mas 'Reeder', id: 880001334
-mas 'Todoist', id: 585829637
+tap "crisidev/chunkwm"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-drivers"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "kejadlen/personal"
+tap "seattle-beach/tap"
+brew "ansible"
+brew "chruby"
+brew "ctags"
+brew "direnv"
+brew "exa"
+brew "fasd"
+brew "fzf"
+brew "git"
+brew "hledger"
+brew "macvim", args: ["with-override-system-vim"]
+brew "mas"
+brew "mosh"
+brew "onepass"
+brew "reattach-to-user-namespace"
+brew "ripgrep"
+brew "ruby-install"
+brew "tmux"
+brew "tree"
+brew "youtube-dl"
+brew "zsh"
+brew "crisidev/chunkwm/chunkwm"
+cask "1password"
+cask "acorn"
+cask "alfred"
+cask "arq"
+cask "bartender"
+cask "daisydisk"
+cask "dash"
+cask "dropbox"
+cask "encryptme"
+cask "fantastical"
+cask "firefoxdeveloperedition"
+cask "google-chrome"
+cask "hammerspoon"
+cask "night-owl"
+cask "qlmarkdown"
+cask "qlstephen"
+cask "quicklook-csv"
+cask "quicklook-json"
+cask "resilio-sync"
+cask "slack"
+cask "vlc"
+cask "zoomus"
+cask "homebrew/cask-drivers/logitech-options"
+cask "homebrew/cask-fonts/font-fira-mono-for-powerline"
+cask "homebrew/cask-fonts/font-hack"
+cask "homebrew/cask-fonts/font-source-code-pro-for-powerline"
+mas "iPulse", id: 1028916583
+mas "Paprika Recipe Manager", id: 451907568
+mas "Reeder", id: 880001334
+mas "Things3", id: 904280696
+mas "Todoist", id: 585829637
