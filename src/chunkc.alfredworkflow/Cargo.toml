@@ -1,0 +1,9 @@
+[package]
+name = "chunkc"
+version = "0.1.0"
+authors = ["Alpha Chen <alpha.chen@gmail.com>"]
+
+[dependencies]
+alphred = { path = "/Users/alpha/Dropbox/src/github.com/kejadlen/alphred-rs" }
+serde = "1.0"
+serde_json = "1.0"
