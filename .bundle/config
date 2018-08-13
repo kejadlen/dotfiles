@@ -1,5 +1,5 @@
 ---
-BUNDLE_PATH: ".bundle"
+BUNDLE_PATH: ".direnv/ruby"
 BUNDLE_JOBS: "4"
 BUNDLE_GEM__COC: "true"
 BUNDLE_GEM__MIT: "true"
