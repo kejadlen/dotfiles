@@ -181,8 +181,8 @@ nnoremap <leader>d :Dispatch<cr>
 
 " fzf
 if executable('fzf')
-  if isdirectory('/usr/local/opt/fzf')
-    set rtp+=~/usr/local/opt/fzf
+  if isdirectory('/usr/local/opt/fzf/plugin')
+    set rtp+=/usr/local/opt/fzf
   elseif isdirectory('/home/alpha/.fzf')
     set rtp+=~/.fzf
   endif
