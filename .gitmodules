@@ -109,3 +109,12 @@
 [submodule "src/emoji.alfredworkflow"]
 	path = src/emoji.alfredworkflow
 	url = git@github.com:kejadlen/emoji.alfredworkflow.git
+[submodule ".vim/pack/alpha/start/vim-colors-paramount"]
+	path = .vim/pack/alpha/start/vim-colors-paramount
+	url = https://github.com/owickstrom/vim-colors-paramount.git
+[submodule ".vim/pack/alpha/start/eink.vim"]
+	path = .vim/pack/alpha/start/eink.vim
+	url = https://github.com/kisom/eink.vim.git
+[submodule ".vim/pack/alpha/start/badwolf"]
+	path = .vim/pack/alpha/start/badwolf
+	url = https://github.com/sjl/badwolf.git

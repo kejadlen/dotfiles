@@ -32,14 +32,16 @@ set wildmode=list:longest,full
 
 " Display {{{
 
+" set t_Co=256
 set background=dark
-let g:solarized_termcolors=256
-colorscheme solarized
+" let g:solarized_termcolors=256
+colorscheme paramount
 
 fun! s:highlight()
-  highlight Normal ctermbg=235
-  highlight CursorLine ctermbg=236
-  highlight MatchParen ctermbg=238
+  " highlight Normal ctermbg=235
+  highlight Normal ctermbg=NONE
+"   highlight CursorLine ctermbg=236
+"   highlight MatchParen ctermbg=238
 endfun
 
 augroup MyHighlight
