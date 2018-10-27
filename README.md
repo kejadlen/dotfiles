@@ -3,7 +3,7 @@
 This repo contains both my dotfiles as well as [Ansible][ansible] playbooks to
 provision new machines.
 
-**Use at your own risk.** Untested except on my own El Capitan installs.
+**Use at your own risk.**
 
 [ansible]: https://github.com/ansible/ansible
 
@@ -19,13 +19,15 @@ provision new machines.
 First, some steps need to be performed on the remote machine that I couldn't
 figure out how to automate:
 
-- Enable Remote Login in System Preferences -> Sharing.
-- Install the command line developer tools: `xcode-select --install`. (It looks
-like the Homebrew installer [_should_][xcode-select-cli] be able to handle
-this, but I haven't been able to get it to work headless.)
-- Install [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12): `open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'`
-- Accept the Xcode license: `sudo xcodebuild -license`
+- [ ] Enable Remote Login in System Preferences -> Sharing.
+- [ ] Install [Xcode][xcode]: `open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'`
+- [ ] Accept the Xcode license: `sudo xcodebuild -license`
+- [ ] Open Xcode
+- [ ] Install the command line developer tools: `xcode-select --install`. (It looks like the
+  Homebrew installer [_should_][xcode-select-cli] be able to handle this, but I haven't been able to
+  get it to work headless.)
 
+[xcode]: https://itunes.apple.com/us/app/xcode/id497799835?mt=12
 [xcode-select-cli]: https://github.com/Homebrew/install/blob/master/install#L207-L216
 
 On the control machine:
@@ -45,9 +47,6 @@ A couple items that I haven't gotten around to automating yet that need to be
 manually run post-provisioning:
 
 ``` shell
-# Apply personal Terminal settings
-open ~/.dotfiles/Alpha.terminal
-
 # Symlink ~/.dotfiles to Dropbox
 rm -rf ~/.dotfiles
 ln -s ~/Dropbox/dotfiles ~/.dotfiles

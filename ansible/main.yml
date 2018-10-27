@@ -12,19 +12,14 @@
         dest: ~/.dotfiles
       ignore_errors: yes
 
-- hosts: os_MacOSX
-  tasks:
-    - name: update homebrew
-      homebrew: update_homebrew=yes
+- import_playbook: playbooks/homebrew.yml
 
 - hosts: os_MacOSX
   roles:
-    - role: homebrew
     - role: osx
 
 - hosts: all
   roles:
     - dotfiles
     - ruby
-    - powerline
     - zsh

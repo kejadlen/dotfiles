@@ -1,0 +1,92 @@
+- hosts: os_MacOSX
+  tasks:
+  - name: update
+    homebrew: update_homebrew=yes
+
+  - name: install taps
+    homebrew_tap:
+      name:
+      - crisidev/chunkwm
+      - homebrew/bundle
+      - homebrew/cask
+      - homebrew/cask-drivers
+      - homebrew/cask-fonts
+      - homebrew/cask-versions
+      - homebrew/core
+      - homebrew/services
+      - kejadlen/personal
+      - seattle-beach/tap
+
+  - name: install formulae
+    homebrew:
+      name:
+      - ansible
+      - chruby
+      - ctags
+      - direnv
+      - exa
+      - fasd
+      - fzf
+      - git
+      - hledger
+      - jq
+      - mas
+      - mosh
+      - reattach-to-user-namespace
+      - ripgrep
+      - ruby-install
+      - tmux
+      - tree
+      - youtube-dl
+      - zsh
+      - crisidev/chunkwm/chunkwm
+
+  - name: install macvim
+    homebrew:
+      name: macvim
+      install_options: with-override-system-vim
+
+  # Not sure if this is needed anymore - was used for installing casks
+  - name: authenticate sudo
+    ping:
+    become: yes
+
+  - name: install casks
+    homebrew_cask:
+      name:
+      - 1password
+      - 1password-cli
+      - acorn
+      - alfred
+      - arq
+      - bartender
+      - daisydisk
+      - dash
+      - dropbox
+      - encryptme
+      - fantastical
+      - firefox-developer-edition
+      - google-chrome
+      - hammerspoon
+      - night-owl
+      - qlmarkdown
+      - qlstephen
+      - quicklook-csv
+      - quicklook-json
+      - resilio-sync
+      - slack
+      - vlc
+      - zoomus
+      - homebrew/cask-drivers/logitech-options
+      - homebrew/cask-fonts/font-fira-mono-for-powerline
+      - homebrew/cask-fonts/font-hack
+      - homebrew/cask-fonts/font-source-code-pro-for-powerline
+
+  - name: install from app store
+    command: /usr/local/bin/mas install {{ item }}
+    with_items:
+    - 1028916583 # iPulse
+    - 451907568  # Paprika Recipe Manager
+    - 880001334  # Reeder
+    - 904280696  # Things3
+    - 585829637  # Todoist

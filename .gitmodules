@@ -1,12 +1,12 @@
 [submodule "src/prezto"]
 	path = src/prezto
-	url = git@github.com:kejadlen/prezto.git
+	url = https://github.com/kejadlen/prezto.git
 [submodule "Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/faker.alfredworkflow
-	url = git@github.com:kejadlen/faker.alfredworkflow
+	url = https://github.com/kejadlen/faker.alfredworkflow
 [submodule "Alfred.alfredpreferences/workflows/alphred.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/alphred.alfredworkflow
-	url = git@github.com:kejadlen/alphred.alfredworkflow.git
+	url = https://github.com/kejadlen/alphred.alfredworkflow.git
 [submodule ".vim/pack/alpha/start/vim-commentary"]
 	path = .vim/pack/alpha/start/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git
@@ -72,13 +72,13 @@
 	url = https://github.com/ElmCast/elm-vim.git
 [submodule "src/giphy.alfredworkflow"]
 	path = src/giphy.alfredworkflow
-	url = git@github.com:kejadlen/giphy.alfredworkflow.git
+	url = https://github.com/kejadlen/giphy.alfredworkflow.git
 [submodule ".vim/pack/alpha/start/vim-racket"]
 	path = .vim/pack/alpha/start/vim-racket
 	url = https://github.com/wlangstroth/vim-racket.git
 [submodule "src/dark-sky.alfredworkflow"]
 	path = src/dark-sky.alfredworkflow
-	url = git@github.com:kejadlen/dark-sky.alfredworkflow.git
+	url = https://github.com/kejadlen/dark-sky.alfredworkflow.git
 [submodule ".vim/pack/alpha/start/lightline.vim"]
 	path = .vim/pack/alpha/start/lightline.vim
 	url = https://github.com/itchyny/lightline.vim.git
@@ -108,7 +108,7 @@
 	url = https://github.com/kana/vim-operator-user.git
 [submodule "src/emoji.alfredworkflow"]
 	path = src/emoji.alfredworkflow
-	url = git@github.com:kejadlen/emoji.alfredworkflow.git
+	url = https://github.com/kejadlen/emoji.alfredworkflow.git
 [submodule ".vim/pack/alpha/start/vim-colors-paramount"]
 	path = .vim/pack/alpha/start/vim-colors-paramount
 	url = https://github.com/owickstrom/vim-colors-paramount.git
