@@ -91,6 +91,7 @@ if !has("nvim")
 endif
 set virtualedit=block
 set noshowmode
+set textwidth=100
 
 function! RestoreCursor()
   let pos = line("'\"")
