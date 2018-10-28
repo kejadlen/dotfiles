@@ -91,7 +91,6 @@ if !has("nvim")
 endif
 set virtualedit=block
 set noshowmode
-set textwidth=100
 
 function! RestoreCursor()
   let pos = line("'\"")
@@ -121,7 +120,7 @@ augroup end
 " GUI {{{
 
 if has("gui_running")
-  set background=light
+  " set background=light
 
   " causes flickering in the terminal for some reason
   set macligatures

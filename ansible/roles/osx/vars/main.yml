@@ -180,7 +180,28 @@ osx_defaults:
     type: int
     value: 1
 
+  # Other applications
   - domain: com.google.Chrome
     key: AppleEnableSwipeNavigateWithScrolls
     type: bool
     value: false
+
+  - domain: org.vim.MacVim
+    key: MMLastWindowClosedBehavior
+    type: int
+    value: 2
+
+  - domain: org.vim.MacVim
+    key: MMUntitledWindow
+    type: int
+    value: 1
+
+  - domain: org.vim.MacVim
+    key: SUCheckAtStartup
+    type: int
+    value: 1
+
+  - domain: org.vim.MacVim
+    key: SUEnableAutomaticChecks
+    type: int
+    value: 1
