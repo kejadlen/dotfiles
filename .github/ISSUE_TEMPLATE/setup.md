@@ -30,6 +30,8 @@
   ansible-playbook main.yml --ask-pass --ask-become-pass
   ```
 
+- [ ] [chunkwm](https://github.com/crisidev/homebrew-chunkwm#caveats)
+
 - [ ] macOS preferences
   - [ ] Displays
     - [ ] Enable Night Shift
