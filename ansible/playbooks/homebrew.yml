@@ -14,7 +14,7 @@
       - homebrew/cask-versions
       - homebrew/core
       - homebrew/services
-      - kejadlen/personal
+      - kejadlen/tap
       - seattle-beach/tap
 
   - name: install formulae
@@ -87,6 +87,7 @@
     with_items:
     - 1028916583 # iPulse
     - 451907568  # Paprika Recipe Manager
+    - 497799835  # Xcode
     - 880001334  # Reeder
     - 904280696  # Things3
     - 585829637  # Todoist

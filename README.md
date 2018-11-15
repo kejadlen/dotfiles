@@ -16,19 +16,11 @@ provision new machines.
 
 # Usage
 
-First, some steps need to be performed on the remote machine that I couldn't
-figure out how to automate:
+Use a [tracking issue][tracking-issue] as a checklist for local provisioning.
 
-- [ ] Enable Remote Login in System Preferences -> Sharing.
-- [ ] Install [Xcode][xcode]: `open 'https://itunes.apple.com/us/app/xcode/id497799835?mt=12'`
-- [ ] Accept the Xcode license: `sudo xcodebuild -license`
-- [ ] Open Xcode
-- [ ] Install the command line developer tools: `xcode-select --install`. (It looks like the
-  Homebrew installer [_should_][xcode-select-cli] be able to handle this, but I haven't been able to
-  get it to work headless.)
+[tracking-issue]: https://github.com/kejadlen/dotfiles/issues/new?template=setup.md
 
-[xcode]: https://itunes.apple.com/us/app/xcode/id497799835?mt=12
-[xcode-select-cli]: https://github.com/Homebrew/install/blob/master/install#L207-L216
+## Remote provisioning
 
 On the control machine:
 
@@ -50,34 +42,6 @@ manually run post-provisioning:
 # Symlink ~/.dotfiles to Dropbox
 rm -rf ~/.dotfiles
 ln -s ~/Dropbox/dotfiles ~/.dotfiles
-
-# Add private SSH keys
-ruby ~/.dotfiles/scripts/setup_ssh_keys.rb
-
-# Install apps from the Mac App Store
-open 'https://itunes.apple.com/us/app/reeder-3/id880001334?ls=1&mt=12'
-open 'https://itunes.apple.com/us/app/paprika-recipe-manager/id451907568?mt=12'
-```
-
-## Provisioning Locally
-
-You can also use this to provision a machine by itself, although this won't
-be able to copy over OS X application settings, for obvious reasons.
-
-``` shell
-# Install Homebrew
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-# Install ansible
-brew install ansible
-
-# Clone dotfiles
-git clone --recursive https://github.com/kejadlen/dotfiles.git ~/.dotfiles
-
-# Run Ansible
-cd ~/.dotfiles/ansible
-echo "localhost ansible_connection=local" > hosts.private
-ansible-playbook main.yml --ask-pass --ask-become-pass
 ```
 
 # Development

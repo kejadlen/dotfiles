@@ -30,11 +30,15 @@
   ansible-playbook main.yml --ask-pass --ask-become-pass
   ```
 
-- [ ] Set Keyboard preferences
-  - [ ] Modifiers
-  - [ ] Function keys
+- [ ] macOS preferences
+  - [ ] Displays
+    - [ ] Enable Night Shift
+  - [ ] Keyboard
+    - [ ] Modifiers
+    - [ ] Function keys
 
 - [ ] Setup programs
   - [ ] 1Password
   - [ ] Firefox
+  - [ ] Fantastical
   - [ ] Arq
