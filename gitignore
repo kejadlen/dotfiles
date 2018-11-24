@@ -6,6 +6,7 @@ doc/tags
 
 # direnv
 *.envrc
+.direnv
 
 # Ruby
 .bundle
