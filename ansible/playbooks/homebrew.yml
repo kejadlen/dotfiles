@@ -78,16 +78,17 @@
       - vlc
       - zoomus
       - homebrew/cask-drivers/logitech-options
-      - homebrew/cask-fonts/font-fira-mono-for-powerline
+      - homebrew/cask-fonts/font-fira-mono
       - homebrew/cask-fonts/font-hack
-      - homebrew/cask-fonts/font-source-code-pro-for-powerline
+      - homebrew/cask-fonts/font-source-code-pro
 
   - name: install from app store
     command: /usr/local/bin/mas install {{ item }}
     with_items:
-    - 1028916583 # iPulse
-    - 451907568  # Paprika Recipe Manager
-    - 497799835  # Xcode
-    - 880001334  # Reeder
-    - 904280696  # Things3
-    - 585829637  # Todoist
+    - 1028916583  # iPulse
+    - 1225570693  # Ulysses
+    - 451907568   # Paprika Recipe Manager
+    - 497799835   # Xcode
+    - 585829637   # Todoist
+    - 880001334   # Reeder
+    - 904280696   # Things3
