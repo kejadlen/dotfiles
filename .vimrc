@@ -12,10 +12,16 @@ noremap <right> <nop>
 nnoremap ' `
 nnoremap ` '
 " nnoremap Y y$
+nnoremap H ^
+nnoremap L $
+nnoremap Q @@
 nnoremap <leader>/ :nohlsearch<cr>
 
 " don't unindent lines starting with #
 inoremap # X#
+
+nnoremap \\ :write<cr>
+inoremap \\ <esc>:write<cr>
 
 " rerun the last command
 nnoremap !! :!!<cr>
@@ -115,6 +121,10 @@ augroup netrw_buf_hidden_fix
         \| endif
 augroup end
 
+augroup AutoComment
+  autocmd FileType * setlocal formatoptions-=o
+augroup END
+
 " }}}
 
 " GUI {{{
@@ -151,6 +161,7 @@ set undofile
 
 set gdefault
 set hlsearch
+set ignorecase
 set smartcase
 
 " }}}
