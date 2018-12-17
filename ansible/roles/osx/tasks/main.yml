@@ -2,7 +2,7 @@
 - import_tasks: terminal.yml
 
 - name: set OS X defaults
-  my_defaults:
+  osx_defaults:
     domain: "{{ item.domain | default(omit) }}"
     key: "{{ item.key }}"
     type: "{{ item.type }}"
