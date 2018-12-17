@@ -17,6 +17,7 @@
     dest: ~/Library/KeyBindings/DefaultKeyBinding.dict
     state: link
 
+- file: path=~/Library/Colors state=directory
 - name: symlink OS X colors palettes
   file: src={{ item }} dest=~/Library/Colors/{{ item | basename }} state=link
   with_fileglob: ~/.dotfiles/osx/Colors/*
