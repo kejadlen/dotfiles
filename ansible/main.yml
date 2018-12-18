@@ -11,7 +11,8 @@
         dest: ~/.dotfiles
       ignore_errors: yes
 
-- import_playbook: playbooks/homebrew.yml
+- hosts: os_MacOSX
+  import_playbook: playbooks/homebrew.yml
 
 - hosts: os_MacOSX
   roles:

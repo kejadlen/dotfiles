@@ -1,4 +1,4 @@
-- hosts: os_MacOSX
+- hosts: all
   tasks:
   - name: update
     homebrew: update_homebrew=yes
@@ -22,7 +22,6 @@
       name:
       - ansible
       - chruby
-      - ctags
       - direnv
       - exa
       - fasd
@@ -40,6 +39,11 @@
       - youtube-dl
       - zsh
       - crisidev/chunkwm/chunkwm
+
+  - name: install universal ctags
+    homebrew:
+      name: universal-ctags/universal-ctags/universal-ctags
+      install_options: HEAD
 
   - name: install macvim
     homebrew:
