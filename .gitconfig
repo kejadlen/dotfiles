@@ -24,20 +24,14 @@
 	prompt = false
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+[difftool "kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[difftool "icdiff"]
+	cmd = icdiff --line-numbers --no-bold \"$LOCAL\" \"$REMOTE\"
 [push]
 	default = current
 	followTags = true
 	recurseSubmodules = on-demand
-[difftool "kaleidoscope"]
-	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-[mergetool "kaleidoscope"]
-	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-	trustExitCode = true
-[difftool "icdiff"]
-	cmd = icdiff --line-numbers --no-bold \"$LOCAL\" \"$REMOTE\"
 [grep]
 	extendRegexp = true
 	lineNumber = true
@@ -48,6 +42,13 @@
 [merge]
 	conflictstyle = diff3
 	ff = false
+	tool = vimdiff
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[mergetool "kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
 [init]
 	templatedir = ~/.git_templates
 [diff]
