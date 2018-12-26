@@ -36,6 +36,7 @@
       - ruby-install
       - tmux
       - tree
+      - ykman
       - youtube-dl
       - zsh
       - crisidev/chunkwm/chunkwm
