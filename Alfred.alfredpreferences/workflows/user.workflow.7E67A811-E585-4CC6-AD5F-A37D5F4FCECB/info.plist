@@ -15,6 +15,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>41AB37FB-6209-484C-AF15-6A5A996DD257</key>
@@ -26,6 +28,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>938650FD-681C-48DE-B900-C8D11D7D7D82</key>
@@ -37,6 +41,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>A8A48A97-E018-4EFE-890D-ACF11FD67A9E</key>
@@ -48,6 +54,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 	</dict>
@@ -56,7 +64,7 @@
 	<key>description</key>
 	<string></string>
 	<key>disabled</key>
-	<false/>
+	<true/>
 	<key>name</key>
 	<string>Volume</string>
 	<key>objects</key>
@@ -68,12 +76,16 @@
 				<integer>0</integer>
 				<key>argument</key>
 				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
 				<key>hotkey</key>
-				<integer>126</integer>
+				<integer>0</integer>
 				<key>hotmod</key>
-				<integer>12320768</integer>
+				<integer>0</integer>
 				<key>hotstring</key>
-				<string>↑</string>
+				<string></string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -86,7 +98,7 @@
 			<key>uid</key>
 			<string>938650FD-681C-48DE-B900-C8D11D7D7D82</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -99,6 +111,10 @@
 				<string>`osascript -e 'set volume output volume ((output volume of (get volume settings)) + 5)'`
 volume = `osascript -e 'output volume of (get volume settings)'`.to_i
 puts ('|' * (volume / 5)).ljust(20, '.')</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>2</integer>
 			</dict>
@@ -107,15 +123,20 @@ puts ('|' * (volume / 5)).ljust(20, '.')</string>
 			<key>uid</key>
 			<string>26B5B08A-1E0F-4FB0-A007-7928687920DC</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
+			<key>config</key>
+			<dict>
+				<key>largetypetext</key>
+				<string>{query}</string>
+			</dict>
 			<key>type</key>
 			<string>alfred.workflow.output.largetype</string>
 			<key>uid</key>
 			<string>2AA34180-C278-45A0-9342-DADD7FC78AFB</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -124,12 +145,16 @@ puts ('|' * (volume / 5)).ljust(20, '.')</string>
 				<integer>0</integer>
 				<key>argument</key>
 				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
 				<key>hotkey</key>
-				<integer>125</integer>
+				<integer>0</integer>
 				<key>hotmod</key>
-				<integer>12320768</integer>
+				<integer>0</integer>
 				<key>hotstring</key>
-				<string>↓</string>
+				<string></string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -142,7 +167,7 @@ puts ('|' * (volume / 5)).ljust(20, '.')</string>
 			<key>uid</key>
 			<string>41AB37FB-6209-484C-AF15-6A5A996DD257</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -155,6 +180,10 @@ puts ('|' * (volume / 5)).ljust(20, '.')</string>
 				<string>`osascript -e 'set volume output volume ((output volume of (get volume settings)) - 5)'`
 volume = `osascript -e 'output volume of (get volume settings)'`.to_i
 puts ('|' * (volume / 5)).ljust(20, '.')</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>2</integer>
 			</dict>
@@ -163,7 +192,7 @@ puts ('|' * (volume / 5)).ljust(20, '.')</string>
 			<key>uid</key>
 			<string>A8A48A97-E018-4EFE-890D-ACF11FD67A9E</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -172,26 +201,36 @@ puts ('|' * (volume / 5)).ljust(20, '.')</string>
 	<dict>
 		<key>26B5B08A-1E0F-4FB0-A007-7928687920DC</key>
 		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
 		<key>2AA34180-C278-45A0-9342-DADD7FC78AFB</key>
 		<dict>
+			<key>xpos</key>
+			<integer>700</integer>
 			<key>ypos</key>
 			<real>70</real>
 		</dict>
 		<key>41AB37FB-6209-484C-AF15-6A5A996DD257</key>
 		<dict>
+			<key>xpos</key>
+			<integer>100</integer>
 			<key>ypos</key>
 			<real>120</real>
 		</dict>
 		<key>938650FD-681C-48DE-B900-C8D11D7D7D82</key>
 		<dict>
+			<key>xpos</key>
+			<integer>100</integer>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
 		<key>A8A48A97-E018-4EFE-890D-ACF11FD67A9E</key>
 		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
 			<key>ypos</key>
 			<real>120</real>
 		</dict>
