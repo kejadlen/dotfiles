@@ -72,7 +72,7 @@
       - fantastical
       - firefox-developer-edition
       - google-chrome
-      - hammerspoon
+      # - hammerspoon
       - night-owl
       - qlmarkdown
       - qlstephen

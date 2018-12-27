@@ -1,0 +1,10 @@
+# Extra configuration for work
+
+- hosts: all
+  tasks:
+  - name: update
+    homebrew: update_homebrew=yes
+
+  - name: install hammerspoon
+    homebrew_cask:
+      name: hammerspoon
