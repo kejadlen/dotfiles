@@ -121,8 +121,8 @@ augroup netrw_buf_hidden_fix
         \| endif
 augroup end
 
-augroup AutoComment
-  autocmd FileType * setlocal formatoptions-=o
+augroup DisableAutoComment
+  autocmd BufEnter * setlocal formatoptions-=o
 augroup END
 
 " }}}
@@ -136,7 +136,7 @@ if has("gui_running")
   set macligatures
 end
 set guicursor+=a:blinkon0 " disable blinking
-set guifont=Source\ Code\ Pro\ for\ Powerline:h13
+set guifont=Source\ Code\ Pro:h13
 set guioptions-=T
 if has("mac") && !has("nvim")
   set macmeta
