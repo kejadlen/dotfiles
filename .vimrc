@@ -204,9 +204,6 @@ if executable('fzf')
   nmap <Leader>t :Tags<CR>
 endif
 
-" rainbow
-let g:rainbow_active = 0
-
 " gundo
 nnoremap <leader>u :GundoToggle<CR>
 
