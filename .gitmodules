@@ -28,9 +28,6 @@
 [submodule ".vim/pack/alpha/start/rust.vim"]
 	path = .vim/pack/alpha/start/rust.vim
 	url = https://github.com/rust-lang/rust.vim.git
-[submodule ".vim/pack/alpha/start/incsearch.vim"]
-	path = .vim/pack/alpha/start/incsearch.vim
-	url = https://github.com/haya14busa/incsearch.vim.git
 [submodule ".vim/pack/alpha/start/vim-vinegar"]
 	path = .vim/pack/alpha/start/vim-vinegar
 	url = https://github.com/tpope/vim-vinegar.git
@@ -106,3 +103,6 @@
 [submodule ".vim/pack/alpha/start/vim-colors-paramount"]
 	path = .vim/pack/alpha/start/vim-colors-paramount
 	url = https://github.com/owickstrom/vim-colors-paramount.git
+[submodule ".vim/pack/alpha/start/is.vim"]
+	path = .vim/pack/alpha/start/is.vim
+	url = git@github.com:haya14busa/is.vim.git
