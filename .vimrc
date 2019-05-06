@@ -40,7 +40,6 @@ set wildmode=list:longest,full
 
 " set t_Co=256
 set background=dark
-" let g:solarized_termcolors=256
 colorscheme paramount
 
 fun! s:highlight()
@@ -111,15 +110,15 @@ augroup RestoreCursor
   autocmd BufWinEnter * call RestoreCursor()
 augroup end
 
-augroup netrw_buf_hidden_fix
-  autocmd!
+" augroup netrw_buf_hidden_fix
+"   autocmd!
 
-  " Set all non-netrw buffers to bufhidden=hide
-  autocmd BufWinEnter *
-        \  if &ft != 'netrw'
-        \|     set bufhidden=hide
-        \| endif
-augroup end
+"   " Set all non-netrw buffers to bufhidden=hide
+"   autocmd BufWinEnter *
+"         \  if &ft != 'netrw'
+"         \|     set bufhidden=hide
+"         \| endif
+" augroup end
 
 augroup DisableAutoComment
   autocmd BufEnter * setlocal formatoptions-=o
@@ -167,6 +166,10 @@ set smartcase
 " }}}
 
 " Plugins {{{
+
+" netrw
+
+let g:netrw_fastbrowse=0
 
 " ripgrep
 if executable('rg')
