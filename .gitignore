@@ -8,6 +8,7 @@
 .vim/.netrwhist
 .vim/.scratch
 .vim/spell
+.vim/view
 .weechat/**/*.*log
 .weechat/script/plugins.xml.gz
 .weechat/sec.conf
