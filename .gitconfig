@@ -75,5 +75,5 @@
 [filter "alfredworkflow"]
 	clean = alfredworkflow.clean
 [user]
-	email = alpha.chen@gmail.com
+	email = alpha@kejadlen.dev
 	name = Alpha Chen
