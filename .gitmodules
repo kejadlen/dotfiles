@@ -105,4 +105,7 @@
 	url = https://github.com/owickstrom/vim-colors-paramount.git
 [submodule ".vim/pack/alpha/start/is.vim"]
 	path = .vim/pack/alpha/start/is.vim
-	url = git@github.com:haya14busa/is.vim.git
+	url = https://github.com/haya14busa/is.vim.git
+[submodule ".vim/pack/alpha/start/typescript-vim"]
+	path = .vim/pack/alpha/start/typescript-vim
+	url = https://github.com/leafgarland/typescript-vim.git
