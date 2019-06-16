@@ -22,5 +22,11 @@
   file: src={{ item }} dest=~/Library/Colors/{{ item | basename }} state=link
   with_fileglob: ~/.dotfiles/osx/Colors/*
 
+- name: symlink iCloud
+  file:
+    src: "{{ ansible_env.HOME }}/Library/Mobile Documents/com~apple~CloudDocs"
+    dest: ~/iCloud
+    state: link
+
 - name: disable gamed
   command: launchctl unload -w /System/Library/LaunchAgents/com.apple.gamed.plist
