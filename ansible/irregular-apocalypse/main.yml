@@ -8,6 +8,7 @@
       ignore_errors: yes
   tasks:
     - name: install dependencies
+      become: yes
       apt:
         name: "{{ item }}"
         update_cache: yes
@@ -21,12 +22,13 @@
         - python3-pip
         - software-properties-common
         - zsh
-      become: yes
 
 - hosts: all
   roles:
     - dotfiles
     - zsh
+
+- import_playbook: js.yml
 
 - hosts: all
   tasks:
@@ -59,7 +61,7 @@
 
         - stat: path=/usr/local/bin/ruby-install
           register: ruby_install
-        - import_tasks: irregular-apocalypse/ruby-install.yml
+        - import_tasks: ruby-install.yml
           vars:
             version: 0.6.1
           when: ruby_install.stat.exists == False
@@ -73,7 +75,7 @@
       block:
         - stat: path=~/.cargo/bin/rustup
           register: rustup
-        - import_tasks: irregular-apocalypse/rustup.yml
+        - import_tasks: rustup.yml
           when: rustup.stat.exists == False
 
         - command: ~/.cargo/bin/rustup toolchain list
@@ -91,9 +93,6 @@
         #     - exa
         #     - ripgrep
 
-    - name: set up JS dev environment
-      import_playbook: js.yml
-
     - name: install fzf
       block:
         - git:
@@ -105,4 +104,10 @@
       file:
         src: ~/.dotfiles/ansible/irregular-apocalypse/.zshrc.local
         dest: ~/.zshrc.local
+        state: link
+
+    - name: link SSH config.local
+      file:
+        src: ~/.dotfiles/ansible/irregular-apocalypse/.ssh/config.local
+        dest: ~/.ssh/config.local
         state: link
