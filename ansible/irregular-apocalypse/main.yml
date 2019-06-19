@@ -28,7 +28,9 @@
     - dotfiles
     - zsh
 
+- import_playbook: docker.yml
 - import_playbook: js.yml
+- import_playbook: nginx.yml
 
 - hosts: all
   tasks:
