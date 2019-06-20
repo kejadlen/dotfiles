@@ -15,35 +15,34 @@
         name: python-certbot-nginx
         update_cache: yes
 
-  - name: setup nginx
+  - name: nginx conf files
     copy:
       src: nginx.conf
       dest: /etc/nginx/conf.d/irregular-apocalypse.kejadlen.dev.conf
-    notify:
-    - reload nginx
+    notify: reload nginx
 
-  - name: obtain the certificate
+  - name: obtain ssl certificates
     command: >-
       certbot --nginx
-      -d irregular-apocalypse.kejadlen.dev
+      -d {{ item }}
       -m alpha+lets.encrypt@kejadlen.dev
       --agree-tos
       --non-interactive
     args:
-      creates: /etc/letsencrypt/live/irregular-apocalypse.kejadlen.dev
-    notify:
-    - reload nginx
+      creates: /etc/letsencrypt/live/{{ item }}
+    with_items:
+      - irregular-apocalypse.kejadlen.dev
+      - dev.irregular-apocalypse.kejadlen.dev
+    notify: reload nginx
 
   - name: automatically renew certs
     cron:
       name: renew certs
-      minute: 0
-      hour: 12
+      minute: "0"
+      hour: "12"
       job: /usr/bin/certbot renew --quiet
 
   handlers:
 
   - name: reload nginx
-    block:
-    - command: nginx -t
-    - command: nginx -s reload
+    shell: nginx -t && nginx -s reload
