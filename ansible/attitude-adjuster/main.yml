@@ -95,6 +95,8 @@
 # ddclient
 
 - hosts: attitude-adjuster
+  vars_files:
+    - vars.yml.private
   tasks:
 
     - name: install ddclient
@@ -104,8 +106,8 @@
       become: yes
 
     - name: configure ddclient
-      copy:
-        src: ddclient.conf.private
+      template:
+        src: ddclient.conf
         dest: /etc/ddclient.conf
         mode: go-r
       become: yes
