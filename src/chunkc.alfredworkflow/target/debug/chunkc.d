@@ -1,1 +1,0 @@
-/Users/alpha/Dropbox/dotfiles/src/chunkc.alfredworkflow/target/debug/chunkc.dSYM: /Users/alpha/Dropbox/dotfiles/src/chunkc.alfredworkflow/src/main.rs /Users/alpha/Dropbox/src/github.com/kejadlen/alphred-rs/src/lib.rs
