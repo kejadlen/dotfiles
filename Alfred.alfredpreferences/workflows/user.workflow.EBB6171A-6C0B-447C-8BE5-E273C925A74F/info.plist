@@ -131,7 +131,7 @@
 	<key>description</key>
 	<string></string>
 	<key>disabled</key>
-	<false/>
+	<true/>
 	<key>name</key>
 	<string>App Launcher/Switcher</string>
 	<key>objects</key>
