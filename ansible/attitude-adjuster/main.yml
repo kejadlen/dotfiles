@@ -10,7 +10,9 @@
         - vim
       become: yes
 
-# ssh
+# Security
+#
+# https://www.raspberrypi.org/documentation/configuration/security.md
 
 - hosts: attitude-adjuster
   tasks:
@@ -33,10 +35,50 @@
         password: !
       become: yes
 
+    - name: install ufw and fail2ban
+      package:
+        name: "{{ item }}"
+        state: present
+      become: yes
+      with_items:
+        - ufw
+        - fail2ban
+
+    - name: allow access to dns, http, and https
+      ufw:
+        rule: allow
+        name: "{{ item }}"
+      with_items:
+        - DNS
+        - WWW Full
+      become: yes
+
+    - name: limit ssh access
+      ufw:
+        rule: limit
+        name: OpenSSH
+      become: yes
+
+    - name: enable ufw
+      ufw:
+        state: enabled
+      become: yes
+
+    - name: create jail.local
+      copy:
+        src: jail.local
+        dest: /etc/fail2ban/
+      become: yes
+      notify: reload fail2ban
+
   handlers:
     - name: reload ssh
       service:
         name: ssh
+        state: reloaded
+    - name: reload fail2ban
+      service:
+        name: fail2ban
         state: reloaded
 
 # Pi-Hole
