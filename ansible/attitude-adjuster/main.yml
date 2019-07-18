@@ -1,0 +1,113 @@
+- hosts: attitude-adjuster
+  tasks:
+
+    - name: install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - git
+        - vim
+      become: yes
+
+# ssh
+
+- hosts: attitude-adjuster
+  tasks:
+
+    - name: disable ssh password logins
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^(#\s*)?{{ item }} '
+        line: "{{ item }} no"
+      notify: reload ssh
+      with_items:
+        - ChallengeResponseAuthentication
+        - PasswordAuthentication
+        - UsePAM
+      become: yes
+
+    - name: disable pi user
+      user:
+        name: pi
+        password: !
+      become: yes
+
+  handlers:
+    - name: reload ssh
+      service:
+        name: ssh
+        state: reloaded
+
+# Pi-Hole
+
+- hosts: attitude-adjuster
+  tasks:
+
+    - name: clone the pi-hole repo
+      git:
+        repo: https://github.com/pi-hole/pi-hole.git
+        dest: ~/src/pi-hole
+        depth: 1
+
+# ddclient
+
+- hosts: attitude-adjuster
+  tasks:
+
+    - name: install ddclient
+      package:
+        name: ddclient
+        state: present
+      become: yes
+
+    - name: configure ddclient
+      copy:
+        src: ddclient.conf.private
+        dest: /etc/ddclient.conf
+        mode: go-r
+      become: yes
+      notify: restart ddclient
+
+    - name: enable ddclient
+      service:
+        name: ddclient
+        enabled: yes
+      become: yes
+
+  handlers:
+    - name: restart ddclient
+      service:
+        name: ddclient
+        state: restarted
+      become: yes
+
+# Homebridge
+
+- hosts: attitude-adjuster
+  tasks:
+
+    - name: install npm
+      package:
+        name: npm
+        state: present
+      become: yes
+
+    - name: install homebridge
+      npm:
+        name: "{{ item }}"
+        global: yes
+      with_items:
+        - homebridge
+        - homebridge-smartthings-tonesto7
+      become: yes
+
+    - name: create ~/.homebridge
+      file:
+        path: ~/.homebridge
+        state: directory
+
+    - name: copy homebridge config
+      copy:
+        src: config.json
+        dest: ~/.homebridge/config.json

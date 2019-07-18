@@ -1,0 +1,17 @@
+{
+  "bridge": {
+    "name": "Homebridge",
+    "username": "67:9E:AC:02:F4:51",
+    "port": 59377,
+    "pin": "617-05-928"
+  },
+  "platforms": [
+    {
+      "platform": "SmartThings",
+      "name": "SmartThings",
+      "app_url": "https://graph-na04-useast2.api.smartthings.com:443/api/smartapps/installations/",
+      "access_token": "d03f2c6e-36e4-4069-8b7a-a2fcb30c1d68",
+      "app_id": "d0549bc7-23cc-4355-b261-6bfe9e5e48b6"
+    }
+  ]
+}
