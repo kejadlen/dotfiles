@@ -53,6 +53,13 @@
         - WWW Full
       become: yes
 
+    - name: allow access to dhcp
+      ufw:
+        rule: allow
+        proto: udp
+        port: 67
+      become: yes
+
     - name: limit ssh access
       ufw:
         rule: limit
