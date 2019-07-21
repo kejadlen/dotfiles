@@ -88,16 +88,7 @@
         name: fail2ban
         state: reloaded
 
-# Pi-Hole
-
-- hosts: attitude-adjuster
-  tasks:
-
-    - name: clone the pi-hole repo
-      git:
-        repo: https://github.com/pi-hole/pi-hole.git
-        dest: ~/src/pi-hole
-        depth: 1
+- import_playbook: pihole.yml
 
 # ddclient
 
