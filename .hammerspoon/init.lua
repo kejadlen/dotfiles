@@ -3,25 +3,30 @@ local smash = {"cmd", "alt", "ctrl", "shift"}
 
 -- Window management
 
-function chunkc (args)
-  hs.task.new("/usr/local/bin/chunkc", nil, args)
-    :start()
-end
+-- TODO implement desktop and window gaps
+hs.urlevent.bind("wm", function(eventName, params)
+  local log = hs.logger.new("wm", "debug")
 
-hs.hotkey.bind(mash, "left", function()
-  chunkc({"tiling::window", "--warp", "west"})
-end)
-hs.hotkey.bind(mash, "right", function()
-  chunkc({"tiling::window", "--warp", "east"})
-end)
-hs.hotkey.bind(mash, "up", function()
-  chunkc({"tiling::window", "--warp", "north"})
-end)
-hs.hotkey.bind(mash, "down", function()
-  chunkc({"tiling::window", "--warp", "south"})
-end)
-hs.hotkey.bind(mash, "z", function()
-  chunkc({"tiling::window", "--toggle", "fullscreen"})
+  local win = hs.window.focusedWindow() -- TODO figure out why focusedWindow doesn't work
+  -- local win = hs.window.frontmostWindow()
+  local f = win:frame()
+  local screen = win:screen()
+  local max = screen:frame()
+
+  local t = {
+    left = function(f) return hs.layout.left50 end,
+    right = function(f) return hs.layout.right50 end,
+    ne = function(f) return { 0.5, 0, 0.5, 0.5 } end,
+    nw = function(f) return { 0, 0, 0.5, 0.5 } end,
+    se = function(f) return { 0.5, 0.5, 0.5, 0.5 } end,
+    sw = function(f) return { 0, 0.5, 0.5, 0.5 } end,
+    max = function(f) return hs.layout.maximized end,
+  }
+
+  local unitRect = hs.geometry(t[params["layout"]](f))
+  local frame = unitRect:fromUnitRect(max)
+  win:setFrame(frame)
+  -- win:focus()
 end)
 
 hs.loadSpoon("ReloadConfiguration")
