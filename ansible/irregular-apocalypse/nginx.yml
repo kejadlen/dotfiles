@@ -17,13 +17,16 @@
 
   - name: nginx conf files
     copy:
-      src: nginx.conf
-      dest: /etc/nginx/conf.d/irregular-apocalypse.kejadlen.dev.conf
+      src: nginx/{{ item }}.conf
+      dest: /etc/nginx/conf.d/{{ item }}.conf
+    with_items:
+      - irregular-apocalypse.kejadlen.dev
+      - dev.irregular-apocalypse.kejadlen.dev
     notify: reload nginx
 
   - name: obtain ssl certificates
     command: >-
-      certbot --nginx
+      certbot certonly --nginx
       -d {{ item }}
       -m alpha+lets.encrypt@kejadlen.dev
       --agree-tos
