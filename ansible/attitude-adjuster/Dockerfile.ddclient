@@ -8,12 +8,6 @@ RUN apk update && apk upgrade && \
         curl \
         make \
         perl \
-        # perl-utils \
-        # perl-test-taint \
-        # perl-netaddr-ip \
-        # perl-net-ip \
-        # perl-yaml \
-        # perl-log-log4perl \
         perl-io-socket-ssl
 RUN cpan install Test::Requires && cpan Data::Validate::IP
 
@@ -23,21 +17,6 @@ RUN cd tmp && \
     cp ddclient-3.9.0/ddclient /usr/sbin && \
     mkdir /etc/ddclient && \
     mkdir -p /var/cache/ddclient
-
-# RUN apk del --purge \
-#         build-dependencies && \
-#     rm -rf /tmp/*
-
-# RUN apt-get update -y && \
-#     apt-get install -yq curl libdata-validate-ip-perl libio-socket-ip-perl libio-socket-ssl-perl libjson-any-perl perl && \
-#     cd tmp && \
-#     curl --location https://github.com/ddclient/ddclient/archive/v3.9.0.tar.gz > ddclient-3.9.0.tar.gz && \
-#     tar xvz < ddclient-3.9.0.tar.gz && \
-#     rm ddclient-3.9.0.tar.gz && \
-#     cp ddclient-3.9.0/ddclient /usr/sbin && \
-#     rm -rf ddclient-3.9.0 && \
-#     mkdir /etc/ddclient && \
-#     mkdir -p /var/cache/ddclient
 
 VOLUME /etc/ddclient
 
