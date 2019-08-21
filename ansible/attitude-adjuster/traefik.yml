@@ -1,0 +1,49 @@
+# https://docs.traefik.io/user-guide/docker-and-lets-encrypt/
+
+- hosts: attitude-adjuster
+  vars_files:
+    - vars.yml.private
+  become: yes
+  tasks:
+
+    - name: traefik.toml
+      copy:
+        content: |
+          debug = false
+          insecureSkipVerify = true
+
+          logLevel = "ERROR"
+          defaultEntryPoints = ["https","http"]
+
+          [entryPoints]
+            [entryPoints.http]
+            address = ":80"
+              [entryPoints.http.redirect]
+              entryPoint = "https"
+            [entryPoints.https]
+            address = ":443"
+            [entryPoints.https.tls]
+
+          [retry]
+
+          [docker]
+          endpoint = "unix:///var/run/docker.sock"
+          domain = "{{ traefik.domain }}"
+          watch = true
+          exposedByDefault = false
+          network = "attitudeadjuster_bridge"
+
+          [acme]
+          email = "{{ traefik.email }}"
+          storage = "acme.json"
+          entryPoint = "https"
+          onHostRule = true
+          [acme.httpChallenge]
+          entryPoint = "http"
+        dest: /opt/traefik/traefik.toml
+
+    - name: acme.json
+      file:
+        name: /opt/traefik/acme.json
+        mode: 0600
+        state: touch

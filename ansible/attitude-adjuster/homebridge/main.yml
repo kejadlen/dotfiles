@@ -1,0 +1,83 @@
+# https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi#install-avahi-and-other-dependencies
+
+- hosts: pi
+  vars_files:
+    - vars.yml.private
+  become: yes
+  tasks:
+
+    - name: update apt to get a modern version of node
+      block:
+        - apt_key:
+            url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+        - copy:
+            src: nodesource.list
+            dest: /etc/apt/sources.list.d/nodesource.list
+
+    - name: update apt
+      apt:
+        update_cache: yes
+
+    - name: install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - libavahi-compat-libdnssd-dev
+        - nodejs
+
+    - name: install homebridge
+      npm:
+        name: "{{ item }}"
+        global: yes
+      with_items:
+        - homebridge
+        - homebridge-smartthings-cloud
+
+    - name: copy systemd config
+      copy:
+        src: homebridge/{{ item.key }}
+        dest: "{{ item.value }}"
+      with_dict:
+        homebridge: /etc/default
+        homebridge.service: /etc/systemd/system
+      notify:
+        - reload systemd daemon
+        - enable and restart homebridge service
+
+    - name: create homebridge user
+      user:
+        name: homebridge
+        password: !
+
+    - name: create homebridge dir
+      file:
+        path: /var/lib/homebridge
+        state: directory
+        owner: homebridge
+
+    - name: copy homebridge config
+      template:
+        src: homebridge/config.json
+        dest: /var/lib/homebridge
+        owner: homebridge
+      notify: enable and restart homebridge service
+
+    - name: allow access to homebridge
+      ufw:
+        rule: allow
+        proto: tcp
+        port: 51826
+        state: reloaded
+
+  handlers:
+
+    - name: reload systemd daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: enable and restart homebridge service
+      service:
+        name: homebridge
+        enabled: yes
+        state: restarted

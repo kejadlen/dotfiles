@@ -1,0 +1,66 @@
+- hosts: attitude-adjuster
+  vars_files:
+    - vars.yml.private
+  become: yes
+  tasks:
+
+    - name: configure ddclient
+      copy:
+        content: |
+          use=web
+          ssl=yes
+          protocol=googledomains
+          login={{ home.ddclient.login }}
+          password={{ home.ddclient.password }}
+          {{ home.host }}
+
+          use=web
+          ssl=yes
+          protocol=googledomains
+          login={{ home_assistant.ddclient.login }}
+          password={{ home_assistant.ddclient.password }}
+          {{ home_assistant.host }}
+
+          use=web
+          ssl=yes
+          protocol=googledomains
+          login={{ homebridge.ddclient.login }}
+          password={{ homebridge.ddclient.password }}
+          {{ homebridge.host }}
+
+          use=web
+          ssl=yes
+          protocol=googledomains
+          login={{ pihole.ddclient.login }}
+          password={{ pihole.ddclient.password }}
+          {{ pihole.host }}
+
+          use=web
+          ssl=yes
+          protocol=googledomains
+          login={{ traefik.ddclient.login }}
+          password={{ traefik.ddclient.password }}
+          {{ traefik.host }}
+        dest: /etc/ddclient/ddclient.conf
+        mode: 0600
+      notify: restart ddclient
+
+    - name: build docker image
+      docker_image:
+        build:
+          path: .
+          dockerfile: Dockerfile.ddclient
+          pull: yes
+        name: kejadlen/ddclient
+        repository: kejadlen/ddclient
+        push: yes
+        source: build
+
+  handlers:
+
+    - name: restart ddclient
+      docker_container:
+        name: ddclient
+        restart: yes
+      ignore_errors: yes
+

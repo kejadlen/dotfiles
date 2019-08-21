@@ -12,9 +12,6 @@
   - `ansible-playbook --extra-vars "ansible_user=pi" --ask-pass attitude-adjuster/bootstrap.yml`
   - `ansible-playbook attitude-adjuster/main.yml`
 
-1. Install Pi-hole
-  - `curl -sSL https://install.pi-hole.net | bash`
-
 ## Optional
 
 1. Use `raspi-config` to set up the WiFi

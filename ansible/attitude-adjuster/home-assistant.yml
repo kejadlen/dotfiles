@@ -1,0 +1,39 @@
+- hosts: attitude-adjuster
+  vars_files:
+    - vars.yml.private
+  become: yes
+  tasks:
+
+    - name: configure home assistant
+      copy:
+        content: |
+          default_config:
+          http:
+            base_url: https://{{ home_assistant.host }}
+          tts: # Text to speech
+            - platform: google_translate
+          homekit:
+          group: !include groups.yaml
+          automation: !include automations.yaml
+          script: !include scripts.yaml
+        dest: /etc/homeassistant/configuration.yaml
+      notify: restart home assistant
+
+    - name: allow access to homekit
+      ufw:
+        rule: allow
+        proto: "{{ item.proto }}"
+        port: "{{ item.port }}"
+        state: reloaded
+      with_items:
+        - { proto: tcp, port: 51827 }
+        - { proto: udp, port: 5353 }
+
+  handlers:
+
+    - name: restart home assistant
+      docker_container:
+        name: home-assistant
+        restart: yes
+      ignore_errors: yes
+

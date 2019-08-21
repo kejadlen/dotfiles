@@ -1,0 +1,142 @@
+# https://docs.docker.com/install/linux/docker-ce/debian/#install-using-the-repository
+
+- hosts: attitude-adjuster
+  vars_files:
+    - vars.yml.private
+  become: yes
+  tasks:
+
+    - name: install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - apt-transport-https
+        - ca-certificates
+        - gnupg2
+
+    - name: add docker apt key
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+
+    # https://github.com/moby/moby/issues/31405#issuecomment-501494874
+    - name: add docker apt repository
+      apt_repository:
+        repo: deb [arch=armhf] https://download.docker.com/linux/raspbian stretch stable
+        state: present
+        filename: docker
+
+    - name: install docker
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: add myself to docker group
+      user:
+        name: alpha
+        groups: docker
+        append: yes
+
+    - name: install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - docker-compose
+        - python-docker
+
+    - name: docker compose
+      docker_compose:
+        project_name: attitude-adjuster
+        definition:
+          version: '2'
+          services:
+            ddclient:
+              image: kejadlen/ddclient
+              container_name: ddclient
+              environment:
+                TZ: America/Los_Angeles
+              volumes:
+                - /etc/ddclient:/etc/ddclient
+              networks:
+                - bridge
+              restart: always
+
+            home_assistant:
+              container_name: home-assistant
+              image: homeassistant/raspberrypi3-homeassistant
+              ports:
+                - 5353:5353/udp
+                - 51827:51827/tcp
+              environment:
+                TZ: America/Los_Angeles
+              volumes:
+                - /etc/homeassistant:/config
+              networks:
+                - bridge
+              restart: always
+              labels:
+                - traefik.enable=true
+                - traefik.frontend.rule=Host:{{ home_assistant.host }}
+                - traefik.basic.port=8123
+                - traefik.basic.protocol=http
+
+            pihole:
+              container_name: pihole
+              image: pihole/pihole:latest
+              ports:
+                - 53:53/tcp
+                - 53:53/udp
+              environment:
+                ServerIP: 192.168.1.101
+                TZ: America/Los_Angeles
+                VIRTUAL_HOST: "{{ pihole.host }}"
+                WEBPASSWORD: "{{ pihole.password }}"
+              volumes:
+                 - /etc/pihole:/etc/pihole
+                 - /etc/dnsmasq.d:/etc/dnsmasq.d
+              dns:
+                - 127.0.0.1
+                - 1.1.1.1
+              cap_add:
+                - NET_ADMIN
+              networks:
+                - bridge
+              restart: always
+              labels:
+                - traefik.enable=true
+                - traefik.frontend.rule=Host:{{ pihole.host }}
+                - traefik.basic.port=80
+                - traefik.basic.protocol=http
+
+            traefik:
+              container_name: traefik
+              image: traefik
+              command: --api --docker
+              ports:
+                - 80:80
+                - 8080:8080
+                - 443:443
+              volumes:
+                - /var/run/docker.sock:/var/run/docker.sock
+                - /opt/traefik/traefik.toml:/traefik.toml
+                - /opt/traefik/acme.json:/acme.json
+              networks:
+                - bridge
+              restart: always
+              labels:
+                - traefik.enable=true
+                - traefik.frontend.rule=Host:{{ traefik.host }}
+                - traefik.frontend.auth.basic.users=alpha:{{ traefik.password | password_hash('md5') | replace('$', '$$') }}
+                - traefik.basic.port=8080
+                - traefik.basic.protocol=http
+
+          networks:
+            bridge:
+        state: present
+        pull: yes
+
