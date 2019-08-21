@@ -14,4 +14,6 @@
 
 - import_playbook: ddclient.yml
 - import_playbook: home-assistant.yml
+- import_playbook: pihole.yml
+- import_playbook: traefik.yml
 - import_playbook: docker.yml

@@ -1,0 +1,18 @@
+- hosts: attitude-adjuster
+  become: yes
+  tasks:
+
+    - name: allow access to dns
+      ufw:
+        rule: allow
+        name: DNS
+      notify: restart pihole
+
+  handlers:
+
+    - name: restart pihole
+      docker_container:
+        name: pihole
+        restart: yes
+      ignore_errors: yes
+

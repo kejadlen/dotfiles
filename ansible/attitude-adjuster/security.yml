@@ -28,13 +28,10 @@
         - ufw
         - fail2ban
 
-    - name: allow access to dns, http, and https
+    - name: allow access to http, and https
       ufw:
         rule: allow
-        name: "{{ item }}"
-      with_items:
-        - DNS
-        - WWW Full
+        name: WWW Full
 
     - name: limit ssh access
       ufw:
