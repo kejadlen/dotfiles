@@ -6,13 +6,17 @@
   become: yes
   tasks:
 
+    - name: get docker ip
+      shell: ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+'
+      register: docker_ip
+
     - name: traefik.toml
       copy:
         content: |
           debug = false
           insecureSkipVerify = true
 
-          logLevel = "ERROR"
+          logLevel = "INFO" # "ERROR"
           defaultEntryPoints = ["https","http"]
 
           [entryPoints]
@@ -25,6 +29,19 @@
             [entryPoints.https.tls]
 
           [retry]
+
+          [file]
+
+          [frontends]
+            [frontends.homeassistant]
+            backend = "homeassistant"
+              [frontends.homeassistant.routes.test_1]
+              rule = "Host:{{ home_assistant.host }}"
+
+          [backends]
+            [backends.homeassistant]
+              [backends.homeassistant.servers.server1]
+              url = "http://{{ docker_ip.stdout | trim }}:8123"
 
           [docker]
           endpoint = "unix:///var/run/docker.sock"
@@ -41,9 +58,19 @@
           [acme.httpChallenge]
           entryPoint = "http"
         dest: /opt/traefik/traefik.toml
+      notify: restart traefik
 
     - name: acme.json
       file:
         name: /opt/traefik/acme.json
         mode: 0600
         state: touch
+
+  handlers:
+
+    - name: restart traefik
+      docker_container:
+        name: traefik
+        restart: yes
+      ignore_errors: yes
+
