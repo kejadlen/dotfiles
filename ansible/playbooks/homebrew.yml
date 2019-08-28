@@ -29,6 +29,7 @@
       - git
       - hledger
       - jq
+      - macvim
       - mas
       - mosh
       - reattach-to-user-namespace
@@ -45,11 +46,6 @@
     homebrew:
       name: universal-ctags/universal-ctags/universal-ctags
       install_options: HEAD
-
-  - name: install macvim
-    homebrew:
-      name: macvim
-      install_options: with-override-system-vim
 
   # Not sure if this is needed anymore - was used for installing casks
   - name: authenticate sudo
