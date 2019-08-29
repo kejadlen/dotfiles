@@ -1,5 +1,0 @@
-desc ''
-task :bundle do
-  cmd = 'bundle install --standalone --path vendor/bundle --without development test'
-  sh "chruby-exec 2.0.0 -- #{cmd}"
-end

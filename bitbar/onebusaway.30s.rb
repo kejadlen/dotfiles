@@ -9,22 +9,22 @@ COLOR_MAP = {
   arrivalStatusEarly: :red,
   arrivalStatusDelayed: :blue,
   arrivalStatusDepartedOnTime: :green,
-  arrivalStatusDepartedNoInfo: :black,
+  arrivalStatusDepartedNoInfo: :white,
   arrivalStatusDepartedEarly: :red,
   arrivalStatusDepartedDelayed: :blue,
   arrivalStatusCancelled: :red,
 }
 
-html = open('http://pugetsound.onebusaway.org/where/standard/stop.action?id=1_7360').read
+html = open('http://pugetsound.onebusaway.org/where/standard/stop.action?id=1_17160').read
 doc = REXML::Document.new(html)
 status = doc.elements['//td[contains(@class, "arrivalsStatusEntry")]']
 
 minutes = status.elements['.//span'].text
-color = COLOR_MAP.fetch(status.attributes['class'].split(/\s+/).last.to_sym, :black)
+color = COLOR_MAP.fetch(status.attributes['class'].split(/\s+/).last.to_sym, :white)
 times = doc.elements.to_a('//div[@class="arrivalsTimePanel"]')
 
 puts "#{minutes} | color=#{color}"
 puts '---'
 times.each do |time|
-  puts "#{time[0].text}#{time[1]}#{time[2].text}"
+  puts "#{time[0].text} - #{time[2].text}"
 end
