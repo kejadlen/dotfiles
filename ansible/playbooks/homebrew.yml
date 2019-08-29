@@ -7,7 +7,6 @@
   - name: install taps
     homebrew_tap:
       name:
-      - crisidev/chunkwm
       - homebrew/bundle
       - homebrew/cask
       - homebrew/cask-drivers
@@ -37,10 +36,10 @@
       - ruby-install
       - tmux
       - tree
+      - watch
       - ykman
       - youtube-dl
       - zsh
-      - crisidev/chunkwm/chunkwm
 
   - name: install universal ctags
     homebrew:
@@ -64,8 +63,10 @@
       - 1password-cli
       - acorn
       - alfred
+      - amethyst
       - arq
       - bartender
+      - bitbar
       - daisydisk
       - dash
       - dropbox
@@ -92,9 +93,9 @@
     command: /usr/local/bin/mas install {{ item }}
     with_items:
     - 1028916583  # iPulse
-    - 1225570693  # Ulysses
+    # - 1225570693  # Ulysses
     - 451907568   # Paprika Recipe Manager
     - 497799835   # Xcode
-    - 585829637   # Todoist
+    # - 585829637   # Todoist
     - 880001334   # Reeder
     - 904280696   # Things3
