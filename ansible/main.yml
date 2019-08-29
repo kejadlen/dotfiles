@@ -24,3 +24,11 @@
     - zsh
 
 # - import_playbook: playbooks/fish.yml
+
+- hosts: all
+  tasks:
+
+    - name: update git remote for dotfiles
+      command: git remote set-url origin git@github.com:kejadlen/dotfiles.git
+      args:
+        chdir: ~/.dotfiles
