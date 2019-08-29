@@ -22,3 +22,5 @@
     - dotfiles
     - ruby
     - zsh
+
+# - import_playbook: playbooks/fish.yml

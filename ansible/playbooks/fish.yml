@@ -1,0 +1,19 @@
+- hosts: all
+  tasks:
+
+  - name: install fish
+    package:
+      name: fish
+      state: present
+
+  - name: find where fish is
+    command: which fish
+    register: which_fish
+
+  - name: add fish to /etc/shells
+    lineinfile: dest=/etc/shells line={{ which_fish.stdout | trim }} state=present
+    become: yes
+
+  - name: set the default user shell to fish
+    user: name={{ ansible_env.USER }} shell={{ which_fish.stdout | trim }}
+    become: yes
