@@ -92,7 +92,7 @@
 	<key>description</key>
 	<string></string>
 	<key>disabled</key>
-	<false/>
+	<true/>
 	<key>name</key>
 	<string>chunkc</string>
 	<key>objects</key>
@@ -127,6 +127,8 @@
 				<true/>
 				<key>alfredfiltersresultsmatchmode</key>
 				<integer>2</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
 				<key>argumenttrimmode</key>
 				<integer>0</integer>
 				<key>argumenttype</key>
@@ -165,7 +167,7 @@
 			<key>uid</key>
 			<string>F9C39BDA-EC36-4EBB-A6F7-0E29F8722058</string>
 			<key>version</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -204,11 +206,11 @@
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>123</integer>
+				<integer>0</integer>
 				<key>hotmod</key>
-				<integer>12320768</integer>
+				<integer>0</integer>
 				<key>hotstring</key>
-				<string>←</string>
+				<string></string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -237,11 +239,11 @@
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>124</integer>
+				<integer>0</integer>
 				<key>hotmod</key>
-				<integer>12320768</integer>
+				<integer>0</integer>
 				<key>hotstring</key>
-				<string>→</string>
+				<string></string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -270,11 +272,11 @@
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>126</integer>
+				<integer>0</integer>
 				<key>hotmod</key>
-				<integer>12320768</integer>
+				<integer>0</integer>
 				<key>hotstring</key>
-				<string>↑</string>
+				<string></string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -303,11 +305,11 @@
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>125</integer>
+				<integer>0</integer>
 				<key>hotmod</key>
-				<integer>12320768</integer>
+				<integer>0</integer>
 				<key>hotstring</key>
-				<string>↓</string>
+				<string></string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -336,11 +338,11 @@
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>6</integer>
+				<integer>0</integer>
 				<key>hotmod</key>
-				<integer>1835008</integer>
+				<integer>0</integer>
 				<key>hotstring</key>
-				<string>Z</string>
+				<string></string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
