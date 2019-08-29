@@ -13,7 +13,10 @@
         state: present
         filename: yarn
 
-    - name: install Yarn
+    - name: install dependencies
       apt:
-        name: yarn
+        name: "{{ item }}"
         update_cache: yes
+      with_items:
+        - npm
+        - yarn
