@@ -59,7 +59,7 @@
 			<key>config</key>
 			<dict>
 				<key>autopaste</key>
-				<false/>
+				<true/>
 				<key>clipboardtext</key>
 				<string>{query}</string>
 				<key>transient</key>
@@ -70,7 +70,7 @@
 			<key>uid</key>
 			<string>6F9F0651-FA49-4F03-8EFE-2BAA285CB4B5</string>
 			<key>version</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
