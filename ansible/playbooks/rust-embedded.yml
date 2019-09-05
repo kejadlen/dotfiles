@@ -1,0 +1,27 @@
+- hosts: all
+  tasks:
+
+  # https://rust-embedded.github.io/book/intro/install.html
+
+  - name: add rust target
+    command: rustup target add thumbv7em-none-eabihf
+
+  - name: install binutils
+    command: cargo install cargo-binutils
+    args:
+      creates: ~/.cargo/bin/cargo-size
+
+  - name: install llvm-tools-preview
+    command: rustup component add llvm-tools-preview
+
+  # https://rust-embedded.github.io/book/intro/install/macos.html
+
+  - name: install gcc-arm-embedded
+    homebrew:
+      name: armmbed/formulae/arm-none-eabi-gcc
+
+  - name: install openocd and qemu
+    homebrew:
+      name:
+        - openocd
+        - qemu
