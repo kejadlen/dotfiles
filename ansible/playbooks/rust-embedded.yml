@@ -1,27 +1,34 @@
 - hosts: all
   tasks:
 
-  # https://rust-embedded.github.io/book/intro/install.html
+    # https://docs.rust-embedded.org/discovery/03-setup/index.html
 
-  - name: add rust target
-    command: rustup target add thumbv7em-none-eabihf
+    - name: install cargo dependencies
+      command: cargo install {{ item.key }}
+      args:
+        creates: ~/.cargo/bin/{{ item.value }}
+      with_dict:
+        itm: itmdump
+        cargo-binutils: cargo-size
 
-  - name: install binutils
-    command: cargo install cargo-binutils
-    args:
-      creates: ~/.cargo/bin/cargo-size
+    - name: add rust target
+      command: rustup target add thumbv7em-none-eabihf
 
-  - name: install llvm-tools-preview
-    command: rustup component add llvm-tools-preview
+    # Is this really necessary?
+    - name: install llvm-tools-preview
+      command: rustup component add llvm-tools-preview
 
-  # https://rust-embedded.github.io/book/intro/install/macos.html
+    # https://rust-embedded.github.io/book/intro/install/macos.html
+    # https://docs.rust-embedded.org/discovery/03-setup/macos.html
 
-  - name: install gcc-arm-embedded
-    homebrew:
-      name: armmbed/formulae/arm-none-eabi-gcc
+    - name: install gcc-arm-embedded
+      homebrew:
+        name: armmbed/formulae/arm-none-eabi-gcc
 
-  - name: install openocd and qemu
-    homebrew:
-      name:
-        - openocd
-        - qemu
+    - name: install brew dependencies
+      homebrew:
+        name:
+          - gdb
+          - minicom
+          - openocd
+          - qemu
