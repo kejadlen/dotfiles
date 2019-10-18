@@ -20,6 +20,7 @@
 	push-f = push --force-with-lease
 	stsh = stash --keep-index
 	staash = stash --include-untracked
+	fix = commit --amend --no-edit --no-reset-author
 [difftool]
 	prompt = false
 [difftool "sourcetree"]
