@@ -108,3 +108,12 @@ namespace :pave do
     end
   end
 end
+
+namespace :brew do
+  desc "Fix homebrew permissions for multi-user"
+  task :multiuser do
+    sh "sudo chmod -R g+w $(brew --prefix)/*"
+    sh "sudo chgrp -R homebrew $(brew --prefix)/*"
+  end
+end
+
