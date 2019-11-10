@@ -1,0 +1,4 @@
+bind <C-n> tabnext
+bind <C-p> tabprev
+
+set allowautofocus false
