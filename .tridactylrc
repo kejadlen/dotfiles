@@ -5,6 +5,8 @@ bind <C-n> tabnext
 bind <C-p> tabprev
 
 set allowautofocus false
+set hintfiltermode vimperator-reflow
+set hintnames numeric
 set smoothscroll true
 
 guiset_quiet hoverlink right
