@@ -219,7 +219,7 @@
 	<key>shouldSyncView</key>
 	<true/>
 	<key>showInDock</key>
-	<false/>
+	<true/>
 	<key>versionedDHCheatRepo</key>
 	<dict>
 		<key>installed</key>
