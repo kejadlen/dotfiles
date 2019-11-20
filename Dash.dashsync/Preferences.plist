@@ -72,7 +72,7 @@
 			<key>rake</key>
 			<dict>
 				<key>date</key>
-				<date>2019-10-20T16:32:02Z</date>
+				<date>2019-11-13T00:33:34Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -121,6 +121,11 @@
 	<dict>
 		<key>installed</key>
 		<dict>
+			<key>http://kapeli.com/feeds/Ansible.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2019-11-20T04:04:50Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
 			<dict>
 				<key>date</key>
@@ -320,7 +325,7 @@
 				<key>2.6.5</key>
 				<dict>
 					<key>date</key>
-					<date>2019-10-20T16:56:37Z</date>
+					<date>2019-11-13T17:41:10Z</date>
 				</dict>
 			</dict>
 		</dict>
