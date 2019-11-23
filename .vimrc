@@ -96,6 +96,7 @@ if !has("nvim")
 endif
 set virtualedit=block
 set noshowmode
+set tags=.git/tags
 
 function! RestoreCursor()
   let pos = line("'\"")
