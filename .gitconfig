@@ -21,6 +21,7 @@
 	stsh = stash --keep-index
 	staash = stash --include-untracked
 	fix = commit --amend --no-edit --no-reset-author
+	ctags = !.git/hooks/ctags
 [difftool]
 	prompt = false
 [difftool "sourcetree"]
@@ -63,6 +64,7 @@
 	sort = version:refname
 [rebase]
 	autosquash = true
+	stat = true
 [interactive]
 	singlekey = true
 ; [url "git@github.com:"]
