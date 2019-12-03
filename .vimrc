@@ -90,7 +90,7 @@ set foldmethod=syntax " Fold on the syntax
 
 " Editing {{{
 
-" set hidden
+set hidden
 if !has("nvim")
   set noesckeys
 endif
@@ -110,16 +110,6 @@ augroup RestoreCursor
   autocmd!
   autocmd BufWinEnter * call RestoreCursor()
 augroup end
-
-" augroup netrw_buf_hidden_fix
-"   autocmd!
-
-"   " Set all non-netrw buffers to bufhidden=hide
-"   autocmd BufWinEnter *
-"         \  if &ft != 'netrw'
-"         \|     set bufhidden=hide
-"         \| endif
-" augroup end
 
 augroup DisableAutoComment
   autocmd BufEnter * setlocal formatoptions-=o
@@ -170,7 +160,8 @@ set smartcase
 
 " netrw
 
-let g:netrw_fastbrowse=0
+" https://github.com/tpope/vim-vinegar/issues/13
+let g:netrw_liststyle=0
 
 " ripgrep
 if executable('rg')
