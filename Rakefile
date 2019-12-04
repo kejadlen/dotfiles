@@ -112,8 +112,13 @@ end
 namespace :brew do
   desc "Fix homebrew permissions for multi-user"
   task :multiuser do
-    sh "sudo chmod -R g+w $(brew --prefix)/*"
-    sh "sudo chgrp -R homebrew $(brew --prefix)/*"
+    sh "sudo chmod -R g+w $(brew --prefix)/*" do
+      # we don't care if it fails
+    end
+
+    sh "sudo chgrp -R homebrew $(brew --prefix)/*" do
+      # we don't care if it fails
+    end
   end
 end
 
