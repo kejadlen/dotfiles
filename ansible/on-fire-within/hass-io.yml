@@ -1,0 +1,29 @@
+# https://www.home-assistant.io/hassio/installation/
+
+- hosts: on_fire_within
+  become: yes
+  tasks:
+    # Forgot what I need this for...
+    - name: install software-properties-common
+      apt: name=software-properties-common
+
+    - name: install other dependencies for hass.io
+      apt:
+        name:
+          - apparmor-utils
+          - apt-transport-https
+          - avahi-daemon
+          - ca-certificates
+          - curl
+          - dbus
+          - jq
+          - network-manager
+          - socat
+        update_cache: yes
+    - service:
+        name: ModemManager
+        enabled: false
+
+    # homekit
+    - name: install dependenies for homekit
+      apt: name=libavahi-compat-libdnssd-dev

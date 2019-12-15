@@ -1,0 +1,44 @@
+# https://www.raspberrypi.org/documentation/configuration/security.md
+
+- hosts: pi
+  become: yes
+  tasks:
+    - name: disable ssh password logins
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^(#\s*)?{{ item }} '
+        line: "{{ item }} no"
+      notify: reload ssh
+      with_items:
+        - ChallengeResponseAuthentication
+        - PasswordAuthentication
+        - UsePAM
+
+    - name: disable pi user
+      user:
+        name: pi
+        password: !
+
+    - name: install fail2ban
+      package:
+        name: fail2ban
+        state: present
+
+    - name: create jail.local
+      copy:
+        content: |
+          [sshd]
+          enabled = true
+        dest: /etc/fail2ban/jail.local
+      notify: reload fail2ban
+
+  handlers:
+    - name: reload ssh
+      service:
+        name: ssh
+        state: reloaded
+
+    - name: reload fail2ban
+      service:
+        name: fail2ban
+        state: reloaded

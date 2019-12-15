@@ -1,0 +1,166 @@
+- import_playbook: ../playbooks/pi/security.yml
+- import_playbook: hass-io.yml
+
+- hosts: on_fire_within
+  become: yes
+  tasks:
+    - name: install dependencies
+      apt:
+        name:
+          - git
+          - vim
+
+          # Needed for Docker stuff
+          - docker-compose
+          - python-pip
+          - python-backports-shutil-get-terminal-size
+          - python-backports.ssl-match-hostname
+
+    - name: install python docker packages
+      pip:
+        name:
+          - docker
+          - docker-compose
+        state: latest
+
+    - name: create conf dirs
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - /etc/ddclient
+        - /etc/traefik
+
+    - name: configure ddclient
+      copy:
+        content: |
+          daemon=300
+
+          use=web
+          ssl=yes
+          protocol=googledomains
+
+          {% for host in hosts %}
+          login={{ host.login }}, password={{ host.password }} {{ host.host }}
+          {% endfor %}
+        dest: /etc/ddclient/ddclient.conf
+        mode: 0600
+      vars:
+        hosts: "{{ ddclient.hosts }}"
+      notify: restart ddclient
+
+    - name: traefik static configuration
+      copy:
+        content: |
+          [providers]
+            [providers.docker]
+              exposedByDefault = false
+            [providers.file]
+              filename = "/etc/traefik/dynamic_conf.toml"
+              watch = true
+
+          [entryPoints]
+            [entryPoints.http]
+              address = ":80"
+
+            [entryPoints.https]
+              address = ":443"
+
+          [certificatesResolvers.le.acme]
+            email = "{{ email }}"
+            storage = "/etc/traefik/acme.json"
+            [certificatesResolvers.le.acme.httpChallenge]
+              entryPoint = "http"
+
+          [api]
+            insecure = true
+        dest: /etc/traefik/traefik.toml
+        mode: 0600
+
+    - name: docker all the things!
+      docker_compose:
+        project_name: on-fire-within
+        definition:
+          version: '2'
+          services:
+            ddclient:
+              image: kejadlen/ddclient:latest
+              container_name: ddclient
+              volumes:
+                - /etc/ddclient:/etc/ddclient
+              restart: always
+            pihole:
+              image: pihole/pihole:latest
+              container_name: pihole
+              ports:
+                - 53:53/tcp
+                - 53:53/udp
+              environment:
+                TZ: America/Los_Angeles
+                VIRTUAL_HOST: "{{ pihole.host }}"
+                WEBPASSWORD: "{{ pihole.password }}"
+              volumes:
+                - /etc/pihole:/etc/pihole
+                - /etc/dnsmasq.d:/etc/dnsmasq.d
+              dns:
+                - 127.0.0.1
+                - 1.1.1.1
+              labels:
+                - traefik.enable=true
+                - traefik.http.routers.pihole.rule=Host(`{{ traefik.host_rules.pihole }}`)
+                - traefik.http.routers.pihole.tls=true
+                - traefik.http.routers.pihole.tls.certresolver=le
+                - traefik.http.services.pihole.loadbalancer.server.port=80
+              restart: always
+            traefik:
+              image: traefik:latest
+              container_name: traefik
+              ports:
+                - 80:80
+                - 8080:8080
+                - 443:443
+              volumes:
+                - /var/run/docker.sock:/var/run/docker.sock
+                - /etc/traefik:/etc/traefik
+              labels:
+                - traefik.enable=true
+                - traefik.http.middlewares.auth.basicauth.users=alpha:{{ traefik.password | password_hash("md5") | replace("$", "$$") }}
+                - traefik.http.routers.traefik.rule=Host(`{{ traefik.host_rules.traefik }}`)
+                - traefik.http.routers.traefik.tls=true
+                - traefik.http.routers.traefik.tls.certresolver=le
+                - traefik.http.routers.traefik.middlewares=auth
+                - traefik.http.routers.traefik.service=api@internal
+              restart: always
+
+    - name: get docker ip
+      block:
+        # - shell: ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+' | head -n 1
+        - shell: docker network inspect on-fire-within_default | jq --raw-output .[0].IPAM.Config[0].Gateway
+          register: docker_ip_result
+        - set_fact:
+            docker_ip: "{{ docker_ip_result.stdout | trim }}"
+
+    - name: traefik dynamic configuration
+      copy:
+        content: |
+          [http.routers]
+            [http.routers.hassio]
+              rule = "Host(`{{ traefik.host_rules.hassio }}`)"
+              service = "hassio"
+              [http.routers.hassio.tls]
+                certResolver = "le"
+
+          [http.services]
+            [http.services.hassio.loadBalancer]
+              [[http.services.hassio.loadBalancer.servers]]
+                url = "http://{{ docker_ip }}:8123/"
+        dest: /etc/traefik/dynamic_conf.toml
+        mode: 0600
+
+  handlers:
+    - name: restart ddclient
+      docker_container:
+        name: ddclient
+        restart: yes
+      ignore_errors: yes
+

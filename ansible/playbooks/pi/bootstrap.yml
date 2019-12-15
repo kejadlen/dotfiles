@@ -1,0 +1,44 @@
+- hosts: pi_bootstrap
+  become: yes
+  tasks:
+
+    - name: change hostname to {{ hostname }}
+      hostname:
+        name: "{{ hostname }}"
+      notify: reboot
+
+    - name: update hostname in /etc/hosts
+      replace:
+        path: /etc/hosts
+        regexp: '(\s+)raspberrypi(\s+.*)?$'
+        replace: '\1{{ hostname }}\2'
+      notify: reboot
+
+    - name: disable wifi
+      lineinfile:
+        path: /boot/config.txt
+        insertafter: dtoverlay
+        line: dtoverlay=pi3-disable-wifi
+      notify: reboot
+
+    - name: create user
+      user:
+        name: alpha
+        password: "{{ password | password_hash('sha512') }}"
+        shell: /bin/bash
+
+    - name: give user sudo access
+      lineinfile:
+        path: /etc/sudoers.d/alpha
+        line: "alpha ALL=(ALL) NOPASSWD: ALL"
+        create: yes
+        validate: visudo -cf %s
+
+    - name: add ssh keys
+      authorized_key:
+        user: alpha
+        key: https://github.com/kejadlen.keys
+
+  handlers:
+    - name: reboot
+      reboot:
