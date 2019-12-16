@@ -19,6 +19,10 @@
           - jq
           - network-manager
           - socat
+
+          # https://www.home-assistant.io/integrations/bluetooth_tracker/
+          - bluetooth
+          - libbluetooth-dev
         update_cache: yes
     - service:
         name: ModemManager

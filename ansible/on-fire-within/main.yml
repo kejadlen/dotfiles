@@ -77,9 +77,37 @@
         dest: /etc/traefik/traefik.toml
         mode: 0600
 
+    # TODO This should really go after the docker_compose task, since it
+    # depends on the network that docker-compose makes. We should create the
+    # network first so we can do this, and set the services to use that network
+    # specifically.
+    - name: traefik dynamic configuration
+      block:
+        # - shell: ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+' | head -n 1
+        - shell: docker network inspect on-fire-within_default | jq --raw-output .[0].IPAM.Config[0].Gateway
+          register: docker_ip_result
+        - set_fact:
+            docker_ip: "{{ docker_ip_result.stdout | trim }}"
+        - copy:
+            content: |
+              [http.routers]
+                [http.routers.hassio]
+                  rule = "Host(`{{ traefik.host_rules.hassio }}`)"
+                  service = "hassio"
+                  [http.routers.hassio.tls]
+                    certResolver = "le"
+
+              [http.services]
+                [http.services.hassio.loadBalancer]
+                  [[http.services.hassio.loadBalancer.servers]]
+                    url = "http://{{ docker_ip }}:8123/"
+            dest: /etc/traefik/dynamic_conf.toml
+            mode: 0600
+
     - name: docker all the things!
       docker_compose:
         project_name: on-fire-within
+        pull: yes
         definition:
           version: '2'
           services:
@@ -88,7 +116,7 @@
               container_name: ddclient
               volumes:
                 - /etc/ddclient:/etc/ddclient
-              restart: always
+              restart: unless-stopped
             pihole:
               image: pihole/pihole:latest
               container_name: pihole
@@ -111,7 +139,21 @@
                 - traefik.http.routers.pihole.tls=true
                 - traefik.http.routers.pihole.tls.certresolver=le
                 - traefik.http.services.pihole.loadbalancer.server.port=80
-              restart: always
+              restart: unless-stopped
+            syncthing:
+              image: kejadlen/syncthing:latest
+              container_name: syncthing
+              ports:
+                - 22000:22000/tcp
+                - 21027:21027/udp
+              volumes:
+                - /etc/syncthing:/etc/syncthing
+              labels:
+                - traefik.enable=true
+                - traefik.http.routers.syncthing.rule=Host(`{{ traefik.host_rules.syncthing }}`)
+                - traefik.http.routers.syncthing.tls=true
+                - traefik.http.routers.syncthing.tls.certresolver=le
+                - traefik.http.services.syncthing.loadbalancer.server.port=8384
             traefik:
               image: traefik:latest
               container_name: traefik
@@ -130,32 +172,7 @@
                 - traefik.http.routers.traefik.tls.certresolver=le
                 - traefik.http.routers.traefik.middlewares=auth
                 - traefik.http.routers.traefik.service=api@internal
-              restart: always
-
-    - name: get docker ip
-      block:
-        # - shell: ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+' | head -n 1
-        - shell: docker network inspect on-fire-within_default | jq --raw-output .[0].IPAM.Config[0].Gateway
-          register: docker_ip_result
-        - set_fact:
-            docker_ip: "{{ docker_ip_result.stdout | trim }}"
-
-    - name: traefik dynamic configuration
-      copy:
-        content: |
-          [http.routers]
-            [http.routers.hassio]
-              rule = "Host(`{{ traefik.host_rules.hassio }}`)"
-              service = "hassio"
-              [http.routers.hassio.tls]
-                certResolver = "le"
-
-          [http.services]
-            [http.services.hassio.loadBalancer]
-              [[http.services.hassio.loadBalancer.servers]]
-                url = "http://{{ docker_ip }}:8123/"
-        dest: /etc/traefik/dynamic_conf.toml
-        mode: 0600
+              restart: unless-stopped
 
   handlers:
     - name: restart ddclient
