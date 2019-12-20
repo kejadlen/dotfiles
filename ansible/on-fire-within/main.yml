@@ -4,7 +4,7 @@
 - hosts: on_fire_within
   become: yes
   tasks:
-    - name: install dependencies
+    - name: Install dependencies
       apt:
         name:
           - git
@@ -16,22 +16,31 @@
           - python-backports-shutil-get-terminal-size
           - python-backports.ssl-match-hostname
 
-    - name: install python docker packages
+    - name: Install python docker packages
       pip:
         name:
           - docker
           - docker-compose
         state: latest
 
-    - name: create conf dirs
+    - name: Create necessary dirs
       file:
         path: "{{ item }}"
         state: directory
       with_items:
         - /etc/ddclient
         - /etc/traefik
+        - /mnt/mushu/minio
+        - /mnt/mushu/syncthing
 
-    - name: configure ddclient
+    - name: Mount USB drive
+      mount:
+        path: /mnt/mushu
+        src: /dev/sda
+        fstype: ext4
+        state: mounted
+
+    - name: Configure ddclient
       copy:
         content: |
           daemon=300
@@ -47,9 +56,9 @@
         mode: 0600
       vars:
         hosts: "{{ ddclient.hosts }}"
-      notify: restart ddclient
+      notify: Restart ddclient
 
-    - name: traefik static configuration
+    - name: Traefik static configuration
       copy:
         content: |
           [providers]
@@ -81,7 +90,7 @@
     # depends on the network that docker-compose makes. We should create the
     # network first so we can do this, and set the services to use that network
     # specifically.
-    - name: traefik dynamic configuration
+    - name: Route Home Assistant through Traefik
       block:
         # - shell: ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+' | head -n 1
         - shell: docker network inspect on-fire-within_default | jq --raw-output .[0].IPAM.Config[0].Gateway
@@ -104,7 +113,7 @@
             dest: /etc/traefik/dynamic_conf.toml
             mode: 0600
 
-    - name: docker all the things!
+    - name: Docker ALL the things!
       docker_compose:
         project_name: on-fire-within
         pull: yes
@@ -117,6 +126,23 @@
               volumes:
                 - /etc/ddclient:/etc/ddclient
               restart: unless-stopped
+            minio:
+              image: kejadlen/minio:latest
+              container_name: minio
+              ports:
+                - 9000:9000/tcp
+              environment:
+                MINIO_ACCESS_KEY: "{{ minio.access_key }}"
+                MINIO_SECRET_KEY: "{{ minio.secret_key }}"
+              volumes:
+                - /mnt/mushu/minio:/data
+              user: 0:0 # root
+              labels:
+                - traefik.enable=true
+                - traefik.http.routers.minio.rule=Host(`{{ traefik.host_rules.minio }}`)
+                - traefik.http.routers.minio.tls=true
+                - traefik.http.routers.minio.tls.certresolver=le
+                - traefik.http.services.minio.loadbalancer.server.port=9000
             pihole:
               image: pihole/pihole:latest
               container_name: pihole
@@ -148,6 +174,8 @@
                 - 21027:21027/udp
               volumes:
                 - /etc/syncthing:/etc/syncthing
+                - /mnt/mushu/syncthing:/sync
+              user: 0:0 # root
               labels:
                 - traefik.enable=true
                 - traefik.http.routers.syncthing.rule=Host(`{{ traefik.host_rules.syncthing }}`)
@@ -175,7 +203,7 @@
               restart: unless-stopped
 
   handlers:
-    - name: restart ddclient
+    - name: Restart ddclient
       docker_container:
         name: ddclient
         restart: yes
