@@ -35,6 +35,7 @@
         - reattach-to-user-namespace
         - ripgrep
         - ruby-install
+        - syncthing
         - tmux
         - tree
         - watch
@@ -46,6 +47,11 @@
     homebrew:
       name: universal-ctags/universal-ctags/universal-ctags
       install_options: HEAD
+
+  - name: start homebrew services
+    command: brew services start {{ item }}
+    with_items:
+      - syncthing
 
   # Not sure if this is needed anymore - was used for installing casks
   - name: authenticate sudo
@@ -77,6 +83,7 @@
         - quicklook-csv
         - quicklook-json
         - resilio-sync
+        - signal
         - slack
         - vlc
         - zoomus
