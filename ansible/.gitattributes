@@ -1,0 +1,2 @@
+docker/minio/minio filter=lfs diff=lfs merge=lfs -text
+docker/mc/mc filter=lfs diff=lfs merge=lfs -text

@@ -29,6 +29,7 @@
         state: directory
       with_items:
         - /etc/ddclient
+        - /etc/minio
         - /etc/traefik
         - /mnt/mushu/minio
         - /mnt/mushu/syncthing
@@ -86,32 +87,16 @@
         dest: /etc/traefik/traefik.toml
         mode: 0600
 
-    # TODO This should really go after the docker_compose task, since it
-    # depends on the network that docker-compose makes. We should create the
-    # network first so we can do this, and set the services to use that network
-    # specifically.
-    - name: Route Home Assistant through Traefik
-      block:
-        # - shell: ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+' | head -n 1
-        - shell: docker network inspect on-fire-within_default | jq --raw-output .[0].IPAM.Config[0].Gateway
-          register: docker_ip_result
-        - set_fact:
-            docker_ip: "{{ docker_ip_result.stdout | trim }}"
-        - copy:
-            content: |
-              [http.routers]
-                [http.routers.hassio]
-                  rule = "Host(`{{ traefik.host_rules.hassio }}`)"
-                  service = "hassio"
-                  [http.routers.hassio.tls]
-                    certResolver = "le"
-
-              [http.services]
-                [http.services.hassio.loadBalancer]
-                  [[http.services.hassio.loadBalancer.servers]]
-                    url = "http://{{ docker_ip }}:8123/"
-            dest: /etc/traefik/dynamic_conf.toml
-            mode: 0600
+    # The docker_compose module overwrites our existing variables, so this is a
+    # workaround to save off ones that we need later on in the playbook.
+    #
+    # https://github.com/ansible/ansible/issues/33960
+    - name: Save original host facts
+      set_fact:
+        "{{ item }}_original": "{{ lookup('vars', item) }}"
+      with_items:
+        - minio
+        - traefik
 
     - name: Docker ALL the things!
       docker_compose:
@@ -129,12 +114,11 @@
             minio:
               image: kejadlen/minio:latest
               container_name: minio
-              ports:
-                - 9000:9000/tcp
               environment:
                 MINIO_ACCESS_KEY: "{{ minio.access_key }}"
                 MINIO_SECRET_KEY: "{{ minio.secret_key }}"
               volumes:
+                - /etc/minio:/root/.minio
                 - /mnt/mushu/minio:/data
               user: 0:0 # root
               labels:
@@ -201,6 +185,29 @@
                 - traefik.http.routers.traefik.middlewares=auth
                 - traefik.http.routers.traefik.service=api@internal
               restart: unless-stopped
+
+    - name: Route Home Assistant through Traefik
+      block:
+        # - shell: ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+' | head -n 1
+        - shell: docker network inspect on-fire-within_default | jq --raw-output .[0].IPAM.Config[0].Gateway
+          register: docker_ip_result
+        - set_fact:
+            docker_ip: "{{ docker_ip_result.stdout | trim }}"
+        - copy:
+            content: |
+              [http.routers]
+                [http.routers.hassio]
+                  rule = "Host(`{{ traefik_original.host_rules.hassio }}`)"
+                  service = "hassio"
+                  [http.routers.hassio.tls]
+                    certResolver = "le"
+
+              [http.services]
+                [http.services.hassio.loadBalancer]
+                  [[http.services.hassio.loadBalancer.servers]]
+                    url = "http://{{ docker_ip }}:8123/"
+            dest: /etc/traefik/dynamic_conf.toml
+            mode: 0600
 
   handlers:
     - name: Restart ddclient
