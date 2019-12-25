@@ -161,7 +161,9 @@ set smartcase
 " netrw
 
 " https://github.com/tpope/vim-vinegar/issues/13
-let g:netrw_liststyle=0
+let g:netrw_fastbrowse=0
+" let g:netrw_liststyle=0
+autocmd FileType netrw setl bufhidden=wipe
 
 " ripgrep
 if executable('rg')
