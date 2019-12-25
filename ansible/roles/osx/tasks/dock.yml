@@ -5,13 +5,13 @@
   register: dockutil_result
 - name: remove all Dock icons
   command: /usr/local/bin/dockutil --remove all
-  when: not (dockutil_result.stdout_lines | length == 1 and dockutil_result.stdout | search("^Downloads"))
+  when: not (dockutil_result.stdout_lines | length == 1 and dockutil_result.stdout is search("^Downloads"))
 - name: add ~/Downloads to the Dock
   command: /usr/local/bin/dockutil --add ~/Downloads
                                       --view list
                                       --display stack
                                       --sort datemodified
-  when: not (dockutil_result.stdout_lines | length == 1 and dockutil_result.stdout | search("^Downloads"))
+  when: not (dockutil_result.stdout_lines | length == 1 and dockutil_result.stdout is search("^Downloads"))
 
 - name: remove Dockutil
   homebrew: name=dockutil state=absent

@@ -75,22 +75,21 @@
         - encryptme
         - fantastical
         - firefox-developer-edition
-        # - google-chrome
-        # - hammerspoon
+        - font-fira-mono
+        - font-hack
+        - font-source-code-pro
+        - google-chrome
+        - hammerspoon
         - night-owl
         - qlmarkdown
         - qlstephen
         - quicklook-csv
         - quicklook-json
-        - resilio-sync
         - signal
         - slack
         - vlc
         - zoomus
         - homebrew/cask-drivers/logitech-options
-        - homebrew/cask-fonts/font-fira-mono
-        - homebrew/cask-fonts/font-hack
-        - homebrew/cask-fonts/font-source-code-pro
 
   - name: install from app store
     command: /usr/local/bin/mas install {{ item }}
@@ -100,5 +99,6 @@
       # - 451907568   # Paprika Recipe Manager
       # - 497799835   # Xcode
       # - 585829637   # Todoist
-      - 880001334   # Reeder
-      - 904280696   # Things3
+      # - 880001334   # Reeder 3
+      - 1449412482  # Reeder 4
+      - 904280696   # Things 3
