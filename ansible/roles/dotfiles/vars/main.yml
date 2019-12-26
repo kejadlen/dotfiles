@@ -18,6 +18,7 @@ conf_symlinks:
   .tmux.conf: ~/.tmux.conf
   .vim: ~/.vim
   .vimrc: ~/.vimrc
+  .zsh: ~/.zsh
 
 private_symlinks:
   .gitconfig.private: ~/.gitconfig.private

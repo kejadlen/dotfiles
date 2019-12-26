@@ -87,6 +87,7 @@
         - quicklook-json
         - signal
         - slack
+        - transmit
         - vlc
         - zoomus
         - homebrew/cask-drivers/logitech-options
