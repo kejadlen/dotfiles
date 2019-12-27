@@ -115,7 +115,10 @@
 	<key>docsets</key>
 	<dict>
 		<key>keywords</key>
-		<dict/>
+		<dict>
+			<key>~/Library/Application Support/Dash/DocSets/NodeJS/NodeJS.docset</key>
+			<string>nodejs:</string>
+		</dict>
 	</dict>
 	<key>feeds</key>
 	<dict>
@@ -145,6 +148,11 @@
 			<dict>
 				<key>date</key>
 				<date>2017-04-12T14:52:01Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/NodeJS.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2019-12-26T20:59:53Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Racket.xml</key>
 			<dict>
