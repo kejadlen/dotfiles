@@ -330,15 +330,24 @@
 		<dict>
 			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
 			<dict>
-				<key>2.6.5</key>
+				<key>2.7.0</key>
 				<dict>
 					<key>date</key>
-					<date>2019-11-13T17:41:10Z</date>
+					<date>2019-12-30T18:32:26Z</date>
 				</dict>
 			</dict>
 		</dict>
 		<key>uninstalled</key>
-		<dict/>
+		<dict>
+			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
+			<dict>
+				<key>2.6.5</key>
+				<dict>
+					<key>date</key>
+					<date>2019-12-30T18:32:20Z</date>
+				</dict>
+			</dict>
+		</dict>
 	</dict>
 	<key>webSearches</key>
 	<array>
@@ -360,7 +369,7 @@
 			<key>isDefault</key>
 			<true/>
 			<key>isEnabled</key>
-			<false/>
+			<true/>
 			<key>name</key>
 			<string>DuckDuckGo</string>
 			<key>url</key>
