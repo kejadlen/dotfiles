@@ -114,4 +114,7 @@
 	url = https://github.com/editorconfig/editorconfig-vim.git
 [submodule ".vim/pack/alpha/start/vimwiki"]
 	path = .vim/pack/alpha/start/vimwiki
-	url = git@github.com:vimwiki/vimwiki.git
+	url = https://github.com/vimwiki/vimwiki.git
+[submodule "src/faker.alfredworkflow"]
+	path = src/faker.alfredworkflow
+	url = https://github.com/kejadlen/faker.alfredworkflow.git
