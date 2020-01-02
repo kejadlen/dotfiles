@@ -72,7 +72,7 @@
 			<key>rake</key>
 			<dict>
 				<key>date</key>
-				<date>2019-11-13T00:33:34Z</date>
+				<date>2020-01-01T18:36:11Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -127,56 +127,57 @@
 			<key>http://kapeli.com/feeds/Ansible.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2019-11-20T04:04:50Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2019-10-20T16:35:57Z</date>
+				<date>2020-01-01T18:35:28Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/CSS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2019-10-20T16:42:36Z</date>
+				<date>2020-01-01T18:35:33Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Haskell.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2019-10-20T16:33:31Z</date>
+				<date>2020-01-01T18:35:29Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Markdown.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2017-04-12T14:52:01Z</date>
+				<date>2020-01-01T18:35:30Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/NodeJS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2019-12-26T20:59:53Z</date>
+				<date>2020-01-01T18:35:27Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Racket.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2017-10-08T21:07:33Z</date>
+				<date>2020-01-01T18:35:54Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2016-03-20T14:08:35Z</date>
+				<date>2020-01-01T18:35:32Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Rust.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2016-03-20T14:08:35Z</date>
+				<date>2020-01-01T18:35:37Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Vim.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2017-04-12T14:52:02Z</date>
+				<date>2020-01-01T18:35:33Z</date>
 			</dict>
 		</dict>
 		<key>uninstalled</key>
-		<dict/>
+		<dict>
+			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2020-01-02T15:22:00Z</date>
+			</dict>
+		</dict>
 	</dict>
 	<key>isPinned</key>
 	<true/>
@@ -333,7 +334,7 @@
 				<key>2.7.0</key>
 				<dict>
 					<key>date</key>
-					<date>2019-12-30T18:32:26Z</date>
+					<date>2020-01-01T18:35:30Z</date>
 				</dict>
 			</dict>
 		</dict>
