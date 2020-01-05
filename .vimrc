@@ -164,6 +164,7 @@ set smartcase
 let g:netrw_fastbrowse=0
 " let g:netrw_liststyle=0
 autocmd FileType netrw setl bufhidden=wipe
+let g:netrw_home="~/.vim_tmp"
 
 " ripgrep
 if executable('rg')
