@@ -17,6 +17,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>DEB68CED-3830-4241-9EDD-5A6FA36C567E</key>
@@ -73,6 +75,10 @@ begin
 ensure
   FileUtils.mv(filename, File.expand_path("~/.Trash"))
 end</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>2</integer>
 			</dict>
@@ -81,7 +87,7 @@ end</string>
 			<key>uid</key>
 			<string>DEB68CED-3830-4241-9EDD-5A6FA36C567E</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -90,6 +96,10 @@ end</string>
 				<integer>0</integer>
 				<key>argument</key>
 				<integer>1</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
 				<key>hotkey</key>
 				<integer>9</integer>
 				<key>hotmod</key>
@@ -108,7 +118,7 @@ end</string>
 			<key>uid</key>
 			<string>64D4866F-5048-4D9D-B4E4-E718528E7C30</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -117,13 +127,17 @@ end</string>
 	<dict>
 		<key>64D4866F-5048-4D9D-B4E4-E718528E7C30</key>
 		<dict>
+			<key>xpos</key>
+			<integer>40</integer>
 			<key>ypos</key>
-			<real>10</real>
+			<integer>40</integer>
 		</dict>
 		<key>DEB68CED-3830-4241-9EDD-5A6FA36C567E</key>
 		<dict>
+			<key>xpos</key>
+			<integer>240</integer>
 			<key>ypos</key>
-			<real>10</real>
+			<integer>40</integer>
 		</dict>
 	</dict>
 	<key>webaddress</key>
