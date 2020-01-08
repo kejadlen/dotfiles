@@ -118,3 +118,6 @@
 [submodule "src/faker.alfredworkflow"]
 	path = src/faker.alfredworkflow
 	url = https://github.com/kejadlen/faker.alfredworkflow.git
+[submodule ".vim/pack/alpha/start/vim-reason-plus"]
+	path = .vim/pack/alpha/start/vim-reason-plus
+	url = https://github.com/reasonml-editor/vim-reason-plus.git
