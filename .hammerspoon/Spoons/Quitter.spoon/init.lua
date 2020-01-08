@@ -32,13 +32,13 @@ function obj:start()
   self:reset()
 
   -- Reset if we're waking from sleep
-  hs.caffeinate.watcher.new(function(event)
+  self.watcher = hs.caffeinate.watcher.new(function(event)
     if event ~= hs.caffeinate.watcher.systemDidWake then return end
     self:reset()
   end)
 
   -- Set last focused time for relevant apps
-  hs.window.filter.default:subscribe(hs.window.filter.windowFocused, function(window, appName)
+  self.windowFilter = hs.window.filter.default:subscribe(hs.window.filter.windowFocused, function(window, appName)
     local bundleID = window:application():bundleID()
     if not self.quitAppsAfter[bundleID] then return end
     self.lastFocused[bundleID] = os.time()
@@ -49,6 +49,18 @@ function obj:start()
   end):start()
 
   return self
+end
+
+--- Quitter:stop()
+--- Method
+--- Stop Quitter
+---
+--- Parameters:
+---  * None
+function obj:stop()
+  self.watcher:stop()
+  self.windowFilter:unsubscribe()
+  self.timer:stop()
 end
 
 function obj:reset()
