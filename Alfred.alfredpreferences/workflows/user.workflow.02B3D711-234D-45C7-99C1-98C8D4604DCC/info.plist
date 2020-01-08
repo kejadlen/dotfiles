@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string>com.arbitrarydefinitions.quickcursor</string>
+	<string>com.kejadlen.dev.quickcursor</string>
 	<key>category</key>
 	<string>Tools</string>
 	<key>connections</key>
@@ -140,6 +140,10 @@ end</string>
 			<integer>40</integer>
 		</dict>
 	</dict>
+	<key>variablesdontexport</key>
+	<array/>
+	<key>version</key>
+	<string></string>
 	<key>webaddress</key>
 	<string>https://github.com/kejadlen</string>
 </dict>

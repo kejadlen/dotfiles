@@ -5,9 +5,9 @@
 	<key>hotkey</key>
 	<dict>
 		<key>key</key>
-		<integer>0</integer>
+		<integer>-1</integer>
 		<key>mod</key>
-		<integer>0</integer>
+		<integer>-1</integer>
 		<key>string</key>
 		<string></string>
 	</dict>
