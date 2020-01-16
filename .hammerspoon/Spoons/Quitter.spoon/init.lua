@@ -59,7 +59,7 @@ end
 ---  * None
 function obj:stop()
   self.watcher:stop()
-  self.windowFilter:unsubscribe()
+  self.windowFilter:unsubscribe(hs.window.filter.windowFocused)
   self.timer:stop()
 end
 
