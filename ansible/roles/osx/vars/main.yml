@@ -205,3 +205,19 @@ osx_defaults:
     key: SUEnableAutomaticChecks
     type: int
     value: 1
+
+  - domain: com.freron.MailMate
+    key: MmAllowedImageURLRegexp
+    type: string
+    value: https://(i\.gr-assets\.com|www.goodreads.com)/.*
+
+  - domain: com.freron.MailMate
+    key: MmSendMessageDelayEnabled
+    type: bool
+    value: true
+
+  - domain: com.freron.MailMate
+    key: MmSendMessageDelay
+    type: int
+    value: 60
+
