@@ -14,6 +14,11 @@ obj.license = "MIT - https://opensource.org/licenses/MIT"
 
 obj.logger = hs.logger.new("quitter", "debug")
 obj.lastFocused = {}
+obj.windowFocusedFn = function(window, appName)
+  local bundleID = window:application():bundleID()
+  if not obj.quitAppsAfter[bundleID] then return end
+  obj.lastFocused[bundleID] = os.time()
+end
 
 --- Quitter.quitAppsAfter
 --- Variable
@@ -38,11 +43,7 @@ function obj:start()
   end)
 
   -- Set last focused time for relevant apps
-  self.windowFilter = hs.window.filter.default:subscribe(hs.window.filter.windowFocused, function(window, appName)
-    local bundleID = window:application():bundleID()
-    if not self.quitAppsAfter[bundleID] then return end
-    self.lastFocused[bundleID] = os.time()
-  end)
+  self.windowFilter = hs.window.filter.default:subscribe(hs.window.filter.windowFocused, self.windowFocusedFn)
 
   self.timer = hs.timer.doEvery(60, function()
     self:reap()
@@ -59,7 +60,7 @@ end
 ---  * None
 function obj:stop()
   self.watcher:stop()
-  self.windowFilter:unsubscribe(hs.window.filter.windowFocused)
+  self.windowFilter:unsubscribe(hs.window.filter.windowFocused, self.windowFocusedFn)
   self.timer:stop()
 end
 
