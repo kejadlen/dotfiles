@@ -22,6 +22,7 @@ end
 
 def tic; @_tic = Time.now; end
 def toc; Time.now - @_tic; end
+def rot13(s=nil); s ||= `pbpaste`; s.tr("A-Za-z","N-ZA-Mn-za-m"); end
 
 Pry::Commands.command /^$/, "repeat last command" do
   _pry_.input = StringIO.new(Pry.history.to_a.last)
