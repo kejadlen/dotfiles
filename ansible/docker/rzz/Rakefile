@@ -1,0 +1,17 @@
+desc "Run RZZ in development mode"
+task :dev do
+  sh "rerun -- rackup"
+end
+
+namespace :docker do
+  TAG = "kejadlen/rzz"
+
+  task :build do
+    sh "docker build --tag #{TAG} ."
+  end
+
+  task push: :build do
+    sh "docker push #{TAG}"
+  end
+end
+
