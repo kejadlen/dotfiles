@@ -22,6 +22,8 @@ module Rzz
           doc.at_xpath("/rss/channel/link/text()").content = self_url
           doc.at_xpath("/rss/channel/atom:link[@href='#{url}']")["href"] = self_url
 
+          doc.at_xpath("/rss/channel/atom:link[@rel='hub']").remove
+
           doc
             .xpath("/rss/channel/item")
             .select {|item| item.xpath("./category[text()='test-gym']").empty? }
