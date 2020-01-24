@@ -4,6 +4,12 @@
 - hosts: on_fire_within
   become: yes
   tasks:
+    - name: Set authorized keys from GitHub
+      authorized_key:
+        user: alpha
+        state: present
+        key: https://github.com/kejadlen.keys
+
     - name: Install dependencies
       apt:
         name:
@@ -84,8 +90,17 @@
 
           [api]
             insecure = true
+
+          [accessLog]
         dest: /etc/traefik/traefik.toml
         mode: 0600
+
+    # https://docs.syncthing.net/users/faq.html#inotify-limits
+    - name: Increase inotify limit for syncthing
+      lineinfile:
+        path: /etc/sysctl.conf
+        regexp: '^fs.inotify.max_user_watches='
+        line: fs.inotify.max_user_watches=204800
 
     # The docker_compose module overwrites our existing variables, so this is a
     # workaround to save off ones that we need later on in the playbook.
