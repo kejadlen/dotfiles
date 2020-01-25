@@ -1,21 +1,16 @@
 - [ ] Install Homebrew
   `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 
-- [ ] Install Ansible and mas
-  `brew install ansible mas`
+- [ ] Install [Xcode]
 
-- [ ] Xcode
-  - [ ] Install Xcode
-    `mas install 497799835`
+[xcode]: https://developer.apple.com/download/more/
 
-  - [ ] Open Xcode to install additional components
-    `open Xcode`
+- [ ] Install Ansible
+  `brew install ansible`
 
-  - [ ] Accept the Xcode license
-    `sudo xcodebuild -license`
-
-  - [ ] Install the command line developer tools from Xcode
-    `xcode-select --reset`
+- [ ] Install `mas
+  `brew install mas`
+  - [ ] Sign in to the Mac App Store
 
 - [ ] Enable Remote Login
   `open /System/Library/PreferencePanes/SharingPref.prefPane`
@@ -30,17 +25,26 @@
   ansible-playbook main.yml --ask-pass --ask-become-pass
   ```
 
-- [ ] [chunkwm](https://github.com/crisidev/homebrew-chunkwm#caveats)
-
 - [ ] macOS preferences
+  - [ ] General
+    - [ ] Appearance -> Auto
   - [ ] Displays
-    - [ ] Enable Night Shift
+    - [ ] Night Shift
   - [ ] Keyboard
     - [ ] Modifiers
     - [ ] Function keys
 
 - [ ] Setup programs
   - [ ] 1Password
-  - [ ] Firefox
-  - [ ] Fantastical
+    - [ ] Change hotkeys
+  - [ ] Alfred
   - [ ] Arq
+  - [ ] Bartender
+  - [ ] Dash
+  - [ ] Encrypt.me
+  - [ ] Fantastical
+  - [ ] Firefox
+  - [ ] MailMate
+  - [ ] Slack
+  - [ ] hammerspoon
+  - [ ] syncthing
