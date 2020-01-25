@@ -31,7 +31,6 @@
   - [ ] Displays
     - [ ] Night Shift
   - [ ] Keyboard
-    - [ ] Modifiers
     - [ ] Function keys
 
 - [ ] Setup programs
