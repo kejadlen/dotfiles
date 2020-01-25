@@ -27,6 +27,7 @@
         - fasd
         - fzf
         - git
+        - git-lfs
         - hledger
         - jq
         - macvim
@@ -90,6 +91,7 @@
         - signal
         - slack
         - transmit
+        - twitterrific
         - vlc
         - zoomus
         - homebrew/cask-drivers/logitech-options
