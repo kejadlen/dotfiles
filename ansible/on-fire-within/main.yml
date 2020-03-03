@@ -36,6 +36,7 @@
       with_items:
         - /etc/ddclient
         - /etc/minio
+        - /etc/mitmproxy
         - /etc/traefik
         - /mnt/mushu/minio
         - /mnt/mushu/syncthing
@@ -142,6 +143,20 @@
                 - traefik.http.routers.minio.tls=true
                 - traefik.http.routers.minio.tls.certresolver=le
                 - traefik.http.services.minio.loadbalancer.server.port=9000
+            mitmproxy:
+              image: mitmproxy/mitmproxy:latest-ARMv7
+              container_name: mitmproxy
+              command: mitmweb --web-iface ""
+              volumes:
+                - /etc/mitmproxy:/home/mitmproxy/.mitmproxy
+              labels:
+                - traefik.enable=true
+                - traefik.tcp.routers.mitmproxy.rule=HostSNI(`{{ traefik.host_rules.mitmproxy }}`)
+                - traefik.tcp.routers.mitmproxy.tls.passthrough=true
+                - traefik.tcp.services.mitmproxy.loadbalancer.server.port=8080
+                - traefik.http.routers.mitmproxy-web.rule=Host(`{{ traefik.host_rules.mitmproxy_web }}`)
+                - traefik.http.routers.mitmproxy-web.tls.certresolver=le
+                - traefik.http.services.mitmproxy-web.loadbalancer.server.port=8081
             pihole:
               image: pihole/pihole:latest
               container_name: pihole
