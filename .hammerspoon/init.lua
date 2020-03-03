@@ -1,27 +1,7 @@
-local mash = {"cmd", "alt", "ctrl"}
-local smash = {"cmd", "alt", "ctrl", "shift"}
+fennel = require("fennel")
+table.insert(package.loaders or package.searchers, fennel.searcher)
 
--- Window management --
-
-wm = {
-  left = hs.layout.left50,
-  right = hs.layout.right50,
-  ne = { 0.5, 0, 0.5, 0.5 },
-  nw = { 0, 0, 0.5, 0.5 },
-  se = { 0.5, 0.5, 0.5, 0.5 },
-  sw = { 0, 0.5, 0.5, 0.5 },
-  max = hs.layout.maximized,
-}
-
-function move(key)
-  local win = hs.window.focusedWindow()
-  local geo = wm[key]
-  win:move(geo, nil, true)
-end
-
-hs.hotkey.bind(mash, "h", function() move("left") end)
-hs.hotkey.bind(mash, "l", function() move("right") end)
-hs.hotkey.bind(mash, "m", function() move("max") end)
+fennel.dofile("init.fnl", { allowedGlobals = false })
 
 -- Defeat paste blocking --
 
@@ -43,7 +23,7 @@ spoon.Quitter.quitAppsAfter = {
   ["com.reederapp.macOS"]       = 600,
   ["com.tinyspeck.slackmacgap"] = 600,
 }
-spoon.Quitter:start()
+-- spoon.Quitter:start()
 
 hs.loadSpoon("ReloadConfiguration")
 spoon.ReloadConfiguration:start()
