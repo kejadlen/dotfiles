@@ -17,6 +17,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 	</dict>
@@ -25,7 +27,7 @@
 	<key>description</key>
 	<string>Quit BitBar</string>
 	<key>disabled</key>
-	<false/>
+	<true/>
 	<key>name</key>
 	<string>Quit BitBar</string>
 	<key>objects</key>
@@ -37,6 +39,8 @@
 				<integer>2</integer>
 				<key>keyword</key>
 				<string>quit bitbar</string>
+				<key>subtext</key>
+				<string></string>
 				<key>text</key>
 				<string>Quit BitBar</string>
 				<key>withspace</key>
@@ -47,7 +51,7 @@
 			<key>uid</key>
 			<string>887A5B23-A6E8-47FC-BCF4-09569787C41A</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -58,6 +62,10 @@
 				<integer>102</integer>
 				<key>script</key>
 				<string>killall BitBar</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>0</integer>
 			</dict>
@@ -66,7 +74,7 @@
 			<key>uid</key>
 			<string>87EB2868-E3D2-4979-8DEB-51C8A686B174</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -75,11 +83,15 @@
 	<dict>
 		<key>87EB2868-E3D2-4979-8DEB-51C8A686B174</key>
 		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
 			<key>ypos</key>
 			<real>60</real>
 		</dict>
 		<key>887A5B23-A6E8-47FC-BCF4-09569787C41A</key>
 		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
 			<key>ypos</key>
 			<real>60</real>
 		</dict>

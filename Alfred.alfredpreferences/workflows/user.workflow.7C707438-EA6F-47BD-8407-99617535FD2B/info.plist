@@ -20,6 +20,16 @@
 				<key>vitoclose</key>
 				<false/>
 			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>E81C089B-1A36-4B7F-A4CC-AD914BF7775D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
 		</array>
 		<key>F9D40CD4-3236-45BB-9B6A-6219DEA3CE62</key>
 		<array>
@@ -74,7 +84,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>./rsa-auth --serial=$SERIAL --seed=$SEED</string>
+				<string>./rsa-auth --serial=$SERIAL --seed=$SEED | tr -d '\n'</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
@@ -93,7 +103,7 @@
 			<key>config</key>
 			<dict>
 				<key>autopaste</key>
-				<false/>
+				<true/>
 				<key>clipboardtext</key>
 				<string>{query}</string>
 				<key>transient</key>
@@ -105,6 +115,27 @@
 			<string>19E314DC-76DE-4ABF-BA3A-8A3BF56C554F</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>E81C089B-1A36-4B7F-A4CC-AD914BF7775D</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -125,6 +156,13 @@
 			<key>ypos</key>
 			<integer>80</integer>
 		</dict>
+		<key>E81C089B-1A36-4B7F-A4CC-AD914BF7775D</key>
+		<dict>
+			<key>xpos</key>
+			<integer>510</integer>
+			<key>ypos</key>
+			<integer>215</integer>
+		</dict>
 		<key>F9D40CD4-3236-45BB-9B6A-6219DEA3CE62</key>
 		<dict>
 			<key>xpos</key>
@@ -142,8 +180,8 @@
 	</dict>
 	<key>variablesdontexport</key>
 	<array>
-		<string>SERIAL</string>
 		<string>SEED</string>
+		<string>SERIAL</string>
 	</array>
 	<key>version</key>
 	<string></string>
