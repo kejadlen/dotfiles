@@ -121,3 +121,6 @@
 [submodule ".vim/pack/alpha/start/vim-reason-plus"]
 	path = .vim/pack/alpha/start/vim-reason-plus
 	url = https://github.com/reasonml-editor/vim-reason-plus.git
+[submodule "src/fast-user-switching.alfredworkflow"]
+	path = src/fast-user-switching.alfredworkflow
+	url = git@github.com:kejadlen/fast-user-switching.alfredworkflow.git
