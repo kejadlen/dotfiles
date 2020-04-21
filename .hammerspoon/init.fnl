@@ -12,4 +12,6 @@
                        (win:move geo nil true)))]
   (hs.hotkey.bind mash "h" (fn [] (move :left)))
   (hs.hotkey.bind mash "l" (fn [] (move :right)))
-  (hs.hotkey.bind mash "m" (fn [] (move :max))))
+  (hs.hotkey.bind mash "m" (fn [] (move :max)))
+  (hs.hotkey.bind [:cmd :alt] "v" (fn [] (hs.eventtap.keyStrokes (hs.pasteboard.getContents)))))
+

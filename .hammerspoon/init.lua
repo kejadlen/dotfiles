@@ -3,10 +3,6 @@ table.insert(package.loaders or package.searchers, fennel.searcher)
 
 fennel.dofile("init.fnl", { allowedGlobals = false })
 
--- Defeat paste blocking --
-
-hs.hotkey.bind({"cmd", "alt"}, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
-
 -- Debugging --
 
 -- hs.hotkey.bind(mash, "d", function()
