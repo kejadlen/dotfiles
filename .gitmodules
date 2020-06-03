@@ -115,6 +115,7 @@
 [submodule ".vim/pack/alpha/start/vimwiki"]
 	path = .vim/pack/alpha/start/vimwiki
 	url = https://github.com/vimwiki/vimwiki.git
+	shallow = true
 [submodule "src/faker.alfredworkflow"]
 	path = src/faker.alfredworkflow
 	url = https://github.com/kejadlen/faker.alfredworkflow.git
@@ -123,4 +124,4 @@
 	url = https://github.com/reasonml-editor/vim-reason-plus.git
 [submodule "src/fast-user-switching.alfredworkflow"]
 	path = src/fast-user-switching.alfredworkflow
-	url = git@github.com:kejadlen/fast-user-switching.alfredworkflow.git
+	url = https://github.com/kejadlen/fast-user-switching.alfredworkflow.git
