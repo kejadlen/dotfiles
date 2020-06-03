@@ -1,0 +1,10 @@
+- hosts: all
+  tasks:
+
+    - name: register keyboard_id
+      # shell: ioreg -n IOHIDKeyboard -r | grep -e VendorID\" -e ProductID | ruby -e 'print ARGF.read.scan(/\d+/).join(?-)'
+      shell: ioreg -p IOUSB -c IOUSBDevice -n "Apple Internal Keyboard / Trackpad" |  ruby -e 'print ARGF.read.scan(/"(\w+)" = (\w+)/).to_h.values_at("idVendor", "idProduct").join(?-)'
+      register: keyboard_id
+
+    - name: s/caps lock/ctrl/
+      command: defaults -currentHost write -g com.apple.keyboard.modifiermapping.{{ keyboard_id.stdout }}-0 -array-add '<dict><key>HIDKeyboardModifierMappingDst</key><integer>2</integer><key>HIDKeyboardModifierMappingSrc</key><integer>0</integer></dict>'
