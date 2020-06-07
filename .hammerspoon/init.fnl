@@ -13,5 +13,11 @@
   (hs.hotkey.bind mash "h" (fn [] (move :left)))
   (hs.hotkey.bind mash "l" (fn [] (move :right)))
   (hs.hotkey.bind mash "m" (fn [] (move :max)))
+
+  ;; defeat paste blocking
   (hs.hotkey.bind [:cmd :alt] "v" (fn [] (hs.eventtap.keyStrokes (hs.pasteboard.getContents)))))
 
+(set hs.urlevent.httpCallback (fn [scheme host params fullURL]
+  (if (string.find fullURL "^https?://.*[.]zoom.us/j/%d+")
+      (hs.urlevent.openURLWithBundle fullURL "us.zoom.xos")
+      (hs.urlevent.openURLWithBundle fullURL "org.mozilla.firefoxdeveloperedition"))))

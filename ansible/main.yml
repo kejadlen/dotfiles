@@ -16,6 +16,9 @@
 - hosts: os_MacOSX
   roles:
     - role: osx
+  tasks:
+    - name: install fennel
+      command: luarocks install fennel
 
 - hosts: all
   roles:

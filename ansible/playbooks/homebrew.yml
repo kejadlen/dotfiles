@@ -30,6 +30,7 @@
         - git-lfs
         - hledger
         - jq
+        - luarocks
         - macvim
         - mas
         - mosh
