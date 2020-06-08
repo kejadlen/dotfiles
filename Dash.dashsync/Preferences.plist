@@ -72,7 +72,7 @@
 			<key>rake</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:13:30Z</date>
+				<date>2020-06-08T03:58:33Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -118,6 +118,8 @@
 		<dict>
 			<key>~/Library/Application Support/Dash/DocSets/NodeJS/NodeJS.docset</key>
 			<string>nodejs:</string>
+			<key>~/Library/Application Support/Dash/Ruby DocSets/rake/rake.docset</key>
+			<string>gem:</string>
 		</dict>
 	</dict>
 	<key>feeds</key>
@@ -127,47 +129,52 @@
 			<key>http://kapeli.com/feeds/Ansible.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:13:09Z</date>
+				<date>2020-06-08T03:58:51Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/CSS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:13:19Z</date>
+				<date>2020-06-08T03:59:01Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Docker.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2020-06-08T03:59:43Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Haskell.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:12:58Z</date>
+				<date>2020-06-08T03:58:31Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Markdown.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:12:59Z</date>
+				<date>2020-06-08T03:58:09Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/NodeJS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:13:11Z</date>
+				<date>2020-06-08T03:58:09Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Racket.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:13:28Z</date>
+				<date>2020-06-08T04:00:08Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:13:22Z</date>
+				<date>2020-06-08T03:59:43Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Rust.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:13:29Z</date>
+				<date>2020-06-08T04:00:16Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Vim.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-01-24T22:12:49Z</date>
+				<date>2020-06-08T03:59:49Z</date>
 			</dict>
 		</dict>
 		<key>uninstalled</key>
@@ -334,7 +341,7 @@
 				<key>2.7.0</key>
 				<dict>
 					<key>date</key>
-					<date>2020-01-24T22:12:59Z</date>
+					<date>2020-06-08T03:58:37Z</date>
 				</dict>
 			</dict>
 		</dict>
