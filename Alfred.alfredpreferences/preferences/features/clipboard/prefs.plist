@@ -11,5 +11,7 @@
 		<key>string</key>
 		<string>C</string>
 	</dict>
+	<key>snippetMatchWordBased</key>
+	<false/>
 </dict>
 </plist>
