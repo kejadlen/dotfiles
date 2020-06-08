@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'open3'
 require 'tempfile'
 
 def with_tempfile(name)
@@ -10,14 +11,16 @@ ensure
 end
 
 plist = ARGF.read
-puts plist and exit unless File.exist?("/usr/libexec/PlistBuddy")
+puts plist or exit unless File.exist?("/usr/libexec/PlistBuddy")
 
 with_tempfile('info.plist') do |f|
   f << plist
   f.flush
 
-  vars = `/usr/libexec/PlistBuddy -c "Print :variablesdontexport" #{f.path}`
-  vars = vars.split("\n")[1..-2].map(&:strip)
+  stdout, _, status = Open3.capture3("/usr/libexec/PlistBuddy -c 'Print :variablesdontexport' #{f.path}")
+  puts plist or exit unless status.success?
+
+  vars = stdout.split("\n")[1..-2].map(&:strip)
 
   vars.each do |var|
     `/usr/libexec/PlistBuddy -c "Set :variables:#{var} ''" #{f.path}`
