@@ -1,0 +1,244 @@
+- hosts: all
+  tasks:
+    - group_by: key=os_{{ ansible_distribution }}
+      tags: always
+
+- hosts: os_MacOSX
+  tasks:
+
+    - name: set OS X defaults
+      osx_defaults:
+        domain: "{{ item.domain | default(omit) }}"
+        key: "{{ item.key }}"
+        type: "{{ item.type }}"
+        value: "{{ item.value }}"
+      notify: restart OS X system services
+      with_items:
+
+        # NSGlobalDomain defaults
+        - # don't quit idle applications
+          domain: -g
+          key: NSDisableAutomaticTermination
+          type: bool
+          value: true
+        - # subpixel rendering on non-Apple LCDs
+          key: AppleFontSmoothing
+          type: int
+          value: 2
+        - # full keyboard access
+          key: AppleKeyboardUIMode
+          type: int
+          value: 3
+        - # show all extensions by default
+          key: AppleShowAllExtensions
+          type: bool
+          value: true
+        - # keyboard repeat rate
+          key: KeyRepeat
+          type: int
+          value: 2
+        - # delay before keyboard repeat
+          key: InitialKeyRepeat
+          type: int
+          value: 25
+        - # set sidebar item size to small
+          key: NSTableViewDefaultSizeMode
+          type: int
+          value: 1
+        - # disable resume
+          key: NSQuitAlwaysKeepsWindows
+          type: bool
+          value: false
+        - # add debug menu in web views
+          key: WebKitDeveloperExtras
+          type: bool
+          value: true
+        - # tap to click
+          key: com.apple.mouse.tapBehavior
+          type: bool
+          value: true
+        - # only show scrollbars when scrolling
+          key: AppleShowScrollBars
+          type: string
+          value: WhenScrolling
+
+        # Safari
+        - # enable Debug menu in Safari
+          domain: com.apple.Safari
+          key: IncludeInternalDebugMenu
+          type: bool
+          value: true
+        - # disable Java
+          domain: com.apple.Safari
+          key: com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabled
+          type: bool
+          value: false
+        - # disable Java
+          domain: com.apple.Safari
+          key: com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabledForLocalFiles
+          type: bool
+          value: false
+
+        - # disable dashboard
+          domain: com.apple.dashboard
+          key: mcx-disabled
+          type: bool
+          value: true
+
+        - # don't write .DS_Store to network volumes
+          domain: com.apple.desktopservices
+          key: DSDontWriteNetworkStores
+          type: bool
+          value: true
+
+        # Dock defaults
+        - # automatically hide and show the dock
+          domain: com.apple.dock
+          key: autohide
+          type: bool
+          value: true
+        - # minimize windows using the scale effect
+          domain: com.apple.dock
+          key: mineffect
+          type: string
+          value: scale
+        - # don't rearrange spaces
+          domain: com.apple.dock
+          key: mru-spaces
+          type: bool
+          value: false
+        - domain: com.apple.dock
+          key: orientation
+          type: string
+          value: left
+        - # set the bottom left hot corner to sleep the display
+          domain: com.apple.dock
+          key: wvous-bl-corner
+          type: int
+          value: 10
+        - # set the icon size to 36 pixels
+          domain: com.apple.dock
+          key: tilesize
+          type: int
+          value: 36
+        - # no dock delay
+          domain: com.apple.dock
+          key: autohide-delay
+          type: float
+          value: 0
+
+        # Trackpad settings
+        - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
+          key: Clicking
+          type: int
+          value: 1
+        - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
+          key: TrackpadFourFingerVertSwipeGesture
+          type: int
+          value: 0
+        - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
+          key: TrackpadThreeFingerDrag
+          type: bool
+          value: true
+        - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
+          key: TrackpadThreeFingerHorizSwipeGesture
+          type: int
+          value: 0
+        - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
+          key: TrackpadThreeFingerVertSwipeGesture
+          type: int
+          value: 0
+
+        # Finder defaults
+        - # don't ask when changing file extension
+          domain: com.apple.finder
+          key: FXEnableExtensionChangeWarning
+          type: bool
+          value: false
+        - # default to list view
+          domain: com.apple.finder
+          key: FXPreferredViewStyle
+          type: string
+          value: Nlsv
+        - # enable text selection in QuickLook
+          domain: com.apple.finder
+          key: QLEnableTextSelection
+          type: bool
+          value: true
+        - # show full path in Finder
+          domain: com.apple.finder
+          key: _FXShowPosixPathInTitle
+          type: bool
+          value: true
+
+        - # set date format in menubar
+          domain: com.apple.menuextra.clock
+          key: DateFormat
+          type: string
+          value: h:mm
+
+        - # no window shadows when capturing windows
+          domain: com.apple.screencapture
+          key: disable-shadow
+          type: bool
+          value: true
+
+        - domain: com.apple.screencapture
+          key: location
+          type: string
+          value: "{{ ansible_env.HOME }}/Downloads"
+
+        - domain: com.apple.screensaver
+          key: askForPassword
+          type: int
+          value: 1
+
+        # Other applications
+        - domain: com.google.Chrome
+          key: AppleEnableSwipeNavigateWithScrolls
+          type: bool
+          value: false
+
+        - domain: org.vim.MacVim
+          key: MMLastWindowClosedBehavior
+          type: int
+          value: 2
+
+        - domain: org.vim.MacVim
+          key: MMUntitledWindow
+          type: int
+          value: 1
+
+        - domain: org.vim.MacVim
+          key: SUCheckAtStartup
+          type: int
+          value: 1
+
+        - domain: org.vim.MacVim
+          key: SUEnableAutomaticChecks
+          type: int
+          value: 1
+
+        - domain: com.freron.MailMate
+          key: MmAllowedImageURLRegexp
+          type: string
+          value: https://((i|images)\.gr-assets\.com|www\.goodreads\.com|massdrop-s3\.imgix\.net)/.*
+
+        - domain: com.freron.MailMate
+          key: MmSendMessageDelayEnabled
+          type: bool
+          value: true
+
+        - domain: com.freron.MailMate
+          key: MmSendMessageDelay
+          type: int
+          value: 60
+
+  handlers:
+
+    - name: restart OS X system services
+      command: killall {{ item }}
+      with_items:
+        - Finder
+        - Dock
+        - SystemUIServer

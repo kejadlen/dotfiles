@@ -1,15 +1,6 @@
 - import_tasks: dock.yml
 - import_tasks: terminal.yml
 
-- name: set OS X defaults
-  osx_defaults:
-    domain: "{{ item.domain | default(omit) }}"
-    key: "{{ item.key }}"
-    type: "{{ item.type }}"
-    value: "{{ item.value }}"
-  with_items: "{{ osx_defaults }}"
-  notify: restart OS X system services
-
 - file: path=~/Library/KeyBindings state=directory
 - name: Symlink Emacs-style keybindings for OS X
   file:

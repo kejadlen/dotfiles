@@ -12,6 +12,7 @@
       ignore_errors: yes
 
 - import_playbook: playbooks/homebrew.yml
+- import_playbook: playbooks/defaults.yml
 
 - hosts: os_MacOSX
   roles:
