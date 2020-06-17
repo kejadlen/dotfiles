@@ -7,4 +7,9 @@
   "~<" = "moveToBeginningOfDocument:";
   "~>" = "moveToEndOfDocument:";
   "~v" = "pageUp:";
+
+  "~[" = ("insertText:", "‘");
+  "~]" = ("insertText:", "’");
+  "~{" = ("insertText:", "“");
+  "~}" = ("insertText:", "”");
 }
