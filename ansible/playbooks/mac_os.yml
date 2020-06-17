@@ -1,0 +1,13 @@
+- hosts: all
+  tasks:
+    - group_by: key=os_{{ ansible_distribution }}
+      tags: always
+
+- hosts: os_MacOSX
+  tasks:
+    - file: path=~/Library/KeyBindings state=directory
+    - name: Symlink Emacs-style keybindings for OS X
+      file:
+        src: ~/.dotfiles/osx/DefaultKeyBinding.dict
+        dest: ~/Library/KeyBindings/DefaultKeyBinding.dict
+        state: link
