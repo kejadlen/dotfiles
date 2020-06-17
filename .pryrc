@@ -1,9 +1,8 @@
 Pry.config.editor = 'vim'
 
-Pry.prompt = [
-  proc { |target, _, _| "(#{Pry.view_clip(target)})> " },
-  proc { |target, _, _| "(#{Pry.view_clip(target)})| " },
-]
+Pry::Prompt.add :kejadlen, nil, %w[ > | ] do |_, _, _, sep|
+  "(#{Pry.view_clip(target)})#{sep} "
+end
 
 begin
   require 'pry-byebug'
