@@ -131,6 +131,11 @@
 				<key>date</key>
 				<date>2020-06-08T03:58:51Z</date>
 			</dict>
+			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2020-03-19T14:01:28Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/CSS.xml</key>
 			<dict>
 				<key>date</key>
@@ -145,6 +150,11 @@
 			<dict>
 				<key>date</key>
 				<date>2020-06-08T03:58:31Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/JavaScript.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2020-03-22T16:46:45Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Markdown.xml</key>
 			<dict>
@@ -178,13 +188,7 @@
 			</dict>
 		</dict>
 		<key>uninstalled</key>
-		<dict>
-			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2020-01-24T15:10:11Z</date>
-			</dict>
-		</dict>
+		<dict/>
 	</dict>
 	<key>isPinned</key>
 	<true/>
@@ -198,7 +202,7 @@
 			<key>name</key>
 			<string>Default</string>
 			<key>searchSnippets</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>icon</key>
@@ -226,11 +230,11 @@
 		<integer>8395520</integer>
 	</dict>
 	<key>shouldRestoreTabs</key>
-	<true/>
+	<false/>
 	<key>shouldShowStatusIcon</key>
 	<false/>
 	<key>shouldStartAtLogin</key>
-	<true/>
+	<false/>
 	<key>shouldSyncBookmarks</key>
 	<true/>
 	<key>shouldSyncDocsets</key>
