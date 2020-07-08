@@ -11,3 +11,13 @@
         src: ~/.dotfiles/osx/DefaultKeyBinding.dict
         dest: ~/Library/KeyBindings/DefaultKeyBinding.dict
         state: link
+
+    - name: Install Webster's 1913 dictionary
+      block:
+        - copy:
+            src: ~/.dotfiles/osx/websters-1913.dictionary
+            dest: ~/Library/Dictionaries/websters-1913.dictionary
+        - command: >
+            /usr/libexec/PlistBuddy
+            -c "Add :DCSActiveDictionaries:0 string /Users/alpha/Library/Containers/com.apple.Dictionary/Data/Library/Dictionaries/websters-1913.dictionary"
+            ~/Library/Preferences/com.apple.DictionaryServices.plist
