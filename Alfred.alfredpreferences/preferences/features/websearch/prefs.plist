@@ -34,6 +34,21 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>57FEE37F-A055-4911-9537-D3F0FCCEDE08</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>letterboxd</string>
+			<key>spaces</key>
+			<string>+</string>
+			<key>text</key>
+			<string>Search Letterboxd for '{query}'</string>
+			<key>url</key>
+			<string>https://letterboxd.com/search/{query}/</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
 		<key>A5E2DBA1-C7F6-4F89-8348-987E767FC291</key>
 		<dict>
 			<key>enabled</key>
@@ -70,12 +85,10 @@
 			<true/>
 			<key>keyword</key>
 			<string>spl</string>
-			<key>plusSpaces</key>
-			<false/>
 			<key>text</key>
 			<string>Search Seattle Public Library for '{query}'</string>
 			<key>url</key>
-			<string>http://seattle.bibliocommons.com/search?where=catalog&amp;t=smart&amp;q={query}&amp;search_category=keyword&amp;commit=search</string>
+			<string>https://seattle.bibliocommons.com/search?where=catalog&amp;t=smart&amp;q={query}&amp;search_category=keyword&amp;commit=search</string>
 			<key>utf8</key>
 			<true/>
 		</dict>
