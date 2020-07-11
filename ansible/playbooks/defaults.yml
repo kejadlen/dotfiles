@@ -21,10 +21,10 @@
           key: NSDisableAutomaticTermination
           type: bool
           value: true
-        - # subpixel rendering on non-Apple LCDs
+        - # disable font smoothing
           key: AppleFontSmoothing
           type: int
-          value: 2
+          value: 0
         - # full keyboard access
           key: AppleKeyboardUIMode
           type: int
@@ -222,7 +222,7 @@
         - domain: com.freron.MailMate
           key: MmAllowedImageURLRegexp
           type: string
-          value: https://((i|images)\.gr-assets\.com|www\.goodreads\.com|massdrop-s3\.imgix\.net)/.*
+          value: https://((i|images)\.gr-assets\.com|www\.goodreads\.com|massdrop-s3\.imgix\.net|.*\.cloudfront\.net|s3\.amazonaws\.com|files\.convertkitcdn\.com/assets/pictures)/.*
 
         - domain: com.freron.MailMate
           key: MmSendMessageDelayEnabled
