@@ -34,6 +34,7 @@
         - macvim
         - mas
         - mosh
+        - pandoc
         - reattach-to-user-namespace
         - ripgrep
         - ruby-install
@@ -41,6 +42,7 @@
         - tmux
         - tree
         - watch
+        - yarn
         - ykman
         - youtube-dl
         - zsh
@@ -82,6 +84,7 @@
         - font-source-code-pro
         - google-chrome
         - hammerspoon
+        - kaleidoscope
         - mailmate
         - netnewswire
         - night-owl
@@ -90,6 +93,7 @@
         - quicklook-csv
         - quicklook-json
         - signal
+        - sf-symbols
         - slack
         - transmit
         - twitterrific
