@@ -1,7 +1,7 @@
 - hosts: all
   tasks:
   - name: install rustup
-    shell: curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --default-toolchain nightly
+    shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     args:
       warn: False
 
