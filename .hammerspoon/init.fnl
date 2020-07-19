@@ -1,3 +1,5 @@
+(local log (hs.logger.new "log" "info"))
+
 (let [mash [:cmd :alt :ctrl]
       smash [:cmd :alt :ctrl :shift]
       wm {:left hs.layout.left50
@@ -17,7 +19,14 @@
   ;; defeat paste blocking
   (hs.hotkey.bind [:cmd :alt] "v" (fn [] (hs.eventtap.keyStrokes (hs.pasteboard.getContents)))))
 
-(set hs.urlevent.httpCallback (fn [scheme host params fullURL]
-  (if (string.find fullURL "^https?://.*[.]zoom.us/j/%d+")
-      (hs.urlevent.openURLWithBundle fullURL "us.zoom.xos")
-      (hs.urlevent.openURLWithBundle fullURL "org.mozilla.firefoxdeveloperedition"))))
+(set hs.logger.defaultLogLevel "info")
+
+(set hs.urlevent.httpCallback
+  (fn [scheme host params fullURL]
+    (let [command (.. "curl -Ls -o /dev/null -w %{url_effective} " fullURL)
+          handle (io.popen command)
+          url (handle:read "*a")]
+      (if (string.find url "^https?://.*[.]zoom.us/j/%d+")
+          (hs.urlevent.openURLWithBundle fullURL "us.zoom.xos")
+          (hs.urlevent.openURLWithBundle fullURL "org.mozilla.firefoxdeveloperedition")))))
+
