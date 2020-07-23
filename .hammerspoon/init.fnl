@@ -9,7 +9,7 @@
           :se [ 0.5 0.5 0.5 0.5 ]
           :sw [ 0 0.5 0.5 0.5 ]
           :max hs.layout.maximized}
-      move (fn [key] (let [win (hs.window.focusedWindow)
+      move (fn [key] (let [win (hs.window.frontmostWindow)
                            geo (. wm key)]
                        (win:move geo nil true)))]
   (hs.hotkey.bind mash "h" (fn [] (move :left)))
