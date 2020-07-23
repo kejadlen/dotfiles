@@ -188,6 +188,16 @@ if executable('fzf')
   nmap <Leader>b :Buffers<CR>
   nmap <Leader>f :Files<CR>
   nmap <Leader>t :Tags<CR>
+
+  " https://coreyja.com/vim-spelling-suggestions-fzf/
+  function! FzfSpellSink(word)
+    exe 'normal! "_ciw'.a:word
+  endfunction
+  function! FzfSpell()
+    let suggestions = spellsuggest(expand("<cword>"))
+    return fzf#run({'source': suggestions, 'sink': function("FzfSpellSink"), 'down': 10 })
+  endfunction
+  nnoremap z= :call FzfSpell()<CR>
 endif
 
 " gundo
