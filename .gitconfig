@@ -53,6 +53,7 @@
 	trustExitCode = true
 [init]
 	templatedir = ~/.git_templates
+	defaultBranch = main
 [diff]
 	algorithm = patience
 	tool = icdiff
