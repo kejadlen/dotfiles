@@ -125,3 +125,7 @@
 [submodule "src/fast-user-switching.alfredworkflow"]
 	path = src/fast-user-switching.alfredworkflow
 	url = https://github.com/kejadlen/fast-user-switching.alfredworkflow.git
+[submodule "src/soulver.alfredworkflow"]
+	path = src/soulver.alfredworkflow
+	url = git@github.com:kejadlen/soulver.alfredworkflow.git
+	branch = main
