@@ -76,9 +76,9 @@
 				<key>script</key>
 				<string>query=$1
 
-curl -v "https://$PIHOLE_HOST/admin/api.php?disable=300&amp;auth=$API_TOKEN"</string>
+curl -v "https://$PIHOLE_HOST/admin/api.php?disable={query}&amp;auth=$API_TOKEN"</string>
 				<key>scriptargtype</key>
-				<integer>1</integer>
+				<integer>0</integer>
 				<key>scriptfile</key>
 				<string></string>
 				<key>type</key>
@@ -103,7 +103,7 @@ curl -v "https://$PIHOLE_HOST/admin/api.php?disable=300&amp;auth=$API_TOKEN"</st
 				<key>items</key>
 				<string>[{"title":"30 seconds","arg":"30"},{"title":"1 minute","arg":"60"},{"title":"5 minutes","arg":"120","subtitle":""}]</string>
 				<key>keyword</key>
-				<string>pihole</string>
+				<string>ph</string>
 				<key>runningsubtext</key>
 				<string></string>
 				<key>subtext</key>
