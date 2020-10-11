@@ -9,13 +9,26 @@
 			<key>enabled</key>
 			<true/>
 			<key>keyword</key>
-			<string>goodreads</string>
-			<key>plusSpaces</key>
-			<true/>
+			<string>gr</string>
+			<key>spaces</key>
+			<string>+</string>
 			<key>text</key>
 			<string>Search Goodreads for '{query}'</string>
 			<key>url</key>
 			<string>https://www.goodreads.com/search?utf8=%E2%9C%93&amp;query={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+		<key>44474AB2-A23A-4D3C-AB64-0DFE164ED23A</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>sh</string>
+			<key>text</key>
+			<string>Sci-Hub</string>
+			<key>url</key>
+			<string>https://sci-hub.tw/{query}</string>
 			<key>utf8</key>
 			<true/>
 		</dict>
@@ -24,9 +37,7 @@
 			<key>enabled</key>
 			<true/>
 			<key>keyword</key>
-			<string>amazon</string>
-			<key>plusSpaces</key>
-			<false/>
+			<string>a</string>
 			<key>text</key>
 			<string>Search Amazon Smile for '{query}'</string>
 			<key>url</key>
@@ -39,7 +50,7 @@
 			<key>enabled</key>
 			<true/>
 			<key>keyword</key>
-			<string>letterboxd</string>
+			<string>lb</string>
 			<key>spaces</key>
 			<string>+</string>
 			<key>text</key>
