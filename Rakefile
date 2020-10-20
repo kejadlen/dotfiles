@@ -74,12 +74,8 @@ end
 
 namespace :pave do
   PATHS = %w[
-    BTSync/
     Downloads/
-    Dropbox/
-    Library/Application\ Support/Adium\ 2.0
     Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist
-    Library/Preferences/com.adiumX.adiumX.plist
   ]
 
   desc "Backup files for paving"
