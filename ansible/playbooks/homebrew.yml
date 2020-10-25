@@ -25,6 +25,7 @@
         - direnv
         - exa
         - fasd
+        - ffmpeg
         - fzf
         - git
         - git-lfs
@@ -78,6 +79,7 @@
         - fantastical
         - firefox-developer-edition
         - flotato
+        - font-atkinson-hyperlegible
         - font-fira-mono
         - font-hack
         - font-hasklig
