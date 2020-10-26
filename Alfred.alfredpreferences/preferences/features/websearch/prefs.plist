@@ -28,7 +28,7 @@
 			<key>text</key>
 			<string>Sci-Hub</string>
 			<key>url</key>
-			<string>https://sci-hub.tw/{query}</string>
+			<string>https://sci-hub.st/{query}</string>
 			<key>utf8</key>
 			<true/>
 		</dict>
