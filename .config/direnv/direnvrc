@@ -2,3 +2,9 @@ bundle() {
   PATH_add .bundle/bin
   export GEM_HOME="`pwd`/.bundle"
 }
+
+layout_k8s() {
+  if [ $commands[kubectl] ]; then
+    source <(kubectl completion zsh)
+  fi
+}
