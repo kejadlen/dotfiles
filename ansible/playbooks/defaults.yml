@@ -170,6 +170,11 @@
           key: _FXShowPosixPathInTitle
           type: bool
           value: true
+        - # remove the proxy icon hover delay
+          domain: com.apple.Finder
+          key: NSToolbarTitleViewRolloverDelay
+          type: float
+          value: 0
 
         - # set date format in menubar
           domain: com.apple.menuextra.clock
