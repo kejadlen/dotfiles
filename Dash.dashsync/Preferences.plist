@@ -72,7 +72,7 @@
 			<key>rake</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T03:58:33Z</date>
+				<date>2020-12-21T17:00:18Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -104,7 +104,30 @@
 	<key>DHUserRepo</key>
 	<dict>
 		<key>installed</key>
-		<dict/>
+		<dict>
+			<key>J</key>
+			<dict>
+				<key>date</key>
+				<date>2020-12-30T17:56:50Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array>
+						<string>JSoftware</string>
+					</array>
+					<key>authorLinkHref</key>
+					<string>https://github.com/Kapeli/Dash-User-Contributions/tree/master/docsets/J#readme</string>
+					<key>authorLinkText</key>
+					<string>Tim Hosgood</string>
+					<key>name</key>
+					<string>J</string>
+					<key>platform</key>
+					<string>usercontribJ</string>
+					<key>uniqueIdentifier</key>
+					<string>J</string>
+				</dict>
+			</dict>
+		</dict>
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
@@ -171,11 +194,6 @@
 				<key>date</key>
 				<date>2020-06-08T04:00:08Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2020-06-08T03:59:43Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/Rust.xml</key>
 			<dict>
 				<key>date</key>
@@ -188,7 +206,18 @@
 			</dict>
 		</dict>
 		<key>uninstalled</key>
-		<dict/>
+		<dict>
+			<key>http://kapeli.com/feeds/Ruby.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2020-12-30T17:57:17Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2020-12-30T17:56:32Z</date>
+			</dict>
+		</dict>
 	</dict>
 	<key>isPinned</key>
 	<true/>
@@ -244,7 +273,7 @@
 	<key>shouldSyncView</key>
 	<true/>
 	<key>showInDock</key>
-	<true/>
+	<false/>
 	<key>versionedDHCheatRepo</key>
 	<dict>
 		<key>installed</key>
@@ -342,10 +371,10 @@
 		<dict>
 			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
 			<dict>
-				<key>2.7.0</key>
+				<key>2.7.2</key>
 				<dict>
 					<key>date</key>
-					<date>2020-06-08T03:58:37Z</date>
+					<date>2020-12-30T17:57:37Z</date>
 				</dict>
 			</dict>
 		</dict>
@@ -357,6 +386,11 @@
 				<dict>
 					<key>date</key>
 					<date>2019-12-30T18:32:20Z</date>
+				</dict>
+				<key>2.7.0</key>
+				<dict>
+					<key>date</key>
+					<date>2020-12-30T17:57:25Z</date>
 				</dict>
 			</dict>
 		</dict>
