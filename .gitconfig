@@ -88,3 +88,5 @@
 	smudge = git-lfs smudge -- %f
 [advice]
 	addEmptyPathspec = false
+[rerere]
+	enabled = true
