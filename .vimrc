@@ -211,6 +211,7 @@ nmap Y <Plug>(operator-flashy)$
 let g:vimwiki_global_ext = 0
 let g:vimwiki_key_mappings = { 'headers': 0 } " `-` conflicts w/vim-vinegar
 let g:vimwiki_list = [{'path': '~/sync/alphanote/', 'syntax': 'markdown', 'ext': '.md'}]
+map <leader>wx <Plug>VimwikiToggleListItem
 
 " vim-sleuth
 
