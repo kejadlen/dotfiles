@@ -66,8 +66,6 @@
 			<true/>
 			<key>keyword</key>
 			<string>pb</string>
-			<key>plusSpaces</key>
-			<false/>
 			<key>text</key>
 			<string>Search Pinboard for '{query}'</string>
 			<key>url</key>
@@ -81,8 +79,6 @@
 			<true/>
 			<key>keyword</key>
 			<string>pbt</string>
-			<key>plusSpaces</key>
-			<false/>
 			<key>text</key>
 			<string>Search Pinboard tags for '{query}'</string>
 			<key>url</key>
