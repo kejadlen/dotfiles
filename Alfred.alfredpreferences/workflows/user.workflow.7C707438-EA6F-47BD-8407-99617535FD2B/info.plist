@@ -75,7 +75,7 @@
 				<key>destinationuid</key>
 				<string>F62F8089-105F-4DDE-8FE3-BAD81EBE0CF3</string>
 				<key>modifiers</key>
-				<integer>524288</integer>
+				<integer>1048576</integer>
 				<key>modifiersubtext</key>
 				<string>Paste into front most app</string>
 				<key>vitoclose</key>
@@ -141,7 +141,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>./rsa-auth --serial=$SERIAL --seed=$SEED | tr -d '\n'</string>
+				<string>./rsa-token $SERIAL $SEED | tr -d '\n'</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
@@ -205,6 +205,8 @@
 				<string>{query}</string>
 				<key>textcolor</key>
 				<string></string>
+				<key>wrapat</key>
+				<integer>50</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.output.largetype</string>
