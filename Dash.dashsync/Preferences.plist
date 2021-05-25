@@ -141,10 +141,18 @@
 		<dict>
 			<key>~/Library/Application Support/Dash/DocSets/JavaScript/JavaScript.docset</key>
 			<string>js:</string>
+			<key>~/Library/Application Support/Dash/DocSets/Markdown/Markdown.docset</key>
+			<string>markdown:</string>
 			<key>~/Library/Application Support/Dash/DocSets/NodeJS/NodeJS.docset</key>
 			<string>nodejs:</string>
+			<key>~/Library/Application Support/Dash/DocSets/Python_3/Python 3.docset</key>
+			<string>python:</string>
+			<key>~/Library/Application Support/Dash/DocSets/Ruby_3/Ruby.docset</key>
+			<string>Ruby:</string>
 			<key>~/Library/Application Support/Dash/Ruby DocSets/rake/rake.docset</key>
 			<string>gem:</string>
+			<key>~/Library/Application Support/Dash/Versioned DocSets/Ruby 2 - DHDocsetDownloader/2-7-2/Ruby.docset</key>
+			<string>rb:</string>
 		</dict>
 	</dict>
 	<key>feeds</key>
@@ -191,10 +199,20 @@
 				<key>date</key>
 				<date>2020-06-08T03:58:09Z</date>
 			</dict>
+			<key>http://kapeli.com/feeds/Python_3.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2021-05-13T02:02:55Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/Racket.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2020-06-08T04:00:08Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Ruby_3.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2021-05-13T02:04:21Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Rust.xml</key>
 			<dict>
@@ -376,7 +394,7 @@
 				<key>2.7.2</key>
 				<dict>
 					<key>date</key>
-					<date>2020-12-30T17:57:37Z</date>
+					<date>2021-05-24T02:52:20Z</date>
 				</dict>
 			</dict>
 		</dict>
