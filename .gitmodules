@@ -127,5 +127,8 @@
 	url = https://github.com/kejadlen/fast-user-switching.alfredworkflow.git
 [submodule "src/soulver.alfredworkflow"]
 	path = src/soulver.alfredworkflow
-	url = git@github.com:kejadlen/soulver.alfredworkflow.git
+	url = https://github.com/kejadlen/soulver.alfredworkflow.git
 	branch = main
+[submodule ".vim/pack/alpha/start/vim-terraform"]
+	path = .vim/pack/alpha/start/vim-terraform
+	url = https://github.com/hashivim/vim-terraform.git

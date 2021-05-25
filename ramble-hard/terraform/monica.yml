@@ -1,0 +1,8 @@
+env:
+  APP_ENV: production
+  # DB_HOST: monica-mariadb
+
+mariadb:
+  enabled: true
+  primary:
+    persistence: true

@@ -1,0 +1,15 @@
+ingressRoute:
+  dashboard:
+    enabled: true
+    annotations: { traefik.ingress.kubernetes.io/router.tls: "true" }
+
+ports:
+  web:
+    redirectTo: websecure
+
+additionalArguments:
+  - "--log.level=INFO"
+  - "--entrypoints.websecure.http.tls"
+  - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
+  - "--ping"
+  - "--metrics.prometheus"
