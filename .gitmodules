@@ -132,3 +132,6 @@
 [submodule ".vim/pack/alpha/start/vim-terraform"]
 	path = .vim/pack/alpha/start/vim-terraform
 	url = https://github.com/hashivim/vim-terraform.git
+[submodule ".vim/pack/alpha/start/vim-nix"]
+	path = .vim/pack/alpha/start/vim-nix
+	url = https://github.com/LnL7/vim-nix.git
