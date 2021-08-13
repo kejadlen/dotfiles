@@ -1,0 +1,172 @@
+---
+- hosts: pixelfed
+  tasks:
+
+  - apt:
+      update_cache: yes
+
+  # https://docs.pixelfed.org/running-pixelfed/prerequisites.html
+  - package:
+      name:
+        - git
+        - python-psycopg2 # required for postgresql_user task
+
+        # pixelfed dependencies
+        - nginx
+        - postgresql
+        - php-fpm
+        - php-bcmath
+        - php-curl
+        - php-gd
+        - php-intl
+        - php-mbstring
+        - php-pgsql
+        - php-redis
+        - php-xml
+        - php-zip
+        - redis
+
+  - community.postgresql.postgresql_db:
+      name: pixelfed
+    become: true
+    become_user: postgres
+  - community.postgresql.postgresql_user:
+      db: pixelfed
+      name: pixelfed
+      password: "{{ pixelfed_db_password }}"
+      # role_attr_flags: CREATEDB
+    become: true
+    become_user: postgres
+
+  - copy:
+      src: /etc/php/7.3/fpm/pool.d/www.conf
+      dest: /etc/php/7.3/fpm/pool.d/pixelfed.conf
+      remote_src: yes
+  - lineinfile:
+      path: /etc/php/7.3/fpm/pool.d/pixelfed.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    loop:
+      - { regexp: "\\[www\\]", line: "[pixelfed]" }
+      - { regexp: "^user =", line: "user = pixelfed" }
+      - { regexp: "^group =", line: "group = pixelfed" }
+      - { regexp: "^listen =", line: "listen = /run/php/pixelfed.sock" }
+      - { regexp: "^;listen.mode =", line: "listen.mode = 0660" }
+    notify: Restart php-fpm
+
+  # - lineinfile:
+  #     path: /etc/redis/redis.conf
+  #     regexp: "{{ item.regexp }}"
+  #     line: "{{ item.line }}"
+  #   loop:
+  #     - { regexp: "^# unixsocket ", line: "unixsocket /var/run/redis/redis.sock" }
+  #     - { regexp: "^# unixsocketperm ", line: "unixsocketperm 770" }
+
+  - user:
+      name: pixelfed
+
+  # https://docs.pixelfed.org/running-pixelfed/installation.html#setting-up-pixelfed-files
+  - git:
+      repo: "https://github.com/pixelfed/pixelfed.git"
+      dest: /usr/share/pixelfed
+      version: dev
+
+  - file:
+      path: /usr/share/pixelfed
+      recurse: yes
+      owner: pixelfed
+      group: pixelfed
+
+  handlers:
+
+    - name: Restart php-fpm
+      service:
+        name: php7.3-fpm
+        state: restarted
+
+- hosts: pixelfed
+  become: yes
+  become_user: pixelfed
+  tasks:
+
+  - get_url:
+      url: https://getcomposer.org/installer
+      dest: /usr/share/pixelfed/composer-setup.php
+  - file:
+      path: /usr/share/pixelfed/bin
+      state: directory
+  - command: php composer-setup.php --install-dir=bin --filename=composer
+    args:
+      chdir: /usr/share/pixelfed
+
+  - community.general.composer:
+      command: install
+      working_dir: /usr/share/pixelfed
+      composer_executable: /usr/share/pixelfed/bin/composer
+
+  - copy:
+      src: /usr/share/pixelfed/.env.example
+      dest: /usr/share/pixelfed/.env
+      remote_src: yes
+  - lineinfile:
+      path: /usr/share/pixelfed/.env
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    loop:
+      - { regexp: "^APP_NAME=", line: "APP_NAME={{ pixelfed_app_name }}" }
+      - { regexp: "^APP_KEY=", line: "APP_KEY={{ pixelfed_app_key }}" }
+      - { regexp: "^APP_URL=", line: "APP_URL={{ pixelfed_app_url }}" }
+      - { regexp: "^APP_DOMAIN=", line: "APP_DOMAIN={{ pixelfed_domain }}" }
+      - { regexp: "^ADMIN_DOMAIN=", line: "ADMIN_DOMAIN={{ pixelfed_domain }}" }
+      - { regexp: "^SESSION_DOMAIN=", line: "SESSION_DOMAIN={{ pixelfed_domain }}" }
+      - { regexp: "^DB_CONNECTION=", line: "DB_CONNECTION=pgsql" }
+      - { regexp: "^DB_PORT=", line: "DB_PORT=5432" }
+      - { regexp: "^DB_PASSWORD=", line: "DB_PASSWORD={{ pixelfed_db_password }}" }
+      - { regexp: "^ACTIVITY_PUB=", line: "ACTIVITY_PUB=true" }
+      - { regexp: "^AP_REMOTE_FOLLOW=", line: "AP_REMOTE_FOLLOW=true" }
+
+  - command: php artisan {{ item }}
+    args:
+      chdir: /usr/share/pixelfed
+    loop:
+      - storage:link
+      - migrate --force
+      - import:cities
+      - instance:actor
+      - route:cache
+      - view:cache
+      - horizon:install
+      - horizon:publish
+
+- hosts: pixelfed
+  tasks:
+
+  - copy:
+      src: pixelfed.service
+      dest: /etc/systemd/system/pixelfed.service
+    become: yes
+
+  - service:
+      name: pixelfed
+      enabled: yes
+      state: restarted
+
+  - cron:
+      job: /usr/bin/php /usr/share/pixelfed/artisan schedule:run >> /dev/null 2>&1
+
+  - template:
+      src: pixelfed.nginx
+      dest: /etc/nginx/sites-available/pixelfed.conf
+    notify: Restart nginx
+  - file:
+      src: /etc/nginx/sites-available/pixelfed.conf
+      dest: /etc/nginx/sites-enabled/pixelfed.conf
+      state: link
+    notify: Restart nginx
+
+  handlers:
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted

@@ -1,0 +1,16 @@
+[Unit]
+Description=Pixelfed task queueing via Laravel Horizon
+After=network.target
+Requires=postgresql
+Requires=php-fpm
+Requires=redis
+Requires=nginx
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/php /usr/share/pixelfed/artisan horizon
+User=pixelfed
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

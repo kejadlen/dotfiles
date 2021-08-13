@@ -1,0 +1,21 @@
+---
+- hosts: all
+  tasks:
+
+  - apt:
+      update_cache: yes
+
+  - package:
+      name:
+      - certbot
+
+  - command: >
+      certbot certonly --standalone --preferred-challenges http
+      -n --agree-tos -m {{ lets_encrypt_email }}
+      -d {{ item }}
+    loop: "{{ lets_encrypt_tlds }}"
+
+  - template:
+      src: renew-certs
+      dest: /etc/cron.daily/renew-certs
+      mode: +x
