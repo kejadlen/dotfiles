@@ -1,0 +1,48 @@
+# https://docs.docker.com/engine/install/debian/
+
+- hosts: docker
+  tasks:
+
+  - name: install dependencies
+    apt:
+      name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+
+        # Needed for Ansible
+        - docker-compose
+        - python3-pip
+      state: present
+
+  - name: install python docker packages
+    pip:
+      name:
+        - docker
+        - docker-compose
+      state: latest
+
+  - name: add docker gpg key
+    apt_key:
+      url: https://download.docker.com/linux/debian/gpg
+      state: present
+
+  - name: get docker release
+    command: lsb_release -cs
+    register: lsb_release
+
+  - name: add docker apt repo
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/debian {{ lsb_release.stdout | trim}} stable
+      state: present
+
+  - name: install docker engine
+    apt:
+      update_cache: true
+      name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+      state: present

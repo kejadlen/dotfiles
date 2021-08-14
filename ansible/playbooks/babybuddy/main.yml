@@ -1,0 +1,40 @@
+---
+- hosts: babybuddy
+  tasks:
+
+  - file:
+      path: /usr/share/babybuddy
+      state: directory
+
+  - docker_compose:
+      project_name: babybuddy
+      definition:
+        version: "2.1"
+        services:
+          babybuddy:
+            image: ghcr.io/linuxserver/babybuddy
+            container_name: babybuddy
+            environment:
+              - TZ=America/Los_Angeles
+            volumes:
+              - /usr/share/babybuddy:/config
+            ports:
+              - 8000:8000
+            restart: unless-stopped
+
+  - template:
+      src: babybuddy.nginx
+      dest: /etc/nginx/sites-available/babybuddy.conf
+    notify: Restart nginx
+  - file:
+      src: /etc/nginx/sites-available/babybuddy.conf
+      dest: /etc/nginx/sites-enabled/babybuddy.conf
+      state: link
+    notify: Restart nginx
+
+  handlers:
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
