@@ -9,11 +9,19 @@
       name:
       - certbot
 
+  - service:
+      name: nginx
+      state: stopped
+
   - command: >
       certbot certonly --standalone --preferred-challenges http
       -n --agree-tos -m {{ lets_encrypt_email }}
       -d {{ item }}
     loop: "{{ lets_encrypt_tlds }}"
+
+  - service:
+      name: nginx
+      state: started
 
   - template:
       src: renew-certs

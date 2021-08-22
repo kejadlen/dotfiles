@@ -9,7 +9,7 @@
   - package:
       name:
         - git
-        - python-psycopg2 # required for postgresql_user task
+        - python3-psycopg2 # required for postgresql_user task
 
         # pixelfed dependencies
         - nginx
@@ -37,6 +37,12 @@
       # role_attr_flags: CREATEDB
     become: true
     become_user: postgres
+
+  - lineinfile:
+      path: /etc/php/7.3/fpm/php.ini
+      regexp: "^upload_max_filesize = "
+      line: "upload_max_filesize = 6M"
+    notify: Restart php-fpm
 
   - copy:
       src: /etc/php/7.3/fpm/pool.d/www.conf
@@ -122,8 +128,16 @@
       - { regexp: "^DB_CONNECTION=", line: "DB_CONNECTION=pgsql" }
       - { regexp: "^DB_PORT=", line: "DB_PORT=5432" }
       - { regexp: "^DB_PASSWORD=", line: "DB_PASSWORD={{ pixelfed_db_password }}" }
+      - { regexp: "^MAIL_DRIVER=", line: "MAIL_DRIVER=smtp" }
+      - { regexp: "^MAIL_HOST=", line: "MAIL_HOST={{ pixelfed_mail_host }}" }
+      - { regexp: "^MAIL_PORT=", line: "MAIL_PORT={{ pixelfed_mail_port }}" }
+      - { regexp: "^MAIL_USERNAME=", line: "MAIL_USERNAME={{ pixelfed_mail_username }}" }
+      - { regexp: "^MAIL_PASSWORD=", line: "MAIL_PASSWORD={{ pixelfed_mail_password }}" }
+      - { regexp: "^MAIL_ENCRYPTION=", line: "MAIL_ENCRYPTION={{ pixelfed_mail_encryption }}" }
+      - { regexp: "^MAIL_FROM_ADDRESS=", line: "MAIL_FROM_ADDRESS={{ pixelfed_mail_from_address }}" }
       - { regexp: "^ACTIVITY_PUB=", line: "ACTIVITY_PUB=true" }
       - { regexp: "^AP_REMOTE_FOLLOW=", line: "AP_REMOTE_FOLLOW=true" }
+    notify: Clear Pixelfed cache
 
   - command: php artisan {{ item }}
     args:
@@ -137,6 +151,12 @@
       - view:cache
       - horizon:install
       - horizon:publish
+
+  handlers:
+    - name: Clear Pixelfed cache
+      command: php artisan config:cache
+      args:
+        chdir: /usr/share/pixelfed
 
 - hosts: pixelfed
   tasks:
