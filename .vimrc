@@ -115,6 +115,16 @@ augroup DisableAutoComment
   autocmd BufEnter * setlocal formatoptions-=o
 augroup END
 
+" https://vim.fandom.com/wiki/Autocomplete_with_TAB_when_typing_words
+function! TabOrComplete()
+  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+inoremap <tab> <c-r>=TabOrComplete()<cr>
+
 " }}}
 
 " GUI {{{
