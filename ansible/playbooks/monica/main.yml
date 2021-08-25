@@ -1,0 +1,72 @@
+---
+- hosts: monica
+  tasks:
+
+  - file:
+      path: /usr/share/monica/{{ item }}
+      state: directory
+    loop:
+      - app
+      - db
+      - php
+
+  - copy:
+      src: php.ini
+      dest: /usr/share/monica/php/uploads.ini
+
+  - docker_compose:
+      project_name: monica
+      definition:
+        version: "3.4"
+        services:
+          app:
+            image: monica
+            depends_on:
+              - db
+            ports:
+              - 8080:80
+            environment:
+              - APP_ENV=production
+              - APP_KEY={{ monica_app_key }}
+              - DB_HOST=db
+              - DB_USERNAME=monica
+              - DB_PASSWORD={{ monica_db_password }}
+              - MAIL_HOST={{ sendgrid_mail_host }}
+              - MAIL_PORT={{ sendgrid_mail_port }}
+              - MAIL_USERNAME={{ sendgrid_mail_username }}
+              - MAIL_PASSWORD={{ sendgrid_mail_password }}
+              - MAIL_ENCRYPTION={{ monica_mail_encryption }}
+              - MAIL_FROM_ADDRESS={{ monica_mail_from_address }}
+              - MAIL_FROM_NAME=Monica
+              - APP_EMAIL_NEW_USERS_NOTIFICATION={{ monica_app_email_new_users_notification }}
+            volumes:
+              - /usr/share/monica/app:/var/www/html/storage
+              - /usr/share/monica/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+            restart: always
+          db:
+            image: mysql:5.7
+            environment:
+              - MYSQL_RANDOM_ROOT_PASSWORD=true
+              - MYSQL_DATABASE=monica
+              - MYSQL_USER=monica
+              - MYSQL_PASSWORD={{ monica_db_password }}
+            volumes:
+              - /usr/share/monica/db:/var/lib/mysql
+            restart: always
+
+  - template:
+      src: monica.nginx
+      dest: /etc/nginx/sites-available/monica.conf
+    notify: Restart nginx
+  - file:
+      src: /etc/nginx/sites-available/monica.conf
+      dest: /etc/nginx/sites-enabled/monica.conf
+      state: link
+    notify: Restart nginx
+
+  handlers:
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
