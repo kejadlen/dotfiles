@@ -21,3 +21,21 @@
             /usr/libexec/PlistBuddy
             -c "Add :DCSActiveDictionaries:0 string /Users/alpha/Library/Containers/com.apple.Dictionary/Data/Library/Dictionaries/websters-1913.dictionary"
             ~/Library/Preferences/com.apple.DictionaryServices.plist
+
+    - name: Enable Touch ID for sudo
+      become: yes
+      lineinfile:
+        path: /etc/pam.d/sudo
+        insertafter: '^auth\s+sufficient'
+        regexp: '^auth\s+sufficient\s+pam_tid.so$'
+        line: "auth\tsufficient\tpam_tid.so"
+    - name: Enable Touch ID for sudo in tmux
+      block:
+        - shell: brew --prefix
+          register: brew_prefix
+        - lineinfile:
+            path: /etc/pam.d/sudo
+            insertbefore: '^auth\tsufficient\tpam_tid.so'
+            regexp: '^auth\s+optional\s+.*pam_reattach.so$'
+            line: "auth\toptional\t{{ brew_prefix.stdout | trim }}/lib/pam/pam_reattach.so"
+          become: yes

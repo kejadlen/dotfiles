@@ -25,6 +25,7 @@
         - direnv
         - exa
         - fasd
+        - fd
         - ffmpeg
         - fzf
         - git
@@ -47,6 +48,7 @@
         - ykman
         - youtube-dl
         - zsh
+        - fabianishere/personal/pam_reattach
 
   - name: install universal ctags
     homebrew:
@@ -84,7 +86,6 @@
         - font-hack
         - font-hasklig
         - font-source-code-pro
-        - google-chrome
         - hammerspoon
         - kaleidoscope
         - mailmate
