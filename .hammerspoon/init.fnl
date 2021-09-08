@@ -1,20 +1,22 @@
 (local log (hs.logger.new "log" "info"))
 
+(set hs.window.animationDuration 0.0)
+(hs.loadSpoon "MiroWindowsManager")
 (let [mash [:cmd :alt :ctrl]
-      smash [:cmd :alt :ctrl :shift]
-      wm {:left hs.layout.left50
-          :right hs.layout.right50
-          :ne [ 0.5 0 0.5 0.5 ]
-          :nw [ 0 0 0.5 0.5 ]
-          :se [ 0.5 0.5 0.5 0.5 ]
-          :sw [ 0 0.5 0.5 0.5 ]
-          :max hs.layout.maximized}
-      move (fn [key] (let [win (hs.window.frontmostWindow)
-                           geo (. wm key)]
-                       (win:move geo nil true)))]
-  (hs.hotkey.bind mash "h" (fn [] (move :left)))
-  (hs.hotkey.bind mash "l" (fn [] (move :right)))
-  (hs.hotkey.bind mash "m" (fn [] (move :max)))
+      smash [:cmd :alt :ctrl :shift]]
+  (spoon.MiroWindowsManager:bindHotkeys {
+    :up         [ mash  "k" ]
+    :left       [ mash  "h" ]
+    :down       [ mash  "j" ]
+    :right      [ mash  "l" ]
+    :fullscreen [ mash  "m" ]
+    :center     [ mash  "c" ]
+    :move       [ smash "m" ]
+    :resize     [ mash  "d" ]
+  }))
+
+(let [mash [:cmd :alt :ctrl]
+      smash [:cmd :alt :ctrl :shift]]
 
   ;; defeat paste blocking
   (hs.hotkey.bind [:cmd :alt] "v" (fn [] (hs.eventtap.keyStrokes (hs.pasteboard.getContents)))))
