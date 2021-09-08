@@ -30,3 +30,12 @@
           (hs.urlevent.openURLWithBundle fullURL "us.zoom.xos")
           (hs.urlevent.openURLWithBundle fullURL "org.mozilla.firefoxdeveloperedition")))))
 
+(hs.loadSpoon "ReloadConfiguration")
+(spoon.ReloadConfiguration:start)
+
+(let [n (hs.notify.new {
+           :title "Hammerspoon"
+           :informativeText "Config loaded"
+           :withdrawAfter 2
+         })]
+  (n:send))

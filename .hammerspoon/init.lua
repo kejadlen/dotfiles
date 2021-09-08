@@ -32,12 +32,3 @@ spoon.Quitter.quitAppsAfter = {
   ["com.tinyspeck.slackmacgap"] = 600,
 }
 -- spoon.Quitter:start()
-
-hs.loadSpoon("ReloadConfiguration")
-spoon.ReloadConfiguration:start()
-
-hs.notify.new({
-  title = "Hammerspoon",
-  informativeText = "Config loaded",
-  withdrawAfter = 2,
-}):send()
