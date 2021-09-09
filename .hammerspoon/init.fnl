@@ -18,6 +18,9 @@
 (let [mash [:cmd :alt :ctrl]
       smash [:cmd :alt :ctrl :shift]]
 
+  ;; debugging
+  ;; (hs.hotkey.bind mash "d" (fn []))
+
   ;; defeat paste blocking
   (hs.hotkey.bind [:cmd :alt] "v" (fn [] (hs.eventtap.keyStrokes (hs.pasteboard.getContents)))))
 
