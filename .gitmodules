@@ -135,3 +135,6 @@
 [submodule ".vim/pack/alpha/start/vim-nix"]
 	path = .vim/pack/alpha/start/vim-nix
 	url = https://github.com/LnL7/vim-nix.git
+[submodule ".vim/pack/alpha/start/riv.vim"]
+	path = .vim/pack/alpha/start/riv.vim
+	url = https://github.com/gu-fan/riv.vim
