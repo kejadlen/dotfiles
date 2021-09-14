@@ -8,7 +8,7 @@
 - [ ] Install Ansible
   `brew install ansible`
 
-- [ ] Install `mas
+- [ ] Install `mas`
   `brew install mas`
   - [ ] Sign in to the Mac App Store
 
@@ -26,12 +26,13 @@
   ```
 
 - [ ] macOS preferences
-  - [ ] General
-    - [ ] Appearance -> Auto
   - [ ] Displays
     - [ ] Night Shift
   - [ ] Keyboard
+    - [ ] Modifier keys
     - [ ] Function keys
+  - [ ] Siri
+    - [ ] Disable `Show Siri in menu bar`
 
 - [ ] Setup programs
   - [ ] 1Password
@@ -45,5 +46,6 @@
   - [ ] Firefox
   - [ ] MailMate
   - [ ] Slack
+  - [ ] Discord
   - [ ] hammerspoon
   - [ ] syncthing
