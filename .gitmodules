@@ -138,3 +138,6 @@
 [submodule ".vim/pack/alpha/start/riv.vim"]
 	path = .vim/pack/alpha/start/riv.vim
 	url = https://github.com/gu-fan/riv.vim
+[submodule ".vim/pack/alpha/start/vim-ledger"]
+	path = .vim/pack/alpha/start/vim-ledger
+	url = https://github.com/ledger/vim-ledger
