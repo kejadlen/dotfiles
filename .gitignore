@@ -4,6 +4,7 @@ private/**/*
 .config
 .pentadactyl/info
 .ssh/*_rsa
+.ssh/config.local
 .ssh/known_hosts
 .vim/.VimballRecord
 .vim/.netrwhist
