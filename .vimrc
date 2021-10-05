@@ -115,15 +115,20 @@ augroup DisableAutoComment
   autocmd BufEnter * setlocal formatoptions-=o
 augroup END
 
-" https://vim.fandom.com/wiki/Autocomplete_with_TAB_when_typing_words
-function! TabOrComplete()
-  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-    return "\<C-N>"
-  else
+" :help ins-completion
+function! CleverTab()
+  if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
     return "\<Tab>"
+
+  " https://vim.fandom.com/wiki/Smart_mapping_for_tab_completion
+  elseif exists('&omnifunc') && &omnifunc != ''
+    return "\<C-X>\<C-O>"
+
+  else
+    return "\<C-N>"
   endif
 endfunction
-inoremap <tab> <c-r>=TabOrComplete()<cr>
+inoremap <Tab> <C-R>=CleverTab()<CR>
 
 " }}}
 
