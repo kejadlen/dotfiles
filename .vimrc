@@ -45,8 +45,8 @@ colorscheme paramount
 fun! s:highlight()
   " highlight Normal ctermbg=235
   highlight Normal ctermbg=NONE
-"   highlight CursorLine ctermbg=236
-"   highlight MatchParen ctermbg=238
+  " highlight CursorLine ctermbg=236
+  " highlight MatchParen ctermbg=238
 endfun
 
 augroup MyHighlight
