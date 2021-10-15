@@ -16,6 +16,7 @@
 
   - docker_compose:
       project_name: monica
+      pull: yes
       definition:
         version: "3.4"
         services:
