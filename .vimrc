@@ -47,6 +47,10 @@ fun! s:highlight()
   highlight Normal ctermbg=NONE
   " highlight CursorLine ctermbg=236
   " highlight MatchParen ctermbg=238
+
+  " For the paramount colorscheme, since otherwise the contrast w/cursorline
+  " is insufficient.
+  highlight Comment ctermfg=243
 endfun
 
 augroup MyHighlight
@@ -171,6 +175,7 @@ set smartcase
 
 " https://github.com/haya14busa/is.vim/issues/4
 map n <Plug>(is-n)zv
+map N <Plug>(is-N)zv
 
 " }}}
 
