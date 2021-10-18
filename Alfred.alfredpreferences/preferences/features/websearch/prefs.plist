@@ -86,6 +86,19 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>D95FBD2E-C606-4167-BC0C-6E37B51081EA</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>bgg</string>
+			<key>text</key>
+			<string>Search BGG for '{query}'</string>
+			<key>url</key>
+			<string>https://boardgamegeek.com/geeksearch.php?action=search&amp;objecttype=boardgame&amp;q={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
 		<key>F548AE26-C2CD-485A-A0EA-6386E713D11C</key>
 		<dict>
 			<key>enabled</key>

@@ -7,9 +7,6 @@
 	<key>fallbacks</key>
 	<array>
 		<string>features.websearch.duckduckgo.fallback</string>
-		<string>features.websearch.google.fallback</string>
-		<string>features.websearch.wiki.fallback</string>
-		<string>features.websearch.custom.491B807D-42B3-4CB4-861F-2ADF20727F53.fallback</string>
 	</array>
 </dict>
 </plist>
