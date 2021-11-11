@@ -15,16 +15,13 @@ obj.license = "MIT - https://opensource.org/licenses/MIT"
 obj.logger = hs.logger.new("quitter", "debug")
 obj.lastFocused = {}
 obj.windowFocusedFn = function(window, appName)
-  local bundleID = window:application():bundleID()
-  if not obj.quitAppsAfter[bundleID] then return end
-  obj.lastFocused[bundleID] = os.time()
+  local name = window:application():name()
+  obj.lastFocused[name] = os.time()
 end
 
 --- Quitter.quitAppsAfter
 --- Variable
---- Table of application bundle IDs to quit when unused. Use `mdls -name
---- --kMDItemCFBundleIdentifier -r /path/to/app` to find unknown bundle IDs.
-
+--- Table of applications to quit when unused.
 obj.quitAppsAfter = {}
 
 --- Quitter:start()
@@ -43,7 +40,11 @@ function obj:start()
   end)
 
   -- Set last focused time for relevant apps
-  self.windowFilter = hs.window.filter.default:subscribe(hs.window.filter.windowFocused, self.windowFocusedFn)
+  self.windowFilter = hs.window.filter.new(false)
+  for app, _ in pairs(self.quitAppsAfter) do
+    self.windowFilter:allowApp(app)
+  end
+  self.windowFilter:subscribe(hs.window.filter.windowFocused, self.windowFocusedFn)
 
   self.timer = hs.timer.doEvery(60, function()
     self:reap()
@@ -60,34 +61,36 @@ end
 ---  * None
 function obj:stop()
   self.watcher:stop()
-  self.windowFilter:unsubscribe(hs.window.filter.windowFocused, self.windowFocusedFn)
+  self.windowFilter:unsubscribe(hs.window.filter.windowFocused)
   self.timer:stop()
 end
 
 function obj:reset()
   hs.fnutils.ieach(hs.application.runningApplications(), function(app)
-    local bundleID = app:bundleID()
+    local name = app:name()
 
-    local duration = self.quitAppsAfter[bundleID]
+    local duration = self.quitAppsAfter[name]
     if not duration then return false end
 
-    self.lastFocused[bundleID] = os.time()
+    self.lastFocused[name] = os.time()
   end)
 end
 
 function obj:reap()
   self.logger.d("reaping")
   local appsToQuit = hs.fnutils.ifilter(hs.application.runningApplications(), function(app)
+    local appName = app:name()
+
     -- Don't quit the currently focused app
     if app:isFrontmost() then return false end
 
-    local duration = self.quitAppsAfter[app:bundleID()]
+    local duration = self.quitAppsAfter[appName]
     if not duration then return false end
 
-    local lastFocused = self.lastFocused[app:bundleID()]
+    local lastFocused = self.lastFocused[appName]
     if not lastFocused then return false end
 
-    self.logger.d("app: " .. app:name() .. " last focused at " .. lastFocused)
+    self.logger.d("app: " .. appName .. " last focused at " .. lastFocused)
 
     return (os.time() - lastFocused) > duration
   end)

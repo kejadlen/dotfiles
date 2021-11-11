@@ -35,8 +35,20 @@
           (hs.urlevent.openURLWithBundle fullURL "us.zoom.xos")
           (hs.urlevent.openURLWithBundle fullURL "org.mozilla.firefoxdeveloperedition")))))
 
+;; Spoons
+
 (hs.loadSpoon "ReloadConfiguration")
 (spoon.ReloadConfiguration:start)
+
+(hs.loadSpoon "Quitter")
+(set spoon.Quitter.quitAppsAfter {
+  :Discord      300
+  :MailMate     300
+  :Messages     300
+  :Slack        300
+  :Twitterrific 300
+})
+(spoon.Quitter:start)
 
 (let [n (hs.notify.new {
            :title "Hammerspoon"
