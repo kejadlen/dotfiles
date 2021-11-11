@@ -1,4 +1,2 @@
 #!/bin/sh
-{% for tld in lets_encrypt_tlds %}
-certbot renew --cert-name {{ tld }} --webroot -w /var/lib/letsencrypt/ --post-hook "systemctl reload nginx"
-{% endfor %}
+certbot renew -w /var/lib/letsencrypt/ --pre-hook "systemctl stop nginx" --post-hook "systemctl start nginx"
