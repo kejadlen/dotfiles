@@ -12,12 +12,8 @@ obj.version = "0.1"
 obj.author = "Alpha Chen <alpha@kejadlen.dev>"
 obj.license = "MIT - https://opensource.org/licenses/MIT"
 
-obj.logger = hs.logger.new("quitter", "debug")
+obj.logger = hs.logger.new("quitter")
 obj.lastFocused = {}
-obj.windowFocusedFn = function(window, appName)
-  local name = window:application():name()
-  obj.lastFocused[name] = os.time()
-end
 
 --- Quitter.quitAppsAfter
 --- Variable
@@ -44,7 +40,10 @@ function obj:start()
   for app, _ in pairs(self.quitAppsAfter) do
     self.windowFilter:allowApp(app)
   end
-  self.windowFilter:subscribe(hs.window.filter.windowFocused, self.windowFocusedFn)
+  self.windowFilter:subscribe(hs.window.filter.windowFocused, function(window, appName)
+    local name = window:application():name()
+    obj.lastFocused[name] = os.time()
+  end)
 
   self.timer = hs.timer.doEvery(60, function()
     self:reap()
@@ -95,7 +94,7 @@ function obj:reap()
     return (os.time() - lastFocused) > duration
   end)
 
-  for _,app in pairs(appsToQuit) do
+  for _, app in pairs(appsToQuit) do
     hs.notify.new({
       title = "Hammerspoon",
       informativeText = "Quitting " .. app:name(),
