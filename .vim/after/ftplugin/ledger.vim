@@ -1,4 +1,4 @@
-set iskeyword+=:
+" set iskeyword+=:
 set foldlevel=0
 
 " noremap { ?^\d<cr>
