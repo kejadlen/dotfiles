@@ -101,7 +101,7 @@ function obj:reap()
       withdrawAfter = 2,
     }):send()
     app:kill()
-    self.lastFocused[app:bundleID()] = nil
+    self.lastFocused[app:name()] = nil
   end
 end
 
