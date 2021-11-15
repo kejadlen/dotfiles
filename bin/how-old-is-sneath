@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require "date"
+
+birthday = Date.new(2021, 8, 14)
+days = (Date.today - birthday).to_i
+puts <<~EOF
+  #{days.to_i} days (#{days / 7} weeks, #{days % 7} days)
+EOF
