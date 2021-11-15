@@ -72,7 +72,7 @@
 			<key>rake</key>
 			<dict>
 				<key>date</key>
-				<date>2021-07-09T03:00:12Z</date>
+				<date>2021-09-13T01:48:43Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -108,7 +108,7 @@
 			<key>J</key>
 			<dict>
 				<key>date</key>
-				<date>2020-12-30T17:56:50Z</date>
+				<date>2021-09-13T01:48:03Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -133,6 +133,8 @@
 	</dict>
 	<key>DHWebViewIsDark</key>
 	<false/>
+	<key>actuallyDarkWebView</key>
+	<true/>
 	<key>annotationsAreShown</key>
 	<true/>
 	<key>docsets</key>
@@ -162,67 +164,67 @@
 			<key>http://kapeli.com/feeds/Ansible.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T03:58:51Z</date>
+				<date>2021-09-13T01:49:06Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-07-05T18:12:06Z</date>
+				<date>2021-09-13T01:48:51Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/CSS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T03:59:01Z</date>
+				<date>2021-09-13T01:48:34Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Docker.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T03:59:43Z</date>
+				<date>2021-09-13T01:48:18Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Haskell.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T03:58:31Z</date>
+				<date>2021-09-13T01:48:29Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/JavaScript.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-07-05T18:13:55Z</date>
+				<date>2021-09-13T01:51:21Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Markdown.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T03:58:09Z</date>
+				<date>2021-09-13T01:48:51Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/NodeJS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T03:58:09Z</date>
+				<date>2021-09-13T01:49:17Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Python_3.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2021-05-13T02:02:55Z</date>
+				<date>2021-09-13T01:49:04Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Racket.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T04:00:08Z</date>
+				<date>2021-09-13T01:50:51Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Ruby_3.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2021-05-13T02:04:21Z</date>
+				<date>2021-09-13T01:50:03Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Rust.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T04:00:16Z</date>
+				<date>2021-09-13T01:51:13Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Vim.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2020-06-08T03:59:49Z</date>
+				<date>2021-09-13T01:49:22Z</date>
 			</dict>
 		</dict>
 		<key>uninstalled</key>
@@ -394,7 +396,7 @@
 				<key>2.7.2</key>
 				<dict>
 					<key>date</key>
-					<date>2021-05-24T02:52:20Z</date>
+					<date>2021-09-13T01:48:28Z</date>
 				</dict>
 			</dict>
 		</dict>
