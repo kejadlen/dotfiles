@@ -55,7 +55,7 @@
 	templatedir = ~/.git_templates
 	defaultBranch = main
 [diff]
-	algorithm = patience
+	algorithm = histogram
 	tool = icdiff
 	; compactionHeuristic = true
 	indentHeuristic = true
