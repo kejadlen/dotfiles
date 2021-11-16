@@ -72,7 +72,7 @@
 	url = https://github.com/wlangstroth/vim-racket.git
 [submodule "src/dark-sky.alfredworkflow"]
 	path = src/dark-sky.alfredworkflow
-	url = https://github.com/kejadlen/dark-sky.alfredworkflow.git
+	url = https://github.com/kejadlen/pirate-weather.alfredworkflow.git
 [submodule ".vim/pack/alpha/start/lightline.vim"]
 	path = .vim/pack/alpha/start/lightline.vim
 	url = https://github.com/itchyny/lightline.vim.git
