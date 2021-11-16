@@ -137,6 +137,7 @@
       - { regexp: "^MAIL_FROM_ADDRESS=", line: "MAIL_FROM_ADDRESS={{ pixelfed_mail_from_address }}" }
       - { regexp: "^ACTIVITY_PUB=", line: "ACTIVITY_PUB=true" }
       - { regexp: "^AP_REMOTE_FOLLOW=", line: "AP_REMOTE_FOLLOW=true" }
+      - { regexp: "^OPEN_REGISTRATION=", line: "OPEN_REGISTRATION=false" }
     notify: Clear Pixelfed cache
 
   - command: php artisan {{ item }}
@@ -151,6 +152,22 @@
       - view:cache
       - horizon:install
       - horizon:publish
+
+  # https://docs.pixelfed.org/technical-documentation/api-v1.html#authorization
+  - lineinfile:
+      path: /usr/share/pixelfed/.env
+      regexp: "^OAUTH_ENABLED="
+      line: "OAUTH_ENABLED=true"
+  # Should probably be a handler - hopefully they're idempotent
+  - command: php artisan {{ item }}
+    args:
+      chdir: /usr/share/pixelfed
+    loop:
+      - passport:keys
+      - config:cache
+      - route:cache
+      - view:cache
+      - passport:client --personal
 
   handlers:
     - name: Clear Pixelfed cache

@@ -1,0 +1,119 @@
+# https://docs.pleroma.social/backend/installation/otp_en/
+---
+- hosts: pleroma
+  become: yes
+  tasks:
+
+    # arch="$(uname -m)";if [ "$arch" = "x86_64" ];then arch="amd64";elif [ "$arch" = "armv7l" ];then arch="arm";elif [ "$arch" = "aarch64" ];then arch="arm64";else echo "Unsupported arch: $arch">&2;fi;if getconf GNU_LIBC_VERSION>/dev/null;then libc_postfix="";elif [ "$(ldd 2>&1|head -c 9)" = "musl libc" ];then libc_postfix="-musl";elif [ "$(find /lib/libc.musl*|wc -l)" ];then libc_postfix="-musl";else echo "Unsupported libc">&2;fi;echo "$arch$libc_postfix"
+    - shell: |
+        arch="$(uname -m)"
+        if [ "$arch" = "x86_64" ]; then
+          arch="amd64";
+        elif [ "$arch" = "armv7l" ]; then
+          arch="arm";
+        elif [ "$arch" = "aarch64" ]; then
+          arch="arm64";
+        else
+          echo "Unsupported arch: $arch">&2;
+        fi;
+        if getconf GNU_LIBC_VERSION>/dev/null; then
+          libc_postfix="";
+        elif [ "$(ldd 2>&1|head -c 9)" = "musl libc" ]; then
+          libc_postfix="-musl";
+        elif [ "$(find /lib/libc.musl*|wc -l)" ]; then
+          libc_postfix="-musl";
+        else
+          echo "Unsupported libc">&2;
+        fi;
+        echo "$arch$libc_postfix"
+      register: arch_result
+    - set_fact:
+        pleroma_flavour: "{{ arch_result.stdout | trim }}"
+
+    - apt:
+        update_cache: yes
+
+    # apt install curl unzip libncurses5 postgresql postgresql-contrib nginx certbot libmagic-dev
+    # apt install imagemagick ffmpeg libimage-exiftool-perl
+    # apt install postgresql-11-rum
+    - package:
+        name:
+          - curl
+          - unzip
+          - libncurses5
+          - postgresql
+          - postgresql-contrib
+          - nginx
+          - certbot
+          - libmagic-dev
+          - imagemagick
+          - ffmpeg
+          - libimage-exiftool-perl
+          - postgresql-11-rum
+      notify:
+        - Restart postgres
+
+    # Create a Pleroma user
+    # adduser --system --shell  /bin/false --home /opt/pleroma pleroma
+    - user:
+        name: pleroma
+        home: /opt/pleroma
+        shell: /bin/false
+        system: yes
+
+    # Clone the release build into a temporary directory and unpack it
+    # su pleroma -s $SHELL -lc "
+    # curl 'https://git.pleroma.social/api/v4/projects/2/jobs/artifacts/stable/download?job=$FLAVOUR' -o /tmp/pleroma.zip
+    # unzip /tmp/pleroma.zip -d /tmp/
+    # "
+    - get_url:
+        url: https://git.pleroma.social/api/v4/projects/2/jobs/artifacts/stable/download?job={{ pleroma_flavour }}
+        dest: /tmp/pleroma.zip
+    - command: unzip /tmp/pleroma.zip -d /tmp/
+
+    # Move the release to the home directory and delete temporary files
+    # su pleroma -s $SHELL -lc "
+    # mv /tmp/release/* /opt/pleroma
+    # rmdir /tmp/release
+    # rm /tmp/pleroma.zip
+    # "
+    - copy:
+        src: /tmp/release/
+        dest: /opt/pleroma/
+        remote_src: yes
+        owner: pleroma
+    - file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /tmp/release
+        - /tmp/pleroma.zip
+
+    # Create uploads directory and set proper permissions (skip if planning to use a remote uploader)
+    # Note: It does not have to be `/var/lib/pleroma/uploads`, the config generator will ask about the upload directory later
+    # mkdir -p /var/lib/pleroma/uploads
+    # chown -R pleroma /var/lib/pleroma
+
+    # Create custom public files directory (custom emojis, frontend bundle overrides, robots.txt, etc.)
+    # Note: It does not have to be `/var/lib/pleroma/static`, the config generator will ask about the custom public files directory later
+    # mkdir -p /var/lib/pleroma/static
+    # chown -R pleroma /var/lib/pleroma
+
+    # Create a config directory
+    # mkdir -p /etc/pleroma
+    # chown -R pleroma /etc/pleroma
+    - file:
+        path: "{{ item }}"
+        state: directory
+        owner: pleroma
+      loop:
+        - /var/lib/pleroma/uploads
+        - /var/lib/pleroma/static
+        - /etc/pleroma
+
+  handlers:
+    - name: Restart postgres
+      service:
+        name: postgresql
+        state: restarted
+

@@ -1,25 +1,53 @@
 ---
 - hosts: beats-working
   tasks:
+
     - name: create user
       user:
         name: alpha
+        # password: "{{ password | password_hash('sha512') }}"
 
+    - name: give user sudo access
+      lineinfile:
+        path: /etc/sudoers.d/alpha
+        line: "alpha ALL=(ALL) NOPASSWD: ALL"
+        create: yes
+        validate: visudo -cf %s
 
-- hosts: beats-working
-  pre_tasks:
+    - name: add ssh keys
+      authorized_key:
+        user: alpha
+        key: https://github.com/kejadlen.keys
+
+    - name: install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - direnv
+        - git
+        - mosh
+        - zsh
+
+    - name: set shell to zxh
+      user:
+        name: alpha
+        shell: /usr/bin/zsh
+
     - name: update dotfiles repo
       git:
         repo: https://github.com/kejadlen/dotfiles.git
         dest: ~/.dotfiles
       ignore_errors: yes
+
+- import_playbook: playbooks/docker.yml
+- hosts: beats-working
   tasks:
-    - name install dependencies
-      package:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - mosh
+    - name: add user to docker group
+      user:
+        name: alpha
+        groups: [ docker ]
+        append: true
 
 # - hosts: all
 #   tasks:

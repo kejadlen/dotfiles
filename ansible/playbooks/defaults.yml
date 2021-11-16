@@ -175,6 +175,12 @@
           key: NSToolbarTitleViewRolloverDelay
           type: float
           value: 0
+        - # show the proxy icon and older titlebar
+          # https://twitter.com/chucker/status/1395843084383043584
+          domain: com.apple.Finder
+          key: NSWindowSupportsAutomaticInlineTitle
+          type: bool
+          value: false
 
         - # set date format in menubar
           domain: com.apple.menuextra.clock
@@ -227,7 +233,7 @@
         - domain: com.freron.MailMate
           key: MmAllowedImageURLRegexp
           type: string
-          value: https://((i|images)\.gr-assets\.com|www\.goodreads\.com|massdrop-s3\.imgix\.net|.*\.cloudfront\.net|s3\.amazonaws\.com|files\.convertkitcdn\.com/assets/pictures)/.*
+          value: https://((i|images|d)\.gr-assets\.com|www\.goodreads\.com|massdrop-s3\.imgix\.net|.*\.cloudfront\.net|s3\.amazonaws\.com|files\.convertkitcdn\.com/assets/pictures)/.*
 
         - domain: com.freron.MailMate
           key: MmSendMessageDelayEnabled

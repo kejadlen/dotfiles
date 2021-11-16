@@ -1,0 +1,31 @@
+# https://docs.pleroma.social/backend/installation/otp_en/
+---
+- hosts: pleroma
+  become: yes
+  tasks:
+
+    # Create the postgres database
+    # su postgres -s $SHELL -lc "psql -f /tmp/setup_db.psql"
+    - command: psql -f /tmp/setup_db.psql
+      become_user: postgres
+
+    # Create the database schema
+    # su pleroma -s $SHELL -lc "./bin/pleroma_ctl migrate"
+    - command: ./bin/pleroma_ctl migrate
+      args:
+        chdir: /opt/pleroma
+      become_user: pleroma
+
+    # If you have installed RUM indexes uncommend and run
+    # su pleroma -s $SHELL -lc "./bin/pleroma_ctl migrate --migrations-path priv/repo/optional_migrations/rum_indexing/"
+    - command: ./bin/pleroma_ctl migrate --migrations-path priv/repo/optional_migrations/rum_indexing/
+      args:
+        chdir: /opt/pleroma
+      become_user: pleroma
+
+  handlers:
+    - name: Restart postgres
+      service:
+        name: postgresql
+        state: restarted
+

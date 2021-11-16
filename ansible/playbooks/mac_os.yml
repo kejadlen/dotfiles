@@ -15,12 +15,33 @@
     - name: Install Webster's 1913 dictionary
       block:
         - copy:
-            src: ~/.dotfiles/osx/websters-1913.dictionary
+            src: ~/.dotfiles/osx/websters-1913.dictionary/
             dest: ~/Library/Dictionaries/websters-1913.dictionary
-        - command: >
-            /usr/libexec/PlistBuddy
-            -c "Add :DCSActiveDictionaries:0 string /Users/alpha/Library/Containers/com.apple.Dictionary/Data/Library/Dictionaries/websters-1913.dictionary"
-            ~/Library/Preferences/com.apple.DictionaryServices.plist
+
+        # This worked in earlier versions of MacOS, but not in Big Sur?
+        # The plist now looks like this:
+        #
+        #
+        # ❯ /usr/libexec/PlistBuddy -c "Print" ~/Library/Preferences/com.apple.DictionaryServices.plist
+        # Dict {
+        #     DCSActiveDictionaries = Array {
+        #         /Users/alpha/Library/Containers/com.apple.Dictionary/Data/Library/Dictionaries/websters-1913.dictionary
+        #         com.apple.dictionary.NOAD
+        #         com.apple.dictionary.OAWT
+        #         com.apple.dictionary.AppleDictionary
+        #         /System/Library/Frameworks/CoreServices.framework/Frameworks/DictionaryServices.framework/Resources/Wikipedia.wikipediadictionary
+        #     }
+        #     DCSPreferenceVersion = 7
+        #     DCSLastUsedAssetCompatibilityVersion = 10
+        # }
+        #
+        # - shell: /usr/libexec/PlistBuddy -c "Print :DCSActiveDictionaries:0" ~/Library/Preferences/com.apple.DictionaryServices.plist
+        #   register: websters_1913_result
+        # - command: >
+        #     /usr/libexec/PlistBuddy
+        #     -c "Add :DCSActiveDictionaries:0 string /Users/alpha/Library/Containers/com.apple.Dictionary/Data/Library/Dictionaries/websters-1913.dictionary"
+        #     ~/Library/Preferences/com.apple.DictionaryServices.plist
+        #   when: websters_1913_result is failed
 
     - name: Enable Touch ID for sudo
       become: yes

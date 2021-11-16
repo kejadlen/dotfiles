@@ -7,13 +7,11 @@ conf_dirs:
 conf_symlinks:
   gitignore: ~/.gitignore
   .bundle/config: ~/.bundle/config
-  .chunkwmrc: ~/.chunkwmrc
   .config: ~/.config
   .gemrc: ~/.gemrc
   .git_templates: ~/.git_templates
   .gitconfig: ~/.gitconfig
   .hammerspoon: ~/.hammerspoon
-  .pentadactylrc: ~/.pentadactylrc
   .pryrc: ~/.pryrc
   .tmux.conf: ~/.tmux.conf
   .vim: ~/.vim

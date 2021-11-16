@@ -143,20 +143,20 @@
                 - traefik.http.routers.minio.tls=true
                 - traefik.http.routers.minio.tls.certresolver=le
                 - traefik.http.services.minio.loadbalancer.server.port=9000
-            mitmproxy:
-              image: mitmproxy/mitmproxy:latest-ARMv7
-              container_name: mitmproxy
-              command: mitmweb --web-iface ""
-              volumes:
-                - /etc/mitmproxy:/home/mitmproxy/.mitmproxy
-              labels:
-                - traefik.enable=true
-                - traefik.tcp.routers.mitmproxy.rule=HostSNI(`{{ traefik.host_rules.mitmproxy }}`)
-                - traefik.tcp.routers.mitmproxy.tls.passthrough=true
-                - traefik.tcp.services.mitmproxy.loadbalancer.server.port=8080
-                - traefik.http.routers.mitmproxy-web.rule=Host(`{{ traefik.host_rules.mitmproxy_web }}`)
-                - traefik.http.routers.mitmproxy-web.tls.certresolver=le
-                - traefik.http.services.mitmproxy-web.loadbalancer.server.port=8081
+            # mitmproxy:
+            #   image: mitmproxy/mitmproxy:latest-ARMv7
+            #   container_name: mitmproxy
+            #   command: mitmweb --web-iface ""
+            #   volumes:
+            #     - /etc/mitmproxy:/home/mitmproxy/.mitmproxy
+            #   labels:
+            #     - traefik.enable=true
+            #     - traefik.tcp.routers.mitmproxy.rule=HostSNI(`{{ traefik.host_rules.mitmproxy }}`)
+            #     - traefik.tcp.routers.mitmproxy.tls.passthrough=true
+            #     - traefik.tcp.services.mitmproxy.loadbalancer.server.port=8080
+            #     - traefik.http.routers.mitmproxy-web.rule=Host(`{{ traefik.host_rules.mitmproxy_web }}`)
+            #     - traefik.http.routers.mitmproxy-web.tls.certresolver=le
+            #     - traefik.http.services.mitmproxy-web.loadbalancer.server.port=8081
             pihole:
               image: pihole/pihole:latest
               container_name: pihole
@@ -229,9 +229,12 @@
       block:
         # - shell: ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+' | head -n 1
         - shell: docker network inspect on-fire-within_default | jq --raw-output .[0].IPAM.Config[0].Gateway
-          register: docker_ip_result
+          register: docker_gateway_result
+        - shell: docker network inspect on-fire-within_default | jq --raw-output .[0].IPAM.Config[0].Gateway
+          register: docker_subnet_result
         - set_fact:
-            docker_ip: "{{ docker_ip_result.stdout | trim }}"
+            docker_gateway: "{{ docker_gateway_result.stdout | trim }}"
+            docker_subnet: "{{ docker_subnet_result.stdout | trim }}"
         - copy:
             content: |
               [http.routers]
@@ -244,9 +247,10 @@
               [http.services]
                 [http.services.hassio.loadBalancer]
                   [[http.services.hassio.loadBalancer.servers]]
-                    url = "http://{{ docker_ip }}:8123/"
+                    url = "http://{{ docker_gateway }}:8123/"
             dest: /etc/traefik/dynamic_conf.toml
             mode: 0600
+      notify: Restart Traefik
 
   handlers:
     - name: Restart ddclient
@@ -255,3 +259,14 @@
         restart: yes
       ignore_errors: yes
 
+    - name: Restart Traefik
+      docker_container:
+        name: traefik
+        restart: yes
+      ignore_errors: yes
+
+    - name: Restart Home Assistant
+      docker_container:
+        name: homeassistant
+        restart: yes
+      ignore_errors: yes

@@ -40,6 +40,7 @@
         - reattach-to-user-namespace
         - ripgrep
         - ruby-install
+        - svn # required for font-source-code-pro
         - syncthing
         - tmux
         - tree
@@ -72,11 +73,13 @@
         - 1password-cli
         - acorn
         - alfred
+        - anki
         - arq
         - bartender
         - bitbar
         - daisydisk
         - dash
+        - discord
         - encryptme
         - fantastical
         - firefox-developer-edition
@@ -101,17 +104,26 @@
         - transmit
         - twitterrific
         - vlc
-        - zoomus
-        - homebrew/cask-drivers/logitech-options
+        - zoom
+
+  - name: fix QuickLook generators
+    command: xattr -cr ~/Library/QuickLook/{{ item }}.qlgenerator
+    with_items:
+      - QLMarkdown
+      - QLStephen
+    notify: Reset QuickLook
 
   - name: install from app store
     command: /usr/local/bin/mas install {{ item }}
     with_items:
       - 1028916583  # iPulse
-      # - 1225570693  # Ulysses
       # - 451907568   # Paprika Recipe Manager
-      # - 497799835   # Xcode
-      # - 585829637   # Todoist
-      # - 880001334   # Reeder 3
-      - 1449412482  # Reeder 4
+      - 1529448980  # Reeder 5
+      - 1522267256  # Shareful
       - 904280696   # Things 3
+
+  handlers:
+    - name: Reset QuickLook
+      block:
+        - command: qlmanage -r
+        - command: qlmanage -r cache
