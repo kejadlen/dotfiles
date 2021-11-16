@@ -109,9 +109,6 @@
 [submodule ".vim/pack/alpha/start/typescript-vim"]
 	path = .vim/pack/alpha/start/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
-[submodule ".vim/pack/alpha/start/editorconfig-vim"]
-	path = .vim/pack/alpha/start/editorconfig-vim
-	url = https://github.com/editorconfig/editorconfig-vim.git
 [submodule ".vim/pack/alpha/start/vimwiki"]
 	path = .vim/pack/alpha/start/vimwiki
 	url = https://github.com/vimwiki/vimwiki.git
