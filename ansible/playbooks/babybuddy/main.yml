@@ -12,7 +12,8 @@
         version: "2.1"
         services:
           babybuddy:
-            image: ghcr.io/linuxserver/babybuddy
+            # https://github.com/babybuddy/babybuddy/issues/337
+            image: lscr.io/linuxserver/babybuddy:v1.9.0-ls14
             container_name: babybuddy
             environment:
               - TZ=America/Los_Angeles
