@@ -2,6 +2,7 @@
 
 (set hs.window.animationDuration 0.0)
 (hs.loadSpoon "MiroWindowsManager")
+(set spoon.MiroWindowsManager.fullScreenSizes [1]) ;; only fullscreen
 (let [mash [:cmd :alt :ctrl]
       smash [:cmd :alt :ctrl :shift]]
   (spoon.MiroWindowsManager:bindHotkeys {
@@ -10,9 +11,9 @@
     :down       [ mash  "j" ]
     :right      [ mash  "l" ]
     :fullscreen [ mash  "m" ]
-    :center     [ mash  "c" ]
-    :move       [ smash "m" ]
-    :resize     [ mash  "d" ]
+    ;; :center     [ mash  "c" ]
+    ;; :move       [ smash "m" ]
+    ;; :resize     [ mash  "d" ]
   }))
 
 (let [mash [:cmd :alt :ctrl]
@@ -42,11 +43,12 @@
 
 (hs.loadSpoon "Quitter")
 (set spoon.Quitter.quitAppsAfter {
-  :Discord      300
+  ;; :Discord      300
   :Flotato      300
   :MailMate     300
   :Messages     300
   :Slack        300
+  :Telegram     300
   :Twitterrific 300
 })
 (spoon.Quitter:start)

@@ -12,7 +12,7 @@ obj.version = "0.1"
 obj.author = "Alpha Chen <alpha@kejadlen.dev>"
 obj.license = "MIT - https://opensource.org/licenses/MIT"
 
-obj.logger = hs.logger.new("quitter")
+obj.logger = hs.logger.new("quitter", "debug")
 obj.lastFocused = {}
 
 --- Quitter.quitAppsAfter
@@ -40,9 +40,9 @@ function obj:start()
   for app, _ in pairs(self.quitAppsAfter) do
     self.windowFilter:allowApp(app)
   end
-  self.windowFilter:subscribe(hs.window.filter.windowFocused, function(window, appName)
+  self.windowFilter:subscribe(hs.window.filter.windowUnfocused, function(window, appName)
     local name = window:application():name()
-    obj.lastFocused[name] = os.time()
+    self.lastFocused[name] = os.time()
   end)
 
   self.timer = hs.timer.doEvery(60, function()
