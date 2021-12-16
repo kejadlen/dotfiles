@@ -121,7 +121,14 @@ augroup END
 
 " :help ins-completion
 function! CleverTab()
-  if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+  " https://vim.fandom.com/wiki/Autocomplete_with_TAB_when_typing_words
+  " if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+  "   return "\<C-N>"
+
+  " if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+  "   return "\<Tab>"
+
+  if col('.') <= 1 || strpart(getline('.'), col('.')-2, 1) =~ '\s'
     return "\<Tab>"
 
   " https://vim.fandom.com/wiki/Smart_mapping_for_tab_completion
@@ -203,8 +210,8 @@ nnoremap <leader>d :Dispatch<cr>
 
 " fzf
 if executable('fzf')
-  if isdirectory('/usr/local/opt/fzf/plugin')
-    set rtp+=/usr/local/opt/fzf
+  if isdirectory('/opt/homebrew/opt/fzf/plugin')
+    set rtp+=/opt/homebrew/opt/fzf
   elseif isdirectory('/home/alpha/.fzf')
     set rtp+=~/.fzf
   endif
