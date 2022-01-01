@@ -14,14 +14,19 @@
       src: php.ini
       dest: /usr/share/monica/php/uploads.ini
 
+  - copy:
+      src: build
+      dest: /usr/share/monica
+
   - docker_compose:
       project_name: monica
+      build: yes
       pull: yes
       definition:
         version: "3.4"
         services:
           app:
-            image: monica
+            build: /usr/share/monica/build
             depends_on:
               - db
             ports:
