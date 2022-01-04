@@ -16,7 +16,7 @@ brew install ansible
 git clone --recursive https://github.com/kejadlen/dotfiles.git ~/.dotfiles
 
 # Run Ansible
-cd ~/.dotfiles/ansible
+cd ~/.dotfiles/meta
 echo "localhost ansible_connection=local" > hosts.private
 ansible-playbook main.yml --ask-become-pass
 ```

@@ -104,12 +104,12 @@
 
     - name: link .zshrc.local
       file:
-        src: ~/.dotfiles/ansible/irregular-apocalypse/.zshrc.local
+        src: ~/.dotfiles/meta/irregular-apocalypse/.zshrc.local
         dest: ~/.zshrc.local
         state: link
 
     - name: link SSH config.local
       file:
-        src: ~/.dotfiles/ansible/irregular-apocalypse/.ssh/config.local
+        src: ~/.dotfiles/meta/irregular-apocalypse/.ssh/config.local
         dest: ~/.ssh/config.local
         state: link

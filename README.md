@@ -16,7 +16,7 @@ On the control machine:
 ```
 brew install ansible
 git clone --recursive git@github.com:kejadlen/dotfiles
-cd dotfiles/ansible
+cd dotfiles/meta
 
 echo HOST > hosts.private
 
