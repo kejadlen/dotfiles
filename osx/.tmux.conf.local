@@ -1,2 +1,10 @@
-set-option -g default-command "reattach-to-user-namespace -l zsh"
-bind y run "tmux save-buffer - | reattach-to-user-namespace pbcopy"
+# vim: set ft:tmux
+
+# This was messing with the `PATH` (`path_helper` shenanigans perhaps?), and
+# it seems like `pbcopy` and `pbpaste` are working now, so maybe it's not
+# needed anymore?
+
+# set-option -g default-command "reattach-to-user-namespace -l zsh"
+# bind y run "tmux save-buffer - | reattach-to-user-namespace pbcopy"
+set-option -g default-command "zsh"
+bind y run "tmux save-buffer - | pbcopy"
