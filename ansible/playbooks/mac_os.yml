@@ -8,19 +8,19 @@
     - file: path=~/Library/KeyBindings state=directory
     - name: Symlink Emacs-style keybindings for OS X
       file:
-        src: ~/.dotfiles/osx/DefaultKeyBinding.dict
+        src: ~/.dotfiles/macos/DefaultKeyBinding.dict
         dest: ~/Library/KeyBindings/DefaultKeyBinding.dict
         state: link
 
+    - file: path=~/Library/Dictionaries state=directory
     - name: Install Webster's 1913 dictionary
       block:
         - copy:
-            src: ~/.dotfiles/osx/websters-1913.dictionary/
+            src: ~/.dotfiles/macos/websters-1913.dictionary/
             dest: ~/Library/Dictionaries/websters-1913.dictionary
 
         # This worked in earlier versions of MacOS, but not in Big Sur?
         # The plist now looks like this:
-        #
         #
         # ❯ /usr/libexec/PlistBuddy -c "Print" ~/Library/Preferences/com.apple.DictionaryServices.plist
         # Dict {

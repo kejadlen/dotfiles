@@ -4,14 +4,14 @@
 - file: path=~/Library/KeyBindings state=directory
 - name: Symlink Emacs-style keybindings for OS X
   file:
-    src: ~/.dotfiles/osx/DefaultKeyBinding.dict
+    src: ~/.dotfiles/macos/DefaultKeyBinding.dict
     dest: ~/Library/KeyBindings/DefaultKeyBinding.dict
     state: link
 
 - file: path=~/Library/Colors state=directory
 - name: symlink OS X colors palettes
   file: src={{ item }} dest=~/Library/Colors/{{ item | basename }} state=link
-  with_fileglob: ~/.dotfiles/osx/Colors/*
+  with_fileglob: ~/.dotfiles/macos/Colors/*
 
 - name: disable gamed
   command: launchctl unload -w /System/Library/LaunchAgents/com.apple.gamed.plist

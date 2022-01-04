@@ -1,13 +1,13 @@
 - name: install dockutil
   homebrew: name=dockutil state=present
 
-- command: /usr/local/bin/dockutil --list
+- command: dockutil --list
   register: dockutil_result
 - name: remove all Dock icons
-  command: /usr/local/bin/dockutil --remove all
+  command: dockutil --remove all
   when: not (dockutil_result.stdout_lines | length == 1 and dockutil_result.stdout is search("^Downloads"))
 - name: add ~/Downloads to the Dock
-  command: /usr/local/bin/dockutil --add ~/Downloads
+  command: dockutil --add ~/Downloads
                                       --view list
                                       --display stack
                                       --sort datemodified

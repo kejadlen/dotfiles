@@ -16,7 +16,7 @@
 
 - hosts: os_MacOSX
   roles:
-    - role: osx
+    - role: macos
   tasks:
     - name: install fennel
       command: luarocks install fennel
@@ -26,11 +26,3 @@
     - dotfiles
     - ruby
     - zsh
-
-- hosts: all
-  tasks:
-
-    - name: update git remote for dotfiles
-      command: git remote set-url origin git@github.com:kejadlen/dotfiles.git
-      args:
-        chdir: ~/.dotfiles
