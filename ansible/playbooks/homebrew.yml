@@ -33,7 +33,6 @@
         - hledger
         - jq
         - luarocks
-        - macvim
         - mas
         - mosh
         - pandoc
@@ -80,20 +79,21 @@
         - daisydisk
         - dash
         - discord
-        - encryptme
         - fantastical
         - firefox-developer-edition
         - flotato
-        - font-atkinson-hyperlegible
+        # - font-atkinson-hyperlegible
         - font-fira-mono
         - font-hack
         - font-hasklig
         - font-source-code-pro
         - hammerspoon
         - kaleidoscope
+        - macvim
         - mailmate
-        - netnewswire
-        - night-owl
+        # - netnewswire
+        # - night-owl
+        - obsidian
         - qlmarkdown
         - qlstephen
         - quicklook-csv
@@ -101,29 +101,28 @@
         - signal
         - sf-symbols
         - slack
+        - telegram
+        - topnotch
         - transmit
         - twitterrific
         - vlc
         - zoom
 
   - name: fix QuickLook generators
-    command: xattr -cr ~/Library/QuickLook/{{ item }}.qlgenerator
-    with_items:
-      - QLMarkdown
-      - QLStephen
-    notify: Reset QuickLook
+    block:
+      - command: xattr -cr ~/Library/QuickLook/{{ item }}.qlgenerator
+        with_items:
+          - QLMarkdown
+          - QLStephen
+      - command: qlmanage -r
+      - command: qlmanage -r cache
 
   - name: install from app store
-    command: /usr/local/bin/mas install {{ item }}
+    command: mas install {{ item }}
     with_items:
-      - 1028916583  # iPulse
       # - 451907568   # Paprika Recipe Manager
-      - 1529448980  # Reeder 5
-      - 1522267256  # Shareful
+      # - 497799835   # Xcode
       - 904280696   # Things 3
-
-  handlers:
-    - name: Reset QuickLook
-      block:
-        - command: qlmanage -r
-        - command: qlmanage -r cache
+      - 1028916583  # iPulse
+      - 1522267256  # Shareful
+      - 1529448980  # Reeder 5

@@ -6,4 +6,4 @@
     state: present
 
 - name: install Ruby
-  command: /usr/local/bin/ruby-install ruby creates=~/.rubies/ruby-*
+  command: ruby-install ruby creates=~/.rubies/ruby-*

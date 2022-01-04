@@ -204,6 +204,11 @@
           type: int
           value: 1
 
+        - domain: com.apple.Terminal
+          key: ShowLineMarks
+          type: bool
+          value: false
+
         # Other applications
         - domain: com.google.Chrome
           key: AppleEnableSwipeNavigateWithScrolls
