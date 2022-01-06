@@ -18,9 +18,9 @@ resource "kubernetes_deployment" "kuard" {
       }
       spec {
         container {
-          image = "gcr.io/kuar-demo/kuard-amd64:1"
+          image             = "gcr.io/kuar-demo/kuard-amd64:1"
           image_pull_policy = "Always"
-          name = "kuard"
+          name              = "kuard"
           port {
             container_port = 8080
           }
@@ -37,9 +37,9 @@ resource "kubernetes_service" "kuard" {
 
   spec {
     port {
-      port = 80
+      port        = 80
       target_port = 8080
-      protocol = "TCP"
+      protocol    = "TCP"
     }
     selector = {
       app = "kuard"
@@ -51,8 +51,8 @@ resource "kubernetes_ingress_v1" "kuard" {
   metadata {
     name = "kuard"
     annotations = {
-      "kubernetes.io/ingress.class" = "nginx"
-      "cert-manager.io/issuer" = "letsencrypt-prod"
+      "kubernetes.io/ingress.class"    = "nginx"
+      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
     }
   }
 
@@ -67,7 +67,7 @@ resource "kubernetes_ingress_v1" "kuard" {
       host = "kuard.${var.domain}"
       http {
         path {
-          path = "/"
+          path      = "/"
           path_type = "Prefix"
           backend {
             service {
