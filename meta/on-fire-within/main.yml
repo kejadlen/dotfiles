@@ -69,31 +69,33 @@
     - name: Traefik static configuration
       copy:
         content: |
-          [providers]
-            [providers.docker]
-              exposedByDefault = false
-            [providers.file]
-              filename = "/etc/traefik/dynamic_conf.toml"
-              watch = true
+          providers:
+            docker:
+              exposedByDefault: false
+            file:
+              filename: /etc/traefik/dynamic_conf.toml
+              watch: true
 
-          [entryPoints]
-            [entryPoints.http]
-              address = ":80"
+          entryPoints:
+            http:
+              address: ":80"
 
-            [entryPoints.https]
-              address = ":443"
+            https:
+              address: ":443"
 
-          [certificatesResolvers.le.acme]
-            email = "{{ email }}"
-            storage = "/etc/traefik/acme.json"
-            [certificatesResolvers.le.acme.httpChallenge]
-              entryPoint = "http"
+          certificatesResolvers:
+            le:
+              acme:
+                email: {{ email }}
+                storage: "/etc/traefik/acme.json"
+                httpChallenge:
+                  entryPoint: http
 
-          [api]
-            insecure = true
+          api:
+            insecure: true
 
-          [accessLog]
-        dest: /etc/traefik/traefik.toml
+          accessLog: {}
+        dest: /etc/traefik/traefik.yml
         mode: 0600
 
     # https://docs.syncthing.net/users/faq.html#inotify-limits
@@ -206,7 +208,7 @@
                 - traefik.http.routers.syncthing.tls.certresolver=le
                 - traefik.http.services.syncthing.loadbalancer.server.port=8384
             traefik:
-              image: traefik:latest
+              image: traefik:v2.5
               container_name: traefik
               ports:
                 - 80:80
