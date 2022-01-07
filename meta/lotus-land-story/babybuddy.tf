@@ -13,32 +13,77 @@ resource "kubernetes_persistent_volume_claim" "babybuddy" {
   }
 }
 
-resource "kubernetes_pod" "babybuddy" {
+# resource "kubernetes_pod" "babybuddy" {
+#   metadata {
+#     name = "babybuddy"
+#     labels = {
+#       app = "babybuddy"
+#     }
+#   }
+
+#   spec {
+#     container {
+#       # https://github.com/babybuddy/babybuddy/issues/337
+#       image             = "lscr.io/linuxserver/babybuddy:v1.9.0-ls14"
+#       image_pull_policy = "Always"
+#       name              = "babybuddy"
+#       port {
+#         container_port = 8000
+#       }
+#       volume_mount {
+#         name       = "babybuddy"
+#         mount_path = "/config"
+#       }
+#     }
+#     volume {
+#       name = "babybuddy"
+#       persistent_volume_claim {
+#         claim_name = "babybuddy"
+#       }
+#     }
+#   }
+# }
+
+resource "kubernetes_deployment" "babybuddy" {
   metadata {
     name = "babybuddy"
-    labels = {
-      app = "babybuddy"
-    }
   }
 
   spec {
-    container {
-      # https://github.com/babybuddy/babybuddy/issues/337
-      image             = "lscr.io/linuxserver/babybuddy:v1.9.0-ls14"
-      image_pull_policy = "Always"
-      name              = "babybuddy"
-      port {
-        container_port = 8000
-      }
-      volume_mount {
-        name       = "babybuddy"
-        mount_path = "/config"
+    selector {
+      match_labels = {
+        app = "babybuddy"
       }
     }
-    volume {
-      name = "babybuddy"
-      persistent_volume_claim {
-        claim_name = "babybuddy"
+    strategy {
+      type = "Recreate"
+    }
+    template {
+      metadata {
+        labels = {
+          app = "babybuddy"
+        }
+      }
+      spec {
+        container {
+          # https://github.com/babybuddy/babybuddy/issues/337
+          image             = "lscr.io/linuxserver/babybuddy:v1.9.0-ls14"
+          name              = "babybuddy"
+          image_pull_policy = "Always"
+          port {
+            container_port = 8000
+          }
+          volume_mount {
+            name       = "babybuddy"
+            mount_path = "/config"
+          }
+        }
+        volume {
+          name = "babybuddy"
+          persistent_volume_claim {
+            claim_name = "babybuddy"
+          }
+        }
       }
     }
   }
