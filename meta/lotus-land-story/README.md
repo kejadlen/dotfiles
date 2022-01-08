@@ -21,6 +21,9 @@ terraform destroy
 - https://learnk8s.io/terraform-lke
 - https://cert-manager.io/docs/tutorials/acme/ingress/
 - https://www.linode.com/community/questions/20215/how-to-re-attach-persistent-volume-to-pod-when-claim-is-deleted
+- Terraform providers
+  - [kubernetes](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs)
+  - [linode](https://registry.terraform.io/providers/linode/linode/latest/docs)
 
   > At first I get new PVC uid by command:
   > `kubectl get pvc my-pvc-0 -o yaml | grep uid`
