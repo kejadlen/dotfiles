@@ -1,6 +1,6 @@
 --- === Quitter ===
 --
--- Quits configured apps if they have not been used since a specified amount of time.
+-- Quits apps if they have not been used since a specified amount of time.
 
 local obj = {}
 obj.__index = obj
@@ -69,39 +69,45 @@ function obj:reset()
     local name = app:name()
 
     local duration = self.quitAppsAfter[name]
-    if not duration then return false end
+    if duration == nil then return false end
 
     self.lastFocused[name] = os.time()
   end)
 end
 
+function obj:shouldQuit(app)
+  if app == nil then return false end
+
+  -- Don't quit the currently focused app
+  if app:isFrontmost() then return false end
+
+  local duration = self.quitAppsAfter[app:name()]
+  if duration == nil then return false end
+
+  local lastFocused = self.lastFocused[app:name()]
+  if lastFocused == nil then return false end
+
+  self.logger.d("app: " .. app:name() .. " last focused at " .. lastFocused)
+
+  return (os.time() - lastFocused) > duration
+end
+
 function obj:reap()
   self.logger.d("reaping")
-  local appsToQuit = hs.fnutils.ifilter(hs.application.runningApplications(), function(app)
-    local appName = app:name()
 
-    -- Don't quit the currently focused app
-    if app:isFrontmost() then return false end
+  local frontmostApp = hs.application.frontmostApplication()
+  for appName, _ in pairs(self.quitAppsAfter) do
+    local app = hs.application.get(appName)
 
-    local duration = self.quitAppsAfter[appName]
-    if not duration then return false end
-
-    local lastFocused = self.lastFocused[appName]
-    if not lastFocused then return false end
-
-    self.logger.d("app: " .. appName .. " last focused at " .. lastFocused)
-
-    return (os.time() - lastFocused) > duration
-  end)
-
-  for _, app in pairs(appsToQuit) do
-    hs.notify.new({
-      title = "Hammerspoon",
-      informativeText = "Quitting " .. app:name(),
-      withdrawAfter = 2,
-    }):send()
-    app:kill()
-    self.lastFocused[app:name()] = nil
+    if self:shouldQuit(app) then
+      hs.notify.new({
+        title = "Hammerspoon",
+        informativeText = "Quitting " .. app:name(),
+        withdrawAfter = 2,
+      }):send()
+      app:kill()
+      self.lastFocused[app:name()] = nil
+    end
   end
 end
 
