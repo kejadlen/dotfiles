@@ -2,7 +2,6 @@ terraform {
   required_providers {
     linode = {
       source  = "linode/linode"
-      version = "1.24.0"
     }
   }
 }
@@ -25,3 +24,4 @@ output "kubeconfig" {
    value     = linode_lke_cluster.lotus_land_story.kubeconfig
    sensitive = true
 }
+

@@ -6,6 +6,9 @@ terraform {
     helm = {
       source = "hashicorp/helm"
     }
+    linode = {
+      source = "linode/linode"
+    }
   }
 }
 
@@ -18,6 +21,8 @@ provider "helm" {
 provider "kubernetes" {
   config_path = ".kube/config"
 }
+
+provider "linode" {}
 
 resource "kubernetes_namespace" "cert_manager" {
   metadata {
@@ -101,4 +106,41 @@ resource "helm_release" "ingress_nginx" {
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
   version    = "4.0.13"
+}
+
+resource "linode_instance" "subterranean_animism" {
+  label  = "subterranean-animism"
+  type   = "g6-nanode-1"
+  region = "us-west"
+
+  disk {
+    label      = "Swap"
+    size       = 512
+    filesystem = "swap"
+  }
+
+  disk {
+    label = "NixOS"
+    size  = 25088
+    image = "private/${var.nixos_image_id}"
+  }
+
+  config {
+    label = "Boot"
+    helpers {
+      updatedb_disabled = false
+      distro            = false
+      modules_dep       = false
+      network           = false
+    }
+    devices {
+      sda {
+        disk_label = "NixOS"
+      }
+      sdb {
+        disk_label = "Swap"
+      }
+    }
+    kernel = "linode/grub2"
+  }
 }
