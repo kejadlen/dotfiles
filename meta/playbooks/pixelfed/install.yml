@@ -39,17 +39,17 @@
     become_user: postgres
 
   - lineinfile:
-      path: /etc/php/7.3/fpm/php.ini
+      path: /etc/php/7.4/fpm/php.ini
       regexp: "^upload_max_filesize = "
       line: "upload_max_filesize = 6M"
     notify: Restart php-fpm
 
   - copy:
-      src: /etc/php/7.3/fpm/pool.d/www.conf
-      dest: /etc/php/7.3/fpm/pool.d/pixelfed.conf
+      src: /etc/php/7.4/fpm/pool.d/www.conf
+      dest: /etc/php/7.4/fpm/pool.d/pixelfed.conf
       remote_src: yes
   - lineinfile:
-      path: /etc/php/7.3/fpm/pool.d/pixelfed.conf
+      path: /etc/php/7.4/fpm/pool.d/pixelfed.conf
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
     loop:
@@ -74,8 +74,8 @@
   # https://docs.pixelfed.org/running-pixelfed/installation.html#setting-up-pixelfed-files
   - git:
       repo: "https://github.com/pixelfed/pixelfed.git"
+      version: v0.11.2
       dest: /usr/share/pixelfed
-      version: dev
 
   - file:
       path: /usr/share/pixelfed
@@ -87,7 +87,7 @@
 
     - name: Restart php-fpm
       service:
-        name: php7.3-fpm
+        name: php7.4-fpm
         state: restarted
 
 - hosts: pixelfed
