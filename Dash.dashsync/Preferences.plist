@@ -127,6 +127,26 @@
 					<string>J</string>
 				</dict>
 			</dict>
+			<key>Terraform</key>
+			<dict>
+				<key>date</key>
+				<date>2022-01-04T23:55:09Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>authorLinkHref</key>
+					<string>https://github.com/Kapeli/Dash-User-Contributions/tree/master/docsets/Terraform#readme</string>
+					<key>authorLinkText</key>
+					<string>rolandjohann</string>
+					<key>name</key>
+					<string>Terraform</string>
+					<key>platform</key>
+					<string>usercontribTerraform</string>
+					<key>uniqueIdentifier</key>
+					<string>Terraform</string>
+				</dict>
+			</dict>
 		</dict>
 		<key>uninstalled</key>
 		<dict/>
