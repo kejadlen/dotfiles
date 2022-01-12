@@ -99,6 +99,21 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>E7F81EDA-93E8-419C-8320-F18674E0C0BF</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>yelp</string>
+			<key>spaces</key>
+			<string>+</string>
+			<key>text</key>
+			<string>Search Yelp for '{query}'</string>
+			<key>url</key>
+			<string>https://www.yelp.com/search?find_desc={query}&amp;find_loc=Seattle%2C+WA</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
 		<key>F548AE26-C2CD-485A-A0EA-6386E713D11C</key>
 		<dict>
 			<key>enabled</key>
