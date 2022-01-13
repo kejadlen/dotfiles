@@ -1,9 +1,14 @@
 { config, pkgs, ... }:
 
-{
+let
+  private = import ./private.nix;
+in {
   imports =
     [ ./hardware-configuration.nix # Include the results of the hardware scan.
       ./linode.nix
+      ./minio.nix
+      ./mysql.nix
+      ./monica.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -30,6 +35,15 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.11"; # Did you read the comment?
 
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
+  security.acme = {
+    acceptTerms = true;
+    email = private.acmeEmail;
+  };
+
+  services.nginx.enable = true;
+
   services.openssh = {
     enable = true;
     permitRootLogin = "yes";
@@ -40,4 +54,3 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPgX0tA28NO3djYaV++JxggR0t47xou+R0HQVwVjzj8s"
   ];
 }
-
