@@ -44,7 +44,6 @@
 (hs.loadSpoon "Quitter")
 (set spoon.Quitter.quitAppsAfter {
   :Discord      300
-  :Flotato      300
   :MailMate     600
   :Messages     300
   :Reeder       600

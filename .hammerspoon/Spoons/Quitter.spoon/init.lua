@@ -12,7 +12,7 @@ obj.version = "0.1"
 obj.author = "Alpha Chen <alpha@kejadlen.dev>"
 obj.license = "MIT - https://opensource.org/licenses/MIT"
 
-obj.logger = hs.logger.new("quitter", "debug")
+obj.logger = hs.logger.new("quitter", "warning")
 obj.lastFocused = {}
 
 --- Quitter.quitAppsAfter
