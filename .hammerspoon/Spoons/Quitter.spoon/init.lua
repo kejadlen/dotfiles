@@ -100,11 +100,14 @@ function obj:reap()
     local app = hs.application.get(appName)
 
     if self:shouldQuit(app) then
-      hs.notify.new({
-        title = "Hammerspoon",
-        informativeText = "Quitting " .. app:name(),
-        withdrawAfter = 2,
-      }):send()
+      hs.notify.new(
+        function() hs.application.open(app:name()) end,
+        {
+          title = "Hammerspoon",
+          informativeText = "Quitting " .. app:name(),
+          withdrawAfter = 2,
+        }
+      ):send()
       app:kill()
       self.lastFocused[app:name()] = nil
     end
