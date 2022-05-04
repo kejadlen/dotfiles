@@ -29,7 +29,7 @@
 	<key>description</key>
 	<string></string>
 	<key>disabled</key>
-	<false/>
+	<true/>
 	<key>name</key>
 	<string>Edit in MacVim</string>
 	<key>objects</key>
@@ -62,7 +62,7 @@ SCRIPT
 
 File.write(filename, query)
 begin
-  `/usr/local/bin/mvim --nofork #{filename}`
+  `/opt/homebrew/bin/mvim --nofork #{filename}`
   `cat #{filename} | pbcopy`
   osascript(&lt;&lt;-SCRIPT)
     tell application "#{app}"

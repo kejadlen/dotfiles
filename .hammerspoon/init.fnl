@@ -1,31 +1,49 @@
 (local log (hs.logger.new "log" "info"))
+(set hs.logger.defaultLogLevel "info")
+
+(local mash [:cmd :alt :ctrl])
+(local smash [:cmd :alt :ctrl :shift])
 
 (set hs.window.animationDuration 0.0)
 (hs.loadSpoon "MiroWindowsManager")
 ;; (set spoon.MiroWindowsManager.fullScreenSizes [1 (/ 4 3) 2]) ;; only fullscreen
-(let [mash [:cmd :alt :ctrl]
-      smash [:cmd :alt :ctrl :shift]]
-  (spoon.MiroWindowsManager:bindHotkeys {
-    :up         [ mash  "k" ]
-    :left       [ mash  "h" ]
-    :down       [ mash  "j" ]
-    :right      [ mash  "l" ]
-    :fullscreen [ mash  "m" ]
-    ;; :center     [ mash  "c" ]
-    ;; :move       [ smash "m" ]
-    ;; :resize     [ mash  "d" ]
-  }))
+(spoon.MiroWindowsManager:bindHotkeys {
+  :up         [ mash  "k" ]
+  :left       [ mash  "h" ]
+  :down       [ mash  "j" ]
+  :right      [ mash  "l" ]
+  :fullscreen [ mash  "m" ]
+  ;; :center     [ mash  "c" ]
+  ;; :move       [ smash "m" ]
+  ;; :resize     [ mash  "d" ]
+})
 
-(let [mash [:cmd :alt :ctrl]
-      smash [:cmd :alt :ctrl :shift]]
+;; debugging
+;; (hs.hotkey.bind mash "d" (fn []))
+;; (hs.hotkey.bind mash "d" (fn [] (hs.dialog.blockAlert "message" "text" "one" "two")))
+;; (hs.hotkey.bind mash "d" (fn [] (hs.dialog.alert 100 100 (fn [] ) "message" "text" "one" "two")))
 
-  ;; debugging
-  ;; (hs.hotkey.bind mash "d" (fn []))
+;; defeat paste blocking
+(hs.hotkey.bind [:cmd :alt] "v" (fn [] (hs.eventtap.keyStrokes (hs.pasteboard.getContents))))
 
-  ;; defeat paste blocking
-  (hs.hotkey.bind [:cmd :alt] "v" (fn [] (hs.eventtap.keyStrokes (hs.pasteboard.getContents)))))
-
-(set hs.logger.defaultLogLevel "info")
+(hs.hotkey.bind mash "e" (fn []
+  (let [app (hs.application.frontmostApplication)
+        prev-pasteboard (hs.pasteboard.getContents)
+        e (hs.uielement.focusedElement)
+        text (if e (e:selectedText)
+                 (do
+                   (hs.eventtap.keyStroke [:cmd] "c")
+                   (hs.pasteboard.getContents)))
+        date (hs.execute "date -Iseconds -u | tr -d '\n'")
+        file (.. "~/.quickcursor." date)]
+    (hs.pasteboard.setContents text)
+    (hs.execute (.. "pbpaste > " file))
+    (hs.execute (.. "/opt/homebrew/bin/mvim --nofork " file))
+    (hs.execute (.. "pbcopy < " file))
+    (app:setFrontmost)
+    (hs.eventtap.keyStroke [:cmd] "v")
+    (hs.execute (.. "rm " file))
+    (hs.pasteboard.setContents prev-pasteboard))))
 
 (set hs.urlevent.httpCallback
   (fn [scheme host params fullURL]
