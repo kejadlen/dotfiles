@@ -46,6 +46,12 @@
               - MAIL_FROM_ADDRESS={{ monica_mail_from_address }}
               - MAIL_FROM_NAME=Monica
               - APP_EMAIL_NEW_USERS_NOTIFICATION={{ monica_app_email_new_users_notification }}
+              # - DEFAULT_FILESYSTEM=s3
+              # - AWS_ENDPOINT={{ minio_host }}
+              # - AWS_REGION=us-west-1
+              # - AWS_BUCKET=monica
+              # - AWS_ACCESS_KEY_ID={{ monica_aws_access_key }}
+              # - AWS_SECRET_ACCESS_KEY={{ monica_aws_secret_key }}
             volumes:
               - /usr/share/monica/app:/var/www/html/storage
               - /usr/share/monica/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
