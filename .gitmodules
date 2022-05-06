@@ -138,3 +138,6 @@
 [submodule ".vim/pack/alpha/start/vim-ledger"]
 	path = .vim/pack/alpha/start/vim-ledger
 	url = https://github.com/ledger/vim-ledger
+[submodule "src/frink.alfredworkflow"]
+	path = src/frink.alfredworkflow
+	url = https://github.com/src/frink.alfredworkflow
