@@ -256,5 +256,8 @@ if get(g:, '_has_set_default_indent_settings', 0) == 0
   let g:_has_set_default_indent_settings = 1
 endif
 
+" terraform
+let g:terraform_fmt_on_save = 1
+
 " }}}
 
