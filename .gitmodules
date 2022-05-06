@@ -64,9 +64,6 @@
 [submodule "src/giphy.alfredworkflow"]
 	path = src/giphy.alfredworkflow
 	url = https://github.com/kejadlen/giphy.alfredworkflow.git
-[submodule ".vim/pack/alpha/start/vim-racket"]
-	path = .vim/pack/alpha/start/vim-racket
-	url = https://github.com/wlangstroth/vim-racket.git
 [submodule "src/dark-sky.alfredworkflow"]
 	path = src/pirate-weather.alfredworkflow
 	url = https://github.com/kejadlen/pirate-weather.alfredworkflow.git
@@ -113,9 +110,6 @@
 [submodule "src/faker.alfredworkflow"]
 	path = src/faker.alfredworkflow
 	url = https://github.com/kejadlen/faker.alfredworkflow.git
-[submodule ".vim/pack/alpha/start/vim-reason-plus"]
-	path = .vim/pack/alpha/start/vim-reason-plus
-	url = https://github.com/reasonml-editor/vim-reason-plus.git
 [submodule "src/fast-user-switching.alfredworkflow"]
 	path = src/fast-user-switching.alfredworkflow
 	url = https://github.com/kejadlen/fast-user-switching.alfredworkflow.git
