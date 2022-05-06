@@ -61,9 +61,6 @@
 [submodule ".vim/pack/alpha/start/vim-rake"]
 	path = .vim/pack/alpha/start/vim-rake
 	url = https://github.com/tpope/vim-rake.git
-[submodule ".vim/pack/alpha/start/elm-vim"]
-	path = .vim/pack/alpha/start/elm-vim
-	url = https://github.com/ElmCast/elm-vim.git
 [submodule "src/giphy.alfredworkflow"]
 	path = src/giphy.alfredworkflow
 	url = https://github.com/kejadlen/giphy.alfredworkflow.git
