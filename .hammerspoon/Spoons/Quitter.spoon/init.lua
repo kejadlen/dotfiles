@@ -40,10 +40,12 @@ function obj:start()
   for app, _ in pairs(self.quitAppsAfter) do
     self.windowFilter:allowApp(app)
   end
-  self.windowFilter:subscribe(hs.window.filter.windowUnfocused, function(window, appName)
-    local name = window:application():name()
-    self.lastFocused[name] = os.time()
-  end)
+  self.windowFilter:subscribe(
+    {hs.window.filter.windowFocused, hs.window.filter.windowUnfocused},
+    function(window, appName)
+      local name = window:application():name()
+      self.lastFocused[name] = os.time()
+    end)
 
   self.timer = hs.timer.doEvery(60, function()
     self:reap()
