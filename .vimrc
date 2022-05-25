@@ -43,14 +43,20 @@ set background=dark
 colorscheme paramount
 
 fun! s:highlight()
-  " highlight Normal ctermbg=235
+  " Use the terminal background color
   highlight Normal ctermbg=NONE
+  highlight htmlH1 ctermbg=NONE
+  highlight htmlH2 ctermbg=NONE
+  highlight htmlH3 ctermbg=NONE
+  highlight htmlH4 ctermbg=NONE
+  highlight htmlH5 ctermbg=NONE
+  highlight htmlH6 ctermbg=NONE
+
   " highlight CursorLine ctermbg=236
   " highlight MatchParen ctermbg=238
 
-  " For the paramount colorscheme, since otherwise the contrast w/cursorline
-  " is insufficient.
-  highlight Comment ctermfg=243
+  " Bump the contrast a bit for the cursorline color
+  highlight Comment ctermfg=243 guifg=#767676
 endfun
 
 augroup MyHighlight
