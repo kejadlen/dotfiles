@@ -116,4 +116,13 @@ function obj:reap()
   end
 end
 
+function obj:debug()
+  local lastFocused = hs.fnutils.map(
+    spoon.Quitter.lastFocused,
+    function(t)
+      return os.date("!%Y-%m-%dT%TZ", t)
+    end)
+  print(hs.inspect(lastFocused))
+end
+
 return obj
