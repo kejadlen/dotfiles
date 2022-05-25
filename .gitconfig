@@ -74,6 +74,7 @@
 	fsckobjects = true
 [submodule]
 	fetchJobs = 4
+	recurse = true
 [commit]
 	verbose = true
 [filter "alfredworkflow"]
