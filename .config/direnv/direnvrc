@@ -1,10 +1,21 @@
-bundle() {
-  PATH_add .bundle/bin
-  export GEM_HOME="`pwd`/.bundle"
-}
+source $HOME/.nix-profile/share/nix-direnv/direnvrc
+source `brew --prefix`/share/chruby/chruby.sh
 
 layout_k8s() {
   if [ $commands[kubectl] ]; then
     source <(kubectl completion zsh)
   fi
+}
+
+# https://github.com/direnv/direnv/issues/98#issuecomment-33677881
+use_ruby() {
+  local ver=$1
+  if [[ -z $ver ]] && [[ -f .ruby-version ]]; then
+    ver=$(cat .ruby-version)
+  fi
+  if [[ -z $ver ]]; then
+    echo Unknown ruby version
+    exit 1
+  fi
+  chruby $ver
 }
