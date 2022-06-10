@@ -356,7 +356,7 @@
 				<key>script</key>
 				<string>url = ARGV.first
 url = `pbpaste`.chomp if url.empty?
-url = "http://#{url}" unless url =~ %r|^[\w]+://|
+url = "https://#{url}" unless url =~ %r|^[\w]+://|
 print url</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
