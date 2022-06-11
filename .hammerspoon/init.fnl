@@ -45,6 +45,9 @@
     (hs.execute (.. "rm " file))
     (hs.pasteboard.setContents prev-pasteboard))))
 
+;; https://stackoverflow.com/questions/39464668/how-to-get-bundle-id-of-mac-application
+;;   osascript -e 'id of app "SomeApp"'
+;;   mdls -name kMDItemCFBundleIdentifier -r SomeApp.app
 (set hs.urlevent.httpCallback
   (fn [scheme host params fullURL]
     (let [command (.. "curl -Ls -o /dev/null -w %{url_effective} " fullURL)
@@ -52,6 +55,8 @@
           url (handle:read "*a")]
       (if (string.find url "^https?://.*[.]zoom.us/j/%d+")
           (hs.urlevent.openURLWithBundle fullURL "us.zoom.xos")
+          (string.find url "^https?://.*[.]discnw.org/")
+          (hs.urlevent.openURLWithBundle fullURL "com.apple.Safari")
           (hs.urlevent.openURLWithBundle fullURL "org.mozilla.firefoxdeveloperedition")))))
 
 ;; Spoons
