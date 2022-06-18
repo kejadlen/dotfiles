@@ -48,16 +48,25 @@
 ;; https://stackoverflow.com/questions/39464668/how-to-get-bundle-id-of-mac-application
 ;;   osascript -e 'id of app "SomeApp"'
 ;;   mdls -name kMDItemCFBundleIdentifier -r SomeApp.app
+(fn bundleIDForURL [url]
+ (let [matchers {
+        ".*[.]zoom.us/j/%d+" "us.zoom.xos"
+        ".*[.]discnw.org/"   "com.apple.Safari"
+        "squareup.com/"      "com.apple.Safari" }]
+    (do
+      (var bundleID nil)
+      (each [key value (pairs matchers) :until bundleID]
+        (if (string.find url (.. "^https://" key))
+            (set bundleID value)))
+      (or bundleID "org.mozilla.firefoxdeveloperedition"))))
+
 (set hs.urlevent.httpCallback
   (fn [scheme host params fullURL]
     (let [command (.. "curl -Ls -o /dev/null -w %{url_effective} " fullURL)
           handle (io.popen command)
-          url (handle:read "*a")]
-      (if (string.find url "^https?://.*[.]zoom.us/j/%d+")
-          (hs.urlevent.openURLWithBundle fullURL "us.zoom.xos")
-          (string.find url "^https?://.*[.]discnw.org/")
-          (hs.urlevent.openURLWithBundle fullURL "com.apple.Safari")
-          (hs.urlevent.openURLWithBundle fullURL "org.mozilla.firefoxdeveloperedition")))))
+          url (handle:read "*a")
+          bundleID (bundleIDForURL url)]
+        (hs.urlevent.openURLWithBundle fullURL bundleID))))
 
 ;; Spoons
 
