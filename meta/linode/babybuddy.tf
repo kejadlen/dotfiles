@@ -35,7 +35,7 @@ resource "kubernetes_deployment" "babybuddy" {
       }
       spec {
         container {
-          image             = "lscr.io/linuxserver/babybuddy:1.10.2"
+          image             = "lscr.io/linuxserver/babybuddy:1.11.1"
           name              = "babybuddy"
           image_pull_policy = "Always"
           port {
@@ -51,6 +51,10 @@ resource "kubernetes_deployment" "babybuddy" {
           }
           env {
             name  = "SECURE_PROXY_SSL_HEADER"
+            value = "True"
+          }
+          env {
+            name  = "DEBUG"
             value = "True"
           }
         }
