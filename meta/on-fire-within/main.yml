@@ -18,7 +18,7 @@
 
           # Needed for Docker stuff
           - docker-compose
-          - python-pip
+          - python3-pip
           - python-backports-shutil-get-terminal-size
           - python-backports.ssl-match-hostname
 
@@ -182,15 +182,6 @@
                 - traefik.http.routers.pihole.tls.certresolver=le
                 - traefik.http.services.pihole.loadbalancer.server.port=80
               restart: unless-stopped
-            rzz:
-              image: kejadlen/rzz:latest
-              container_name: rzz
-              labels:
-                - traefik.enable=true
-                - traefik.http.routers.rzz.rule=Host(`{{ traefik.host_rules.rzz }}`)
-                - traefik.http.routers.rzz.tls=true
-                - traefik.http.routers.rzz.tls.certresolver=le
-                - traefik.http.services.rzz.loadbalancer.server.port=9292
             syncthing:
               image: kejadlen/syncthing:latest
               container_name: syncthing
