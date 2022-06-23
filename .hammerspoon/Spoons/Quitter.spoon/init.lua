@@ -14,6 +14,7 @@ obj.license = "MIT - https://opensource.org/licenses/MIT"
 
 obj.logger = hs.logger.new("quitter", "warning")
 obj.lastFocused = {}
+obj.state = "stopped"
 
 --- Quitter.quitAppsAfter
 --- Variable
@@ -27,6 +28,8 @@ obj.quitAppsAfter = {}
 --- Parameters:
 ---  * None
 function obj:start()
+  if self.state == "started" then return end
+
   self:reset()
 
   -- Reset if we're waking from sleep
@@ -51,6 +54,8 @@ function obj:start()
     self:reap()
   end):start()
 
+  self.state = "started"
+
   return self
 end
 
@@ -61,9 +66,27 @@ end
 --- Parameters:
 ---  * None
 function obj:stop()
+  if self.state == "stopped" then return end
+
   self.watcher:stop()
-  self.windowFilter:unsubscribe(hs.window.filter.windowFocused)
+  self.windowFilter:unsubscribeAll()
   self.timer:stop()
+
+  self.state = "stopped"
+end
+
+--- Quitter:toggle()
+--- Method
+--- Toggle Quitter
+---
+--- Parameters:
+---  * None
+function obj:toggle()
+  if self.state == "started" then
+    self:stop()
+  else
+    self:start()
+  end
 end
 
 function obj:reset()
