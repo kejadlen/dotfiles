@@ -4,9 +4,6 @@
 [submodule "Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/faker.alfredworkflow
 	url = https://github.com/kejadlen/faker.alfredworkflow
-[submodule "Alfred.alfredpreferences/workflows/alphred.alfredworkflow"]
-	path = Alfred.alfredpreferences/workflows/alphred.alfredworkflow
-	url = https://github.com/kejadlen/alphred.alfredworkflow.git
 [submodule ".vim/pack/alpha/start/vim-commentary"]
 	path = .vim/pack/alpha/start/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git

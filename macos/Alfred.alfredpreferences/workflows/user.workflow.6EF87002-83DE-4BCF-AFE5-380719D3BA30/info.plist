@@ -150,9 +150,9 @@ curl -v "https://$PIHOLE_HOST/admin/api.php?disable={query}&amp;auth=$API_TOKEN"
 	<key>variables</key>
 	<dict>
 		<key>API_TOKEN</key>
-		<string></string>
+		<string>0747e372decf96f455c816d84af4dcdb9035f534ee031b7a1cf99812e923a114</string>
 		<key>PIHOLE_HOST</key>
-		<string></string>
+		<string>pihole.kejadlen.dev</string>
 	</dict>
 	<key>variablesdontexport</key>
 	<array>

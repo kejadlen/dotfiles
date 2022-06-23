@@ -286,9 +286,9 @@
 	<key>variables</key>
 	<dict>
 		<key>SEED</key>
-		<string></string>
+		<string>95:6f:35:5c:03:20:4f:fc:c4:d6:1d:44:d2:84:8d:13</string>
 		<key>SERIAL</key>
-		<string></string>
+		<string>115900150589</string>
 	</dict>
 	<key>variablesdontexport</key>
 	<array>
