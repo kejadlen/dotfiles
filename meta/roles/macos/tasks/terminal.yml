@@ -1,5 +1,5 @@
 - name: import terminal profile
-  command: open ~/.dotfiles/Alpha.terminal
+  command: open ~/.dotfiles/macos/Alpha.terminal
 
 - name: set terminal profile to be the default
   osx_defaults:
