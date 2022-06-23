@@ -4,6 +4,7 @@
 - hosts: on_fire_within
   become: yes
   tasks:
+
     - name: Set authorized keys from GitHub
       authorized_key:
         user: alpha
@@ -116,6 +117,27 @@
         - minio
         - traefik
 
+    # Workaround for https://github.com/pi-hole/docker-pi-hole/issues/1048
+    # - https://github.com/pi-hole/docker-pi-hole/issues/1042#issuecomment-1086728157
+    # - https://github.com/pi-hole/docker-pi-hole/issues/1043#issuecomment-1086936352
+    - name: Work around a Docker libseccomp issue w/Pi-Hole
+      block:
+        - apt_key:
+            keyserver: keyserver.ubuntu.com
+            id: "{{ item }}"
+          loop:
+            - 04EE7237B7D453EC
+            - 648ACFD622F3D138
+        - apt_repository:
+            repo: deb http://deb.debian.org/debian buster-backports main
+            filename: buster-backports
+            state: present
+        - shell: apt-cache policy libseccomp2 | grep buster-backports -B1 | head -n1 | sed -e 's/^\s*\**\s*\(\S*\).*/\1/'
+          register: libseccomp2_version
+        - apt:
+            update_cache: yes
+            name: libseccomp2={{ libseccomp2_version.stdout_lines[0] }}
+
     - name: Docker ALL the things!
       docker_compose:
         project_name: on-fire-within
@@ -169,6 +191,7 @@
                 TZ: America/Los_Angeles
                 VIRTUAL_HOST: "{{ pihole.host }}"
                 WEBPASSWORD: "{{ pihole.password }}"
+                LOCAL_IPV4: "{{ ansible_default_ipv4.address }}"
               volumes:
                 - /etc/pihole:/etc/pihole
                 - /etc/dnsmasq.d:/etc/dnsmasq.d
