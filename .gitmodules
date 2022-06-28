@@ -129,3 +129,39 @@
 [submodule "src/frink.alfredworkflow"]
 	path = src/frink.alfredworkflow
 	url = https://github.com/src/frink.alfredworkflow
+[submodule ".local/share/nvim/site/pack/hotpot.nvim"]
+	path = .local/share/nvim/site/pack/kejadlen/start/hotpot
+	url = https://github.com/rktjmp/hotpot.nvim
+[submodule ".local/share/nvim/site/pack/kejadlen/start/colorscheme-paramount"]
+	path = .local/share/nvim/site/pack/kejadlen/start/colorscheme-paramount
+	url = https://github.com/owickstrom/vim-colors-paramount.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/vim-tmux-navigator"]
+	path = .local/share/nvim/site/pack/kejadlen/start/tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/lightline"]
+	path = .local/share/nvim/site/pack/kejadlen/start/lightline
+	url = https://github.com/itchyny/lightline.vim.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/unimpaired"]
+	path = .local/share/nvim/site/pack/kejadlen/start/unimpaired
+	url = https://github.com/tpope/vim-unimpaired.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/sleuth"]
+	path = .local/share/nvim/site/pack/kejadlen/start/sleuth
+	url = https://github.com/tpope/vim-sleuth.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/fennel"]
+	path = .local/share/nvim/site/pack/kejadlen/start/fennel
+	url = https://github.com/jaawerth/fennel.vim.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/commentary"]
+	path = .local/share/nvim/site/pack/kejadlen/start/commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/lspconfig"]
+	path = .local/share/nvim/site/pack/kejadlen/start/lspconfig
+	url = https://github.com/neovim/nvim-lspconfig.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/sensible"]
+	path = .local/share/nvim/site/pack/kejadlen/start/sensible
+	url = https://github.com/tpope/vim-sensible.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/vinegar"]
+	path = .local/share/nvim/site/pack/kejadlen/start/vinegar
+	url = https://github.com/tpope/vim-vinegar.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/surround"]
+	path = .local/share/nvim/site/pack/kejadlen/start/surround
+	url = https://github.com/tpope/vim-surround.git
