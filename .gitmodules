@@ -133,8 +133,8 @@
 	path = .local/share/nvim/site/pack/kejadlen/start/hotpot
 	url = https://github.com/rktjmp/hotpot.nvim
 [submodule ".local/share/nvim/site/pack/kejadlen/start/colorscheme-paramount"]
-	path = .local/share/nvim/site/pack/kejadlen/start/colorscheme-paramount
-	url = https://github.com/owickstrom/vim-colors-paramount.git
+	path = .local/share/nvim/site/pack/kejadlen/start/paramount
+	url = https://github.com/kejadlen/vim-colors-paramount.git
 [submodule ".local/share/nvim/site/pack/kejadlen/start/vim-tmux-navigator"]
 	path = .local/share/nvim/site/pack/kejadlen/start/tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator.git
@@ -165,3 +165,6 @@
 [submodule ".local/share/nvim/site/pack/kejadlen/start/surround"]
 	path = .local/share/nvim/site/pack/kejadlen/start/surround
 	url = https://github.com/tpope/vim-surround.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/ale"]
+	path = .local/share/nvim/site/pack/kejadlen/start/ale
+	url = https://github.com/dense-analysis/ale.git
