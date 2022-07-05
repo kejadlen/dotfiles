@@ -206,21 +206,25 @@
                 - traefik.http.services.pihole.loadbalancer.server.port=80
               restart: unless-stopped
             syncthing:
-              image: kejadlen/syncthing:latest
+              image: syncthing/syncthing:latest
               container_name: syncthing
               ports:
-                - 22000:22000/tcp
-                - 21027:21027/udp
+                - 22000:22000/tcp # TCP file transfers
+                - 22000:22000/udp # QUIC file transfers
+                - 21027:21027/udp # Receive local discovery broadcasts
               volumes:
-                - /etc/syncthing:/etc/syncthing
+                - /etc/syncthing:/var/syncthing
                 - /mnt/mushu/syncthing:/sync
-              user: 0:0 # root
+              environment:
+                PUID: 0
+                PGID: 0
               labels:
                 - traefik.enable=true
                 - traefik.http.routers.syncthing.rule=Host(`{{ traefik.host_rules.syncthing }}`)
                 - traefik.http.routers.syncthing.tls=true
                 - traefik.http.routers.syncthing.tls.certresolver=le
                 - traefik.http.services.syncthing.loadbalancer.server.port=8384
+              restart: unless-stopped
             traefik:
               image: traefik:v2.5
               container_name: traefik
