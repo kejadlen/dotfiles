@@ -165,9 +165,6 @@
 [submodule ".local/share/nvim/site/pack/kejadlen/start/surround"]
 	path = .local/share/nvim/site/pack/kejadlen/start/surround
 	url = https://github.com/tpope/vim-surround.git
-[submodule ".local/share/nvim/site/pack/kejadlen/start/ale"]
-	path = .local/share/nvim/site/pack/kejadlen/start/ale
-	url = https://github.com/dense-analysis/ale.git
 [submodule ".local/share/nvim/site/pack/kejadlen/start/fzf"]
 	path = .local/share/nvim/site/pack/kejadlen/start/fzf
 	url = https://github.com/junegunn/fzf.vim.git
@@ -177,3 +174,6 @@
 [submodule ".local/share/nvim/site/pack/kejadlen/start/tabular"]
 	path = .local/share/nvim/site/pack/kejadlen/start/tabular
 	url = https://github.com/godlygeek/tabular.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/lint"]
+	path = .local/share/nvim/site/pack/kejadlen/start/lint
+	url = https://github.com/mfussenegger/nvim-lint.git
