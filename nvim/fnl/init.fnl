@@ -103,6 +103,17 @@
 ; https://github.com/tpope/vim-vinegar/issues/13
 (set vim.g.netrw_home "~/.nvim_tmp")
 
+;;; tree-sitter
+
+(let [configs (require :nvim-treesitter.configs)
+      {: setup} configs]
+  (setup {:ensure_installed [:fennel]
+          :sync_install false
+          :highlight {:enable true :additional_vim_regex_highlighting false}
+          :indent {:enable true}}))
+(set vim.opt.foldmethod :expr)
+(set vim.opt.foldexpr "nvim_treesitter#foldexpr()")
+
 ;;; generate help files
 
 ; Load all plugins now.
