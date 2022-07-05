@@ -104,13 +104,17 @@
 (set vim.g.netrw_home "~/.nvim_tmp")
 
 ;;; treesitter
-
 (let [configs (require :nvim-treesitter.configs)
       {: setup} configs]
   (setup {:ensure_installed [:fennel]
           :sync_install false
           :highlight {:enable true :additional_vim_regex_highlighting false}
-          :indent {:enable true}}))
+          :indent {:enable true}
+          :incremental_selection {:enable true
+                                  :keymaps {:init_selection :gnn
+                                            :node_incremental :grn
+                                            :scope_incremental :grc
+                                            :node_decremental :grm}}}))
 
 (set vim.opt.foldmethod :expr)
 (set vim.opt.foldexpr "nvim_treesitter#foldexpr()")
