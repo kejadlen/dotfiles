@@ -1,5 +1,6 @@
 (vim.cmd "colorscheme paramount")
 
+(set vim.opt.foldlevel 1)
 (set vim.opt.list true)
 
 ;; fnlfmt: skip
@@ -98,12 +99,11 @@
 
 ;;; netrw
 
+;; https://github.com/tpope/vim-vinegar/issues/13
 (set vim.g.netrw_fastbrowse 0)
-
-; https://github.com/tpope/vim-vinegar/issues/13
 (set vim.g.netrw_home "~/.nvim_tmp")
 
-;;; tree-sitter
+;;; treesitter
 
 (let [configs (require :nvim-treesitter.configs)
       {: setup} configs]
@@ -111,15 +111,16 @@
           :sync_install false
           :highlight {:enable true :additional_vim_regex_highlighting false}
           :indent {:enable true}}))
+
 (set vim.opt.foldmethod :expr)
 (set vim.opt.foldexpr "nvim_treesitter#foldexpr()")
 
 ;;; generate help files
 
-; Load all plugins now.
-; Plugins need to be added to runtimepath before helptags can be generated.
+;; Load all plugins now.
+;; Plugins need to be added to runtimepath before helptags can be generated.
 (vim.api.nvim_command :packloadall)
 
-; Load all of the helptags now, after plugins have been loaded.
-; All messages and errors will be ignored.
+;; Load all of the helptags now, after plugins have been loaded.
+;; All messages and errors will be ignored.
 (vim.api.nvim_command "silent! helptags ALL")
