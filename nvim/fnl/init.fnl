@@ -1,6 +1,7 @@
 (vim.cmd "colorscheme paramount")
 
 (set vim.opt.foldlevel 1)
+(set vim.opt.linebreak true)
 (set vim.opt.list true)
 
 ;; fnlfmt: skip
@@ -11,18 +12,35 @@
                         :nbsp     "\\u00b7"})
 
 (set vim.opt.number true)
+(set vim.opt.showmode false)
+(set vim.opt.termguicolors true)
+(set vim.opt.virtualedit :block)
+(set vim.opt.wildmode "longest:full")
+
+;; search
+(set vim.opt.gdefault true)
+(set vim.opt.ignorecase true)
+(set vim.opt.smartcase true)
 
 (set vim.g.mapleader " ")
 
-;; move the cursor to the first non-blank character with H
-(vim.keymap.set :n :H "^" {:noremap true})
+;; disable arrow keys
+(each [_ v (ipairs [:up :down :left :right])]
+  (vim.keymap.set :n (.. "<" v ">") :<nop>))
 
 ;; quick save
-(vim.keymap.set :n "\\\\" ":write<cr>" {:noremap true})
-(vim.keymap.set :i "\\\\" "<esc>:write<cr>" {:noremap true})
+(vim.keymap.set :n "\\\\" ":write<cr>")
+(vim.keymap.set :i "\\\\" "<esc>:write<cr>")
 
 ;; clear highlight
-(vim.keymap.set :n :<leader>/ ":nohlsearch<cr>" {:noremap true})
+(vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
+
+;; non-shifted shortcuts for moving the cursor to the start/end of the current line
+(vim.keymap.set :n :H "^")
+(vim.keymap.set :n :L "$")
+
+;; re-run the last macro
+(vim.keymap.set :n :Q "@@")
 
 ;;; restore cursor location
 
@@ -52,6 +70,17 @@
 
 ;; (require :ale)
 (require :fzf)
+
+;;; lightline
+
+;; https://github.com/itchyny/lightline.vim/issues/168#issuecomment-232183744
+(let [colorscheme :powerline
+      palette-key (.. "lightline#colorscheme#" colorscheme "#palette")
+      palette (. vim.g palette-key)]
+  (set vim.g.lightline {: colorscheme})
+  (each [_ f (ipairs [:normal :inactive :tabline])]
+    (tset palette f :middle [[:NONE :NONE :NONE :NONE]]))
+  (tset vim.g palette-key palette))
 
 ;;; lint
 
