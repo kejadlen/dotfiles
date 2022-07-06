@@ -89,7 +89,7 @@
       {:fennel fennel-linter} linters
       {: nvim_create_autocmd} vim.api]
   (tset linters-by-ft :fennel [:fennel])
-  (tset fennel-linter :globals [:vim]) ; hack
+  (tset fennel-linter :globals [:vim :hs :spoon]) ; hack for neovim and hammerspoon
   (nvim_create_autocmd :BufWritePost {:callback #(try-lint)}))
 
 ;;; lspconfig
