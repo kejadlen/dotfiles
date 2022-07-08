@@ -122,9 +122,10 @@
     (vim.keymap.set :n :gr vim.lsp.buf.references bufopts)
     (vim.keymap.set :n :<leader>f vim.lsp.buf.formatting bufopts)))
 
-(let [{: rust_analyzer} (require :lspconfig)]
+(let [{: rust_analyzer : tsserver} (require :lspconfig)]
   ((. rust_analyzer :setup) {: on_attach
-                             :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}}))
+                             :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
+  ((. tsserver :setup) {: on_attach}))
 
 ;;; netrw
 
