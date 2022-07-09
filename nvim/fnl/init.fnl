@@ -69,6 +69,11 @@
   (nvim_create_autocmd :FileType {:callback cb :group au-group}))
 
 ;; (require :ale)
+
+;;; diagnostic
+
+(vim.diagnostic.config {:float {:source :if_many :border :rounded}})
+
 (require :fzf)
 
 ;;; lightline
@@ -102,7 +107,7 @@
   (vim.keymap.set :n "]d" vim.diagnostic.goto_next opts)
   (vim.keymap.set :n :<leader>q vim.diagnostic.setloclist opts))
 
-(fn on_attach [client bufnr]
+(fn on-attach [client bufnr]
   (vim.api.nvim_buf_set_option bufnr :omnifunc "v:lua.vim.lsp.omnifunc")
   (let [bufopts {:noremap true :silent true :buffer bufnr}]
     (vim.keymap.set :n :gD vim.lsp.buf.declaration bufopts)
@@ -120,12 +125,26 @@
     (vim.keymap.set :n :<leader>rn vim.lsp.buf.rename bufopts)
     (vim.keymap.set :n :<leader>ca vim.lsp.buf.code_action bufopts)
     (vim.keymap.set :n :gr vim.lsp.buf.references bufopts)
-    (vim.keymap.set :n :<leader>f vim.lsp.buf.formatting bufopts)))
+    (vim.keymap.set :n :<leader>lf vim.lsp.buf.formatting bufopts)))
 
-(let [{: rust_analyzer : tsserver} (require :lspconfig)]
-  ((. rust_analyzer :setup) {: on_attach
+(let [{: efm : rust_analyzer : tsserver} (require :lspconfig)]
+  ((. efm :setup) {:on_attach on-attach
+                   :init_options {:documentFormatting true
+                                  :hover true
+                                  :documentSymbol true
+                                  :codeAction true
+                                  :completion true}
+                   :settings {:languages {:javascript [{:formatCommand "prettier --stdin-filepath ${INPUT}"
+                                                        :formatStdin true}]
+                                          :typescript [{:formatCommand "prettier --stdin-filepath ${INPUT}"
+                                                        :formatStdin true}]}}
+                   :filetypes [:javascript :typescript]})
+  ((. rust_analyzer :setup) {:on_attach on-attach
                              :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
-  ((. tsserver :setup) {: on_attach}))
+  ((. tsserver :setup) {:on_attach (fn [client bufnr]
+                                      (on-attach client bufnr)
+                                      (set client.resolved_capabilities.document_formatting
+                                           false))}))
 
 ;;; netrw
 
