@@ -101,6 +101,12 @@
 
 ;; (vim.lsp.set_log_level :debug)
 
+;; default hover windows to have borders
+(let [{: handlers : with} vim.lsp
+      {: hover} handlers]
+  (tset handlers :textDocument/hover (with hover {:border :rounded}))
+  (tset handlers :textDocument/signatureHelp (with hover {:border :rounded})))
+
 (let [opts {:noremap true :silent true}]
   (vim.keymap.set :n :<leader>e vim.diagnostic.open_float opts)
   (vim.keymap.set :n "[d" vim.diagnostic.goto_prev opts)
@@ -142,9 +148,9 @@
   ((. rust_analyzer :setup) {:on_attach on-attach
                              :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
   ((. tsserver :setup) {:on_attach (fn [client bufnr]
-                                      (on-attach client bufnr)
-                                      (set client.resolved_capabilities.document_formatting
-                                           false))}))
+                                     (on-attach client bufnr)
+                                     (set client.resolved_capabilities.document_formatting
+                                          false))}))
 
 ;;; netrw
 
