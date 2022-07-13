@@ -53,8 +53,9 @@
 
 ;; fnlfmt: skip
 (local matchers {".*[.]zoom.us/j/%d+" :us.zoom.xos
-                  ".*[.]discnw.org/"  :com.apple.Safari
-                  :squareup.com/      :com.apple.Safari})
+                 ".*[.]webex.com/"    :Cisco-Systems.Spark
+                 ".*[.]discnw.org/"   :com.apple.Safari
+                 :squareup.com/       :com.apple.Safari})
 
 (fn bundleIDForURL [url]
   (var bundleID nil)
