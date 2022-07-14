@@ -174,9 +174,6 @@
 [submodule ".local/share/nvim/site/pack/kejadlen/start/tabular"]
 	path = .local/share/nvim/site/pack/kejadlen/start/tabular
 	url = https://github.com/godlygeek/tabular.git
-[submodule ".local/share/nvim/site/pack/kejadlen/start/lint"]
-	path = .local/share/nvim/site/pack/kejadlen/start/lint
-	url = https://github.com/mfussenegger/nvim-lint.git
 [submodule ".local/share/nvim/site/pack/kejadlen/start/treesitter"]
 	path = .local/share/nvim/site/pack/kejadlen/start/treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter.git

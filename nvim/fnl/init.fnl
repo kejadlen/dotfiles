@@ -87,16 +87,6 @@
     (tset palette f :middle [[:NONE :NONE :NONE :NONE]]))
   (tset vim.g palette-key palette))
 
-;;; lint
-
-(let [lint (require :lint)
-      {: linters :linters_by_ft linters-by-ft :try_lint try-lint} lint
-      {:fennel fennel-linter} linters
-      {: nvim_create_autocmd} vim.api]
-  (tset linters-by-ft :fennel [:fennel])
-  (tset fennel-linter :globals [:vim :hs :spoon]) ; hack for neovim and hammerspoon
-  (nvim_create_autocmd :BufWritePost {:callback #(try-lint)}))
-
 ;;; lspconfig
 
 ;; (vim.lsp.set_log_level :debug)
@@ -133,18 +123,31 @@
     (vim.keymap.set :n :gr vim.lsp.buf.references bufopts)
     (vim.keymap.set :n :<leader>lf vim.lsp.buf.formatting bufopts)))
 
-(let [{: efm : rust_analyzer : tsserver} (require :lspconfig)]
+(let [{: efm : rust_analyzer : tsserver} (require :lspconfig)
+      fmt (fn [formatCommand formatStdin]
+            {: formatCommand : formatStdin})
+      lint (fn [lintCommand lintFormats lintStdin]
+             {: lintCommand : lintFormats : lintStdin})
+      prettier (fmt "prettier --stdin-filepath ${INPUT}" true)
+      ;; https://github.com/alexaandru/nvim-config/blob/master/fnl/config/efm.fnl
+      fennelFmt (fmt "fnlfmt /dev/stdin" true)
+      fennelLint (lint "fennel --globals vim,hs,spoon --raw-errors $(realpath --relative-to . ${INPUT}) 2>&1"
+                       ["%f:%l: %m"] true)
+      fennel [fennelFmt fennelLint]]
   ((. efm :setup) {:on_attach on-attach
                    :init_options {:documentFormatting true
                                   :hover true
                                   :documentSymbol true
                                   :codeAction true
                                   :completion true}
-                   :settings {:languages {:javascript [{:formatCommand "prettier --stdin-filepath ${INPUT}"
-                                                        :formatStdin true}]
-                                          :typescript [{:formatCommand "prettier --stdin-filepath ${INPUT}"
-                                                        :formatStdin true}]}}
-                   :filetypes [:javascript :typescript]})
+                   :settings {:languages {:javascript [prettier]
+                                          :typescript [prettier]
+                                          :typescriptreact [prettier]
+                                          : fennel}}
+                   :filetypes [:javascript
+                               :typescript
+                               :typescriptreact
+                               :fennel]})
   ((. rust_analyzer :setup) {:on_attach on-attach
                              :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
   ((. tsserver :setup) {:on_attach (fn [client bufnr]
@@ -183,3 +186,4 @@
 ;; Load all of the helptags now, after plugins have been loaded.
 ;; All messages and errors will be ignored.
 (vim.api.nvim_command "silent! helptags ALL")
+
