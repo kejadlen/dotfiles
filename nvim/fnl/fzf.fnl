@@ -1,5 +1,3 @@
-;;; fzf
-
 ;; https://github.com/junegunn/fzf/blob/master/README-VIM.md
 
 (fn init-keymaps []
