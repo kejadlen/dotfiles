@@ -53,7 +53,7 @@
 
 ;; fnlfmt: skip
 (local matchers {".*[.]zoom.us/j/%d+" :us.zoom.xos
-                 ".*[.]webex.com/"    :com.webex.meetingmanager
+                 ; ".*[.]webex.com/"    :com.webex.meetingmanager
                  ".*[.]discnw.org/"   :com.apple.Safari
                  :squareup.com/       :com.apple.Safari})
 
