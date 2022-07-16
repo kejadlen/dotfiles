@@ -60,6 +60,19 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>A0D55B34-A5CE-44C9-8920-22144A82FE2B</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>bookshop</string>
+			<key>spaces</key>
+			<string>+</string>
+			<key>text</key>
+			<string>Search Bookshop for '{query}'</string>
+			<key>url</key>
+			<string>https://bookshop.org/books?keywords={query}</string>
+		</dict>
 		<key>A5E2DBA1-C7F6-4F89-8348-987E767FC291</key>
 		<dict>
 			<key>enabled</key>
