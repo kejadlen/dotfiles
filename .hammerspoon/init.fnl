@@ -52,29 +52,30 @@
 ;;   mdls -name kMDItemCFBundleIdentifier -r SomeApp.app
 
 ;; fnlfmt: skip
-(local matchers {".*[.]zoom.us/j/%d+" :us.zoom.xos
-                 ; ".*[.]webex.com/"    :com.webex.meetingmanager
-                 ".*[.]discnw.org/"   :com.apple.Safari
-                 :squareup.com/       :com.apple.Safari})
+(local bundle-ids {:firefox :org.mozilla.firefoxdeveloperedition
+                   :safari  :com.apple.Safari
+                   :zoom    :us.zoom.xos})
 
-(fn bundleIDForURL [url]
-  (var bundleID nil)
-  (each [key value (pairs matchers) :until bundleID]
-    (if (string.find url (.. "^https://" key))
-        (set bundleID value)))
-  (or bundleID :org.mozilla.firefoxdeveloperedition))
+(fn handle [url orig-url]
+  (let [open-with (fn [app]
+                    (partial #(hs.urlevent.openURLWithBundle $2 $1)
+                             (. bundle-ids app)))
+        open-url #((open-with $1) url)]
+    (if (string.find url "^https://.*[.]zoom.us/j/%d+") (open-url :zoom)
+        (string.find url "^https://.*[.]discnw.org/") (open-url :safari)
+        (string.find url "^https://squareup.com/") (open-url :safari)
+        (string.find orig-url "^https://doi.org/")
+        ((open-with :firefox) (.. "https://sci-hub.st/" orig-url))
+        (open-url :firefox))))
 
 (set hs.urlevent.httpCallback
      (fn [scheme host params url]
        (let [run #(: (io.popen (.. $1 " \"" $2 "\"")) :read :*a)
              de-utm (partial run "~/.dotfiles/bin/de-utm")
              redirect (partial run "curl -Ls -o /dev/null -w %{url_effective}")
-             final-url (->> url
-                            (de-utm)
-                            (redirect)
-                            (de-utm))
-             bundleID (bundleIDForURL final-url)]
-         (hs.urlevent.openURLWithBundle final-url bundleID))))
+             orig-url (de-utm url)
+             redirected (de-utm (redirect orig-url))]
+         (handle redirected orig-url))))
 
 ;;; Spoons
 
@@ -97,3 +98,4 @@
 (: (hs.notify.new {:title :Hammerspoon
                    :informativeText "Config loaded"
                    :withdrawAfter 2}) :send)
+

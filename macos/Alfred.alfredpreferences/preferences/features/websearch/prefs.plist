@@ -19,19 +19,6 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
-		<key>44474AB2-A23A-4D3C-AB64-0DFE164ED23A</key>
-		<dict>
-			<key>enabled</key>
-			<true/>
-			<key>keyword</key>
-			<string>sh</string>
-			<key>text</key>
-			<string>Open '{query}' in Sci-Hub</string>
-			<key>url</key>
-			<string>https://sci-hub.st/{query}</string>
-			<key>utf8</key>
-			<true/>
-		</dict>
 		<key>491B807D-42B3-4CB4-861F-2ADF20727F53</key>
 		<dict>
 			<key>enabled</key>
