@@ -130,15 +130,19 @@
 			<key>Terraform</key>
 			<dict>
 				<key>date</key>
-				<date>2022-06-11T18:01:06Z</date>
+				<date>2022-07-27T13:50:24Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
-					<array/>
+					<array>
+						<string>terraform</string>
+						<string>tf</string>
+						<string>terra</string>
+					</array>
 					<key>authorLinkHref</key>
 					<string>https://github.com/Kapeli/Dash-User-Contributions/tree/master/docsets/Terraform#readme</string>
 					<key>authorLinkText</key>
-					<string>rolandjohann</string>
+					<string>Roberth Kulbin</string>
 					<key>name</key>
 					<string>Terraform</string>
 					<key>platform</key>
@@ -163,16 +167,20 @@
 		<dict>
 			<key>~/Library/Application Support/Dash/DocSets/JavaScript/JavaScript.docset</key>
 			<string>js:</string>
+			<key>~/Library/Application Support/Dash/DocSets/Man_Pages/Man Pages.docset</key>
+			<string>man:</string>
 			<key>~/Library/Application Support/Dash/DocSets/Markdown/Markdown.docset</key>
-			<string>markdown:</string>
+			<string>md:</string>
 			<key>~/Library/Application Support/Dash/DocSets/NodeJS/NodeJS.docset</key>
-			<string>nodejs:</string>
+			<string>node:</string>
 			<key>~/Library/Application Support/Dash/DocSets/Python_3/Python 3.docset</key>
-			<string>python:</string>
+			<string>py:</string>
 			<key>~/Library/Application Support/Dash/DocSets/Ruby_3/Ruby.docset</key>
 			<string>Ruby:</string>
 			<key>~/Library/Application Support/Dash/Ruby DocSets/rake/rake.docset</key>
 			<string>gem:</string>
+			<key>~/Library/Application Support/Dash/User Contributed/Terraform/Terraform.docset</key>
+			<string>tf:</string>
 			<key>~/Library/Application Support/Dash/Versioned DocSets/Ruby 2 - DHDocsetDownloader/2-7-2/Ruby.docset</key>
 			<string>rb:</string>
 		</dict>
@@ -196,16 +204,6 @@
 				<key>date</key>
 				<date>2021-11-18T00:12:13Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/Docker.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2021-11-18T00:04:04Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Haskell.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2021-11-18T00:03:12Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/JavaScript.xml</key>
 			<dict>
 				<key>date</key>
@@ -226,15 +224,15 @@
 				<key>date</key>
 				<date>2021-11-18T00:35:30Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/Racket.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2021-11-18T00:37:36Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/Ruby_3.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2021-11-18T00:32:27Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Ruby_on_Rails_7.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-07-27T14:27:48Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Rust.xml</key>
 			<dict>
@@ -249,6 +247,21 @@
 		</dict>
 		<key>uninstalled</key>
 		<dict>
+			<key>http://kapeli.com/feeds/Docker.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-07-30T18:49:35Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Haskell.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-07-30T18:49:38Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Racket.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-07-30T18:49:25Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/Ruby.xml</key>
 			<dict>
 				<key>date</key>
