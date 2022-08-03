@@ -60,6 +60,10 @@
   (nvim_command "filetype plugin indent on")
   (nvim_create_autocmd :BufReadPost {:callback cb :group au-group}))
 
+;;; filetype
+
+(set vim.g.do_filetype_lua true)
+
 ;;; ftplugins in fennel
 
 ;; https://github.com/rktjmp/hotpot.nvim/discussions/41#discussioncomment-3050564
@@ -95,7 +99,7 @@
 ;;; treesitter
 (let [configs (require :nvim-treesitter.configs)
       {: setup} configs]
-  (setup {:ensure_installed [:fennel]
+  (setup {:ensure_installed [:fennel :lua :ruby :rust :typescript]
           :sync_install false
           :highlight {:enable true :additional_vim_regex_highlighting false}
           :indent {:enable true}
@@ -103,7 +107,15 @@
                                   :keymaps {:init_selection :gnn
                                             :node_incremental :grn
                                             :scope_incremental :grc
-                                            :node_decremental :grm}}}))
+                                            :node_decremental :grm}}
+          :textobjects {:select {:enable true
+                                 :lookahead true
+                                 :keymaps {:af "@function.outer"
+                                           :if "@function.inner"
+                                           :ac "@class.outer"
+                                           :ic "@class.inner"
+                                           :ab "@block.outer"
+                                           :ib "@block.inner"}}}}))
 
 (set vim.opt.foldmethod :expr)
 (set vim.opt.foldexpr "nvim_treesitter#foldexpr()")

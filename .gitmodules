@@ -7,57 +7,75 @@
 [submodule ".vim/pack/alpha/start/vim-commentary"]
 	path = .vim/pack/alpha/start/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-sensible"]
 	path = .vim/pack/alpha/start/vim-sensible
 	url = https://github.com/tpope/vim-sensible.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-surround"]
 	path = .vim/pack/alpha/start/vim-surround
 	url = https://github.com/tpope/vim-surround.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-sleuth"]
 	path = .vim/pack/alpha/start/vim-sleuth
 	url = https://github.com/tpope/vim-sleuth.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-tmux-navigator"]
 	path = .vim/pack/alpha/start/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-unimpaired"]
 	path = .vim/pack/alpha/start/vim-unimpaired
 	url = https://github.com/tpope/vim-unimpaired.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/rust.vim"]
 	path = .vim/pack/alpha/start/rust.vim
 	url = https://github.com/rust-lang/rust.vim.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-vinegar"]
 	path = .vim/pack/alpha/start/vim-vinegar
 	url = https://github.com/tpope/vim-vinegar.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-dispatch"]
 	path = .vim/pack/alpha/start/vim-dispatch
 	url = https://github.com/tpope/vim-dispatch.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-endwise"]
 	path = .vim/pack/alpha/start/vim-endwise
 	url = https://github.com/tpope/vim-endwise.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-ruby"]
 	path = .vim/pack/alpha/start/vim-ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-repeat"]
 	path = .vim/pack/alpha/start/vim-repeat
 	url = https://github.com/tpope/vim-repeat.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-textobj-user"]
 	path = .vim/pack/alpha/start/vim-textobj-user
 	url = https://github.com/kana/vim-textobj-user.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-textobj-rubyblock"]
 	path = .vim/pack/alpha/start/vim-textobj-rubyblock
 	url = https://github.com/nelstrom/vim-textobj-rubyblock.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-indent-object"]
 	path = .vim/pack/alpha/start/vim-indent-object
 	url = https://github.com/michaeljsmith/vim-indent-object.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/tabular"]
 	path = .vim/pack/alpha/start/tabular
 	url = https://github.com/godlygeek/tabular.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-projectionist"]
 	path = .vim/pack/alpha/start/vim-projectionist
 	url = https://github.com/tpope/vim-projectionist.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-rake"]
 	path = .vim/pack/alpha/start/vim-rake
 	url = https://github.com/tpope/vim-rake.git
+	shallow = true
 [submodule "src/giphy.alfredworkflow"]
 	path = src/giphy.alfredworkflow
 	url = https://github.com/kejadlen/giphy.alfredworkflow.git
@@ -67,39 +85,50 @@
 [submodule ".vim/pack/alpha/start/lightline.vim"]
 	path = .vim/pack/alpha/start/lightline.vim
 	url = https://github.com/itchyny/lightline.vim.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-qf"]
 	path = .vim/pack/alpha/start/vim-qf
 	url = https://github.com/romainl/vim-qf.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-sexp"]
 	path = .vim/pack/alpha/start/vim-sexp
 	url = https://github.com/guns/vim-sexp.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/fzf.vim"]
 	path = .vim/pack/alpha/start/fzf.vim
 	url = https://github.com/junegunn/fzf.vim.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/scribble.vim"]
 	path = .vim/pack/alpha/start/scribble.vim
 	url = https://github.com/vim-scripts/scribble.vim.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/gundo.vim"]
 	path = .vim/pack/alpha/start/gundo.vim
 	url = https://github.com/sjl/gundo.vim.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-operator-flashy"]
 	path = .vim/pack/alpha/start/vim-operator-flashy
 	url = https://github.com/haya14busa/vim-operator-flashy.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-operator-user"]
 	path = .vim/pack/alpha/start/vim-operator-user
 	url = https://github.com/kana/vim-operator-user.git
+	shallow = true
 [submodule "src/emoji.alfredworkflow"]
 	path = src/emoji.alfredworkflow
 	url = https://github.com/kejadlen/emoji.alfredworkflow.git
 [submodule ".vim/pack/alpha/start/vim-colors-paramount"]
 	path = .vim/pack/alpha/start/vim-colors-paramount
 	url = https://github.com/owickstrom/vim-colors-paramount.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/is.vim"]
 	path = .vim/pack/alpha/start/is.vim
 	url = https://github.com/haya14busa/is.vim.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/typescript-vim"]
 	path = .vim/pack/alpha/start/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/vimwiki"]
 	path = .vim/pack/alpha/start/vimwiki
 	url = https://github.com/vimwiki/vimwiki.git
@@ -120,60 +149,82 @@
 [submodule ".vim/pack/alpha/start/vim-nix"]
 	path = .vim/pack/alpha/start/vim-nix
 	url = https://github.com/LnL7/vim-nix.git
+	shallow = true
 [submodule ".vim/pack/alpha/start/riv.vim"]
 	path = .vim/pack/alpha/start/riv.vim
 	url = https://github.com/gu-fan/riv.vim
+	shallow = true
 [submodule ".vim/pack/alpha/start/vim-ledger"]
 	path = .vim/pack/alpha/start/vim-ledger
 	url = https://github.com/ledger/vim-ledger
+	shallow = true
 [submodule "src/frink.alfredworkflow"]
 	path = src/frink.alfredworkflow
 	url = https://github.com/src/frink.alfredworkflow
 [submodule ".local/share/nvim/site/pack/hotpot.nvim"]
 	path = .local/share/nvim/site/pack/kejadlen/start/hotpot
 	url = https://github.com/rktjmp/hotpot.nvim
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/colorscheme-paramount"]
 	path = .local/share/nvim/site/pack/kejadlen/start/paramount
 	url = https://github.com/kejadlen/vim-colors-paramount.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/vim-tmux-navigator"]
 	path = .local/share/nvim/site/pack/kejadlen/start/tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/lightline"]
 	path = .local/share/nvim/site/pack/kejadlen/start/lightline
 	url = https://github.com/itchyny/lightline.vim.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/unimpaired"]
 	path = .local/share/nvim/site/pack/kejadlen/start/unimpaired
 	url = https://github.com/tpope/vim-unimpaired.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/sleuth"]
 	path = .local/share/nvim/site/pack/kejadlen/start/sleuth
 	url = https://github.com/tpope/vim-sleuth.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/fennel"]
 	path = .local/share/nvim/site/pack/kejadlen/start/fennel
 	url = https://github.com/jaawerth/fennel.vim.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/commentary"]
 	path = .local/share/nvim/site/pack/kejadlen/start/commentary
 	url = https://github.com/tpope/vim-commentary.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/lspconfig"]
 	path = .local/share/nvim/site/pack/kejadlen/start/lspconfig
 	url = https://github.com/neovim/nvim-lspconfig.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/sensible"]
 	path = .local/share/nvim/site/pack/kejadlen/start/sensible
 	url = https://github.com/tpope/vim-sensible.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/vinegar"]
 	path = .local/share/nvim/site/pack/kejadlen/start/vinegar
 	url = https://github.com/tpope/vim-vinegar.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/surround"]
 	path = .local/share/nvim/site/pack/kejadlen/start/surround
 	url = https://github.com/tpope/vim-surround.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/fzf"]
 	path = .local/share/nvim/site/pack/kejadlen/start/fzf
 	url = https://github.com/junegunn/fzf.vim.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/repeat"]
 	path = .local/share/nvim/site/pack/kejadlen/start/repeat
 	url = https://github.com/tpope/vim-repeat.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/tabular"]
 	path = .local/share/nvim/site/pack/kejadlen/start/tabular
 	url = https://github.com/godlygeek/tabular.git
+	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/treesitter"]
 	path = .local/share/nvim/site/pack/kejadlen/start/treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter.git
+	shallow = true
+[submodule ".local/share/nvim/site/pack/kejadlen/start/treesitter-textobjects"]
+	path = .local/share/nvim/site/pack/kejadlen/start/treesitter-textobjects
+	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
