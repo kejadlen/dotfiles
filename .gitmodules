@@ -228,3 +228,6 @@
 [submodule ".local/share/nvim/site/pack/kejadlen/start/treesitter-textobjects"]
 	path = .local/share/nvim/site/pack/kejadlen/start/treesitter-textobjects
 	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/navic"]
+	path = .local/share/nvim/site/pack/kejadlen/start/navic
+	url = https://github.com/SmiteshP/nvim-navic.git
