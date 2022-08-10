@@ -38,7 +38,11 @@
     (vim.keymap.set :n :<leader>rn lsp.buf.rename bufopts)
     (vim.keymap.set :n :<leader>ca lsp.buf.code_action bufopts)
     (vim.keymap.set :n :gr lsp.buf.references bufopts)
-    (vim.keymap.set :n :<leader>lf lsp.buf.formatting bufopts)))
+    (vim.keymap.set :n :<leader>lf lsp.buf.formatting bufopts))
+  (when (not= client.name :efm)
+    (let [navic (require :nvim-navic)
+          {: attach} navic]
+      (attach client bufnr))))
 
 (local prettier (fmt "prettier --stdin-filepath ${INPUT}" true))
 (local fennel [(fmt "fnlfmt /dev/stdin" true)
@@ -64,9 +68,10 @@
                          (set client.resolved_capabilities.document_formatting
                               false)))
 
-(let [{: efm : rust_analyzer : tsserver} (require :lspconfig)]
+(let [{: efm : rust_analyzer : tsserver : typeprof} (require :lspconfig)]
   (efm.setup efm-setup)
   (rust_analyzer.setup {:on_attach on-attach
                         :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
-  (tsserver.setup {:on_attach tsserver-attach}))
+  (tsserver.setup {:on_attach tsserver-attach})
+  (typeprof.setup {:on_attach on-attach}))
 

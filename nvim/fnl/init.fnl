@@ -1,26 +1,21 @@
 (vim.cmd "colorscheme paramount")
 
-(set vim.opt.foldlevel 1)
-(set vim.opt.linebreak true)
-(set vim.opt.list true)
+(set vim.o.foldlevel 1)
+(set vim.o.linebreak true)
+(set vim.o.list true)
+(set vim.o.listchars
+     "tab:\\u21e5 ,trail:\\u2423,extends:\\u21c9,precedes:\\u21c7,nbsp:\\u00b7")
 
-;; fnlfmt: skip
-(set vim.opt.listchars {:tab      "\\u21e5 "
-                        :trail    "\\u2423"
-                        :extends  "\\u21c9"
-                        :precedes "\\u21c7"
-                        :nbsp     "\\u00b7"})
-
-(set vim.opt.number true)
-(set vim.opt.showmode false)
-(set vim.opt.termguicolors true)
-(set vim.opt.virtualedit :block)
-(set vim.opt.wildmode "longest:full")
+(set vim.o.number true)
+(set vim.o.showmode false)
+(set vim.o.termguicolors true)
+(set vim.o.virtualedit :block)
+(set vim.o.wildmode "longest:full")
 
 ;; search
-(set vim.opt.gdefault true)
-(set vim.opt.ignorecase true)
-(set vim.opt.smartcase true)
+(set vim.o.gdefault true)
+(set vim.o.ignorecase true)
+(set vim.o.smartcase true)
 
 (set vim.g.mapleader " ")
 
@@ -32,8 +27,9 @@
 (vim.keymap.set :n "\\\\" ":write<cr>")
 (vim.keymap.set :i "\\\\" "<esc>:write<cr>")
 
-;; clear highlight
-(vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
+;; highlight
+(set vim.o.hlsearch false)
+; (vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
 
 ;; non-shifted shortcuts for moving the cursor to the start/end of the current line
 (vim.keymap.set :n :H "^")
@@ -90,6 +86,12 @@
     (tset palette f :middle [[:NONE :NONE :NONE :NONE]]))
   (tset vim.g palette-key palette))
 
+;;; navic
+
+;; TODO Enable this when 0.8 is released
+;; TODO Use fennel for this?
+; (set vim.o.winbar "%{%v:lua.require'nvim-navic'.get_location()%}")
+
 ;;; netrw
 
 ;; https://github.com/tpope/vim-vinegar/issues/13
@@ -102,7 +104,8 @@
   (setup {:ensure_installed [:fennel :lua :ruby :rust :typescript]
           :sync_install false
           :highlight {:enable true :additional_vim_regex_highlighting false}
-          :indent {:enable true}
+          ;; disabling since this is super annoying in Ruby
+          ; :indent {:enable true}
           :incremental_selection {:enable true
                                   :keymaps {:init_selection :gnn
                                             :node_incremental :grn
@@ -115,10 +118,12 @@
                                            :ac "@class.outer"
                                            :ic "@class.inner"
                                            :ab "@block.outer"
-                                           :ib "@block.inner"}}}}))
+                                           :ib "@block.inner"
+                                           :aa "@parameter.outer"
+                                           :ia "@parameter.inner"}}}}))
 
-(set vim.opt.foldmethod :expr)
-(set vim.opt.foldexpr "nvim_treesitter#foldexpr()")
+(set vim.o.foldmethod :expr)
+(set vim.o.foldexpr "nvim_treesitter#foldexpr()")
 
 ;;; generate help files
 
