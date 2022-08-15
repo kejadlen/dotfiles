@@ -61,11 +61,14 @@
                     (partial #(hs.urlevent.openURLWithBundle $2 $1)
                              (. bundle-ids app)))
         open-url #((open-with $1) url)]
-    (if (string.find url "^https://.*[.]zoom.us/j/%d+") (open-url :zoom)
-        (string.find url "^https://.*[.]discnw.org/") (open-url :safari)
-        (string.find url "^https://squareup.com/") (open-url :safari)
+    (if (url:find "^https://.*[.]zoom.us/j/%d+") (open-url :zoom)
+        (url:find "^https://.*[.]discnw.org/") (open-url :safari)
+        (url:find "^https://squareup.com/") (open-url :safari)
+        (url:find "^https://.*[.]bulletin.com/") (open-url :safari)
         (string.find orig-url "^https://doi.org/")
         ((open-with :firefox) (.. "https://sci-hub.st/" orig-url))
+        (string.find url "^https://twitter.com/")
+        ((open-with :firefox) (url:gsub :twitter.com :nitter.net 1))
         (open-url :firefox))))
 
 (set hs.urlevent.httpCallback
@@ -85,7 +88,8 @@
 
 ;; fnlfmt: skip
 (set spoon.Quitter.quitAppsAfter
-     {:Discord      300
+     {:Calendar      30
+      :Discord      300
       :MailMate     600
       :Messages     300
       :Reeder       600
