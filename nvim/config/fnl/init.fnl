@@ -1,6 +1,6 @@
 (vim.cmd "colorscheme paramount")
 
-(set vim.o.foldlevel 1)
+(set vim.o.foldlevel 2)
 (set vim.o.linebreak true)
 (set vim.o.list true)
 (set vim.o.listchars
@@ -101,7 +101,7 @@
 ;;; treesitter
 (let [configs (require :nvim-treesitter.configs)
       {: setup} configs]
-  (setup {:ensure_installed [:fennel :lua :ruby :rust :typescript]
+  (setup {:ensure_installed [:fennel :hcl :lua :ruby :rust :typescript]
           :sync_install false
           :highlight {:enable true :additional_vim_regex_highlighting false}
           ;; disabling since this is super annoying in Ruby

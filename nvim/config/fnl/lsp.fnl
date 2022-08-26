@@ -74,4 +74,3 @@
                         :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
   (tsserver.setup {:on_attach tsserver-attach})
   (typeprof.setup {:on_attach on-attach}))
-
