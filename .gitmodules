@@ -165,9 +165,8 @@
 	path = .local/share/nvim/site/pack/kejadlen/start/hotpot
 	url = https://github.com/rktjmp/hotpot.nvim
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/colorscheme-paramount"]
-	path = .local/share/nvim/site/pack/kejadlen/start/paramount
-	url = https://github.com/kejadlen/vim-colors-paramount.git
+[submodule ".local/share/nvim/site/pack/kejadlen/start/paramount"]
+	url = https://git.kejadlen.dev/alpha/vim-colors-paramount.git
 	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/vim-tmux-navigator"]
 	path = .local/share/nvim/site/pack/kejadlen/start/tmux-navigator
