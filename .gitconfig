@@ -31,6 +31,8 @@
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [difftool "icdiff"]
 	cmd = icdiff --line-numbers --no-bold \"$LOCAL\" \"$REMOTE\"
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
 [push]
 	default = current
 	followTags = true
@@ -57,7 +59,8 @@
 	defaultBranch = main
 [diff]
 	algorithm = histogram
-	tool = icdiff
+	external = difft
+	tool = difftastic
 	; compactionHeuristic = true
 	indentHeuristic = true
 [fetch]
@@ -78,11 +81,13 @@
 	recurse = true
 [commit]
 	verbose = true
+	gpgsign = true
 [filter "alfredworkflow"]
 	clean = alfredworkflow.clean
 [user]
 	email = alpha@kejadlen.dev
 	name = Alpha Chen
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCttH8nEfk1uZ2291P4mbCoNcHxnr9iNBlbZckykeZ8
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
@@ -94,3 +99,7 @@
 	enabled = true
 [branch]
 	sort = -committerdate
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
