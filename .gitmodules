@@ -160,12 +160,12 @@
 	shallow = true
 [submodule "src/frink.alfredworkflow"]
 	path = src/frink.alfredworkflow
-	url = https://github.com/src/frink.alfredworkflow
+	url = https://github.com/kejadlen/frink.alfredworkflow
 [submodule ".local/share/nvim/site/pack/hotpot.nvim"]
 	path = nvim/pack/kejadlen/start/hotpot
 	url = https://github.com/rktjmp/hotpot.nvim
 	shallow = true
-[submodule "nvim/pack/kejadlen/start/paramount"]
+[submodule ".local/share/nvim/site/pack/kejadlen/start/paramount"]
 	url = https://git.kejadlen.dev/alpha/vim-colors-paramount.git
 	shallow = true
 [submodule ".local/share/nvim/site/pack/kejadlen/start/vim-tmux-navigator"]
