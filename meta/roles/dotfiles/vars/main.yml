@@ -5,7 +5,6 @@ conf_dirs:
   - ~/.vim_undo
 
 conf_symlinks:
-  gitignore: ~/.gitignore
   .bundle/config: ~/.bundle/config
   .config: ~/.config
   .gemrc: ~/.gemrc
