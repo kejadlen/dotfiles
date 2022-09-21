@@ -67,8 +67,6 @@
         (url:find "^https://.*[.]bulletin.com/") (open-url :safari)
         (string.find orig-url "^https://doi.org/")
         ((open-with :firefox) (.. "https://sci-hub.st/" orig-url))
-        (string.find url "^https://twitter.com/")
-        ((open-with :firefox) (url:gsub :twitter.com :nitter.net 1))
         (open-url :firefox))))
 
 (set hs.urlevent.httpCallback
@@ -79,6 +77,7 @@
              orig-url (de-utm url)
              redirected (de-utm (redirect orig-url))]
          (handle redirected orig-url))))
+         ; (hs.urlevent.openURLWithBundle orig-url bundle-ids.firefox))))
 
 ;;; Spoons
 
