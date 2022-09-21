@@ -6,7 +6,6 @@
 [core]
 	autocrlf = false
 	safecrlf = true
-	excludesfile = ~/.gitignore
 	quotepath = false
 	sparecheckout = true
 	editor = nvim
