@@ -1,11 +1,5 @@
 (local {: lsp} vim)
 
-(fn fmt [formatCommand formatStdin]
-  {: formatCommand : formatStdin})
-
-(fn lint [lintCommand lintFormats lintStdin]
-  {: lintCommand : lintFormats : lintStdin})
-
 ;; (lsp.set_log_level :debug)
 
 ;; default hover windows to have borders
@@ -21,7 +15,7 @@
   (vim.keymap.set :n :<leader>q vim.diagnostic.setloclist opts))
 
 (fn on-attach [client bufnr]
-  (vim.api.nvim_buf_set_option bufnr :omnifunc "v:lua.lsp.omnifunc")
+  (vim.api.nvim_buf_set_option bufnr :omnifunc "v:lua.vim.lsp.omnifunc")
   (let [bufopts {:noremap true :silent true :buffer bufnr}]
     (vim.keymap.set :n :gD lsp.buf.declaration bufopts)
     (vim.keymap.set :n :gd lsp.buf.definition bufopts)
@@ -31,46 +25,72 @@
     (vim.keymap.set :n :<leader>wa lsp.buf.add_workspace_folder bufopts)
     (vim.keymap.set :n :<leader>wr lsp.buf.remove_workspace_folder bufopts)
     (vim.keymap.set :n :<leader>wl
-                    (fn []
-                      (print (vim.inspect (lsp.buf.list_workspace_folders))))
+                    #(print (vim.inspect (lsp.buf.list_workspace_folders)))
                     bufopts)
     (vim.keymap.set :n :<leader>D lsp.buf.type_definition bufopts)
     (vim.keymap.set :n :<leader>rn lsp.buf.rename bufopts)
     (vim.keymap.set :n :<leader>ca lsp.buf.code_action bufopts)
     (vim.keymap.set :n :gr lsp.buf.references bufopts)
-    (vim.keymap.set :n :<leader>lf lsp.buf.formatting bufopts))
-  (when (not= client.name :efm)
-    (let [navic (require :nvim-navic)
-          {: attach} navic]
-      (attach client bufnr))))
+    (vim.keymap.set :n :<leader>lf #(lsp.buf.format {:async true}) bufopts)))
 
-(local prettier (fmt "prettier --stdin-filepath ${INPUT}" true))
-(local fennel [(fmt "fnlfmt /dev/stdin" true)
-               (lint "fennel --globals vim,hs,spoon --raw-errors $(realpath --relative-to . ${INPUT}) 2>&1"
-                     ["%f:%l: %m"] true)])
+(fn on-attach-do [...]
+  (let [fns [...]] ; https://benaiah.me/posts/everything-you-didnt-want-to-know-about-lua-multivals/
+    (fn [client bufnr]
+      (on-attach client bufnr)
+      (each [_ f (ipairs fns)]
+        (f client bufnr)))))
 
-(local efm-setup
-       {:on_attach on-attach
-        :init_options {:documentFormatting true
-                       :hover true
-                       :documentSymbol true
-                       :codeAction true
-                       :completion true}
-        :settings {:languages {: fennel
-                               :javascript [prettier]
-                               :typescript [prettier]
-                               :typescriptreact [prettier]}}
-        :filetypes [:fennel :javascript :typescript :typescriptreact]})
+(fn attach-navic [client bufnr]
+  ((. (require :nvim-navic) :attach) client bufnr))
 
-(local tsserver-attach (fn [client bufnr]
-                         (on-attach client bufnr)
-                         ;; use prettier for formatting via efm
-                         (set client.resolved_capabilities.document_formatting
-                              false)))
+(fn disable-fmt [client]
+  (set client.resolved_capabilities.document_formatting false))
 
-(let [{: efm : rust_analyzer : tsserver : typeprof} (require :lspconfig)]
-  (efm.setup efm-setup)
-  (rust_analyzer.setup {:on_attach on-attach
-                        :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
-  (tsserver.setup {:on_attach tsserver-attach})
-  (typeprof.setup {:on_attach on-attach}))
+(fn setup-lsp [lsp config]
+  (let [lspconfig (require :lspconfig)
+        {: setup} (. lspconfig lsp)]
+    (setup (or config {:on_attach on-attach}))))
+
+(let [fmt #{:formatCommand $1 :formatStdin true}
+      lint #{:lintCommand $1 :lintFormats $2 :lintStdin true}
+      fennel-lint "fennel --globals vim,hs,spoon --raw-errors $(realpath --relative-to . ${INPUT}) 2>&1"
+      fennel [(fmt "fnlfmt /dev/stdin") (lint fennel-lint ["%f:%l: %m"])]
+      eslint {:lintCommand "eslint -f visualstudio --stdin --stdin-filename ${INPUT}"
+              :lintIgnoreExitCode true
+              :lintStdin true
+              :lintFormats ["%f(%l,%c): %tarning %m" "%f(%l,%c): %rror %m"]}
+      prettier (fmt "prettier --stdin-filepath ${INPUT}")
+      javascript [eslint prettier]
+      black (fmt "black --quiet -")
+      ; flake8 (lint "flake8 --stdin-display-name ${INPUT} -" ["%f:%l:%c: %m"])
+      isort (fmt "isort --quiet --profile black -")
+      python [black isort]]
+  (setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
+  (setup-lsp :pyright
+             {:on_attach on-attach
+              :settings {:python {:analysis {:autoImportCompletions true}}}})
+  (setup-lsp :typeprof)
+  (setup-lsp :vuels {:on_attach (on-attach-do attach-navic disable-fmt)})
+  (setup-lsp :efm {:on_attach on-attach
+                   :init_options {:documentFormatting true
+                                  :hover true
+                                  :documentSymbol true
+                                  :codeAction true
+                                  :completion true}
+                   :settings {:languages {: fennel
+                                          : javascript
+                                          : python
+                                          :typescript javascript
+                                          :typescriptreact javascript
+                                          :vue [prettier]}}
+                   :filetypes [:fennel
+                               :javascript
+                               :typescript
+                               :python
+                               :typescriptreact
+                               :vue]})
+  (setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
+  (setup-lsp :rust_analyzer
+             {:on_attach on-attach
+              :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}}))
+

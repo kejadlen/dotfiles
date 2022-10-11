@@ -1,5 +1,7 @@
 (vim.cmd "colorscheme paramount")
 
+(set vim.o.cmdheight 0)
+
 (set vim.o.foldlevel 2)
 (set vim.o.linebreak true)
 (set vim.o.list true)
