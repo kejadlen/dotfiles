@@ -67,17 +67,20 @@
         (url:find "^https://.*[.]bulletin.com/") (open-url :safari)
         (string.find orig-url "^https://doi.org/")
         ((open-with :firefox) (.. "https://sci-hub.st/" orig-url))
+        (string.find orig-url "^https://.*[.]usps.com/")
+        ((open-with :firefox) orig-url)
         (open-url :firefox))))
 
 (set hs.urlevent.httpCallback
      (fn [scheme host params url]
-       (let [run #(: (io.popen (.. $1 " \"" $2 "\"")) :read :*a)
+       (let [run #(: (io.popen (.. $1 " '" $2 "'")) :read :*a)
              de-utm (partial run "~/.dotfiles/bin/de-utm")
              redirect (partial run "curl -Ls -o /dev/null -w %{url_effective}")
              orig-url (de-utm url)
              redirected (de-utm (redirect orig-url))]
          (handle redirected orig-url))))
-         ; (hs.urlevent.openURLWithBundle orig-url bundle-ids.firefox))))
+
+; (hs.urlevent.openURLWithBundle orig-url bundle-ids.firefox))))
 
 ;;; Spoons
 
