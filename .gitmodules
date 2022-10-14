@@ -161,72 +161,93 @@
 [submodule "src/frink.alfredworkflow"]
 	path = src/frink.alfredworkflow
 	url = https://github.com/kejadlen/frink.alfredworkflow
-[submodule ".local/share/nvim/site/pack/hotpot.nvim"]
-	path = nvim/pack/kejadlen/start/hotpot
+[submodule "hotpot.nvim"]
+	path = .local/share/nvim/site/pack/kejadlen/start/hotpot
 	url = https://github.com/rktjmp/hotpot.nvim
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/paramount"]
+[submodule "paramount"]
+	path = .local/share/nvim/site/pack/kejadlen/start/paramount
 	url = https://git.kejadlen.dev/alpha/vim-colors-paramount.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/vim-tmux-navigator"]
-	path = nvim/pack/kejadlen/start/tmux-navigator
+[submodule "vim-tmux-navigator"]
+	path = .local/share/nvim/site/pack/kejadlen/start/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/lightline"]
-	path = nvim/pack/kejadlen/start/lightline
+[submodule "lightline"]
+	path = .local/share/nvim/site/pack/kejadlen/start/lightline
 	url = https://github.com/itchyny/lightline.vim.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/unimpaired"]
-	path = nvim/pack/kejadlen/start/unimpaired
+[submodule "unimpaired"]
+	path = .local/share/nvim/site/pack/kejadlen/start/unimpaired
 	url = https://github.com/tpope/vim-unimpaired.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/sleuth"]
-	path = nvim/pack/kejadlen/start/sleuth
+[submodule "sleuth"]
+	path = .local/share/nvim/site/pack/kejadlen/start/sleuth
 	url = https://github.com/tpope/vim-sleuth.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/fennel"]
-	path = nvim/pack/kejadlen/start/fennel
+[submodule "fennel"]
+	path = .local/share/nvim/site/pack/kejadlen/start/fennel
 	url = https://github.com/jaawerth/fennel.vim.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/commentary"]
-	path = nvim/pack/kejadlen/start/commentary
+[submodule "commentary"]
+	path = .local/share/nvim/site/pack/kejadlen/start/commentary
 	url = https://github.com/tpope/vim-commentary.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/lspconfig"]
-	path = nvim/pack/kejadlen/start/lspconfig
+[submodule "lspconfig"]
+	path = .local/share/nvim/site/pack/kejadlen/start/lspconfig
 	url = https://github.com/neovim/nvim-lspconfig.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/sensible"]
-	path = nvim/pack/kejadlen/start/sensible
+[submodule "sensible"]
+	path = .local/share/nvim/site/pack/kejadlen/start/sensible
 	url = https://github.com/tpope/vim-sensible.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/vinegar"]
-	path = nvim/pack/kejadlen/start/vinegar
+[submodule "vinegar"]
+	path = .local/share/nvim/site/pack/kejadlen/start/vinegar
 	url = https://github.com/tpope/vim-vinegar.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/surround"]
-	path = nvim/pack/kejadlen/start/surround
+[submodule "surround"]
+	path = .local/share/nvim/site/pack/kejadlen/start/surround
 	url = https://github.com/tpope/vim-surround.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/fzf"]
-	path = nvim/pack/kejadlen/start/fzf
+[submodule "fzf"]
+	path = .local/share/nvim/site/pack/kejadlen/start/fzf
 	url = https://github.com/junegunn/fzf.vim.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/repeat"]
-	path = nvim/pack/kejadlen/start/repeat
+[submodule "repeat"]
+	path = .local/share/nvim/site/pack/kejadlen/start/repeat
 	url = https://github.com/tpope/vim-repeat.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/tabular"]
-	path = nvim/pack/kejadlen/start/tabular
+[submodule "tabular"]
+	path = .local/share/nvim/site/pack/kejadlen/start/tabular
 	url = https://github.com/godlygeek/tabular.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/treesitter"]
-	path = nvim/pack/kejadlen/start/treesitter
+[submodule "treesitter"]
+	path = .local/share/nvim/site/pack/kejadlen/start/treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter.git
+	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/kejadlen/start/treesitter-textobjects"]
-	path = nvim/pack/kejadlen/start/treesitter-textobjects
+[submodule "treesitter-textobjects"]
+	path = .local/share/nvim/site/pack/kejadlen/start/treesitter-textobjects
 	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
-[submodule ".local/share/nvim/site/pack/kejadlen/start/navic"]
-	path = nvim/pack/kejadlen/start/navic
+	branch = master
+	shallow = true
+[submodule "navic"]
+	path = .local/share/nvim/site/pack/kejadlen/start/navic
 	url = https://github.com/SmiteshP/nvim-navic.git
+	branch = master
+	shallow = true
