@@ -1,6 +1,3 @@
-[submodule "src/prezto"]
-	path = src/prezto
-	url = https://github.com/kejadlen/prezto.git
 [submodule "Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
 	path = Alfred.alfredpreferences/workflows/faker.alfredworkflow
 	url = https://github.com/kejadlen/faker.alfredworkflow
@@ -251,3 +248,7 @@
 	url = https://github.com/jaawerth/fennel.vim.git
 	branch = main
 	shallow = true
+[submodule "prezto"]
+	path = src/prezto
+	url = https://git.kejadlen.dev/alpha/prezto.git
+	branch = main
