@@ -5,6 +5,9 @@ private
 !.config/git
 !.config/nvim
 
+.local
+!.local/share/nvim
+
 .ssh/*_rsa
 .ssh/config.local
 .ssh/known_hosts
