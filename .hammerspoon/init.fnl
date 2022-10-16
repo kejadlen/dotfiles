@@ -68,8 +68,7 @@
         (string.find orig-url "^https://doi.org/")
         ((open-with :firefox) (.. "https://sci-hub.st/" orig-url))
         (string.find orig-url "^https://.*[.]usps.com/")
-        ((open-with :firefox) orig-url)
-        (open-url :firefox))))
+        ((open-with :firefox) orig-url) (open-url :firefox))))
 
 (set hs.urlevent.httpCallback
      (fn [scheme host params url]
@@ -78,28 +77,72 @@
              redirect (partial run "curl -Ls -o /dev/null -w %{url_effective}")
              orig-url (de-utm url)
              redirected (de-utm (redirect orig-url))]
+         ;; (hs.urlevent.openURLWithBundle orig-url bundle-ids.firefox))))
          (handle redirected orig-url))))
 
-; (hs.urlevent.openURLWithBundle orig-url bundle-ids.firefox))))
+;;; Elgato Key Light Air
+
+;; finding the hostname for the key light air
+; (local browser (: (hs.bonjour.new) :findServices :_elg._tcp.
+;                   (fn [browser _ _ service _]
+;                     (service:resolve #(log :info (: ($1:hostname) :sub 1 -2)))
+;                     (browser:stop))))
+
+(fn update-key-light-air [on?]
+  (let [url "http://elgato-key-light-air-5c9e.local:9123/elgato/lights"
+        on (if on? 1 0)
+        data (hs.json.encode {:lights [{: on}]})]
+    (hs.http.doRequest url :PUT data)))
+
+(fn docked? []
+  (accumulate [docked? false _ v (pairs (hs.usb.attachedDevices)) &until docked?]
+    (or docked? (= v.productName "CalDigit Thunderbolt 3 Audio"))))
+
+(local key-light-air-watcher
+       (let [{: watcher} hs.caffeinate]
+         (watcher.new #(when (docked?)
+                         (match $1
+                           watcher.screensDidLock (update-key-light-air false)
+                           watcher.screensDidSleep (update-key-light-air false)
+                           watcher.screensDidUnlock (update-key-light-air true)
+                           watcher.screensDidWake (update-key-light-air true))))))
+
+(when (docked?)
+  (key-light-air-watcher:start))
+
+(local usb-watcher (: (hs.usb.watcher.new #(let [{: eventType : productName} $1]
+                                             (when (= productName
+                                                      "CalDigit Thunderbolt 3 Audio")
+                                               (match eventType
+                                                 :added (do
+                                                          (update-key-light-air true)
+                                                          (key-light-air-watcher:start))
+                                                 :removed (do
+                                                            (update-key-light-air false)
+                                                            (key-light-air-watcher:stop))))))
+                      :start))
 
 ;;; Spoons
 
 (: (hs.loadSpoon :ReloadConfiguration) :start)
 
-(hs.loadSpoon :Quitter)
+; (hs.loadSpoon :Quitter)
 
-;; fnlfmt: skip
-(set spoon.Quitter.quitAppsAfter
-     {:Calendar      30
-      :Discord      300
-      :MailMate     600
-      :Messages     300
-      :Reeder       600
-      :Slack        300
-      :Telegram     300
-      :Twitterrific 300})
+; ;; fnlfmt: skip
+; (set spoon.Quitter.quitAppsAfter
+;      {:Calendar      30
+;       :Discord      300
+;       :MailMate     600
+;       :Messages     300
+;       :Reeder       600
+;       ; :Slack        300
+;       :Telegram     300
+;       :Twitterrific 300})
 
-(spoon.Quitter:start)
+; (spoon.Quitter:start)
+
+(when (hs.fs.attributes :local.fnl)
+  (require :local))
 
 (: (hs.notify.new {:title :Hammerspoon
                    :informativeText "Config loaded"
