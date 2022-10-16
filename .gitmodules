@@ -161,11 +161,6 @@
 [submodule "src/frink.alfredworkflow"]
 	path = src/frink.alfredworkflow
 	url = https://github.com/kejadlen/frink.alfredworkflow
-[submodule "hotpot"]
-	path = .local/share/nvim/site/pack/alpha/start/hotpot
-	url = https://github.com/rktjmp/hotpot.nvim.git
-	branch = master
-	shallow = true
 [submodule "commentary"]
 	path = .local/share/nvim/site/pack/alpha/start/paramount
 	url = https://git.kejadlen.dev/alpha/vim-colors-paramount.git
@@ -250,4 +245,9 @@
 	path = .local/share/nvim/site/pack/alpha/start/fennel
 	url = https://github.com/jaawerth/fennel.vim.git
 	branch = main
+	shallow = true
+[submodule "hotpot"]
+	path = .local/share/nvim/site/pack/alpha/start/hotpot
+	url = https://github.com/rktjmp/hotpot.nvim.git
+	branch = master
 	shallow = true
