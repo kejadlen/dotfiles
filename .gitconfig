@@ -1,5 +1,3 @@
-[include]
-	path = ~/.gitconfig.private
 [color]
 	ui = auto
 	diff = true
@@ -54,7 +52,7 @@
 	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
 [init]
-	templatedir = ~/.git_templates
+	; templatedir = ~/.git_templates
 	defaultBranch = main
 [diff]
 	algorithm = histogram
@@ -69,6 +67,7 @@
 [rebase]
 	autosquash = true
 	stat = true
+	updateRefs = true
 [interactive]
 	singlekey = true
 ; [url "git@github.com:"]
@@ -102,3 +101,5 @@
 	format = ssh
 [gpg "ssh"]
 	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+[include]
+	path = ~/.gitconfig.local
