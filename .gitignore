@@ -8,9 +8,8 @@ private
 .local
 !.local/share/nvim
 
-.ssh/*_rsa
-.ssh/config.local
-.ssh/known_hosts
+.ssh
+!.ssh/config
 
 .vim/.VimballRecord
 .vim/.netrwhist
