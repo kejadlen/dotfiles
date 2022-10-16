@@ -252,3 +252,8 @@
 	path = src/prezto
 	url = https://git.kejadlen.dev/alpha/prezto.git
 	branch = main
+[submodule "paramount"]
+	path = .local/share/nvim/site/pack/alpha/start/paramount
+	url = https://git.kejadlen.dev/alpha/vim-colors-paramount.git
+	branch = main
+	shallow = true
