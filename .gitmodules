@@ -169,7 +169,7 @@
 [submodule "fennel"]
 	path = .local/share/nvim/site/pack/alpha/start/fennel
 	url = https://github.com/jaawerth/fennel.vim.git
-	branch = master
+	branch = main
 	shallow = true
 [submodule "commentary"]
 	path = .local/share/nvim/site/pack/alpha/start/paramount
