@@ -162,8 +162,8 @@
 	path = src/frink.alfredworkflow
 	url = https://github.com/kejadlen/frink.alfredworkflow
 [submodule "commentary"]
-	path = .local/share/nvim/site/pack/alpha/start/paramount
-	url = https://git.kejadlen.dev/alpha/vim-colors-paramount.git
+	path = .local/share/nvim/site/pack/alpha/start/commentary
+	url = https://github.com/tpope/vim-commentary.git
 	branch = main
 	shallow = true
 [submodule "lspconfig"]
