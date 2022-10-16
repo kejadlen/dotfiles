@@ -1,17 +1,18 @@
-*.private
-**/private/**/*
+private
 
 .config
-.pentadactyl/info
+!.config/direnv
+!.config/git
+!.config/nvim
+
 .ssh/*_rsa
 .ssh/config.local
 .ssh/known_hosts
+
 .vim/.VimballRecord
 .vim/.netrwhist
 .vim/.scratch
 .vim/spell
 .vim/view
-.weechat/**/*.*log
-.weechat/script/plugins.xml.gz
-.weechat/sec.conf
+
 Alfred\ 2/Alfred.alfredpreferences/preferences/local
