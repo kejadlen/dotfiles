@@ -32,6 +32,8 @@
 ;; highlight
 (set vim.o.hlsearch false)
 ; (vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
+;; TODO
+; au TextYankPost * silent! lua vim.highlight.on_yank()
 
 ;; non-shifted shortcuts for moving the cursor to the start/end of the current line
 (vim.keymap.set :n :H "^")
@@ -39,6 +41,17 @@
 
 ;; re-run the last macro
 (vim.keymap.set :n :Q "@@")
+
+;; smart tab
+;; https://vim.fandom.com/wiki/Smart_mapping_for_tab_completion
+(vim.keymap.set :i :<tab>
+                (fn []
+                  (let [line (vim.fn.getline ".")
+                        col (vim.fn.col ".")
+                        line (line:sub 1 (- col 1))
+                        substr (line:match "[^ \t]*$")]
+                    (if (= (substr:len) 0) :<tab> :<c-x><c-o>)))
+                {:expr true})
 
 ;;; restore cursor location
 
@@ -76,6 +89,10 @@
 ;;; diagnostic
 
 (vim.diagnostic.config {:float {:source :if_many :border :rounded}})
+
+;;; hotpot
+
+(require :hp)
 
 ;;; lightline
 
