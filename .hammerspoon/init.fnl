@@ -20,7 +20,6 @@
                                        })
 
 ;; debugging
-;; (hs.hotkey.bind mash "d" (fn []))
 ;; (hs.hotkey.bind mash "d" (fn [] (hs.dialog.blockAlert "message" "text" "one" "two")))
 ;; (hs.hotkey.bind mash "d" (fn [] (hs.dialog.alert 100 100 (fn [] ) "message" "text" "one" "two")))
 
@@ -126,21 +125,7 @@
 
 (: (hs.loadSpoon :ReloadConfiguration) :start)
 
-; (hs.loadSpoon :Quitter)
-
-; ;; fnlfmt: skip
-; (set spoon.Quitter.quitAppsAfter
-;      {:Calendar      30
-;       :Discord      300
-;       :MailMate     600
-;       :Messages     300
-;       :Reeder       600
-;       ; :Slack        300
-;       :Telegram     300
-;       :Twitterrific 300})
-
-; (spoon.Quitter:start)
-
+;; Local overrides
 (when (hs.fs.attributes :local.fnl)
   (require :local))
 
