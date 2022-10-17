@@ -249,7 +249,7 @@
 	branch = main
 	shallow = true
 [submodule "prezto"]
-	path = src/prezto
+	path = .zprezto
 	url = https://git.kejadlen.dev/alpha/prezto.git
 	branch = main
 [submodule "paramount"]
