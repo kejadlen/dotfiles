@@ -104,7 +104,9 @@
 (let [colorscheme :powerline
       palette-key (.. "lightline#colorscheme#" colorscheme "#palette")
       palette (. vim.g palette-key)]
-  (set vim.g.lightline {: colorscheme})
+  (set vim.g.lightline
+       {: colorscheme
+        :active {:left [[:mode :paste] [:readonly :relativepath :modified]]}})
   (each [_ f (ipairs [:normal :inactive :tabline])]
     (tset palette f :middle [[:NONE :NONE :NONE :NONE]]))
   (tset vim.g palette-key palette))
@@ -124,7 +126,7 @@
 ;;; treesitter
 (let [configs (require :nvim-treesitter.configs)
       {: setup} configs]
-  (setup {:ensure_installed [:fennel :hcl :lua :ruby :rust :typescript]
+  (setup {:ensure_installed [:fennel :hcl :lua :python :ruby :rust :typescript]
           :sync_install false
           :highlight {:enable true :additional_vim_regex_highlighting false}
           ;; disabling since this is super annoying in Ruby
