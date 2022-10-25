@@ -42,6 +42,10 @@
 ;; re-run the last macro
 (vim.keymap.set :n :Q "@@")
 
+;; completion
+
+(set vim.o.completeopt "longest,menuone")
+
 ;; smart tab
 ;; https://vim.fandom.com/wiki/Smart_mapping_for_tab_completion
 (vim.keymap.set :i :<tab>
