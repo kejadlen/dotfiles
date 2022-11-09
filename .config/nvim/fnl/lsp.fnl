@@ -65,12 +65,6 @@
       ; flake8 (lint "flake8 --stdin-display-name ${INPUT} -" ["%f:%l:%c: %m"])
       isort (fmt "isort --quiet --profile black -")
       python [black isort]]
-  (setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
-  (setup-lsp :pyright
-             {:on_attach on-attach
-              :settings {:python {:analysis {:autoImportCompletions true}}}})
-  (setup-lsp :typeprof)
-  (setup-lsp :vuels {:on_attach (on-attach-do attach-navic disable-fmt)})
   (setup-lsp :efm {:on_attach on-attach
                    :init_options {:documentFormatting true
                                   :hover true
@@ -89,8 +83,15 @@
                                :python
                                :typescriptreact
                                :vue]})
-  (setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
+  (setup-lsp :elmls)
+  (setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
+  (setup-lsp :pyright
+             {:on_attach on-attach
+              :settings {:python {:analysis {:autoImportCompletions true}}}})
   (setup-lsp :rust_analyzer
              {:on_attach on-attach
-              :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}}))
+              :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
+  (setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
+  (setup-lsp :typeprof)
+  (setup-lsp :vuels {:on_attach (on-attach-do attach-navic disable-fmt)}))
 

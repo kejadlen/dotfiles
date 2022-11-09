@@ -102,11 +102,10 @@
 
 ;; https://github.com/itchyny/lightline.vim/issues/168#issuecomment-232183744
 (let [colorscheme :powerline
+      component {:filename "%{expand(\"%:~:.\")}"} ; relative path
       palette-key (.. "lightline#colorscheme#" colorscheme "#palette")
       palette (. vim.g palette-key)]
-  (set vim.g.lightline
-       {: colorscheme
-        :active {:left [[:mode :paste] [:readonly :relativepath :modified]]}})
+  (set vim.g.lightline {: colorscheme : component})
   (each [_ f (ipairs [:normal :inactive :tabline])]
     (tset palette f :middle [[:NONE :NONE :NONE :NONE]]))
   (tset vim.g palette-key palette))
