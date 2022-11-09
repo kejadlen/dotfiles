@@ -7,6 +7,7 @@ scratch.*
 
 # ctags
 .ctags.d
+/*.tags
 tags
 
 # direnv
