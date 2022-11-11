@@ -90,8 +90,8 @@
               :settings {:python {:analysis {:autoImportCompletions true}}}})
   (setup-lsp :rust_analyzer
              {:on_attach on-attach
+              :cmd [:rustup :run :stable :rust-analyzer]
               :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
   (setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
   (setup-lsp :typeprof)
   (setup-lsp :vuels {:on_attach (on-attach-do attach-navic disable-fmt)}))
-
