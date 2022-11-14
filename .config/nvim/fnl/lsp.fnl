@@ -1,4 +1,17 @@
+(local lspconfig (require :lspconfig))
 (local {: lsp} vim)
+
+;;; fennel-ls
+
+(let [configs (require :lspconfig.configs)]
+  (tset configs :fennel-ls
+        {:default_config {:cmd [:/opt/homebrew/bin/fennel-ls]
+                          :filetypes [:fennel]
+                          :root_dir #(lspconfig.util.find_git_ancestor $1)
+                          :settings {}}}))
+
+(let [{: fennel-ls} lspconfig]
+  (fennel-ls.setup (vim.lsp.protocol.make_client_capabilities)))
 
 ;; (lsp.set_log_level :debug)
 
@@ -47,8 +60,7 @@
   (set client.resolved_capabilities.document_formatting false))
 
 (fn setup-lsp [lsp config]
-  (let [lspconfig (require :lspconfig)
-        {: setup} (. lspconfig lsp)]
+  (let [{: setup} (. lspconfig lsp)]
     (setup (or config {:on_attach on-attach}))))
 
 (let [fmt #{:formatCommand $1 :formatStdin true}
@@ -84,6 +96,7 @@
                                :typescriptreact
                                :vue]})
   (setup-lsp :elmls)
+  (setup-lsp :fennel-ls)
   (setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
   (setup-lsp :pyright
              {:on_attach on-attach
@@ -95,3 +108,4 @@
   (setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
   (setup-lsp :typeprof)
   (setup-lsp :vuels {:on_attach (on-attach-do attach-navic disable-fmt)}))
+
