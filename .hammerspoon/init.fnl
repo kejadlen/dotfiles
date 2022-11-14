@@ -1,7 +1,7 @@
+(local {: mash : smash : modal-bind} (require :hotkey))
+
 (local log (hs.logger.new :log :info))
 (set hs.logger.defaultLogLevel :info)
-
-(local {: mash : smash : modal-bind} (require :hotkey))
 
 (set hs.window.animationDuration 0.0)
 (hs.loadSpoon :MiroWindowsManager)
@@ -59,41 +59,7 @@
     (hs.eventtap.keyStroke [:cmd] :v)
     (hs.pasteboard.setContents prev-pasteboard)))
 
-(modal-bind mash "," "," [[mash :l :linkify linkify]])
-
-;; https://stackoverflow.com/questions/39464668/how-to-get-bundle-id-of-mac-application
-;;   osascript -e 'id of app "SomeApp"'
-;;   mdls -name kMDItemCFBundleIdentifier -r SomeApp.app
-
-;; fnlfmt: skip
-(local bundle-ids {:firefox :org.mozilla.firefoxdeveloperedition
-                   :firefox :org.mozilla.firefox
-                   :safari  :com.apple.Safari
-                   :zoom    :us.zoom.xos})
-
-(fn handle [url orig-url]
-  (let [open-with (fn [app]
-                    (partial #(hs.urlevent.openURLWithBundle $2 $1)
-                             (. bundle-ids app)))
-        open-url #((open-with $1) url)]
-    (if (url:find "^https://.*[.]zoom.us/j/%d+") (open-url :zoom)
-        (url:find "^https://.*[.]discnw.org/") (open-url :safari)
-        (url:find "^https://squareup.com/") (open-url :safari)
-        (url:find "^https://.*[.]bulletin.com/") (open-url :safari)
-        (string.find orig-url "^https://doi.org/")
-        ((open-with :firefox) (.. "https://sci-hub.st/" orig-url))
-        (string.find orig-url "^https://.*[.]usps.com/")
-        ((open-with :firefox) orig-url) (open-url :safari))))
-
-(set hs.urlevent.httpCallback
-     (fn [scheme host params url]
-       (let [run #(: (io.popen (.. $1 " '" $2 "'")) :read :*a)
-             de-utm (partial run "~/.dotfiles/bin/de-utm")
-             redirect (partial run "curl -Ls -o /dev/null -w %{url_effective}")
-             orig-url (de-utm url)
-             redirected (de-utm (redirect orig-url))]
-         ;; (hs.urlevent.openURLWithBundle orig-url bundle-ids.firefox))))
-         (handle redirected orig-url))))
+(modal-bind mash "," nil [[mash :l nil linkify]])
 
 ;;; Elgato Key Light Air
 
