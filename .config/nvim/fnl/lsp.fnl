@@ -1,6 +1,8 @@
 (local lspconfig (require :lspconfig))
 (local {: lsp} vim)
 
+;; (lsp.set_log_level :debug)
+
 ;;; fennel-ls
 
 (let [configs (require :lspconfig.configs)]
@@ -12,8 +14,6 @@
 
 (let [{: fennel-ls} lspconfig]
   (fennel-ls.setup (vim.lsp.protocol.make_client_capabilities)))
-
-;; (lsp.set_log_level :debug)
 
 ;; default hover windows to have borders
 (let [{: hover} lsp.handlers]
