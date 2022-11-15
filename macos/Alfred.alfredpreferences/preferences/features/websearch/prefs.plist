@@ -47,12 +47,25 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>6C215CFB-5A2B-40DC-8C30-15DDB423D6B7</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>sg</string>
+			<key>spaces</key>
+			<string>+</string>
+			<key>text</key>
+			<string>Search StoryGraph for '{query}'</string>
+			<key>url</key>
+			<string>https://app.thestorygraph.com/browse?search_term={query}</string>
+		</dict>
 		<key>A0D55B34-A5CE-44C9-8920-22144A82FE2B</key>
 		<dict>
 			<key>enabled</key>
 			<true/>
 			<key>keyword</key>
-			<string>bookshop</string>
+			<string>bs</string>
 			<key>spaces</key>
 			<string>+</string>
 			<key>text</key>
@@ -72,6 +85,19 @@
 			<string>https://pinboard.in/search/u:kejadlen?query={query}</string>
 			<key>utf8</key>
 			<true/>
+		</dict>
+		<key>CB3335FB-D778-42B6-9AF8-97590E88638F</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>k</string>
+			<key>spaces</key>
+			<string>+</string>
+			<key>text</key>
+			<string>Search Kagi for '{query}'</string>
+			<key>url</key>
+			<string>https://kagi.com/search?q={query}</string>
 		</dict>
 		<key>D70178D9-628A-4910-9C32-9FDA059AA75F</key>
 		<dict>
