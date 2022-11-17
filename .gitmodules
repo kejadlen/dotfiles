@@ -264,3 +264,9 @@
 [submodule ".local/share/nvim/site/pack/alpha/start/direnv"]
 	path = .local/share/nvim/site/pack/alpha/start/direnv
 	url = https://github.com/direnv/direnv.vim.git
+[submodule ".local/share/nvim/site/pack/alpha/start/terraform"]
+	path = .local/share/nvim/site/pack/alpha/start/terraform
+	url = https://github.com/hashivim/vim-terraform.git
+[submodule "src/alfred-gemoji"]
+	path = src/alfred-gemoji
+	url = https://git.kejadlen.dev/alpha/alfred-gemoji.git

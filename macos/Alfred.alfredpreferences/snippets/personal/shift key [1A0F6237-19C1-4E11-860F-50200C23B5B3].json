@@ -1,6 +1,7 @@
 {
   "alfredsnippet" : {
     "snippet" : "⇧",
+    "dontautoexpand" : true,
     "uid" : "1A0F6237-19C1-4E11-860F-50200C23B5B3",
     "name" : "shift key",
     "keyword" : "shift"

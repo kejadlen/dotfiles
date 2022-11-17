@@ -1,6 +1,7 @@
 {
   "alfredsnippet" : {
     "snippet" : "–",
+    "dontautoexpand" : true,
     "uid" : "98CB4320-E12F-4F68-8E8D-DA28F10782C8",
     "name" : "en dash",
     "keyword" : "--"

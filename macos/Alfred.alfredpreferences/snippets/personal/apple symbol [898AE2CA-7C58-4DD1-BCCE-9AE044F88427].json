@@ -1,6 +1,7 @@
 {
   "alfredsnippet" : {
     "snippet" : "",
+    "dontautoexpand" : true,
     "uid" : "898AE2CA-7C58-4DD1-BCCE-9AE044F88427",
     "name" : "apple symbol",
     "keyword" : "apple"

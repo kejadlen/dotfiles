@@ -7,7 +7,24 @@
 		<key>installed</key>
 		<dict/>
 		<key>uninstalled</key>
-		<dict/>
+		<dict>
+			<key>YAML</key>
+			<dict>
+				<key>date</key>
+				<date>2022-10-30T20:26:10Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>YAML</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>YAML</string>
+				</dict>
+			</dict>
+		</dict>
 	</dict>
 	<key>DHCocoaRepo</key>
 	<dict>
@@ -150,7 +167,7 @@
 			<key>Neovim</key>
 			<dict>
 				<key>date</key>
-				<date>2022-10-16T23:12:42Z</date>
+				<date>2022-10-19T02:07:22Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -173,7 +190,7 @@
 			<key>Terraform</key>
 			<dict>
 				<key>date</key>
-				<date>2022-09-26T21:53:51Z</date>
+				<date>2022-11-15T19:04:04Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
