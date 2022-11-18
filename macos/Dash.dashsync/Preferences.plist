@@ -142,28 +142,6 @@
 					<string>Hammerspoon</string>
 				</dict>
 			</dict>
-			<key>J</key>
-			<dict>
-				<key>date</key>
-				<date>2021-11-17T23:58:55Z</date>
-				<key>entry</key>
-				<dict>
-					<key>aliases</key>
-					<array>
-						<string>JSoftware</string>
-					</array>
-					<key>authorLinkHref</key>
-					<string>https://github.com/Kapeli/Dash-User-Contributions/tree/master/docsets/J#readme</string>
-					<key>authorLinkText</key>
-					<string>Tim Hosgood</string>
-					<key>name</key>
-					<string>J</string>
-					<key>platform</key>
-					<string>usercontribJ</string>
-					<key>uniqueIdentifier</key>
-					<string>J</string>
-				</dict>
-			</dict>
 			<key>Neovim</key>
 			<dict>
 				<key>date</key>
@@ -213,7 +191,30 @@
 			</dict>
 		</dict>
 		<key>uninstalled</key>
-		<dict/>
+		<dict>
+			<key>J</key>
+			<dict>
+				<key>date</key>
+				<date>2022-11-18T18:41:17Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array>
+						<string>JSoftware</string>
+					</array>
+					<key>authorLinkHref</key>
+					<string>https://github.com/Kapeli/Dash-User-Contributions/tree/master/docsets/J#readme</string>
+					<key>authorLinkText</key>
+					<string>Tim Hosgood</string>
+					<key>name</key>
+					<string>J</string>
+					<key>platform</key>
+					<string>usercontribJ</string>
+					<key>uniqueIdentifier</key>
+					<string>J</string>
+				</dict>
+			</dict>
+		</dict>
 	</dict>
 	<key>DHWebViewIsDark</key>
 	<false/>
@@ -237,12 +238,18 @@
 			<string>py:</string>
 			<key>~/Library/Application Support/Dash/DocSets/Ruby_3/Ruby.docset</key>
 			<string>rb:</string>
+			<key>~/Library/Application Support/Dash/DocSets/Rust/Rust.docset</key>
+			<string>rs:</string>
 			<key>~/Library/Application Support/Dash/Ruby DocSets/rake/rake.docset</key>
 			<string>gem:</string>
 			<key>~/Library/Application Support/Dash/User Contributed/Hammerspoon/Hammerspoon.docset</key>
 			<string>hs:</string>
+			<key>~/Library/Application Support/Dash/User Contributed/Neovim/Neovim.docset</key>
+			<string>nvim:</string>
 			<key>~/Library/Application Support/Dash/User Contributed/Terraform/Terraform.docset</key>
 			<string>tf:</string>
+			<key>~/Library/Application Support/Dash/Versioned DocSets/Django - DHDocsetDownloader/3-2-10/Django.docset</key>
+			<string>dj:</string>
 			<key>~/Library/Application Support/Dash/Versioned DocSets/Python 3 - DHDocsetDownloader/3-7-12/Python 3.docset</key>
 			<string>py:</string>
 			<key>~/Library/Application Support/Dash/Versioned DocSets/Ruby 2 - DHDocsetDownloader/2-7-2/Ruby.docset</key>
@@ -262,11 +269,6 @@
 			<dict>
 				<key>date</key>
 				<date>2021-11-18T00:23:45Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/CSS.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2021-11-18T00:12:13Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/JavaScript.xml</key>
 			<dict>
@@ -288,11 +290,6 @@
 				<key>date</key>
 				<date>2021-11-18T00:32:27Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/Ruby_on_Rails_7.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-27T14:27:48Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/Rust.xml</key>
 			<dict>
 				<key>date</key>
@@ -301,6 +298,11 @@
 		</dict>
 		<key>uninstalled</key>
 		<dict>
+			<key>http://kapeli.com/feeds/CSS.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-11-18T18:41:41Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/Django.xml</key>
 			<dict>
 				<key>date</key>
@@ -335,6 +337,11 @@
 			<dict>
 				<key>date</key>
 				<date>2020-12-30T17:56:32Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Ruby_on_Rails_7.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-11-18T18:41:38Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Vim.xml</key>
 			<dict>
@@ -515,13 +522,7 @@
 				</dict>
 			</dict>
 			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
-			<dict>
-				<key>2.7.2</key>
-				<dict>
-					<key>date</key>
-					<date>2021-11-18T00:06:24Z</date>
-				</dict>
-			</dict>
+			<dict/>
 			<key>http://kapeli.com/feeds/VueJS.xml</key>
 			<dict>
 				<key>2.6.12</key>
@@ -544,6 +545,11 @@
 				<dict>
 					<key>date</key>
 					<date>2020-12-30T17:57:25Z</date>
+				</dict>
+				<key>2.7.2</key>
+				<dict>
+					<key>date</key>
+					<date>2022-11-18T18:41:22Z</date>
 				</dict>
 			</dict>
 		</dict>
