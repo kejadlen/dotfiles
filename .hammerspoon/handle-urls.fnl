@@ -28,6 +28,11 @@
 (fn open-with [app]
   (partial open-url app))
 
+(local default-handlers
+       [["^https://.*%.?zoom.us/j/%d+" (open-with :zoom)]
+        ["^https://doi.org/"
+         #(open-with :default (.. "https://sci-hub.st/" $1))]])
+
 (fn url->handler [url]
   (accumulate [acc nil _ [pat handler] (ipairs handlers) &until acc]
     (if (url:find pat) #(handler url) nil)))
@@ -37,12 +42,9 @@
     (handler)))
 
 (fn setup [{:bundle-ids extra-bundle-ids :handlers extra-handlers}]
-  (let [default-handlers [["^https://.*%.?zoom.us/j/%d+" (open-with :zoom)]
-                          ["^https://doi.org/"
-                           #(open-url :default (.. "https://sci-hub.st/" $1))]]]
-    (each [k v (pairs (or extra-bundle-ids {}))]
-      (tset bundle-ids k v))
-    (set handlers (hs.fnutils.concat extra-handlers default-handlers))))
+  (each [k v (pairs (or extra-bundle-ids {}))]
+    (tset bundle-ids k v))
+  (set handlers (hs.fnutils.concat extra-handlers default-handlers)))
 
 (fn start []
   (set hs.urlevent.httpCallback
