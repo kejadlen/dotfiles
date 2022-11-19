@@ -34,6 +34,7 @@
 	default = current
 	followTags = true
 	recurseSubmodules = on-demand
+	autoSetupRemote = true
 [grep]
 	extendRegexp = true
 	lineNumber = true
