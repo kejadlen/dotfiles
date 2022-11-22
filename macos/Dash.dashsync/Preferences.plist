@@ -168,7 +168,7 @@
 			<key>Terraform</key>
 			<dict>
 				<key>date</key>
-				<date>2022-11-15T19:04:04Z</date>
+				<date>2022-11-22T03:01:34Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -195,7 +195,7 @@
 			<key>J</key>
 			<dict>
 				<key>date</key>
-				<date>2022-11-18T18:41:17Z</date>
+				<date>2022-11-19T20:38:03Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -301,7 +301,7 @@
 			<key>http://kapeli.com/feeds/CSS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-11-18T18:41:41Z</date>
+				<date>2022-11-19T20:38:03Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Django.xml</key>
 			<dict>
@@ -341,7 +341,7 @@
 			<key>http://kapeli.com/feeds/Ruby_on_Rails_7.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-11-18T18:41:38Z</date>
+				<date>2022-11-19T20:38:03Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Vim.xml</key>
 			<dict>
@@ -549,7 +549,7 @@
 				<key>2.7.2</key>
 				<dict>
 					<key>date</key>
-					<date>2022-11-18T18:41:22Z</date>
+					<date>2022-11-19T20:38:03Z</date>
 				</dict>
 			</dict>
 		</dict>
