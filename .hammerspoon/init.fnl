@@ -79,14 +79,14 @@
   (accumulate [docked? false _ v (pairs (hs.usb.attachedDevices)) &until docked?]
     (or docked? (= v.productName "CalDigit Thunderbolt 3 Audio"))))
 
-(local key-light-air-watcher (let [{: watcher} hs.caffeinate]
-                               (: (watcher.new #(when (docked?)
-                                                  (match $1
-                                                    watcher.screensDidLock (update-key-light-air false)
-                                                    watcher.screensDidSleep (update-key-light-air false)
-                                                    watcher.screensDidUnlock (update-key-light-air true)
-                                                    watcher.screensDidWake (update-key-light-air true))))
-                                  :start)))
+(local key-light-air-watcher (let [{: watcher} hs.caffeinate
+                                   w (watcher.new #(when (docked?)
+                                                     (match $1
+                                                       watcher.screensDidLock (update-key-light-air false)
+                                                       watcher.screensDidSleep (update-key-light-air false)
+                                                       watcher.screensDidUnlock (update-key-light-air true)
+                                                       watcher.screensDidWake (update-key-light-air true))))]
+                               (w:start)))
 
 ; (local usb-watcher (: (hs.usb.watcher.new #(let [{: eventType : productName} $1]
 ;                                              (when (= productName
