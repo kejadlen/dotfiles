@@ -1,3 +1,18 @@
+;; Per-directory LSP usage:
+;;
+;; .envrc:
+;;   use vim
+;;
+;; .vimrc.local:
+;;   lua << EOF
+;;     package.path = "./.dev.local/?.fnl;" .. package.path
+;;     require("vimrc")
+;;   EOF
+;;
+;; .dev.local/vimrc.fnl
+;;   (local {: setup-lsp} (require :lsp))
+;;   (setup-lsp :ruby_ls)
+
 (local lspconfig (require :lspconfig))
 (local {: lsp} vim)
 
@@ -9,6 +24,11 @@
   (tset configs :fennel-ls
         {:default_config {:cmd [:/opt/homebrew/bin/fennel-ls]
                           :filetypes [:fennel]
+                          :root_dir #(lspconfig.util.find_git_ancestor $1)
+                          :settings {}}})
+  (tset configs :steep
+        {:default_config {:cmd ["steep langserver"]
+                          :filetypes [:ruby]
                           :root_dir #(lspconfig.util.find_git_ancestor $1)
                           :settings {}}}))
 
@@ -106,6 +126,9 @@
               :cmd [:rustup :run :stable :rust-analyzer]
               :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
   (setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
-  (setup-lsp :typeprof)
+  ; (setup-lsp :ruby_ls)
+  ; (setup-lsp :typeprof)
+  ; (setup-lsp :steep)
   (setup-lsp :vuels {:on_attach (on-attach-do attach-navic disable-fmt)}))
 
+{: setup-lsp}
