@@ -3,7 +3,7 @@
 # Overrides for --exclude and --languages can be put into .ctags.d/*.ctags
 
 set -e
-PATH="/usr/local/bin:$PATH"
+PATH="/opt/homebrew/bin:$PATH"
 trap 'rm -f "$$.tags"' EXIT
 git ls-files | ctags --tag-relative -L - -f"$$.tags"
 mv "$$.tags" "tags"
