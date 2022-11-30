@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require "rexml/document"
+
+doc = REXML::Document.new(ARGF.read)
+doc.get_elements("//date").each {|date| date.text = nil }
+doc.write

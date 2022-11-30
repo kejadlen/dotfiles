@@ -1,3 +1,4 @@
 Alfred.alfredpreferences/workflows/*/info.plist filter=alfredworkflow
 Alfred.alfredpreferences/workflows/user.workflow.35F259A3-BBD9-4A1B-B237-5E149EE1E723/*.png filter=lfs diff=lfs merge=lfs -text
 osx/websters-1913.dictionary filter=lfs diff=lfs merge=lfs -text
+macos/Dash.dashsync/Preferences.plist filter=dash-prefs
