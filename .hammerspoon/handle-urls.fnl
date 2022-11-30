@@ -28,10 +28,10 @@
 (fn open-with [app]
   (partial open-url app))
 
+;; fnlfmt: skip
 (local default-handlers
        [["^https://.*%.?zoom.us/j/%d+" (open-with :zoom)]
-        ["^https://doi.org/"
-         #(open-with :default (.. "https://sci-hub.st/" $1))]])
+        ["^https://doi.org/"           #((open-with :default) (.. "https://sci-hub.st/" $1))]])
 
 (fn url->handler [url]
   (accumulate [acc nil _ [pat handler] (ipairs handlers) &until acc]
