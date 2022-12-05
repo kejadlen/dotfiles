@@ -270,3 +270,7 @@
 [submodule "src/alfred-gemoji"]
 	path = src/alfred-gemoji
 	url = https://git.kejadlen.dev/alpha/alfred-gemoji.git
+[submodule "src/bqn"]
+	path = src/bqn
+	url = https://github.com/mlochbaum/BQN.git
+	branch = master
