@@ -1,0 +1,35 @@
+" General Settings
+set update.lastchecktime 1670274234332
+set configversion 2.0
+
+" vimperator hint mode
+set hintfiltermode vimperator-reflow
+set hintchars 1234567890
+
+" only hint search results on DDG
+bindurl ^https://duckduckgo.com f hint -Jc [data-testid="result-title-a"]
+bindurl ^https://duckduckgo.com F hint -Jbc [data-testid="result-title-a"]
+
+" make d take you to the left (I find it much less confusing)
+" bind d composite tabprev; tabclose #
+" bind D tabclose
+
+" binds
+bind j scrollline 3
+bind <C-n> tabnext
+bind <C-p> tabprev
+
+" ignore modes
+autocmd DocStart youtube.com mode ignore
+
+" new reddit is bad
+autocmd DocStart ^http(s?)://www.reddit.com js tri.excmds.urlmodify("-t", "www", "old")
+
+" isolate Facebook in its own container
+set auconcreatecontainer true
+autocontain facebook\.com facebook
+autocontain google\.com google
+autocontain notion\.so work
+
+" For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
+" vim: set filetype=tridactyl
