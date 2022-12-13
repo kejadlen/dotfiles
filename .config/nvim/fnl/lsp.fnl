@@ -18,6 +18,10 @@
 
 ;; (lsp.set_log_level :debug)
 
+;; Use rounded borders for :LspInfo
+(let [{: default_options} (require "lspconfig.ui.windows")]
+  (tset default_options :border :rounded))
+
 ;;; fennel-ls
 
 (let [configs (require :lspconfig.configs)]
