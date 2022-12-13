@@ -33,9 +33,6 @@ modified = "​"
 staged = "​"
 renamed = "​"
 deleted = "​"
-ahead = "⇡${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-behind = "⇣${count}"
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
