@@ -30,11 +30,10 @@
                           :filetypes [:fennel]
                           :root_dir #(lspconfig.util.find_git_ancestor $1)
                           :settings {}}})
-  (tset configs :steep
-        {:default_config {:cmd ["steep langserver"]
-                          :filetypes [:ruby]
-                          :root_dir #(lspconfig.util.find_git_ancestor $1)
-                          :settings {}}}))
+  (tset configs :steep {:default_config {:cmd ["steep langserver"]
+                                         :filetypes [:ruby]
+                                         :root_dir #(lspconfig.util.find_git_ancestor $1)
+                                         :settings {}}}))
 
 (let [{: fennel-ls} lspconfig]
   (fennel-ls.setup (vim.lsp.protocol.make_client_capabilities)))
@@ -87,52 +86,81 @@
   (let [{: setup} (. lspconfig lsp)]
     (setup (or config {:on_attach on-attach}))))
 
-(let [fmt #{:formatCommand $1 :formatStdin true}
-      lint #{:lintCommand $1 :lintFormats $2 :lintStdin true}
-      fennel-lint "fennel --globals vim,hs,spoon --raw-errors $(realpath --relative-to . ${INPUT}) 2>&1"
-      fennel [(fmt "fnlfmt /dev/stdin") (lint fennel-lint ["%f:%l: %m"])]
-      eslint {:lintCommand "eslint -f visualstudio --stdin --stdin-filename ${INPUT}"
-              :lintIgnoreExitCode true
-              :lintStdin true
-              :lintFormats ["%f(%l,%c): %tarning %m" "%f(%l,%c): %rror %m"]}
-      prettier (fmt "prettier --stdin-filepath ${INPUT}")
-      javascript [eslint prettier]
-      black (fmt "black --quiet -")
-      ; flake8 (lint "flake8 --stdin-display-name ${INPUT} -" ["%f:%l:%c: %m"])
-      isort (fmt "isort --quiet --profile black -")
-      python [black isort]]
-  (setup-lsp :efm {:on_attach on-attach
-                   :init_options {:documentFormatting true
-                                  :hover true
-                                  :documentSymbol true
-                                  :codeAction true
-                                  :completion true}
-                   :settings {:languages {: fennel
-                                          : javascript
-                                          : python
-                                          :typescript javascript
-                                          :typescriptreact javascript
-                                          :vue [prettier]}}
-                   :filetypes [:fennel
-                               :javascript
-                               :typescript
-                               :python
-                               :typescriptreact
-                               :vue]})
-  (setup-lsp :elmls)
-  (setup-lsp :fennel-ls)
-  (setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
-  (setup-lsp :pyright
-             {:on_attach on-attach
-              :settings {:python {:analysis {:autoImportCompletions true}}}})
-  (setup-lsp :rust_analyzer
-             {:on_attach on-attach
-              :cmd [:rustup :run :stable :rust-analyzer]
-              :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
-  (setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
-  ; (setup-lsp :ruby_ls)
-  ; (setup-lsp :typeprof)
-  ; (setup-lsp :steep)
-  (setup-lsp :vuels {:on_attach (on-attach-do attach-navic disable-fmt)}))
+(local fmt #{:formatCommand $1 :formatStdin true})
+(local lint #{:lintCommand $1 :lintFormats $2 :lintStdin true})
+(local fennel-lint
+       "fennel --globals vim,hs,spoon --raw-errors $(realpath --relative-to . ${INPUT}) 2>&1")
+
+(local fennel [(fmt "fnlfmt /dev/stdin") (lint fennel-lint ["%f:%l: %m"])])
+(local eslint
+       {:lintCommand "eslint -f visualstudio --stdin --stdin-filename ${INPUT}"
+        :lintIgnoreExitCode true
+        :lintStdin true
+        :lintFormats ["%f(%l,%c): %tarning %m" "%f(%l,%c): %rror %m"]})
+
+(local prettier (fmt "prettier --stdin-filepath ${INPUT}"))
+(local javascript [eslint prettier])
+(local black (fmt "black --quiet -"))
+(local flake8 (lint "flake8 --stdin-display-name ${INPUT} -" ["%f:%l:%c: %m"]))
+(local isort (fmt "isort --quiet --profile black -"))
+(local python [black isort])
+
+(setup-lsp :efm {:on_attach on-attach
+                 :init_options {:documentFormatting true
+                                :hover true
+                                :documentSymbol true
+                                :codeAction true
+                                :completion true}
+                 :settings {:languages {: fennel
+                                        : javascript
+                                        : python
+                                        :typescript javascript
+                                        :typescriptreact javascript
+                                        :vue [prettier]}}
+                 :filetypes [:fennel
+                             :javascript
+                             :typescript
+                             :python
+                             :typescriptreact
+                             :vue]})
+
+(setup-lsp :elmls)
+(setup-lsp :fennel-ls)
+(setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
+(setup-lsp :pyright
+           {:on_attach on-attach
+            :settings {:python {:analysis {:autoImportCompletions true}}}})
+
+(setup-lsp :rust_analyzer
+           {:on_attach on-attach
+            :cmd [:rustup :run :stable :rust-analyzer]
+            :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
+
+(setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
+(setup-lsp :vuels {:on_attach (on-attach-do attach-navic disable-fmt)})
+
+;; TODO
+;; https://github.com/Shopify/ruby-lsp/issues/188#issuecomment-1268932965
+; (local request-diagnostics
+;        (fn [client buffer]
+;          (let [{: util : diagnostic} lsp
+;                params (util.make_text_document_params buffer)
+;                publish-diagnostics #(diagnostic.on_publish_diagnostics nil
+;                                                                        (vim.tbl_extend :keep
+;                                                                                        params
+;                                                                                        {:diagnostics $1.items})
+;                                                                        {:client_id client.id})
+;                update-diagnostics #(when (not $1)
+;                                      (publish-diagnostics $2))
+;                callback #(client.request :textDocument/diagnostic
+;                                          {:textDocument params}
+;                                          update-diagnostics)]
+;            (vim.api.nvim_create_autocmd [:BufEnter :BufWritePre :CursorHold]
+;                                         {: buffer : callback}))))
+
+; (fn setup-ruby-ls []
+;   (let []
+;     (setup-lsp :ruby_ls {:on_attach (on-attach-do request-diagnostics)})))
 
 {: setup-lsp}
+

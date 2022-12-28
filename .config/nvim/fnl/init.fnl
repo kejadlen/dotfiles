@@ -30,10 +30,12 @@
 (vim.keymap.set :i "\\\\" "<esc>:write<cr>")
 
 ;; highlight
-(set vim.o.hlsearch false)
-; (vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
-;; TODO
-; au TextYankPost * silent! lua vim.highlight.on_yank()
+(set vim.o.hlsearch true)
+(vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
+(let [{: nvim_command : nvim_create_autocmd : nvim_create_augroup} vim.api
+      au-group (nvim_create_augroup :nvim-hl-on-yank {})
+      cb #(vim.highlight.on_yank {:higroup :Search :timeout 250})]
+  (nvim_create_autocmd :TextYankPost {:callback cb :group au-group}))
 
 ;; non-shifted shortcuts for moving the cursor to the start/end of the current line
 (vim.keymap.set :n :H "^")
@@ -125,7 +127,7 @@
 ;;; treesitter
 (let [configs (require :nvim-treesitter.configs)
       {: setup} configs]
-  (setup {:ensure_installed [:fennel :hcl :lua :python :ruby :rust :typescript]
+  (setup {:ensure_installed [:fennel :hcl :lua :python :query :ruby :rust :typescript]
           :sync_install false
           :highlight {:enable true :additional_vim_regex_highlighting false}
           ;; disabling since this is super annoying in Ruby
