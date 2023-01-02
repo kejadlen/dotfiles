@@ -73,6 +73,8 @@
 	singlekey = true
 [url "git@github.com:"]
 	insteadof = https://github.com/
+[url "git@git.kejadlen.dev:"]
+	insteadof = https://git.kejadlen.dev/
 [transfer]
 	fsckobjects = true
 [submodule]
