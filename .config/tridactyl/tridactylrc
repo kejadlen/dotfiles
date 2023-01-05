@@ -16,11 +16,13 @@ bindurl ^https://duckduckgo.com F hint -Jbc [data-testid="result-title-a"]
 
 " binds
 bind j scrollline 3
+bind k scrollline -3
 bind <C-n> tabnext
 bind <C-p> tabprev
 
 " ignore modes
 autocmd DocStart youtube.com mode ignore
+autocmd DocStart nytimes.com/crosswords mode ignore
 
 " new reddit is bad
 autocmd DocStart ^http(s?)://www.reddit.com js tri.excmds.urlmodify("-t", "www", "old")
