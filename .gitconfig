@@ -7,6 +7,7 @@
 	quotepath = false
 	sparecheckout = true
 	editor = nvim
+	pager = delta
 [alias]
 	g = grep --break --heading --line-number
 	standup = !git log --all --date=short --no-merges --pretty=format:\"%h %ad %s%d\" --since=1.weeks --author=`git config user.email`
@@ -58,9 +59,9 @@
 [diff]
 	algorithm = histogram
 	external = difft
-	tool = difftastic
 	; compactionHeuristic = true
 	indentHeuristic = true
+	colorMoved = default
 [fetch]
 	prune = true
 [tag]
@@ -71,6 +72,7 @@
 	updateRefs = true
 [interactive]
 	singlekey = true
+	diffFilter = delta --color-only --features=interactive
 [url "git@github.com:"]
 	insteadof = https://github.com/
 [url "git@git.kejadlen.dev:"]
@@ -106,5 +108,13 @@
 	format = ssh
 [gpg "ssh"]
 	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+[delta]
+	features = decorations
+	navigate = true
+	line-numbers = true
+	side-by-side = true
+	line-numbers-right-format = "│ "
+[delta "decorations"]
+	hunk-header-style = omit
 [include]
 	path = ~/.gitconfig.local
