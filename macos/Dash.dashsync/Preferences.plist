@@ -269,6 +269,11 @@
 				<key>date</key>
 				<date/>
 			</dict>
+			<key>http://kapeli.com/feeds/Docker.xml</key>
+			<dict>
+				<key>date</key>
+				<date/>
+			</dict>
 			<key>http://kapeli.com/feeds/JavaScript.xml</key>
 			<dict>
 				<key>date</key>
@@ -303,11 +308,6 @@
 				<date/>
 			</dict>
 			<key>http://kapeli.com/feeds/Django.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Docker.xml</key>
 			<dict>
 				<key>date</key>
 				<date/>
