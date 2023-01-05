@@ -34,7 +34,7 @@
 (vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
 (let [{: nvim_command : nvim_create_autocmd : nvim_create_augroup} vim.api
       au-group (nvim_create_augroup :nvim-hl-on-yank {})
-      cb #(vim.highlight.on_yank {:higroup :Search :timeout 250})]
+      cb #(vim.highlight.on_yank {:higroup :Search :timeout 100})]
   (nvim_create_autocmd :TextYankPost {:callback cb :group au-group}))
 
 ;; non-shifted shortcuts for moving the cursor to the start/end of the current line
