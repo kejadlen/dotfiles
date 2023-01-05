@@ -7,7 +7,8 @@
 
 require "json"
 
-muted = `osascript -e "input volume of (get volume settings)"`.to_i.zero?
+volume = `osascript -e "input volume of (get volume settings)"`.to_i
+muted = volume < 5
 
 unless ARGV.empty?
   vol = ARGV.shift

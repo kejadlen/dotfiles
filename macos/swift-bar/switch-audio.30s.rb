@@ -4,48 +4,48 @@
 # <swiftbar.hideRunInTerminal>true</swiftbar.hideRunInTerminal>
 # <swiftbar.hideLastUpdated>true</swiftbar.hideLastUpdated>
 # <swiftbar.hideDisablePlugin>true</swiftbar.hideDisablePlugin>
+# <swiftbar.hideSwiftBar>true</swiftbar.hideSwiftBar>
 # <swiftbar.refreshOnOpen>true</swiftbar.refreshOnOpen>
 
 require "json"
 
-switch_audio_source = "/opt/homebrew/bin/SwitchAudioSource"
+SWITCH_AUDIO_SOURCE = "/opt/homebrew/bin/SwitchAudioSource"
+SOURCES = {
+  headset: { icon: "headphones", input: "Antlion USB Microphone", output: "CalDigit Thunderbolt 3 Audio" },
+  laptop: { icon: "play.laptopcomputer", input: "MacBook Pro Microphone", output: "MacBook Pro Speakers" },
+}
 
 unless ARGV.empty?
-  type, id = ARGV
-  `#{switch_audio_source} -t #{type} -i #{id}`
+  audio_sources = `#{SWITCH_AUDIO_SOURCE} -a -f json`
+    .lines(chomp: true)
+    .map {|x| JSON.parse(x) }
+
+  SOURCES.fetch(ARGV.shift.to_sym).each do |type, name|
+    src = audio_sources.find {|src| src.values_at("type", "name") == [type.to_s, name] }
+    id = src.fetch("id")
+    `#{SWITCH_AUDIO_SOURCE} -t #{type} -i #{id}`
+  end
 end
 
-audio_sources = `#{switch_audio_source} -a -f json`
-  .lines(chomp: true)
-  .map {|x| JSON.parse(x) }
-  .group_by {|x| x.fetch("type") }
+input = JSON.parse(`#{SWITCH_AUDIO_SOURCE} -c -f json -t input`)
+output = JSON.parse(`#{SWITCH_AUDIO_SOURCE} -c -f json -t output`)
+active_source = SOURCES.find {|_,src|
+  src.values_at(:input, :output) == [input, output].map {|src| src.fetch("name") }
+}
 
-input = JSON.parse(`#{switch_audio_source} -c -f json -t input`)
-output = JSON.parse(`#{switch_audio_source} -c -f json -t output`)
-
-puts ":waveform: | symbolize=true"
+icon = active_source ? active_source.fetch(1).fetch(:icon) : "questionmark.bubble"
+puts ":waveform:: :#{icon}: | symbolize=true"
 puts "---"
 
-audio_sources.each do |type,sources|
-  sources.each do |source|
-    name = source.fetch("name")
-    id = source.fetch("id")
+SOURCES.each do |name, sources|
+  params = {
+    symbolize: true,
+    checked: name == active_source.fetch(0),
+    bash: __FILE__,
+    terminal: false,
+    param0: name,
+  }
 
-    sf_type = case type
-              when "input" then ":mic.fill:"
-              when "output" then ":speaker.wave.2.fill:"
-              else fail "Unexpected type: #{type}"
-              end
-
-    params = {
-      symbolize: true,
-      checked: [input, output].include?(source),
-      bash: __FILE__,
-      terminal: false,
-      param0: type,
-      param1: id,
-    }
-
-    puts "#{sf_type} #{name} | #{params.map {|k,v| "#{k}=#{v}"}.join(" ")}"
-  end
+  icon = sources.fetch(:icon)
+  puts ":#{icon}: | #{params.map {|k,v| "#{k}=#{v}"}.join(" ")}"
 end
