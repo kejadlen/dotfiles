@@ -25,6 +25,8 @@
 (each [_ v (ipairs [:up :down :left :right])]
   (vim.keymap.set :n (.. "<" v ">") :<nop>))
 
+(set vim.o.mouse nil)
+
 ;; quick save
 (vim.keymap.set :n "\\\\" ":write<cr>")
 (vim.keymap.set :i "\\\\" "<esc>:write<cr>")
