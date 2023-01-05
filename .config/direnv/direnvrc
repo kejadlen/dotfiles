@@ -1,4 +1,5 @@
-source $HOME/.nix-profile/share/nix-direnv/direnvrc
+# source $HOME/.nix-profile/share/nix-direnv/direnvrc
+
 source `brew --prefix`/share/chruby/chruby.sh
 
 layout_k8s() {
