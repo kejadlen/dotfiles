@@ -20,10 +20,12 @@ unless ARGV.empty?
     .lines(chomp: true)
     .map {|x| JSON.parse(x) }
 
-  SOURCES.fetch(ARGV.shift.to_sym).each do |type, name|
-    src = audio_sources.find {|src| src.values_at("type", "name") == [type.to_s, name] }
+  source = SOURCES.fetch(ARGV.shift.to_sym)
+  %i[input output].each do |xput|
+    name = source.fetch(xput)
+    src = audio_sources.find {|src| src.values_at("type", "name") == [xput.to_s, name] }
     id = src.fetch("id")
-    `#{SWITCH_AUDIO_SOURCE} -t #{type} -i #{id}`
+    `#{SWITCH_AUDIO_SOURCE} -t #{xput} -i #{id}`
   end
 end
 
