@@ -46,6 +46,7 @@ SOURCES.each do |name, sources|
     bash: __FILE__,
     terminal: false,
     param0: name,
+    refresh: true,
   }
 
   icon = sources.fetch(:icon)
