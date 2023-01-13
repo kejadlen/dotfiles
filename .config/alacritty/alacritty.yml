@@ -35,3 +35,6 @@ colors:
     magenta: "0x8787AF"
     cyan:    "0x5FAFAF"
     white:   "0xffffff"
+
+import:
+  - ~/.config/alacritty/local.yml
