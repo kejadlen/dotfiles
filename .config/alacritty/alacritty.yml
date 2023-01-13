@@ -24,7 +24,7 @@ colors:
     blue:    "0x5F87AF"
     magenta: "0x5F5F87"
     cyan:    "0x5F8787"
-    white:   "0x6C6C6C"
+    white:   "0xBFBFBF" # originally "0x6C6C6C", lightened up a bit
 
   bright:
     black:   "0x444444"
