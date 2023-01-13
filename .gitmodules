@@ -278,3 +278,7 @@
 	path = .local/share/nvim/site/pack/alpha/start/treesitter-playground
 	url = https://github.com/nvim-treesitter/playground.git
 	branch = master
+[submodule ".config/fish/functions/theme-pure"]
+	path = .config/fish/functions/theme-pure
+	url = https://github.com/pure-fish/pure.git
+	branch = master
