@@ -28,4 +28,4 @@ Pry::Commands.command /^$/, "repeat last command" do
 end
 
 pryrc_local = File.expand_path('../.pryrc.local', __FILE__)
-load pryrc_local if File.exists?(pryrc_local)
+load pryrc_local if File.exist?(pryrc_local)
