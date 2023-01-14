@@ -6,7 +6,6 @@ font:
     family: SauceCodePro Nerd Font
   bold:
     style: Semibold
-  size: 12
 
 draw_bold_text_with_bright_colors: true
 
@@ -35,6 +34,12 @@ colors:
     magenta: "0x8787AF"
     cyan:    "0x5FAFAF"
     white:   "0xffffff"
+
+key_bindings:
+  - { key: B,     mods: Alt, chars: "\eb" }
+  - { key: Left,  mods: Alt, chars: "\eb" }
+  - { key: F,     mods: Alt, chars: "\ef" }
+  - { key: Right, mods: Alt, chars: "\ef" }
 
 import:
   - ~/.config/alacritty/local.yml
