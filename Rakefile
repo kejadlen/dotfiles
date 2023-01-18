@@ -48,9 +48,9 @@ namespace :sync do
   end
 
   desc "Sync a config"
-  task :config, [:config] do |t, args|
+  task :config, [:config, :to] do |t, args|
     config = File.expand_path(args[:config])
-    to = config.sub(Dir.home, '\0/.dotfiles')
+    to = args[:to] || config.sub(Dir.home, '\0/.dotfiles')
 
     mv config, to
     ln_s to, config
