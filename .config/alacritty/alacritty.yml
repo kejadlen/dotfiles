@@ -36,10 +36,11 @@ colors:
     white:   "0xffffff"
 
 key_bindings:
-  - { key: B,     mods: Alt, chars: "\eb" }
-  - { key: Left,  mods: Alt, chars: "\eb" }
-  - { key: F,     mods: Alt, chars: "\ef" }
-  - { key: Right, mods: Alt, chars: "\ef" }
+  - { key: B,     mods: Alt,     chars: "\eb" }
+  - { key: Left,  mods: Alt,     chars: "\eb" }
+  - { key: F,     mods: Alt,     chars: "\ef" }
+  - { key: Right, mods: Alt,     chars: "\ef" }
+  - { key: N,     mods: Command, action: CreateNewWindow }
 
 import:
   - ~/.config/alacritty/local.yml
