@@ -23,5 +23,5 @@
   file: src=~/.dotfiles/bin dest=~/bin state=link
 
 - name: symlink ~/.tmux.conf.local
-  file: src=~/.dotfiles/macos/.tmux.conf.local dest=~/.tmux.conf.local state=link
+  file: src=~/.dotfiles/macos/.tmux.conf dest=~/.tmux.conf.local state=link
   when: ansible_distribution == "MacOSX"
