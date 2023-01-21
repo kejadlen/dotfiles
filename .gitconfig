@@ -7,7 +7,7 @@
 	quotepath = false
 	sparecheckout = true
 	editor = nvim
-	pager = delta
+	; pager = delta
 [alias]
 	g = grep --break --heading --line-number
 	standup = !git log --all --date=short --no-merges --pretty=format:\"%h %ad %s%d\" --since=1.weeks --author=`git config user.email`
