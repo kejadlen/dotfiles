@@ -11,7 +11,7 @@ require "json"
 
 SWITCH_AUDIO_SOURCE = "/opt/homebrew/bin/SwitchAudioSource"
 SOURCES = {
-  headset: { icon: "headphones", input: "Antlion USB Microphone", output: "CalDigit Thunderbolt 3 Audio" },
+  headset: { icon: "headphones", input: "Antlion USB Microphone", output: "CalDigit TS4 Audio - Front" },
   laptop: { icon: "play.laptopcomputer", input: "MacBook Pro Microphone", output: "MacBook Pro Speakers" },
 }
 
@@ -42,7 +42,7 @@ puts "---"
 SOURCES.each do |name, sources|
   params = {
     symbolize: true,
-    checked: name == active_source.fetch(0),
+    checked: active_source && (name == active_source.fetch(0)),
     bash: __FILE__,
     terminal: false,
     param0: name,
