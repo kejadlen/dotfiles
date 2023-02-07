@@ -22,3 +22,6 @@ tags
 
 # Xcode
 xcuserdata
+
+# Python
+.ropeproject
