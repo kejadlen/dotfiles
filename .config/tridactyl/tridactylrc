@@ -2,9 +2,14 @@
 set update.lastchecktime 1670274234332
 set configversion 2.0
 
+set editorcmd /opt/homebrew/bin/neovide
+
 " vimperator hint mode
 set hintfiltermode vimperator-reflow
 set hintchars 1234567890
+
+" open in safari
+command safari composite get_current_url | shellescape | !s open -a Safari
 
 " only hint search results on DDG
 bindurl ^https://duckduckgo.com f hint -Jc [data-testid="result-title-a"]
@@ -33,5 +38,9 @@ autocontain facebook\.com facebook
 autocontain google\.com google
 autocontain notion\.so work
 
-" For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
+" github
+" https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
+unbindurl ^https://github.com s " focus the search bar
+unbindurl ^https://github.com t " activate the file finder
+
 " vim: set filetype=tridactyl
