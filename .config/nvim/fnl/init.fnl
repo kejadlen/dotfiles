@@ -153,6 +153,11 @@
 (set vim.o.foldmethod :expr)
 (set vim.o.foldexpr "nvim_treesitter#foldexpr()")
 
+;;; neovide
+
+;; disable animation
+(set vim.g.neovide_cursor_animation_length 0)
+
 ;;; generate help files
 
 ;; Load all plugins now.
