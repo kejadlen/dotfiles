@@ -261,9 +261,6 @@
 	path = .local/share/nvim/site/pack/alpha/start/context-commentstring
 	url = https://github.com/suy/vim-context-commentstring.git
 	branch = master
-[submodule ".local/share/nvim/site/pack/alpha/start/direnv"]
-	path = .local/share/nvim/site/pack/alpha/start/direnv
-	url = https://github.com/direnv/direnv.vim.git
 [submodule ".local/share/nvim/site/pack/alpha/start/terraform"]
 	path = .local/share/nvim/site/pack/alpha/start/terraform
 	url = https://github.com/hashivim/vim-terraform.git
@@ -281,4 +278,8 @@
 [submodule ".config/fish/functions/theme-pure"]
 	path = .config/fish/functions/theme-pure
 	url = https://github.com/pure-fish/pure.git
+	branch = master
+[submodule "direnv.vim"]
+	path = .local/share/nvim/site/pack/alpha/start/direnv
+	url = https://github.com/direnv/direnv.vim.git
 	branch = master
