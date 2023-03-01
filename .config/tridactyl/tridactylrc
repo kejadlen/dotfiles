@@ -9,11 +9,13 @@ set hintfiltermode vimperator-reflow
 set hintchars 1234567890
 
 " open in safari
-command safari composite get_current_url | shellescape | !s open -a Safari
+command safari composite get_current_url | shellescape | !s open -a Safari | tabclose
 
 " only hint search results on DDG
 bindurl ^https://duckduckgo.com f hint -Jc [data-testid="result-title-a"]
 bindurl ^https://duckduckgo.com F hint -Jbc [data-testid="result-title-a"]
+
+bindurl ^https://www.instapaper.com/hello2 f hint -Jc button[type="submit"]
 
 " make d take you to the left (I find it much less confusing)
 " bind d composite tabprev; tabclose #
@@ -37,6 +39,7 @@ set auconcreatecontainer true
 autocontain facebook\.com facebook
 autocontain google\.com google
 autocontain notion\.so work
+autocontain tana\.inc google
 
 " github
 " https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
