@@ -13,13 +13,14 @@
 	standup = !git log --all --date=short --no-merges --pretty=format:\"%h %ad %s%d\" --since=1.weeks --author=`git config user.email`
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-	s = status -sb
-	latest = for-each-ref --count=20 --sort=-committerdate --format='%(committerdate:short) %(refname:short)'
+	s = status --short --branch
+	latest = for-each-ref --count=10 --sort=-committerdate --format='%(committerdate:relative) %(refname:short)'
 	root = !pwd
 	push-f = push --force-with-lease
-	stsh = stash --keep-index
+	stsh = stash --keep-index --include-untracked
 	staash = stash --include-untracked
-	fix = commit --amend --no-edit --no-reset-author
+	; fix = commit --amend --no-edit --no-reset-author
+	fix = commit --fixup @
 	ctags = !.git/hooks/ctags
 [difftool]
 	prompt = false
