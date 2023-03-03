@@ -1,10 +1,4 @@
 namespace :clean do
-  desc "Remove .DS_Store files from Dropbox"
-  task :ds_store do
-    sh "find ~/Dropbox -name .DS_Store -print0 | xargs -0 rm -v"
-  end
-
-  task all: %i[ ds_store ]
 end
 
 namespace :sync do
@@ -57,21 +51,6 @@ namespace :sync do
   end
 end
 
-namespace :bitbar do
-  FILE = "onebusaway.30s.rb"
-
-  desc "Toggle OneBusAway BitBar plugin"
-  task :oba do
-    if File.exist?(File.expand_path("../bitbar/enabled/#{FILE}", __FILE__))
-      rm File.expand_path("../bitbar/enabled/#{FILE}", __FILE__)
-    else
-      ln_s File.expand_path("../bitbar/#{FILE}", __FILE__),
-           File.expand_path("../bitbar/enabled/#{FILE}", __FILE__)
-    end
-    sh "open bitbar://refreshPlugin?name=onebusaway.*"
-  end
-end
-
 namespace :pave do
   PATHS = %w[
     Downloads/
@@ -105,16 +84,23 @@ namespace :pave do
   end
 end
 
-namespace :brew do
-  desc "Fix homebrew permissions for multi-user"
-  task :multiuser do
-    sh "sudo chmod -R g+w $(brew --prefix)/*" do
-      # we don't care if it fails
-    end
+namespace :init do
+  desc "Set up local neovim overrides"
+  task "local-nvim", [:dir] do |t, args|
+    dir = File.expand_path(args.fetch(:dir))
 
-    sh "sudo chgrp -R homebrew $(brew --prefix)/*" do
-      # we don't care if it fails
-    end
+    File.write(File.join(dir, ".vimrc.local"), <<~VIMRC_LOCAL)
+      lua << EOF
+        package.path = "./.dev.local/?.fnl;" .. package.path
+        require("vimrc")
+      EOF
+    VIMRC_LOCAL
+
+    mkdir_p File.join(dir, ".dev.local")
+
+    File.write(File.join(dir, ".dev.local", "vimrc.fnl"), <<~VIMRC_FNL)
+      (local {: setup-lsp} (require :lsp))
+      ;; (setup-lsp :ruby_ls)
+    VIMRC_FNL
   end
 end
-
