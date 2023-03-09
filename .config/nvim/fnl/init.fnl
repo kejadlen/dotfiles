@@ -129,7 +129,14 @@
 ;;; treesitter
 (let [configs (require :nvim-treesitter.configs)
       {: setup} configs]
-  (setup {:ensure_installed [:fennel :hcl :lua :python :query :ruby :rust :typescript]
+  (setup {:ensure_installed [:fennel
+                             :hcl
+                             :lua
+                             :python
+                             :query
+                             :ruby
+                             :rust
+                             :typescript]
           :sync_install false
           :highlight {:enable true :additional_vim_regex_highlighting false}
           ;; disabling since this is super annoying in Ruby
@@ -139,7 +146,25 @@
                                             :node_incremental :grn
                                             :scope_incremental :grc
                                             :node_decremental :grm}}
-          :textobjects {:select {:enable true
+          :textobjects {:move {:enable true
+                               :set_jumps true
+                               :goto_next_start {"]f" "@function.outer"
+                                                 "]c" "@class.outer"
+                                                 "]b" "@block.outer"
+                                                 "]a" "@parameter.inner"}
+                               :goto_next_end {"]F" "@function.outer"
+                                               "]C" "@class.outer"
+                                               "]B" "@block.outer"
+                                               "]A" "@parameter.inner"}
+                               :goto_previous_start {"[f" "@function.outer"
+                                                     "[c" "@class.outer"
+                                                     "[b" "@block.outer"
+                                                     "[a" "@parameter.inner"}
+                               :goto_previous_end {"[F" "@function.outer"
+                                                   "[C" "@class.outer"
+                                                   "[B" "@block.outer"
+                                                   "[A" "@parameter.inner"}}
+                        :select {:enable true
                                  :lookahead true
                                  :keymaps {:af "@function.outer"
                                            :if "@function.inner"
