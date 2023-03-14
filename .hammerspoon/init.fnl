@@ -1,14 +1,30 @@
 (local {: mash : smash : modal-bind} (require :hotkey))
 
-(local log (hs.logger.new :log :info))
-(set hs.logger.defaultLogLevel :info)
+(local {: application
+        : caffeinate
+        : eventtap
+        : execute
+        : fs
+        : hotkey
+        : http
+        : json
+        : logger
+        : loadSpoon
+        : notify
+        : pasteboard
+        : uielement
+        : usb} hs)
+
+(local log (logger.new :log :info))
+(set logger.defaultLogLevel :info)
 
 (set hs.window.animationDuration 0.0)
-(hs.loadSpoon :MiroWindowsManager)
+(loadSpoon :MiroWindowsManager)
 ;; (set spoon.MiroWindowsManager.fullScreenSizes [1 (/ 4 3) 2]) ; only fullscreen
 
 ;; fnlfmt: skip
-(spoon.MiroWindowsManager:bindHotkeys {:up         [mash :k]
+(let [{: MiroWindowsManager} spoon]
+      (MiroWindowsManager:bindHotkeys {:up         [mash :k]
                                        :left       [mash :h]
                                        :down       [mash :j]
                                        :right      [mash :l]
@@ -16,48 +32,49 @@
                                        ;; :center  [mash  "c"]
                                        ;; :move    [smash "m"]
                                        ;; :resize  [mash  "d"]
-                                       })
+                                       }))
 
 ;; debugging
-;; (hs.hotkey.bind mash "d" (fn [] (hs.dialog.blockAlert "message" "text" "one" "two")))
-;; (hs.hotkey.bind mash "d" (fn [] (hs.dialog.alert 100 100 (fn [] ) "message" "text" "one" "two")))
+;; (hotkey.bind mash "d" (fn [] (hs.dialog.blockAlert "message" "text" "one" "two")))
+;; (hotkey.bind mash "d" (fn [] (hs.dialog.alert 100 100 (fn [] ) "message" "text" "one" "two")))
 
 ;; defeat paste blocking
-(hs.hotkey.bind [:cmd :alt] :v
-                #(hs.eventtap.keyStrokes (hs.pasteboard.getContents)))
+(hotkey.bind [:cmd :alt] :v #(eventtap.keyStrokes (pasteboard.getContents)))
 
-(hs.hotkey.bind mash :e
-                #(let [app (hs.application.frontmostApplication)
-                       prev-pasteboard (hs.pasteboard.getContents)
-                       e (hs.uielement.focusedElement)
-                       text (if e (e:selectedText)
-                                (do
-                                  (hs.eventtap.keyStroke [:cmd] :c)
-                                  (hs.pasteboard.getContents)))
-                       date (hs.execute "date -Iseconds -u | tr -d '\n'")
-                       file (.. "~/.quickcursor." date)]
-                   (hs.pasteboard.setContents text)
-                   (hs.execute (.. "pbpaste > " file))
-                   (hs.execute (.. "/opt/homebrew/bin/neovide --nofork " file))
-                   (hs.execute (.. "pbcopy < " file))
-                   (app:setFrontmost)
-                   (hs.eventtap.keyStroke [:cmd] :v)
-                   (hs.execute (.. "rm " file))
-                   (hs.pasteboard.setContents prev-pasteboard)))
+(hotkey.bind mash :e
+             #(let [app (application.frontmostApplication)
+                    prev-pasteboard (pasteboard.getContents)
+                    e (uielement.focusedElement)
+                    text (if e (e:selectedText)
+                             (do
+                               (eventtap.keyStroke [:cmd] :c)
+                               (pasteboard.getContents)))
+                    date (execute "date -Iseconds -u | tr -d '\n'")
+                    file (.. "~/.quickcursor." date)]
+                (pasteboard.setContents text)
+                (execute (.. "pbpaste > " file))
+                (execute (.. "/opt/homebrew/bin/neovide --nofork " file))
+                (execute (.. "pbcopy < " file))
+                (app:setFrontmost)
+                (eventtap.keyStroke [:cmd] :v)
+                (execute (.. "rm " file))
+                (pasteboard.setContents prev-pasteboard)))
+
+(hotkey.bind mash :t #(execute :/opt/homebrew/bin/alacritty))
 
 (fn linkify []
-  (let [app (hs.application.frontmostApplication)
-        prev-pasteboard (hs.pasteboard.getContents)
-        e (hs.uielement.focusedElement)
+  (let [app (application.frontmostApplication)
+        prev-pasteboard (pasteboard.getContents)
+        e (uielement.focusedElement)
         text (if e (e:selectedText)
                  (do
-                   (hs.eventtap.keyStroke [:cmd] :c)
-                   (hs.pasteboard.getContents)))
+                   (eventtap.keyStroke [:cmd] :c)
+                   (pasteboard.getContents)))
         link (.. "[" text "]" "(" prev-pasteboard ")")]
-    (hs.pasteboard.setContents link)
+    (pasteboard.setContents link)
     (app:setFrontmost)
-    (hs.eventtap.keyStroke [:cmd] :v)
-    (hs.pasteboard.setContents prev-pasteboard)))
+    (eventtap.keyStroke [:cmd] :v)
+    (pasteboard.setContents prev-pasteboard)))
 
 (modal-bind mash "," nil [[mash :l nil linkify]])
 
@@ -72,14 +89,14 @@
 (fn update-key-light-air [on?]
   (let [url "http://elgato-key-light-air-5c9e.local:9123/elgato/lights"
         on (if on? 1 0)
-        data (hs.json.encode {:lights [{: on}]})]
-    (hs.http.doRequest url :PUT data)))
+        data (json.encode {:lights [{: on}]})]
+    (http.doRequest url :PUT data)))
 
 (fn docked? []
-  (accumulate [docked? false _ v (pairs (hs.usb.attachedDevices)) &until docked?]
+  (accumulate [docked? false _ v (pairs (usb.attachedDevices)) &until docked?]
     (or docked? (= v.productName "CalDigit Thunderbolt 3 Audio"))))
 
-(local key-light-air-watcher (let [{: watcher} hs.caffeinate
+(local key-light-air-watcher (let [{: watcher} caffeinate
                                    w (watcher.new #(when (docked?)
                                                      (match $1
                                                        watcher.screensDidLock (update-key-light-air false)
@@ -88,7 +105,7 @@
                                                        watcher.screensDidWake (update-key-light-air true))))]
                                (w:start)))
 
-; (local usb-watcher (: (hs.usb.watcher.new #(let [{: eventType : productName} $1]
+; (local usb-watcher (: (usb.watcher.new #(let [{: eventType : productName} $1]
 ;                                              (when (= productName
 ;                                                       "CalDigit Thunderbolt 3 Audio")
 ;                                                (match eventType
@@ -102,13 +119,13 @@
 
 ;;; Spoons
 
-(: (hs.loadSpoon :ReloadConfiguration) :start)
+(: (loadSpoon :ReloadConfiguration) :start)
 
 ;; Local overrides
-(when (hs.fs.attributes :local.fnl)
+(when (fs.attributes :local.fnl)
   (require :local))
 
-(: (hs.notify.new {:title :Hammerspoon
-                   :informativeText "Config loaded"
-                   :withdrawAfter 2}) :send)
+(: (notify.new {:title :Hammerspoon
+                :informativeText "Config loaded"
+                :withdrawAfter 2}) :send)
 
