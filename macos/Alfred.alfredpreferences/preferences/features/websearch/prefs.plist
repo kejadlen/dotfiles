@@ -19,19 +19,6 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
-		<key>491B807D-42B3-4CB4-861F-2ADF20727F53</key>
-		<dict>
-			<key>enabled</key>
-			<true/>
-			<key>keyword</key>
-			<string>a</string>
-			<key>text</key>
-			<string>Search Amazon Smile for '{query}'</string>
-			<key>url</key>
-			<string>https://smile.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords={query}</string>
-			<key>utf8</key>
-			<true/>
-		</dict>
 		<key>57FEE37F-A055-4911-9537-D3F0FCCEDE08</key>
 		<dict>
 			<key>enabled</key>
