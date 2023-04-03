@@ -40,7 +40,11 @@ key_bindings:
   - { key: Left,  mods: Alt,     chars: "\eb" }
   - { key: F,     mods: Alt,     chars: "\ef" }
   - { key: Right, mods: Alt,     chars: "\ef" }
+  - { key: Back,  mods: Command, chars: "\x15" }
+
   - { key: N,     mods: Command, action: CreateNewWindow }
+  - { key: Comma, mods: Command, command:
+      { program: "sh", args: ["-c", "/opt/homebrew/bin/neovide ~/.config/alacritty/alacritty.yml"] } }
 
 import:
   - ~/.config/alacritty/local.yml
