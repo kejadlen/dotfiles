@@ -19,4 +19,11 @@ use_ruby() {
     exit 1
   fi
   chruby $ver
+
+  layout ruby
+
+  # For some reason, the PATH order is unstable and sometimes Ruby's
+  # bin directory is in front of the direnv one, so force the direnv
+  # bin directory to take precedence
+  PATH_add ./.direnv/bin
 }
