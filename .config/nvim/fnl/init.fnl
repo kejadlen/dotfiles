@@ -180,6 +180,9 @@
                                            :aa "@parameter.outer"
                                            :ia "@parameter.inner"}}}}))
 
+(let [tscontext (require :treesitter-context)]
+  (tscontext.setup))
+
 (set vim.o.foldmethod :expr)
 (set vim.o.foldexpr "nvim_treesitter#foldexpr()")
 

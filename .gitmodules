@@ -287,3 +287,7 @@
 	path = src/fzf-git.sh
 	url = https://github.com/junegunn/fzf-git.sh.git
 	branch = main
+[submodule ".local/share/nvim/site/pack/alpha/start/treesitter-context"]
+	path = .local/share/nvim/site/pack/alpha/start/treesitter-context
+	url = https://github.com/nvim-treesitter/nvim-treesitter-context.git
+	branch = master
