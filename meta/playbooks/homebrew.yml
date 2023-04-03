@@ -46,7 +46,7 @@
         - watch
         - yarn
         - ykman
-        - youtube-dl
+        - yt-dlp
         - zsh
         - fabianishere/personal/pam_reattach
 
@@ -83,12 +83,12 @@
         - firefox-developer-edition
         - flotato
         # - font-atkinson-hyperlegible
-        - font-fira-mono
-        - font-hack
-        - font-hasklig
-        - font-source-code-pro
+        # - font-fira-mono
+        # - font-hack
+        # - font-hasklig
+        - font-sauce-code-pro-nerd-font
+        # - font-source-code-pro
         - hammerspoon
-        - kaleidoscope
         - macvim
         - mailmate
         # - netnewswire
@@ -120,9 +120,7 @@
   - name: install from app store
     command: mas install {{ item }}
     with_items:
-      # - 451907568   # Paprika Recipe Manager
-      # - 497799835   # Xcode
-      - 904280696   # Things 3
+      # TODO Little Snitch Mini
       - 1028916583  # iPulse
       - 1522267256  # Shareful
       - 1529448980  # Reeder 5
