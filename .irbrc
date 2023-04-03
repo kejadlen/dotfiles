@@ -25,7 +25,7 @@ IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 # end
 
 irbrc_local = File.expand_path('../.irbrc.local', __FILE__)
-require irbrc_local if File.exists?(irbrc_local)
+require irbrc_local if File.exist?(irbrc_local)
 
 begin
   # use Pry if it exists
