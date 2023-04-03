@@ -43,7 +43,9 @@ autocontain tana\.inc google
 
 " github
 " https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
-unbindurl ^https://github.com s " focus the search bar
-unbindurl ^https://github.com t " activate the file finder
+unbindurl ^https://github.com/ s " focus the search bar
+unbindurl ^https://github.com/ t " activate the file finder
+
+unbindurl ^https://docs.rs/ s " focus the search bar
 
 " vim: set filetype=tridactyl
