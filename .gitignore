@@ -1,12 +1,13 @@
 local.*
-private
+*.local
+*.private
 
-.config
+.config/*
 !.config/direnv
 !.config/git
 !.config/nvim
 
-.local
+.local/*
 !.local/share/nvim
 
 .ssh
