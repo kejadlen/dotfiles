@@ -3,23 +3,15 @@
 ;; .envrc:
 ;;   use vim
 ;;
-;; .vimrc.local:
-;;   lua << EOF
-;;     package.path = "./.dev.local/?.fnl;" .. package.path
-;;     require("vimrc")
-;;   EOF
-;;
-;; .dev.local/vimrc.fnl
-;;   (local {: setup-lsp} (require :lsp))
-;;   (setup-lsp :ruby_ls)
+;; $ rake init:local-nvim
 
 (local lspconfig (require :lspconfig))
 (local {: lsp} vim)
 
-;; (lsp.set_log_level :debug)
+; (lsp.set_log_level :debug)
 
 ;; Use rounded borders for :LspInfo
-(let [{: default_options} (require "lspconfig.ui.windows")]
+(let [{: default_options} (require :lspconfig.ui.windows)]
   (tset default_options :border :rounded))
 
 ;;; fennel-ls
@@ -124,6 +116,7 @@
                              :typescriptreact
                              :vue]})
 
+(setup-lsp :ansiblels)
 (setup-lsp :elmls)
 (setup-lsp :fennel-ls)
 (setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
@@ -136,7 +129,9 @@
             :cmd [:rustup :run :stable :rust-analyzer]
             :settings {:rust-analyzer {:checkOnSave {:command :clippy}}}})
 
-(setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
+(setup-lsp :terraformls)
+
+; (setup-lsp :tsserver {:on_attach (on-attach-do attach-navic disable-fmt)})
 (setup-lsp :vuels {:on_attach (on-attach-do attach-navic disable-fmt)})
 
 ;; TODO

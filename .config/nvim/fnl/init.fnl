@@ -27,6 +27,11 @@
 
 (set vim.o.mouse nil)
 
+;; gui
+(set vim.o.guifont "SauceCodePro Nerd Font")
+
+(set vim.g.markdown_fenced_languages [:ts=typescript])
+
 ;; quick save
 (vim.keymap.set :n "\\\\" ":write<cr>")
 (vim.keymap.set :i "\\\\" "<esc>:write<cr>")
