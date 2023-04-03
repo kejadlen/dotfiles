@@ -82,17 +82,10 @@
         - fantastical
         - firefox-developer-edition
         - flotato
-        # - font-atkinson-hyperlegible
-        # - font-fira-mono
-        # - font-hack
-        # - font-hasklig
         - font-sauce-code-pro-nerd-font
-        # - font-source-code-pro
         - hammerspoon
         - macvim
         - mailmate
-        # - netnewswire
-        # - night-owl
         - obsidian
         - qlmarkdown
         - qlstephen
@@ -120,7 +113,7 @@
   - name: install from app store
     command: mas install {{ item }}
     with_items:
-      # TODO Little Snitch Mini
+      - 1629008763  # Little Snitch Mini
       - 1028916583  # iPulse
       - 1522267256  # Shareful
       - 1529448980  # Reeder 5
