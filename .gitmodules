@@ -283,3 +283,7 @@
 	path = .local/share/nvim/site/pack/alpha/start/direnv
 	url = https://github.com/direnv/direnv.vim.git
 	branch = master
+[submodule "src/fzf-git.sh"]
+	path = src/fzf-git.sh
+	url = https://github.com/junegunn/fzf-git.sh.git
+	branch = main
