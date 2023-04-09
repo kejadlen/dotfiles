@@ -126,10 +126,6 @@
 	path = .vim/pack/alpha/start/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
 	shallow = true
-[submodule ".vim/pack/alpha/start/vimwiki"]
-	path = .vim/pack/alpha/start/vimwiki
-	url = https://github.com/vimwiki/vimwiki.git
-	shallow = true
 [submodule "src/faker.alfredworkflow"]
 	path = src/faker.alfredworkflow
 	url = https://github.com/kejadlen/faker.alfredworkflow.git
@@ -161,7 +157,7 @@
 [submodule "commentary"]
 	path = .local/share/nvim/site/pack/alpha/start/commentary
 	url = https://github.com/tpope/vim-commentary.git
-	branch = main
+	branch = master
 	shallow = true
 [submodule "lspconfig"]
 	path = .local/share/nvim/site/pack/alpha/start/lspconfig
