@@ -1,6 +1,3 @@
-[submodule "Alfred.alfredpreferences/workflows/faker.alfredworkflow"]
-	path = Alfred.alfredpreferences/workflows/faker.alfredworkflow
-	url = https://github.com/kejadlen/faker.alfredworkflow
 [submodule ".vim/pack/alpha/start/vim-commentary"]
 	path = .vim/pack/alpha/start/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git
@@ -126,13 +123,13 @@
 	path = .vim/pack/alpha/start/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
 	shallow = true
-[submodule "src/faker.alfredworkflow"]
+[submodule "faker.alfredworkflow"]
 	path = src/faker.alfredworkflow
 	url = https://github.com/kejadlen/faker.alfredworkflow.git
-[submodule "src/fast-user-switching.alfredworkflow"]
+[submodule "fast-user-switching.alfredworkflow"]
 	path = src/fast-user-switching.alfredworkflow
 	url = https://github.com/kejadlen/fast-user-switching.alfredworkflow.git
-[submodule "src/soulver.alfredworkflow"]
+[submodule "soulver.alfredworkflow"]
 	path = src/soulver.alfredworkflow
 	url = https://github.com/kejadlen/soulver.alfredworkflow.git
 	branch = main
@@ -151,7 +148,7 @@
 	path = .vim/pack/alpha/start/vim-ledger
 	url = https://github.com/ledger/vim-ledger
 	shallow = true
-[submodule "src/frink.alfredworkflow"]
+[submodule "frink.alfredworkflow"]
 	path = src/frink.alfredworkflow
 	url = https://github.com/kejadlen/frink.alfredworkflow
 [submodule "commentary"]
@@ -258,27 +255,22 @@
 	url = https://github.com/suy/vim-context-commentstring.git
 	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/alpha/start/terraform"]
+[submodule "terraform"]
 	path = .local/share/nvim/site/pack/alpha/start/terraform
 	url = https://github.com/hashivim/vim-terraform.git
 	shallow = true
-[submodule "src/alfred-gemoji"]
+[submodule "alfred-gemoji"]
 	path = src/alfred-gemoji
 	url = https://git.kejadlen.dev/alpha/alfred-gemoji.git
 	shallow = true
-[submodule "src/bqn"]
+[submodule "bqn"]
 	path = src/bqn
 	url = https://github.com/mlochbaum/BQN.git
 	branch = master
 	shallow = true
-[submodule ".local/share/nvim/site/pack/alpha/start/treesitter-playground"]
+[submodule "treesitter-playground"]
 	path = .local/share/nvim/site/pack/alpha/start/treesitter-playground
 	url = https://github.com/nvim-treesitter/playground.git
-	branch = master
-	shallow = true
-[submodule ".config/fish/functions/theme-pure"]
-	path = .config/fish/functions/theme-pure
-	url = https://github.com/pure-fish/pure.git
 	branch = master
 	shallow = true
 [submodule "direnv.vim"]
