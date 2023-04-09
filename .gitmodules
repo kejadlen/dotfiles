@@ -257,33 +257,47 @@
 	path = .local/share/nvim/site/pack/alpha/start/context-commentstring
 	url = https://github.com/suy/vim-context-commentstring.git
 	branch = master
+	shallow = true
 [submodule ".local/share/nvim/site/pack/alpha/start/terraform"]
 	path = .local/share/nvim/site/pack/alpha/start/terraform
 	url = https://github.com/hashivim/vim-terraform.git
+	shallow = true
 [submodule "src/alfred-gemoji"]
 	path = src/alfred-gemoji
 	url = https://git.kejadlen.dev/alpha/alfred-gemoji.git
+	shallow = true
 [submodule "src/bqn"]
 	path = src/bqn
 	url = https://github.com/mlochbaum/BQN.git
 	branch = master
+	shallow = true
 [submodule ".local/share/nvim/site/pack/alpha/start/treesitter-playground"]
 	path = .local/share/nvim/site/pack/alpha/start/treesitter-playground
 	url = https://github.com/nvim-treesitter/playground.git
 	branch = master
+	shallow = true
 [submodule ".config/fish/functions/theme-pure"]
 	path = .config/fish/functions/theme-pure
 	url = https://github.com/pure-fish/pure.git
 	branch = master
+	shallow = true
 [submodule "direnv.vim"]
 	path = .local/share/nvim/site/pack/alpha/start/direnv
 	url = https://github.com/direnv/direnv.vim.git
 	branch = master
-[submodule "src/fzf-git.sh"]
+	shallow = true
+[submodule "fzf-git.sh"]
 	path = src/fzf-git.sh
 	url = https://github.com/junegunn/fzf-git.sh.git
 	branch = main
-[submodule ".local/share/nvim/site/pack/alpha/start/treesitter-context"]
+	shallow = true
+[submodule "treesitter-context"]
 	path = .local/share/nvim/site/pack/alpha/start/treesitter-context
 	url = https://github.com/nvim-treesitter/nvim-treesitter-context.git
 	branch = master
+	shallow = true
+[submodule "fidget.nvim"]
+	path = .local/share/nvim/site/pack/alpha/start/fidget
+	url = https://github.com/j-hui/fidget.nvim.git
+	branch = main
+	shallow = true

@@ -191,6 +191,10 @@
 ;; disable animation
 (set vim.g.neovide_cursor_animation_length 0)
 
+;;; fidget
+(let [{: setup} (require :fidget)]
+  (setup))
+
 ;;; generate help files
 
 ;; Load all plugins now.
