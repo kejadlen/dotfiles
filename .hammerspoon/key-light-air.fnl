@@ -18,7 +18,7 @@
 
 (fn docked? []
   (accumulate [docked? false _ v (pairs (usb.attachedDevices)) &until docked?]
-    (or docked? (= v.productName "CalDigit Thunderbolt 3 Audio"))))
+    (or docked? (= v.productName "TS4 USB3.2 Gen2 HUB"))))
 
 (local watcher (let [{: watcher} caffeinate
                      w (watcher.new #(when (docked?)
