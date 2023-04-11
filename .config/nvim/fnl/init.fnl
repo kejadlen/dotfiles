@@ -195,6 +195,10 @@
 (let [{: setup} (require :fidget)]
   (setup))
 
+;; dirvish
+
+(set vim.g.dirvish_mode ":sort ,^.*[\\/],")
+
 ;;; generate help files
 
 ;; Load all plugins now.
