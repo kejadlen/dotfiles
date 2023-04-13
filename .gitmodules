@@ -256,7 +256,8 @@
 	shallow = true
 [submodule "alfred-gemoji"]
 	path = src/alfred-gemoji
-	url = https://git.kejadlen.dev/alpha/alfred-gemoji.git
+	url = https://github.com/kejadlen/alfred-gemoji.git
+	branch = main
 	shallow = true
 [submodule "bqn"]
 	path = src/bqn
