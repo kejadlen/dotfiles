@@ -76,14 +76,14 @@
 
 ;;; Quitter
 
-(let [{: start} (require :quitter-fnl)]
-  (start {:Calendar 30
-          :Discord 300
-          :MailMate 600
-          :Messages 300
-          :Reeder 600
-          :Slack 300
-          :Telegram 300}))
+; (let [{: start} (require :quitter-fnl)]
+;   (start {:Calendar 30
+;           :Discord 300
+;           :MailMate 600
+;           :Messages 300
+;           :Reeder 600
+;           :Slack 300
+;           :Telegram 300}))
 
 ;;; Spoons
 
