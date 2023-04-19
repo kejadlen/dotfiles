@@ -1,81 +1,117 @@
+;; fennel-ls doesn't support arbitrary allowed globals, so
+;; unwrap `hs` here to localize it to just one place
+(local {: application
+        : dialog
+        : eventtap
+        : execute
+        : fs
+        : hotkey
+        :loadSpoon load_spoon
+        : logger
+        : notify
+        : pasteboard
+        : uielement
+        : window} hs)
+
 (local {: mash : smash : modal-bind} (require :hotkey))
 
-(local log (hs.logger.new :log :info))
-(set hs.logger.defaultLogLevel :info)
+(local log (logger.new :log :info))
+(set logger.defaultLogLevel :info)
 
-(set hs.window.animationDuration 0.0)
-(hs.loadSpoon :MiroWindowsManager)
-;; (set spoon.MiroWindowsManager.fullScreenSizes [1 (/ 4 3) 2]) ; only fullscreen
+(set window.animationDuration 0.0)
+
+(load_spoon :MiroWindowsManager)
 
 ;; fnlfmt: skip
-(spoon.MiroWindowsManager:bindHotkeys {:up         [mash :k]
-                                       :left       [mash :h]
-                                       :down       [mash :j]
-                                       :right      [mash :l]
-                                       :fullscreen [mash :m]
-                                       ;; :center  [mash  "c"]
-                                       ;; :move    [smash "m"]
-                                       ;; :resize  [mash  "d"]
-                                       })
+(let [{:MiroWindowsManager wm} spoon]
+  (wm:bindHotkeys {:up         [mash :k]
+                   :left       [mash :h]
+                   :down       [mash :j]
+                   :right      [mash :l]
+                   :fullscreen [mash :m]
+                   ;; :center  [mash  "c"]
+                   ;; :move    [smash "m"]
+                   ;; :resize  [mash  "d"]
+                   })
+  ;; (set wm.fullScreenSizes [1 (/ 4 3) 2]) ; only fullscreen
+  )
 
 ;; debugging
-;; (hs.hotkey.bind mash "d" (fn [] (hs.dialog.blockAlert "message" "text" "one" "two")))
-;; (hs.hotkey.bind mash "d" (fn [] (hs.dialog.alert 100 100 (fn [] ) "message" "text" "one" "two")))
+; (hotkey.bind mash "d" #(dialog.blockAlert "message" "text" "one" "two"))
 
 ;; defeat paste blocking
-(hs.hotkey.bind [:cmd :alt] :v
-                #(hs.eventtap.keyStrokes (hs.pasteboard.getContents)))
+(hotkey.bind [:cmd :alt] :v #(eventtap.keyStrokes (pasteboard.getContents)))
 
-(hs.hotkey.bind mash :e
-                #(let [app (hs.application.frontmostApplication)
-                       prev-pasteboard (hs.pasteboard.getContents)
-                       e (hs.uielement.focusedElement)
-                       text (if e (e:selectedText)
-                                (do
-                                  (hs.eventtap.keyStroke [:cmd] :c)
-                                  (hs.pasteboard.getContents)))
-                       date (hs.execute "date -Iseconds -u | tr -d '\n'")
-                       file (.. "~/.quickcursor." date)]
-                   (hs.pasteboard.setContents text)
-                   (hs.execute (.. "pbpaste > " file))
-                   (hs.execute (.. "/opt/homebrew/bin/neovide --nofork " file))
-                   (hs.execute (.. "pbcopy < " file))
-                   (app:setFrontmost)
-                   (hs.eventtap.keyStroke [:cmd] :v)
-                   (hs.execute (.. "rm " file))
-                   (hs.pasteboard.setContents prev-pasteboard)))
+(fn run [...]
+  (accumulate [last nil _ cmd (ipairs [...])]
+    (execute cmd)))
 
-(fn linkify []
-  (let [app (hs.application.frontmostApplication)
-        prev-pasteboard (hs.pasteboard.getContents)
-        e (hs.uielement.focusedElement)
+(fn with-selection [cb]
+  (let [app (application.frontmostApplication)
+        prev-pasteboard (pasteboard.getContents)
+        e (uielement.focusedElement)
         text (if e (e:selectedText)
                  (do
-                   (hs.eventtap.keyStroke [:cmd] :c)
-                   (hs.pasteboard.getContents)))
-        link (.. "[" text "]" "(" prev-pasteboard ")")]
-    (hs.pasteboard.setContents link)
+                   (eventtap.keyStroke [:cmd] :c)
+                   (pasteboard.getContents)))
+        content (cb text prev-pasteboard)]
+    (pasteboard.setContents content)
     (app:setFrontmost)
-    (hs.eventtap.keyStroke [:cmd] :v)
-    (hs.pasteboard.setContents prev-pasteboard)))
+    (eventtap.keyStroke [:cmd] :v)
+    (pasteboard.setContents prev-pasteboard)))
 
-(modal-bind mash "," nil [[mash :l nil linkify]])
+(fn chomp [s]
+  (if (= (s:sub -1) "\n")
+      (s:sub 1 -2)
+      s))
+
+(hotkey.bind mash :e
+             #(with-selection (fn [text]
+                                (let [home (os.getenv :HOME)
+                                      date (chomp (run "date -Iseconds -u"))
+                                      file (.. home :/.quickcursor. date)]
+                                  (pasteboard.setContents text)
+                                  (run (.. "pbpaste > " file)
+                                       (.. "/opt/homebrew/bin/neovide --nofork "
+                                           file)
+                                       (.. "pbcopy < " file) (.. "rm " file))
+                                  (pasteboard.getContents)))))
+
+(hotkey.bind mash :t #(execute :/opt/homebrew/bin/alacritty))
+
+(modal-bind mash "," nil
+            [[mash
+              :l
+              nil
+              (fn []
+                (with-selection #(.. "[" $1 "]" "(" $2 ")")))]])
 
 ;;; Elgato Key Light Air
 
-; package.loaded["key-light-air"]["find-hostname"]()
-; package.loaded["key-light-air"]["update"](false)
+;; Run `package.loaded["key-light-air"]["find-hostname"]()`
+;; to find the hostname of the Key Light Air
 (require :key-light-air)
+
+;;; Quitter
+
+(let [{: start} (require :quitter-fnl)]
+  (start {:Calendar 30
+          :Discord 300
+          :MailMate 600
+          :Messages 300
+          :Reeder 600
+          :Slack 300
+          :Telegram 300}))
 
 ;;; Spoons
 
-(: (hs.loadSpoon :ReloadConfiguration) :start)
+(: (load_spoon :ReloadConfiguration) :start)
 
 ;; Local overrides
-(when (hs.fs.attributes :local.fnl)
+(when (fs.attributes :local.fnl)
   (require :local))
 
-(: (hs.notify.new {:title :Hammerspoon
-                   :informativeText "Config loaded"
-                   :withdrawAfter 2}) :send)
+(: (notify.new {:title :Hammerspoon
+                :informativeText "Config loaded"
+                :withdrawAfter 2}) :send)
 
