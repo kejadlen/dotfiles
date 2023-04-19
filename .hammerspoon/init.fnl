@@ -13,28 +13,10 @@
         : uielement
         : window} hs)
 
-(local {: mash : smash : modal-bind} (require :hotkey))
-
 (local log (logger.new :log :info))
 (set logger.defaultLogLevel :info)
 
-(set window.animationDuration 0.0)
-
-(load_spoon :MiroWindowsManager)
-
-;; fnlfmt: skip
-(let [{:MiroWindowsManager wm} spoon]
-  (wm:bindHotkeys {:up         [mash :k]
-                   :left       [mash :h]
-                   :down       [mash :j]
-                   :right      [mash :l]
-                   :fullscreen [mash :m]
-                   ;; :center  [mash  "c"]
-                   ;; :move    [smash "m"]
-                   ;; :resize  [mash  "d"]
-                   })
-  ;; (set wm.fullScreenSizes [1 (/ 4 3) 2]) ; only fullscreen
-  )
+(local {: mash : smash : modal-bind} (require :hotkey))
 
 ;; debugging
 ; (hotkey.bind mash "d" #(dialog.blockAlert "message" "text" "one" "two"))
@@ -105,7 +87,21 @@
 
 ;;; Spoons
 
-(: (load_spoon :ReloadConfiguration) :start)
+(load_spoon :SpoonInstall)
+(local {:SpoonInstall Install} spoon)
+(set Install.use_syncinstall true)
+
+;; fnlfmt: skip
+(let [hotkeys {:up         [mash :k]
+               :left       [mash :h]
+               :down       [mash :j]
+               :right      [mash :l]
+               :fullscreen [mash :m]
+               :nextscreen [mash :n]}]
+  (set window.animationDuration 0.0)
+  (Install:andUse :MiroWindowsManager {: hotkeys}))
+
+(Install:andUse :ReloadConfiguration)
 
 ;; Local overrides
 (when (fs.attributes :local.fnl)
