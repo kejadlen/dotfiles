@@ -101,13 +101,14 @@
   (set window.animationDuration 0.0)
   (Install:andUse :MiroWindowsManager {: hotkeys}))
 
-(Install:andUse :ReloadConfiguration)
+(Install:andUse :ReloadConfiguration {:start true})
 
 ;; Local overrides
 (when (fs.attributes :local.fnl)
   (require :local))
 
-(: (notify.new {:title :Hammerspoon
-                :informativeText "Config loaded"
-                :withdrawAfter 2}) :send)
+(let [n (notify.new {:title :Hammerspoon
+                     :informativeText "Config loaded"
+                     :withdrawAfter 2})]
+  (n:send))
 
