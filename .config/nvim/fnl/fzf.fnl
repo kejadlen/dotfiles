@@ -16,6 +16,9 @@
     (vim.api.nvim_create_user_command :FzfSpell fzf-spell {})
     (vim.keymap.set :n :z= ":FzfSpell<cr>" {:noremap true})))
 
+(if (vim.fn.exists :TMUX)
+    (set vim.g.fzf_layout {:tmux "-p80%,60%"}))
+
 (when (vim.fn.isdirectory :/opt/homebrew/opt/fzf/plugin)
   (vim.opt.rtp:append :/opt/homebrew/opt/fzf)
   (init-keymaps)
