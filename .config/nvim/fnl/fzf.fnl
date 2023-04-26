@@ -3,7 +3,8 @@
 (fn init-keymaps []
   (vim.keymap.set :n :<leader>b ":Buffers<cr>" {:noremap true})
   (vim.keymap.set :n :<leader>f ":Files<cr>" {:noremap true})
-  (vim.keymap.set :n :<leader>t ":Tags<cr>" {:noremap true}))
+  (vim.keymap.set :n :<leader>t ":Tags<cr>" {:noremap true})
+  (vim.keymap.set :n :<leader>g ":Rg<cr>" {:noremap true}))
 
 ;; https://coreyja.com/vim-spelling-suggestions-fzf/
 (fn init-fzf-spell []
