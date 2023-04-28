@@ -92,14 +92,38 @@
 (set Install.use_syncinstall true)
 
 ;; fnlfmt: skip
-(let [hotkeys {:up         [mash :k]
-               :left       [mash :h]
-               :down       [mash :j]
-               :right      [mash :l]
-               :fullscreen [mash :m]
-               :nextscreen [mash :n]}]
-  (set window.animationDuration 0.0)
-  (Install:andUse :MiroWindowsManager {: hotkeys}))
+(local hotkeys {:up         [mash :k]
+                :left       [mash :h]
+                :down       [mash :j]
+                :right      [mash :l]
+                :fullscreen [mash :m]
+                :nextscreen [mash :n]})
+
+(set window.animationDuration 0.0)
+(Install:andUse :MiroWindowsManager {:config {:GRID {:w 6 :h 4}} : hotkeys})
+
+(Install:andUse :WindowGrid {:config {:gridGeometries [[:6x4]]}
+                             :hotkeys {:show_grid [mash :g]}
+                             :start true})
+
+(let [browsers {:arc :company.thebrowser.Browser
+                :firefox-dev :org.mozilla.firefoxdeveloperedition
+                :firefox :org.mozilla.firefox
+                :safari :com.apple.Safari
+                :zoom :us.zoom.xos}
+      url_patterns [["^https://(.*%.?)zoom.us/j/%d+" browsers.zoom]
+                    ["^https://(.*%.?)discnw.org/?" browsers.safari]
+                    ["^https://(.*%.?)squareupmessaging.com/?" browsers.safari]
+                    ["^https://(.*%.?)bulletin.com/?" browsers.safari]
+                    ["^https://(.*%.?)store.apple.com/?" browsers.safari]
+                    ["^https://(.*%.?)goodluckbread.com/?" browsers.safari]]
+      url_redir_decoders [[:sci-hub
+                           "^https://doi.org/(.*)"
+                           "https://sci-hub.st/%1"]]]
+  (Install:andUse :URLDispatcher {:config {: url_patterns
+                                           : url_redir_decoders
+                                           :default_handler browsers.firefox-dev}
+                                  :start true}))
 
 (Install:andUse :ReloadConfiguration {:start true})
 
