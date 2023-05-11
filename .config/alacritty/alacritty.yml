@@ -3,7 +3,7 @@ env:
 
 font:
   normal:
-    family: SauceCodePro Nerd Font
+    family: SauceCodePro Nerd Font Mono
   bold:
     style: Semibold
 
