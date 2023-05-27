@@ -6,7 +6,8 @@
         : execute
         : fs
         : hotkey
-        :loadSpoon load_spoon
+        : ipc
+        : loadSpoon
         : logger
         : notify
         : pasteboard
@@ -59,7 +60,7 @@
                                        (.. "pbcopy < " file) (.. "rm " file))
                                   (pasteboard.getContents)))))
 
-(hotkey.bind mash :t #(execute :/opt/homebrew/bin/alacritty))
+(hotkey.bind mash :t #(execute "/opt/homebrew/bin/alacritty msg create-window"))
 
 (modal-bind mash "," nil
             [[mash
@@ -74,20 +75,9 @@
 ;; to find the hostname of the Key Light Air
 (require :key-light-air)
 
-;;; Quitter
-
-; (let [{: start} (require :quitter-fnl)]
-;   (start {:Calendar 30
-;           :Discord 300
-;           :MailMate 600
-;           :Messages 300
-;           :Reeder 600
-;           :Slack 300
-;           :Telegram 300}))
-
 ;;; Spoons
 
-(load_spoon :SpoonInstall)
+(loadSpoon :SpoonInstall)
 (local {:SpoonInstall Install} spoon)
 (set Install.use_syncinstall true)
 
@@ -116,7 +106,8 @@
                     ["^https://(.*%.?)squareupmessaging.com/?" browsers.safari]
                     ["^https://(.*%.?)bulletin.com/?" browsers.safari]
                     ["^https://(.*%.?)store.apple.com/?" browsers.safari]
-                    ["^https://(.*%.?)goodluckbread.com/?" browsers.safari]]
+                    ["^https://(.*%.?)goodluckbread.com/?" browsers.safari]
+                    ["^https://community.glowforge.com/?" browsers.arc]]
       url_redir_decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]]]
