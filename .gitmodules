@@ -289,3 +289,7 @@
 	url = https://github.com/justinmk/vim-dirvish.git
 	branch = master
 	shallow = true
+[submodule "masked-email.alfredworkflow"]
+	path = src/masked-email.alfredworkflow
+	url = https://github.com/kejadlen/masked-email.alfredworkflow
+	branch = main
