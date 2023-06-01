@@ -4,12 +4,15 @@ private
 *.private
 
 .config/*
+!.config/alacritty
 !.config/direnv
 !.config/git
 !.config/nvim
+!.config/starship.toml
+!.config/tridactyl
 
 .local/*
-!.local/share/nvim
+!.local/share/nvim/site/pack/alpha/start
 
 .ssh
 !.ssh/config
@@ -21,3 +24,7 @@ private
 .vim/view
 
 Alfred\ 2/Alfred.alfredpreferences/preferences/local
+
+# temporary
+.hammerspoon/Spoons/*
+!.hammerspoon/Spoons/SpoonInstall
