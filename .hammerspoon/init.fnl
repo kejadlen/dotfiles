@@ -90,11 +90,7 @@
                 :nextscreen [mash :n]})
 
 (set window.animationDuration 0.0)
-(Install:andUse :MiroWindowsManager {:config {:GRID {:w 6 :h 4}} : hotkeys})
-
-(Install:andUse :WindowGrid {:config {:gridGeometries [[:6x4]]}
-                             :hotkeys {:show_grid [mash :g]}
-                             :start true})
+(Install:andUse :MiroWindowsManager {: hotkeys})
 
 (let [browsers {:arc :company.thebrowser.Browser
                 :firefox-dev :org.mozilla.firefoxdeveloperedition
@@ -107,7 +103,8 @@
                     ["^https://(.*%.?)bulletin.com/?" browsers.safari]
                     ["^https://(.*%.?)store.apple.com/?" browsers.safari]
                     ["^https://(.*%.?)goodluckbread.com/?" browsers.safari]
-                    ["^https://community.glowforge.com/?" browsers.arc]]
+                    ["^https://community.glowforge.com/?" browsers.arc]
+                    ["^https://accounts.google.com/?" browsers.arc]]
       url_redir_decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]]]
