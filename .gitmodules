@@ -293,3 +293,7 @@
 	path = src/masked-email.alfredworkflow
 	url = https://github.com/kejadlen/masked-email.alfredworkflow
 	branch = main
+[submodule "vim-speeddating"]
+	path = .local/share/nvim/site/pack/alpha/start/speeddating
+	url = https://github.com/tpope/vim-speeddating.git
+	branch = master
