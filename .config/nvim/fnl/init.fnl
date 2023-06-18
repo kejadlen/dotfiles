@@ -200,6 +200,18 @@
 
 (set vim.g.dirvish_mode ":sort ,^.*[\\/],")
 
+;; indent-blankline
+
+(let [{: setup} (require :indent_blankline)]
+  (setup {:char ""
+          :context_char "┃"
+          :show_current_context true
+          :show_first_indent_level false
+          ; :show_trailing_blankline_indent false
+          ; :max_indent_increase 1
+          :use_treesitter true
+          :use_treesitter_scope true}))
+
 ;;; generate help files
 
 ;; Load all plugins now.
