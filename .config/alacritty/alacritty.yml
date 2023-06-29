@@ -9,32 +9,6 @@ font:
 
 draw_bold_text_with_bright_colors: true
 
-colors:
-  # https://github.com/romainl/Apprentice
-  primary:
-    background: "0x262626"
-    foreground: "0xBCBCBC"
-
-  normal:
-    black:   "0x1C1C1C"
-    red:     "0xAF5F5F"
-    green:   "0x5F875F"
-    yellow:  "0x87875F"
-    blue:    "0x5F87AF"
-    magenta: "0x5F5F87"
-    cyan:    "0x5F8787"
-    white:   "0xBFBFBF" # originally "0x6C6C6C", lightened up a bit
-
-  bright:
-    black:   "0x444444"
-    red:     "0xFF8700"
-    green:   "0x87AF87"
-    yellow:  "0xFFFFAF"
-    blue:    "0x87AFD7"
-    magenta: "0x8787AF"
-    cyan:    "0x5FAFAF"
-    white:   "0xffffff"
-
 key_bindings:
   - { key: B,     mods: Alt,     chars: "\eb" }
   - { key: Left,  mods: Alt,     chars: "\eb" }
@@ -48,3 +22,136 @@ key_bindings:
 
 import:
   - ~/.config/alacritty/local.yml
+
+apprentice: &apprentice
+  # https://github.com/romainl/Apprentice
+  primary:
+    background: "0x262626"
+    foreground: "0xbcbcbc"
+
+  normal:
+    black:   "0x1c1c1c"
+    red:     "0xaf5f5f"
+    green:   "0x5f875f"
+    yellow:  "0x87875f"
+    blue:    "0x5f87af"
+    magenta: "0x5f5f87"
+    cyan:    "0x5f8787"
+    white:   "0xbfbfbf" # originally "0x6c6c6c", lightened up a bit
+
+  bright:
+    black:   "0x444444"
+    red:     "0xff8700"
+    green:   "0x87af87"
+    yellow:  "0xffffaf"
+    blue:    "0x87afd7"
+    magenta: "0x8787af"
+    cyan:    "0x5fafaf"
+    white:   "0xffffff"
+
+ashes: &ashes
+  primary:
+    background: "0x1c2023"
+    foreground: "0xc7ccd1"
+
+  normal:
+    black:   "0x1c2023"
+    red:     "0xc7ae95"
+    green:   "0x95c7ae"
+    yellow:  "0xaec795"
+    blue:    "0xae95c7"
+    magenta: "0xc795ae"
+    cyan:    "0x95aec7"
+    white:   "0xc7ccd1"
+
+  bright:
+    black:   "0x747c84"
+    red:     "0xc7ae95"
+    green:   "0x95c7ae"
+    yellow:  "0xaec795"
+    blue:    "0xae95c7"
+    magenta: "0xc795ae"
+    cyan:    "0x95aec7"
+    white:   "0xf3f4f5"
+
+catppuccin-mocha: &catppuccin-mocha
+    primary:
+        background: "#1E1E2E" # base
+        foreground: "#CDD6F4" # text
+        # Bright and dim foreground colors
+        dim_foreground: "#CDD6F4" # text
+        bright_foreground: "#CDD6F4" # text
+
+    # Cursor colors
+    cursor:
+        text: "#1E1E2E" # base
+        cursor: "#F5E0DC" # rosewater
+    vi_mode_cursor:
+        text: "#1E1E2E" # base
+        cursor: "#B4BEFE" # lavender
+
+    # Search colors
+    search:
+        matches:
+            foreground: "#1E1E2E" # base
+            background: "#A6ADC8" # subtext0
+        focused_match:
+            foreground: "#1E1E2E" # base
+            background: "#A6E3A1" # green
+        footer_bar:
+            foreground: "#1E1E2E" # base
+            background: "#A6ADC8" # subtext0
+
+    # Keyboard regex hints
+    hints:
+        start:
+            foreground: "#1E1E2E" # base
+            background: "#F9E2AF" # yellow
+        end:
+            foreground: "#1E1E2E" # base
+            background: "#A6ADC8" # subtext0
+
+    # Selection colors
+    selection:
+        text: "#1E1E2E" # base
+        background: "#F5E0DC" # rosewater
+
+    # Normal colors
+    normal:
+        black: "#45475A" # surface1
+        red: "#F38BA8" # red
+        green: "#A6E3A1" # green
+        yellow: "#F9E2AF" # yellow
+        blue: "#89B4FA" # blue
+        magenta: "#F5C2E7" # pink
+        cyan: "#94E2D5" # teal
+        white: "#BAC2DE" # subtext1
+
+    # Bright colors
+    bright:
+        black: "#585B70" # surface2
+        red: "#F38BA8" # red
+        green: "#A6E3A1" # green
+        yellow: "#F9E2AF" # yellow
+        blue: "#89B4FA" # blue
+        magenta: "#F5C2E7" # pink
+        cyan: "#94E2D5" # teal
+        white: "#A6ADC8" # subtext0
+
+    # Dim colors
+    dim:
+        black: "#45475A" # surface1
+        red: "#F38BA8" # red
+        green: "#A6E3A1" # green
+        yellow: "#F9E2AF" # yellow
+        blue: "#89B4FA" # blue
+        magenta: "#F5C2E7" # pink
+        cyan: "#94E2D5" # teal
+        white: "#BAC2DE" # subtext1
+
+    indexed_colors:
+        - { index: 16, color: "#FAB387" }
+        - { index: 17, color: "#F5E0DC" }
+
+colors: *ashes
+
