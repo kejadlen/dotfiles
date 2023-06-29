@@ -5,8 +5,7 @@
 (set vim.o.foldlevel 2)
 (set vim.o.linebreak true)
 (set vim.o.list true)
-(set vim.o.listchars
-     "tab:\\u21e5 ,trail:\\u2423,extends:\\u21c9,precedes:\\u21c7,nbsp:\\u00b7")
+(set vim.o.listchars "tab:⇥ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·")
 
 (set vim.o.number true)
 (set vim.o.showmode false)
