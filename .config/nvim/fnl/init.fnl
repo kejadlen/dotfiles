@@ -18,18 +18,20 @@
 (set vim.o.ignorecase true)
 (set vim.o.smartcase true)
 
+(set vim.o.mouse nil)
+
+;; gui
+(set vim.o.guifont "Source Code Pro")
+
+(set vim.g.markdown_fenced_languages [:ts=typescript])
+
+;;; mappings
+
 (set vim.g.mapleader " ")
 
 ;; disable arrow keys
 (each [_ v (ipairs [:up :down :left :right])]
   (vim.keymap.set :n (.. "<" v ">") :<nop>))
-
-(set vim.o.mouse nil)
-
-;; gui
-(set vim.o.guifont "SauceCodePro Nerd Font")
-
-(set vim.g.markdown_fenced_languages [:ts=typescript])
 
 ;; quick save
 (vim.keymap.set :n "\\\\" ":write<cr>")
@@ -50,7 +52,11 @@
 ;; re-run the last macro
 (vim.keymap.set :n :Q "@@")
 
-;; completion
+;; swap `:` and `;`
+(vim.keymap.set :n :: ";")
+(vim.keymap.set :n ";" ::)
+
+;;; completion
 
 (set vim.o.completeopt "longest,menuone")
 
@@ -208,7 +214,7 @@
           :show_first_indent_level false
           ; :show_trailing_blankline_indent false
           ; :max_indent_increase 1
-          :use_treesitter true
+          ; :use_treesitter true
           :use_treesitter_scope true}))
 
 ;;; generate help files
