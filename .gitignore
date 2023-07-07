@@ -14,7 +14,7 @@ private
 .local/*
 !.local/share/nvim/site/pack/alpha/start
 
-.ssh
+.ssh/*
 !.ssh/config
 
 .vim/.VimballRecord
