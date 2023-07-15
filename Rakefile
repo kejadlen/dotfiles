@@ -17,12 +17,7 @@ namespace :sync do
 
   desc "Sync submodules"
   task :submodules do
-    sh "git submodule foreach git pull"
-    Dir.chdir "src/prezto" do
-      sh "git fetch upstream"
-      sh "git rebase upstream/master"
-      sh "git submodule update --init --recursive"
-    end
+    sh "git submodule update --init --recursive --remote"
   end
 
   desc "Sync puzzles from ~/Downloads"

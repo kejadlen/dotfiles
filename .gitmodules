@@ -136,6 +136,7 @@
 [submodule ".vim/pack/alpha/start/vim-terraform"]
 	path = .vim/pack/alpha/start/vim-terraform
 	url = https://github.com/hashivim/vim-terraform.git
+	branch = master
 [submodule ".vim/pack/alpha/start/vim-nix"]
 	path = .vim/pack/alpha/start/vim-nix
 	url = https://github.com/LnL7/vim-nix.git
@@ -253,6 +254,7 @@
 [submodule "terraform"]
 	path = .local/share/nvim/site/pack/alpha/start/terraform
 	url = https://github.com/hashivim/vim-terraform.git
+	branch = master
 	shallow = true
 [submodule "alfred-gemoji"]
 	path = src/alfred-gemoji
@@ -282,7 +284,6 @@
 [submodule "fidget.nvim"]
 	path = .local/share/nvim/site/pack/alpha/start/fidget
 	url = https://github.com/j-hui/fidget.nvim.git
-	branch = main
 	shallow = true
 [submodule "dirvish"]
 	path = .local/share/nvim/site/pack/alpha/start/dirvish
