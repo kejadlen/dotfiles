@@ -8,6 +8,7 @@ private
 !.config/direnv
 !.config/git
 !.config/nvim
+!.config/pip
 !.config/starship.toml
 !.config/tridactyl
 
