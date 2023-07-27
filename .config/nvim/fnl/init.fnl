@@ -52,10 +52,6 @@
 ;; re-run the last macro
 (vim.keymap.set :n :Q "@@")
 
-;; swap `:` and `;`
-(vim.keymap.set :n :: ";")
-(vim.keymap.set :n ";" ::)
-
 ;;; completion
 
 (set vim.o.completeopt "longest,menuone")
