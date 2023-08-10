@@ -12,6 +12,7 @@
         : notify
         : pasteboard
         : uielement
+        : urlevent
         : window} hs)
 
 (local log (logger.new :log :info))
@@ -92,25 +93,33 @@
 (set window.animationDuration 0.0)
 (Install:andUse :MiroWindowsManager {: hotkeys})
 
-(let [browsers {:arc :company.thebrowser.Browser
+;; By default, URLDispatcher focuses the application before opening the URL, but
+;; this interacts poorly with Arc since then we can be in the wrong space when
+;; the URL is opened in Little Arc.
+(let [handlers {:arc #(urlevent.openURLWithBundle $1
+                                                  :company.thebrowser.Browser)
                 :firefox-dev :org.mozilla.firefoxdeveloperedition
                 :firefox :org.mozilla.firefox
                 :safari :com.apple.Safari
                 :zoom :us.zoom.xos}
-      url_patterns [["^https://(.*%.?)zoom.us/j/%d+" browsers.zoom]
-                    ["^https://(.*%.?)discnw.org/?" browsers.safari]
-                    ["^https://(.*%.?)squareupmessaging.com/?" browsers.safari]
-                    ["^https://(.*%.?)bulletin.com/?" browsers.safari]
-                    ["^https://(.*%.?)store.apple.com/?" browsers.safari]
-                    ["^https://(.*%.?)goodluckbread.com/?" browsers.safari]
-                    ["^https://community.glowforge.com/?" browsers.arc]
-                    ["^https://accounts.google.com/?" browsers.arc]]
+      url_patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
+                    ["^https://(.*%.?)discnw.org/?" handlers.safari]
+                    ["^https://(.*%.?)squareupmessaging.com/?" handlers.safari]
+                    ["^https://(.*%.?)bulletin.com/?" handlers.safari]
+                    ["^https://(.*%.?)store.apple.com/?" handlers.safari]
+                    ["^https://(.*%.?)goodluckbread.com/?" handlers.safari]
+                    ["^https://community.glowforge.com/?" handlers.arc]
+                    ["^https://accounts.google.com/?" handlers.arc]]
       url_redir_decoders [[:sci-hub
                            "^https://doi.org/(.*)"
-                           "https://sci-hub.st/%1"]]]
+                           "https://sci-hub.st/%1"]
+                          [:twitter
+                           "^https://twitter.com/(.*)"
+                           "https://nitter.net/%1"]]]
   (Install:andUse :URLDispatcher {:config {: url_patterns
                                            : url_redir_decoders
-                                           :default_handler browsers.firefox-dev}
+                                           :default_handler handlers.arc
+                                           :set_system_handler true}
                                   :start true}))
 
 (Install:andUse :ReloadConfiguration {:start true})
