@@ -1,22 +1,25 @@
 ;; fennel-ls doesn't support arbitrary allowed globals, so
 ;; unwrap `hs` here to localize it to just one place
 (local {: application
+        : canvas
         : dialog
         : eventtap
         : execute
         : fs
         : hotkey
         : ipc
+        : inspect
         : loadSpoon
         : logger
         : notify
         : pasteboard
+        : screen
         : uielement
         : urlevent
         : window} hs)
 
-(local log (logger.new :log :info))
-(set logger.defaultLogLevel :info)
+(local log (logger.new :init :info))
+; (set logger.defaultLogLevel :info)
 
 (local {: mash : smash : modal-bind} (require :hotkey))
 
@@ -82,16 +85,18 @@
 (local {:SpoonInstall Install} spoon)
 (set Install.use_syncinstall true)
 
-;; fnlfmt: skip
-(local hotkeys {:up         [mash :k]
-                :left       [mash :h]
-                :down       [mash :j]
-                :right      [mash :l]
-                :fullscreen [mash :m]
-                :nextscreen [mash :n]})
-
 (set window.animationDuration 0.0)
-(Install:andUse :MiroWindowsManager {: hotkeys})
+
+;; fnlfmt: skip
+(let [hotkeys {:up         [mash :k]
+               :left       [mash :h]
+               :down       [mash :j]
+               :right      [mash :l]
+               :fullscreen [mash :m]
+               :nextscreen [mash :n]}]
+  (Install:andUse :MiroWindowsManager {: hotkeys}))
+
+(Install:andUse :SleepCorners {:config {:feedbackSize 100} :start true})
 
 ;; By default, URLDispatcher focuses the application before opening the URL, but
 ;; this interacts poorly with Arc since then we can be in the wrong space when

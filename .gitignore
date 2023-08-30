@@ -5,6 +5,7 @@ private
 
 .config/*
 !.config/alacritty
+!.config/bat
 !.config/direnv
 !.config/git
 !.config/nvim
