@@ -20,6 +20,10 @@
 
 (set vim.o.mouse nil)
 
+;;; completion
+
+(set vim.o.completeopt "longest,menuone")
+
 ;; gui
 (set vim.o.guifont "Source Code Pro")
 
@@ -32,6 +36,9 @@
 ;; disable arrow keys
 (each [_ v (ipairs [:up :down :left :right])]
   (vim.keymap.set :n (.. "<" v ">") :<nop>))
+
+;; command mode
+(vim.keymap.set :c :<c-a> :<home>)
 
 ;; quick save
 (vim.keymap.set :n "\\\\" ":write<cr>")
@@ -51,10 +58,6 @@
 
 ;; re-run the last macro
 (vim.keymap.set :n :Q "@@")
-
-;;; completion
-
-(set vim.o.completeopt "longest,menuone")
 
 ;; smart tab
 ;; https://vim.fandom.com/wiki/Smart_mapping_for_tab_completion
@@ -133,7 +136,8 @@
 (set vim.g.netrw_home "~/.nvim_tmp")
 
 ;;; treesitter
-(let [configs (require :nvim-treesitter.configs)
+(let [{: treesitter} vim
+      configs (require :nvim-treesitter.configs)
       {: setup} configs]
   (setup {:ensure_installed [:fennel
                              :hcl
@@ -180,7 +184,8 @@
                                            :ab "@block.outer"
                                            :ib "@block.inner"
                                            :aa "@parameter.outer"
-                                           :ia "@parameter.inner"}}}}))
+                                           :ia "@parameter.inner"}}}})
+ (treesitter.language.register :yaml :yaml.ansible))
 
 (let [tscontext (require :treesitter-context)]
   (tscontext.setup))
