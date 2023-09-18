@@ -8,6 +8,7 @@ private
 !.config/bat
 !.config/direnv
 !.config/git
+!.config/kitty
 !.config/nvim
 !.config/pip
 !.config/starship.toml
