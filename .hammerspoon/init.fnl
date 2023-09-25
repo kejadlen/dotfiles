@@ -96,7 +96,8 @@
                :nextscreen [mash :n]}]
   (Install:andUse :MiroWindowsManager {: hotkeys}))
 
-(Install:andUse :SleepCorners {:config {:feedbackSize 100} :start true})
+(Install:andUse :SleepCorners {:config {:feedbackSize 25 :neverSleepCorner "*"}
+                               :start true})
 
 ;; By default, URLDispatcher focuses the application before opening the URL, but
 ;; this interacts poorly with Arc since then we can be in the wrong space when
