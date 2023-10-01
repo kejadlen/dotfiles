@@ -121,7 +121,8 @@
                            "https://sci-hub.st/%1"]
                           [:twitter
                            "^https://twitter.com/(.*)"
-                           "https://nitter.net/%1"]]]
+                           "https://nitter.net/%1"]
+                          [:x "^https://x.com/(.*)" "https://nitter.net/%1"]]]
   (Install:andUse :URLDispatcher {:config {: url_patterns
                                            : url_redir_decoders
                                            :default_handler handlers.arc
