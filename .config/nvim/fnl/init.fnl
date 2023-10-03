@@ -185,7 +185,7 @@
                                            :ib "@block.inner"
                                            :aa "@parameter.outer"
                                            :ia "@parameter.inner"}}}})
- (treesitter.language.register :yaml :yaml.ansible))
+  (treesitter.language.register :yaml :yaml.ansible))
 
 (let [tscontext (require :treesitter-context)]
   (tscontext.setup))
@@ -208,15 +208,8 @@
 
 ;; indent-blankline
 
-(let [{: setup} (require :indent_blankline)]
-  (setup {:char ""
-          :context_char "┃"
-          :show_current_context true
-          :show_first_indent_level false
-          ; :show_trailing_blankline_indent false
-          ; :max_indent_increase 1
-          ; :use_treesitter true
-          :use_treesitter_scope true}))
+(let [{: setup} (require :ibl)]
+  (setup))
 
 ;;; generate help files
 
