@@ -97,6 +97,8 @@
 (local isort (fmt "isort --quiet --profile black -"))
 (local python [black isort])
 
+(local yamlfmt (fmt "yamlfmt -in"))
+
 (setup-lsp :efm {:on_attach on-attach
                  :init_options {:documentFormatting true
                                 :hover true
@@ -108,13 +110,15 @@
                                         : python
                                         :typescript javascript
                                         :typescriptreact javascript
-                                        :vue [prettier]}}
+                                        :vue [prettier]
+                                        :yaml [yamlfmt]}}
                  :filetypes [:fennel
                              :javascript
                              :typescript
                              :python
                              :typescriptreact
-                             :vue]})
+                             :vue
+                             :yaml]})
 
 (setup-lsp :ansiblels)
 (setup-lsp :elmls)
