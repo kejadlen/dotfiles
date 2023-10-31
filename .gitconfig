@@ -69,7 +69,8 @@
 [tag]
 	sort = version:refname
 [rebase]
-	autosquash = true
+	autoStash = true
+	autoSquash = true
 	stat = true
 	updateRefs = true
 [interactive]
