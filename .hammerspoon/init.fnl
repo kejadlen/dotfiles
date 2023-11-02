@@ -12,6 +12,7 @@
         : loadSpoon
         : logger
         : notify
+        : osascript
         : pasteboard
         : screen
         : uielement
@@ -52,26 +53,46 @@
       (s:sub 1 -2)
       s))
 
+;; mash-e: edit selected text in neovide, inspired by quickcursor (hence
+;; the temporary filenme)
 (hotkey.bind mash :e
-             #(with-selection (fn [text]
-                                (let [home (os.getenv :HOME)
-                                      date (chomp (run "date -Iseconds -u"))
-                                      file (.. home :/.quickcursor. date)]
-                                  (pasteboard.setContents text)
-                                  (run (.. "pbpaste > " file)
-                                       (.. "/opt/homebrew/bin/neovide --nofork "
-                                           file)
-                                       (.. "pbcopy < " file) (.. "rm " file))
-                                  (pasteboard.getContents)))))
+             (let [editor "/opt/homebrew/bin/neovide --nofork"]
+               #(with-selection (fn [text]
+                                  (let [home (os.getenv :HOME)
+                                        date (chomp (run "date -Iseconds -u"))
+                                        file (.. home :/.quickcursor. date)]
+                                    (pasteboard.setContents text)
+                                    (run (.. "pbpaste > " file)
+                                         (.. editor " " file)
+                                         (.. "pbcopy < " file) (.. "rm " file))
+                                    (pasteboard.getContents))))))
 
-(hotkey.bind mash :t #(execute "/opt/homebrew/bin/alacritty msg create-window"))
-
+;; mash-, modal hotkeys
 (modal-bind mash "," nil
+            ;; mash-, mash-l: create a markdown link using the selected
+            ;; text as the title and pastboard contents as the link
             [[mash
               :l
               nil
               (fn []
                 (with-selection #(.. "[" $1 "]" "(" $2 ")")))]])
+
+;; cmd-shift-c: copy current url
+(let [safari-applescript "tell application \"Safari\" to get URL of front document"
+      copy-safari (hotkey.new [:cmd :shift] :c
+                              #(let [(_ obj _) (osascript.applescript safari-applescript)]
+                                 (pasteboard.setContents obj)))
+      copy-firefox (hotkey.new [:cmd :shift] :c #(eventtap.keyStrokes :yy))
+      {: activated : deactivated} application.watcher
+      update-hotkey (fn [name event app]
+                      (match [name event]
+                        ["Firefox Developer Edition" activated] (copy-firefox:enable)
+                        ["Firefox Developer Edition" deactivated] (copy-firefox:disable)
+                        [:Safari activated] (copy-safari:enable)
+                        [:Safari deactivated] (copy-safari:disable)))
+      watcher (application.watcher.new update-hotkey)]
+  ;; hold onto watcher as a global so it doesn't get GC'ed
+  (set _G.watcher (watcher:start)))
 
 ;;; Elgato Key Light Air
 
