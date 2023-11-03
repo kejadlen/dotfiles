@@ -54,21 +54,20 @@
                 (with-selection #(.. "[" $1 "]" "(" $2 ")")))]])
 
 ;; cmd-shift-c: copy current url
-(let [safari-applescript "tell application \"Safari\" to get URL of front document"
-      copy-safari (hotkey.new [:cmd :shift] :c
-                              #(let [(_ obj _) (osascript.applescript safari-applescript)]
-                                 (pasteboard.setContents obj)))
-      copy-firefox (hotkey.new [:cmd :shift] :c #(eventtap.keyStrokes :yy))
-      {: activated : deactivated} application.watcher
-      update-hotkey (fn [name event app]
-                      (match [name event]
-                        ["Firefox Developer Edition" activated] (copy-firefox:enable)
-                        ["Firefox Developer Edition" deactivated] (copy-firefox:disable)
-                        [:Safari activated] (copy-safari:enable)
-                        [:Safari deactivated] (copy-safari:disable)))
-      watcher (application.watcher.new update-hotkey)]
+(let [{: activated : deactivated} application.watcher
+      firefox (hotkey.new [:cmd :shift] :c #(eventtap.keyStrokes :yy))
+      safari-applescript "tell application \"Safari\" to get URL of front document"
+      safari (hotkey.new [:cmd :shift] :c
+                         #(let [(_ obj _) (osascript.applescript safari-applescript)]
+                            (pasteboard.setContents obj)))
+      per-app {"Firefox Developer Edition" firefox :Safari safari}
+      update-app (fn [name event _app]
+                   (match [(. per-app name) event]
+                     [app-config activated] (app-config:enable)
+                     [app-config deactivated] (app-config:disable)))
+      watcher (application.watcher.new update-app)]
   ;; hold onto watcher as a global so it doesn't get GC'ed
-  (set _G.watcher (watcher:start)))
+  (set _G.per-app-watcher (watcher:start)))
 
 ;;; Elgato Key Light Air
 
