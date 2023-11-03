@@ -23,49 +23,25 @@
 ; (set logger.defaultLogLevel :info)
 
 (local {: mash : smash : modal-bind} (require :hotkey))
+(local {: chomp : paste : replace-selection : run} (require :utils))
 
 ;; debugging
 ; (hotkey.bind mash "d" #(dialog.blockAlert "message" "text" "one" "two"))
 
-;; defeat paste blocking
+;; ⌘⌥V - defeat paste blocking
 (hotkey.bind [:cmd :alt] :v #(eventtap.keyStrokes (pasteboard.getContents)))
 
-(fn run [...]
-  (accumulate [last nil _ cmd (ipairs [...])]
-    (execute cmd)))
-
-(fn with-selection [cb]
-  (let [app (application.frontmostApplication)
-        prev-pasteboard (pasteboard.getContents)
-        e (uielement.focusedElement)
-        text (if e (e:selectedText)
-                 (do
-                   (eventtap.keyStroke [:cmd] :c)
-                   (pasteboard.getContents)))
-        content (cb text prev-pasteboard)]
-    (pasteboard.setContents content)
-    (app:setFrontmost)
-    (eventtap.keyStroke [:cmd] :v)
-    (pasteboard.setContents prev-pasteboard)))
-
-(fn chomp [s]
-  (if (= (s:sub -1) "\n")
-      (s:sub 1 -2)
-      s))
-
-;; mash-e: edit selected text in neovide, inspired by quickcursor (hence
-;; the temporary filenme)
-(hotkey.bind mash :e
-             (let [editor "/opt/homebrew/bin/neovide --nofork"]
-               #(with-selection (fn [text]
-                                  (let [home (os.getenv :HOME)
-                                        date (chomp (run "date -Iseconds -u"))
-                                        file (.. home :/.quickcursor. date)]
-                                    (pasteboard.setContents text)
-                                    (run (.. "pbpaste > " file)
-                                         (.. editor " " file)
-                                         (.. "pbcopy < " file) (.. "rm " file))
-                                    (pasteboard.getContents))))))
+;;  ⌘⌥⌃E - edit selected text in neovide, inspired by quickcursor (hence the temporary filenme)
+(let [editor "/opt/homebrew/bin/neovide --nofork"
+      cb (fn [text]
+           (let [home (os.getenv :HOME)
+                 date (chomp (run "date -Iseconds -u"))
+                 file (.. home :/.quickcursor. date)]
+             (pasteboard.setContents text)
+             (run (.. "pbpaste > " file) (.. editor " " file)
+                  (.. "pbcopy < " file) (.. "rm " file))
+             (pasteboard.getContents)))]
+  (hotkey.bind mash :e #(replace-selection cb)))
 
 ;; mash-, modal hotkeys
 (modal-bind mash "," nil
@@ -123,13 +99,13 @@
 ;; By default, URLDispatcher focuses the application before opening the URL, but
 ;; this interacts poorly with Arc since then we can be in the wrong space when
 ;; the URL is opened in Little Arc.
-(let [handlers {:arc #(urlevent.openURLWithBundle $1
-                                                  :company.thebrowser.Browser)
+(let [open-in-arc #(urlevent.openURLWithBundle $1 :company.thebrowser.Browser)
+      handlers {:arc open-in-arc
                 :firefox-dev :org.mozilla.firefoxdeveloperedition
                 :firefox :org.mozilla.firefox
                 :safari :com.apple.Safari
                 :zoom :us.zoom.xos}
-      url_patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
+      url-patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
                     ["^https://(.*%.?)discnw.org/?" handlers.safari]
                     ["^https://(.*%.?)squareupmessaging.com/?" handlers.safari]
                     ["^https://(.*%.?)bulletin.com/?" handlers.safari]
@@ -137,15 +113,15 @@
                     ["^https://(.*%.?)goodluckbread.com/?" handlers.safari]
                     ["^https://community.glowforge.com/?" handlers.arc]
                     ["^https://accounts.google.com/?" handlers.arc]]
-      url_redir_decoders [[:sci-hub
+      url-redir-decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]
                           [:twitter
                            "^https://twitter.com/(.*)"
                            "https://nitter.net/%1"]
                           [:x "^https://x.com/(.*)" "https://nitter.net/%1"]]]
-  (Install:andUse :URLDispatcher {:config {: url_patterns
-                                           : url_redir_decoders
+  (Install:andUse :URLDispatcher {:config {:url_patterns url-patterns
+                                           :url_redir_decoders url-redir-decoders
                                            :default_handler handlers.arc
                                            :set_system_handler true}
                                   :start true}))
@@ -156,8 +132,7 @@
 (when (fs.attributes :local.fnl)
   (require :local))
 
-(let [n (notify.new {:title :Hammerspoon
-                     :informativeText "Config loaded"
-                     :withdrawAfter 2})]
-  (n:send))
+(: (notify.new {:title :Hammerspoon
+                :informativeText "Config loaded"
+                :withdrawAfter 2}) :send)
 
