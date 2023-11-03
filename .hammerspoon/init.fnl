@@ -31,7 +31,7 @@
 ;; ⌘⌥V - defeat paste blocking
 (hotkey.bind [:cmd :alt] :v #(eventtap.keyStrokes (pasteboard.getContents)))
 
-;;  ⌘⌥⌃E - edit selected text in neovide, inspired by quickcursor (hence the temporary filenme)
+;; ⌘⌥⌃E - edit selected text in neovide, inspired by quickcursor (hence the temporary filenme)
 (let [editor "/opt/homebrew/bin/neovide --nofork"
       cb (fn [text]
            (let [home (os.getenv :HOME)
