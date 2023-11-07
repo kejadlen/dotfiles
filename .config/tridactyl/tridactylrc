@@ -28,7 +28,6 @@ bind <C-n> tabnext
 bind <C-p> tabprev
 
 " ignore modes
-autocmd DocStart youtube.com mode ignore
 autocmd DocStart nytimes.com/crosswords mode ignore
 
 " new reddit is bad
@@ -39,12 +38,15 @@ set auconcreatecontainer true
 autocontain facebook\.com facebook
 autocontain google\.com google
 autocontain notion\.so work
-autocontain tana\.inc google
 
 " github
 " https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
 unbindurl ^https://github.com/ s " focus the search bar
-unbindurl ^https://github.com/ t " activate the file finder
+" unbindurl ^https://github.com/ t " activate the file finder
+
+" youtube
+unbindurl ^https://youtube.com/ j " back 10s
+unbindurl ^https://youtube.com/ l " forward 10s
 
 unbindurl ^https://docs.rs/ s " focus the search bar
 
