@@ -73,6 +73,17 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>AFED4C07-328E-43ED-9A87-0DE28CE3C7D2</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>kp</string>
+			<key>text</key>
+			<string>Search Kagi for '{query}' with Programming lens</string>
+			<key>url</key>
+			<string>https://kagi.com/search?q={query}+alfred&amp;l=0</string>
+		</dict>
 		<key>CB3335FB-D778-42B6-9AF8-97590E88638F</key>
 		<dict>
 			<key>enabled</key>

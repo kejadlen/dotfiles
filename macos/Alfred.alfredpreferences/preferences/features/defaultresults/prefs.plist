@@ -6,8 +6,10 @@
 	<integer>1</integer>
 	<key>fallbacks</key>
 	<array>
-		<string>features.websearch.duckduckgo.fallback</string>
 		<string>features.websearch.custom.CB3335FB-D778-42B6-9AF8-97590E88638F.fallback</string>
+		<string>features.websearch.duckduckgo.fallback</string>
 	</array>
+	<key>fallbacksMode</key>
+	<integer>1</integer>
 </dict>
 </plist>
