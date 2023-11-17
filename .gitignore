@@ -9,6 +9,7 @@ private
 !.config/direnv
 !.config/git
 !.config/irb
+.config/irb/irb_history
 !.config/kitty
 !.config/nvim
 !.config/pip
