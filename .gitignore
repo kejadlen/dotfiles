@@ -8,6 +8,7 @@ private
 !.config/bat
 !.config/direnv
 !.config/git
+!.config/irb
 !.config/kitty
 !.config/nvim
 !.config/pip
@@ -27,8 +28,8 @@ private
 .vim/spell
 .vim/view
 
-Alfred\ 2/Alfred.alfredpreferences/preferences/local
-
-# temporary
 .hammerspoon/Spoons/*
 !.hammerspoon/Spoons/SpoonInstall
+
+# hack for now since I don't want to commit Alfred secrets
+macos/Alfred.alfredpreferences/workflows/*/prefs.plist
