@@ -1,14 +1,23 @@
-require 'irb/completion'
-require 'irb/ext/save-history' unless RUBY_ENGINE == 'macruby'
 require 'pp'
 
-# tab completion
-ARGV.concat %w[ --readline --prompt-mode simple ] unless RUBY_ENGINE == 'macruby'
+if defined?(Reline::Face) # https://github.com/ruby/irb/issues/328
+  # Tweak IRB's default colors
+  Reline::Face.config(:completion_dialog) do |conf|
+    conf.define :default, foreground: :black, background: :cyan
+    conf.define :enhanced, foreground: :black, background: :magenta
+    conf.define :scrollbar, foreground: :white, background: :blue
+  end
+end
 
-IRB.conf[:AUTO_INDENT] = true
-IRB.conf[:EVAL_HISTORY] = 1000
-IRB.conf[:SAVE_HISTORY] = 1000
-IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
+def pbcopy(str=nil)
+  str = yield if block_given?
+  IO.popen(%w[pbcopy], 'w') {|io| io.write str }
+end
+
+# IRB.conf[:AUTO_INDENT] = true
+# IRB.conf[:EVAL_HISTORY] = 1000
+# IRB.conf[:SAVE_HISTORY] = 1000
+# IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 
 # shut irb up
 # IRB.conf[:PROMPT][ IRB.conf[:PROMPT_MODE] ][:RETURN] = ''
@@ -26,10 +35,3 @@ IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 
 irbrc_local = File.expand_path('../.irbrc.local', __FILE__)
 require irbrc_local if File.exist?(irbrc_local)
-
-begin
-  # use Pry if it exists
-  require 'pry'
-  Pry.start || exit
-rescue LoadError
-end
