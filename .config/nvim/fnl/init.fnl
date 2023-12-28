@@ -91,6 +91,7 @@
 ;;; filetype
 
 (set vim.g.do_filetype_lua true)
+(vim.filetype.add {:extension {:ua :uiua}})
 
 ;;; ftplugins in fennel
 
