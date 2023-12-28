@@ -82,7 +82,7 @@
 			<key>text</key>
 			<string>Search Kagi for '{query}' with Programming lens</string>
 			<key>url</key>
-			<string>https://kagi.com/search?q={query}+alfred&amp;l=0</string>
+			<string>https://kagi.com/search?q={query}&amp;l=0</string>
 		</dict>
 		<key>CB3335FB-D778-42B6-9AF8-97590E88638F</key>
 		<dict>
