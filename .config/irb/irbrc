@@ -1,7 +1,18 @@
 require 'pp'
 
+# make it more pry-like
+IRB.conf[:PROMPT][:ALPHA] = {
+  :PROMPT_I => "[%n] %N(%m)> ",
+  :PROMPT_S => "[%n] %N(%m)> ",
+  :PROMPT_C => "[%n] %N(%m)* ",
+  :RETURN => "=> %s\n",
+}
+IRB.conf[:PROMPT_MODE] = :ALPHA
+
+# needs prism and rbs
+IRB.conf[:COMPLETOR] = :type
+
 if defined?(Reline::Face) # https://github.com/ruby/irb/issues/328
-  # Tweak IRB's default colors
   Reline::Face.config(:completion_dialog) do |conf|
     conf.define :default, foreground: :black, background: :cyan
     conf.define :enhanced, foreground: :black, background: :magenta
@@ -9,10 +20,16 @@ if defined?(Reline::Face) # https://github.com/ruby/irb/issues/328
   end
 end
 
+
+## utility functions
+
 def pbcopy(str=nil)
   str = yield if block_given?
   IO.popen(%w[pbcopy], 'w') {|io| io.write str }
 end
+
+def tic; @_tic = Time.now; end
+def toc; Time.now - @_tic; end
 
 # IRB.conf[:AUTO_INDENT] = true
 # IRB.conf[:EVAL_HISTORY] = 1000
@@ -33,5 +50,5 @@ end
 #   Readline::HISTORY.to_a
 # end
 
-irbrc_local = File.expand_path('../.irbrc.local', __FILE__)
+irbrc_local = File.expand_path(".irbrc.local", __dir__)
 require irbrc_local if File.exist?(irbrc_local)
