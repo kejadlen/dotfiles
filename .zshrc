@@ -68,12 +68,17 @@ zstyle ':z4h:term-title:ssh' precmd  '%n@'${${${Z4H_SSH##*:}//\%/%%}:-%m}': %~'
 z4h init || return
 
 # Extend PATH.
-path=(~/bin $path)
+path=(
+  ~/bin
+  $path
+)
 
 # Export environment variables.
 export GPG_TTY=$TTY
+
 export EDITOR=nvim
 export VISUAL=nvim
+
 export BAT_THEME=ashes
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
 export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
@@ -84,6 +89,7 @@ export FZF_ALT_C_COMMAND="fd --type d --strip-cwd-prefix --hidden --follow --exc
 if (( $+commands[fzf] )); then
   [[ $- == *i* ]] && z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh}
 fi
+z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh}
 z4h source ~/.dotfiles/src/fzf-git.sh/fzf-git.sh
 z4h source ~/.local.zsh
 
@@ -152,5 +158,8 @@ setopt auto_menu  # require an extra TAB press to open the completion menu
 
 # https://github.com/romkatv/zsh4humans/issues/110#issuecomment-846824056
 [[ ! -v functions[command_not_found_handler] ]] || unfunction command_not_found_handler
+
+# default to ruby 3.3
+which chruby &>/dev/null && chruby 3.3
 
 [ -z "$ZPROF" ] || zprof
