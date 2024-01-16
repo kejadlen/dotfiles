@@ -105,10 +105,6 @@
 	url = https://github.com/jaawerth/fennel.vim.git
 	branch = main
 	shallow = true
-[submodule "prezto"]
-	path = .zprezto
-	url = https://git.kejadlen.dev/alpha/prezto.git
-	branch = main
 [submodule "paramount"]
 	path = .local/share/nvim/site/pack/alpha/start/paramount
 	url = https://git.kejadlen.dev/alpha/vim-colors-paramount.git
