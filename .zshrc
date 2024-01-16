@@ -98,26 +98,12 @@ autoload -Uz zmv
 function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
 
-# https://github.com/romkatv/powerlevel10k/issues/254#issuecomment-539959233
-# function zsh_directory_name() {
-#   emulate -L zsh
-#   [[ $1 == d ]] || return
-#   while [[ $2 != / ]]; do
-#     if [[ -e $2/.git ]]; then
-#       typeset -ga reply=(${2:t} $#2)
-#       return
-#     fi
-#     2=${2:h}
-#   done
-#   return 1
-# }
-
 # Define named directories: ~w <=> Windows home directory on WSL.
 # [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
 
 # Define aliases.
 alias clear=z4h-clear-screen-soft-bottom
-alias ls=eza
+(( $+commands[eza] )) && alias ls=eza
 alias rake='noglob rake' # don't match on square brackets
 alias tat='tmux new-session -As `basename $PWD | ruby -e "puts ARGF.read.strip.downcase.gsub(/[^\w]+/, ?-)"`'
 alias tree='tree -a -I .git'
