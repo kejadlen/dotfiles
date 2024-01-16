@@ -123,4 +123,7 @@ alias tree='tree -a -I .git'
 setopt glob_dots  # no special treatment for file names with a leading dot
 setopt auto_menu  # require an extra TAB press to open the completion menu
 
+# https://github.com/romkatv/zsh4humans/issues/110#issuecomment-846824056
+[[ ! -v functions[command_not_found_handler] ]] || unfunction command_not_found_handler
+
 [ -z "$ZPROF" ] || zprof
