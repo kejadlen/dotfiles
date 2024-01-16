@@ -1374,6 +1374,8 @@
       '*'         OTHER)
   typeset -g POWERLEVEL9K_TERRAFORM_OTHER_FOREGROUND=38
   # typeset -g POWERLEVEL9K_TERRAFORM_OTHER_VISUAL_IDENTIFIER_EXPANSION='⭐'
+  # Replace the content of terraform segment with an empty value.
+  typeset -g POWERLEVEL9K_TERRAFORM_CONTENT_EXPANSION=
 
   #############[ terraform_version: terraform version (https://www.terraform.io) ]##############
   # Terraform version color.
