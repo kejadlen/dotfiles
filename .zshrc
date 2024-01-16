@@ -72,8 +72,19 @@ path=(~/bin $path)
 
 # Export environment variables.
 export GPG_TTY=$TTY
+export EDITOR=nvim
+export VISUAL=nvim
+export BAT_THEME=ashes
+export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
+export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type d --strip-cwd-prefix --hidden --follow --exclude .git"
 
 # Source additional local files if they exist.
+if (( $+commands[fzf] )); then
+  [[ $- == *i* ]] && z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh}
+fi
+z4h source ~/.dotfiles/src/fzf-git.sh/fzf-git.sh
 z4h source ~/.local.zsh
 
 # Use additional Git repositories pulled in with `z4h install`.
@@ -91,12 +102,36 @@ z4h bindkey z4h-cd-forward Shift+Right  # cd into the next directory
 z4h bindkey z4h-cd-up      Shift+Up     # cd into the parent directory
 z4h bindkey z4h-cd-down    Shift+Down   # cd into a child directory
 
+z4h bindkey history-beginning-search-backward Ctrl+P
+z4h bindkey history-beginning-search-forward  Ctrl+N
+
+if (( $+commands[fzf] )); then
+  z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh}
+
+  # Not sure how to do key sequences w/`z4h bindkey`
+  bindkey '^gg' fzf-git-branches-widget
+
+  # ^gl doesn't work in tmux, but I need reflogs more than remotes probably?
+  bindkey '^gr' fzf-git-lreflogs-widget
+
+  # https://github.com/junegunn/fzf/issues/164#issuecomment-581837757
+  z4h bindkey fzf-cd-widget ç
+fi
+
 # Autoload functions.
 autoload -Uz zmv
 
 # Define functions and completions.
 function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
+
+# https://docs.brew.sh/Shell-Completion
+if type brew &>/dev/null; then
+  FPATH=${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/share/zsh/site-functions:${FPATH}}
+
+  autoload -Uz compinit
+  compinit
+fi
 
 # Define named directories: ~w <=> Windows home directory on WSL.
 # [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
