@@ -12,6 +12,7 @@ private
 .config/irb/irb_history
 !.config/kitty
 !.config/nvim
+!.config/neovide
 !.config/pip
 !.config/starship.toml
 !.config/tridactyl
