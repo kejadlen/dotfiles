@@ -123,3 +123,5 @@
 	hunk-header-style = omit
 [include]
 	path = ~/.gitconfig.local
+[log]
+	follow = true
