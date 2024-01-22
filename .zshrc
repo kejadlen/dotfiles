@@ -50,6 +50,10 @@ zstyle ':completion:*:(ssh|scp|rdp):*:hosts' hosts
 zstyle ':z4h:term-title:ssh' preexec '%n@'${${${Z4H_SSH##*:}//\%/%%}:-%m}': ${1//\%/%%}'
 zstyle ':z4h:term-title:ssh' precmd  '%n@'${${${Z4H_SSH##*:}//\%/%%}:-%m}': %~'
 
+# https://github.com/romkatv/zsh4humans/issues/53#issuecomment-706493865
+zstyle ':zle:up-line-or-beginning-search'   leave-cursor false
+zstyle ':zle:down-line-or-beginning-search' leave-cursor false
+
 # Send these files over to the remote host when connecting over SSH to the
 # enabled hosts.
 # zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh'
@@ -110,8 +114,12 @@ z4h bindkey z4h-cd-forward Shift+Right  # cd into the next directory
 z4h bindkey z4h-cd-up      Shift+Up     # cd into the parent directory
 z4h bindkey z4h-cd-down    Shift+Down   # cd into a child directory
 
-z4h bindkey history-beginning-search-backward Ctrl+P
-z4h bindkey history-beginning-search-forward  Ctrl+N
+# Both using `z4h bindkey` instead of just `bindkey` and `^` instead of `\e`
+# results in the cursor staying at the beginning of the command.
+bindkey "\ep" history-beginning-search-backward
+bindkey "\en" history-beginning-search-forward
+
+bindkey " " magic-space
 
 if (( $+commands[fzf] )); then
   z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh}
