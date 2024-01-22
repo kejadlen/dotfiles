@@ -148,7 +148,8 @@
                              :ruby
                              :rust
                              :terraform
-                             :typescript]
+                             :typescript
+                             :yaml]
           :sync_install false
           :highlight {:enable true :additional_vim_regex_highlighting false}
           ;; disabling since this is super annoying in Ruby
