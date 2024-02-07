@@ -114,11 +114,7 @@
                     ["^https://accounts.google.com/?" handlers.arc]]
       url-redir-decoders [[:sci-hub
                            "^https://doi.org/(.*)"
-                           "https://sci-hub.st/%1"]
-                          [:twitter
-                           "^https://twitter.com/(.*)"
-                           "https://nitter.net/%1"]
-                          [:x "^https://x.com/(.*)" "https://nitter.net/%1"]]]
+                           "https://sci-hub.st/%1"]]]
   (Install:andUse :URLDispatcher {:config {:url_patterns url-patterns
                                            :url_redir_decoders url-redir-decoders
                                            :default_handler handlers.arc
