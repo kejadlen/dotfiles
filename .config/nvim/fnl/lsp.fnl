@@ -14,21 +14,11 @@
 (let [{: default_options} (require :lspconfig.ui.windows)]
   (tset default_options :border :rounded))
 
-;;; fennel-ls
-
 (let [configs (require :lspconfig.configs)]
-  (tset configs :fennel-ls
-        {:default_config {:cmd [:/opt/homebrew/bin/fennel-ls]
-                          :filetypes [:fennel]
-                          :root_dir #(lspconfig.util.find_git_ancestor $1)
-                          :settings {}}})
   (tset configs :steep {:default_config {:cmd ["steep langserver"]
                                          :filetypes [:ruby]
                                          :root_dir #(lspconfig.util.find_git_ancestor $1)
                                          :settings {}}}))
-
-(let [{: fennel-ls} lspconfig]
-  (fennel-ls.setup (vim.lsp.protocol.make_client_capabilities)))
 
 ;; default hover windows to have borders
 (let [{: hover} lsp.handlers]
@@ -122,7 +112,7 @@
 
 (setup-lsp :ansiblels)
 (setup-lsp :elmls)
-(setup-lsp :fennel-ls)
+(setup-lsp :fennel_ls {:settings {:fennel-ls {:extra-globals :hs}}})
 (setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
 (setup-lsp :pyright
            {:on_attach on-attach
