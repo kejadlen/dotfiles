@@ -111,7 +111,8 @@
                     ["^https://(.*%.?)store.apple.com/?" handlers.safari]
                     ["^https://(.*%.?)goodluckbread.com/?" handlers.safari]
                     ["^https://community.glowforge.com/?" handlers.arc]
-                    ["^https://accounts.google.com/?" handlers.arc]]
+                    ["^https://accounts.google.com/?" handlers.arc]
+                    ["^https://(.*%.?)fidelityinvestments.com/?" handlers.safari]]
       url-redir-decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]]]
