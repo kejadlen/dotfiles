@@ -112,7 +112,7 @@
 
 (setup-lsp :ansiblels)
 (setup-lsp :elmls)
-(setup-lsp :fennel_ls {:settings {:fennel-ls {:extra-globals :hs}}})
+(setup-lsp :fennel_ls {:settings {:fennel-ls {:extra-globals "hs spoon"}}})
 (setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
 (setup-lsp :pyright
            {:on_attach on-attach
