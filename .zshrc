@@ -156,6 +156,7 @@ fi
 # Define aliases.
 alias clear=z4h-clear-screen-soft-bottom
 (( $+commands[eza] )) && alias ls=eza
+alias git='noglob git' # so that shortcuts like @^ work
 alias rake='noglob rake' # don't match on square brackets
 alias tat='tmux new-session -As `basename $PWD | ruby -e "puts ARGF.read.strip.downcase.gsub(/[^\w]+/, ?-)"`'
 alias tree='tree -a -I .git'
