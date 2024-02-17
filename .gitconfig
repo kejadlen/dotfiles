@@ -126,5 +126,6 @@
 	path = ~/.gitconfig.local
 [log]
 	follow = true
+	date = iso
 [status]
 	submoduleSummary = true
