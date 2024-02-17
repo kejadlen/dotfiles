@@ -44,7 +44,7 @@
 [apply]
 	whitespace = warn
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 	ff = false
 	tool = vimdiff
 [mergetool "vimdiff"]
