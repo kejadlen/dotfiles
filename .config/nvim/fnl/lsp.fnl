@@ -82,10 +82,6 @@
 
 (local prettier (fmt "prettier --stdin-filepath ${INPUT}"))
 (local javascript [eslint prettier])
-(local black (fmt "black --quiet -"))
-(local flake8 (lint "flake8 --stdin-display-name ${INPUT} -" ["%f:%l:%c: %m"]))
-(local isort (fmt "isort --quiet --profile black -"))
-(local python [black isort])
 
 (local yamlfmt (fmt "yamlfmt -in"))
 
@@ -97,7 +93,6 @@
                                 :completion true}
                  :settings {:languages {: fennel
                                         : javascript
-                                        : python
                                         :typescript javascript
                                         :typescriptreact javascript
                                         :vue [prettier]
@@ -105,19 +100,17 @@
                  :filetypes [:fennel
                              :javascript
                              :typescript
-                             :python
                              :typescriptreact
                              :vue
                              :yaml]})
 
 (setup-lsp :ansiblels)
 (setup-lsp :elmls)
-(setup-lsp :fennel_ls {:settings {:fennel-ls {:extra-globals "hs spoon"}}})
-(setup-lsp :pylsp {:on_attach (on-attach-do attach-navic disable-fmt)})
+(setup-lsp :fennel_ls {:settings {:fennel-ls {:extra-globals "hs spoon vim"}}})
 (setup-lsp :pyright
            {:on_attach on-attach
             :settings {:python {:analysis {:autoImportCompletions true}}}})
-
+(setup-lsp :ruff_lsp)
 (setup-lsp :rust_analyzer
            {:on_attach on-attach
             :cmd [:rustup :run :stable :rust-analyzer]
