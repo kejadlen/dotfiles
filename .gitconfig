@@ -1,3 +1,26 @@
+# me
+[user]
+	email = alpha@kejadlen.dev
+	name = Alpha Chen
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCttH8nEfk1uZ2291P4mbCoNcHxnr9iNBlbZckykeZ8
+
+# remotes
+[fetch]
+	prune = true
+[pull]
+	rebase = true
+[push]
+	default = current
+	followTags = true
+	recurseSubmodules = on-demand
+	autoSetupRemote = true
+[url "git@github.com:"]
+	insteadof = https://github.com/
+[url "git@git.kejadlen.dev:"]
+	insteadof = https://git.kejadlen.dev/
+[transfer]
+	fsckobjects = true
+
 [color]
 	ui = auto
 	diff = true
@@ -21,54 +44,14 @@
 	fix = commit --fixup @
 	ctags = !.git/hooks/ctags
 	lg = log --date=format:'%a %b %e, %Y' --pretty=format:'%C(yellow)%h%C(reset) %s %C(cyan)%cd%C(reset) %C(blue)%an%C(reset) %C(green)%d%C(reset)' --graph ; https://roadrunnertwice.dreamwidth.org/596185.html
-[difftool]
-	prompt = false
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-[difftool "kaleidoscope"]
-	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-[difftool "icdiff"]
-	cmd = icdiff --line-numbers --no-bold \"$LOCAL\" \"$REMOTE\"
-[difftool "difftastic"]
-	cmd = difft "$LOCAL" "$REMOTE"
-[push]
-	default = current
-	followTags = true
-	recurseSubmodules = on-demand
-	autoSetupRemote = true
 [grep]
 	extendRegexp = true
 	lineNumber = true
-[pull]
-	rebase = true
 [apply]
 	whitespace = warn
-[merge]
-	conflictstyle = zdiff3
-	ff = false
-	tool = vimdiff
-[mergetool "vimdiff"]
-	path = nvim
-[mergetool "nvimdiff"]
-	cmd = nvim -d \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-[mergetool "kaleidoscope"]
-	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-	trustExitCode = true
 [init]
 	templatedir = ~/.git_templates
 	defaultBranch = main
-[diff]
-	algorithm = histogram
-	external = difft
-	; compactionHeuristic = true
-	indentHeuristic = true
-	colorMoved = default
-	submodule = log
-[fetch]
-	prune = true
 [tag]
 	sort = version:refname
 [rebase]
@@ -79,12 +62,6 @@
 [interactive]
 	singlekey = true
 	diffFilter = delta --color-only --features=interactive
-[url "git@github.com:"]
-	insteadof = https://github.com/
-[url "git@git.kejadlen.dev:"]
-	insteadof = https://git.kejadlen.dev/
-[transfer]
-	fsckobjects = true
 [submodule]
 	fetchJobs = 4
 	recurse = true
@@ -95,10 +72,6 @@
 	clean = alfredworkflow.clean
 [filter "dash-prefs"]
 	clean = clean-dash-prefs
-[user]
-	email = alpha@kejadlen.dev
-	name = Alpha Chen
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCttH8nEfk1uZ2291P4mbCoNcHxnr9iNBlbZckykeZ8
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
@@ -110,10 +83,32 @@
 	enabled = true
 [branch]
 	sort = -committerdate
-[gpg]
-	format = ssh
-[gpg "ssh"]
-	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+[include]
+	path = ~/.gitconfig.local
+[log]
+	follow = true
+	date = iso
+[status]
+	submoduleSummary = true
+
+# diff things
+[diff]
+	algorithm = histogram
+	external = difft
+	; compactionHeuristic = true
+	indentHeuristic = true
+	colorMoved = default
+	submodule = log
+[difftool]
+	prompt = false
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+[difftool "kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[difftool "icdiff"]
+	cmd = icdiff --line-numbers --no-bold \"$LOCAL\" \"$REMOTE\"
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
 [delta]
 	features = decorations
 	navigate = true
@@ -122,10 +117,27 @@
 	line-numbers-right-format = "│ "
 [delta "decorations"]
 	hunk-header-style = omit
-[include]
-	path = ~/.gitconfig.local
-[log]
-	follow = true
-	date = iso
-[status]
-	submoduleSummary = true
+
+# merging
+[merge]
+	conflictstyle = zdiff3
+	ff = false
+	tool = vimdiff
+[mergetool]
+	keepBackup = false
+[mergetool "vimdiff"]
+	path = nvim
+[mergetool "nvimdiff"]
+	cmd = nvim -d \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[mergetool "kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
+
+# signing commits with 1Password
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
