@@ -66,6 +66,7 @@
 	; compactionHeuristic = true
 	indentHeuristic = true
 	colorMoved = default
+	submodule = log
 [fetch]
 	prune = true
 [tag]
@@ -125,3 +126,5 @@
 	path = ~/.gitconfig.local
 [log]
 	follow = true
+[status]
+	submoduleSummary = true
