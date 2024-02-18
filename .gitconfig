@@ -21,15 +21,20 @@
 [transfer]
 	fsckobjects = true
 
+# ui
 [color]
 	ui = auto
 	diff = true
+[column]
+	ui = auto
+
 [core]
 	autocrlf = false
 	safecrlf = true
 	quotepath = false
 	sparecheckout = true
 	editor = nvim
+	fsmonitor = true
 [alias]
 	g = grep --break --heading --line-number
 	standup = !git log --all --date=short --no-merges --pretty=format:\"%h %ad %s%d\" --since=1.weeks --author=`git config user.email`
@@ -81,10 +86,9 @@
 	addEmptyPathspec = false
 [rerere]
 	enabled = true
+	autoUpdate = true
 [branch]
 	sort = -committerdate
-[include]
-	path = ~/.gitconfig.local
 [log]
 	follow = true
 	date = iso
@@ -99,6 +103,7 @@
 	indentHeuristic = true
 	colorMoved = default
 	submodule = log
+	renames = copy
 [difftool]
 	prompt = false
 [difftool "sourcetree"]
@@ -141,3 +146,6 @@
 	format = ssh
 [gpg "ssh"]
 	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[include]
+	path = ~/.gitconfig.local
