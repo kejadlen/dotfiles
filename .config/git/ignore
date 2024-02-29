@@ -1,6 +1,7 @@
 *.local
 *.private
 *.secrets
+*.tmp
 
 # scratch
 scratch.*
