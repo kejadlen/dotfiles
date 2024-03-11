@@ -26,5 +26,4 @@ xcuserdata
 
 # Python
 .ropeproject
-ruff.toml
 pyrightconfig.json
