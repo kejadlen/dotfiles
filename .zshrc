@@ -133,6 +133,17 @@ if (( $+commands[fzf] )); then
 
   # https://github.com/junegunn/fzf/issues/164#issuecomment-581837757
   z4h bindkey fzf-cd-widget ç
+
+  # https://blog.revathskumar.com/2024/02/curl-fuzzy-search-options-using-fzf.html
+  _fzf_complete_curl() {
+    _fzf_complete --header-lines=1  --prompt="curl> " -- "$@" < <(
+      curl -h all
+    )
+  }
+
+  _fzf_complete_curl_post() {
+    awk '{print $1}' | cut -d ',' -f -1
+  }
 fi
 
 # Autoload functions.
@@ -150,19 +161,25 @@ if type brew &>/dev/null; then
   compinit
 fi
 
+# has to go after compinit
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+fi
+
 # Define named directories: ~w <=> Windows home directory on WSL.
 # [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
 
 # Define aliases.
+alias be='bundle exec'
 alias clear=z4h-clear-screen-soft-bottom
 (( $+commands[eza] )) && alias ls=eza
 alias git='noglob git' # so that shortcuts like @^ work
 alias rake='noglob rake' # don't match on square brackets
 alias tat='tmux new-session -As `basename $PWD | ruby -e "puts ARGF.read.strip.downcase.gsub(/[^\w]+/, ?-)"`'
-alias tree='tree -a -I .git'
+alias tree='eza --tree'
 
 # Add flags to existing aliases.
-alias ls="${aliases[ls]:-ls} -A --git-ignore"
+alias ls="${aliases[ls]:-ls} -A"
 
 # Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
 setopt glob_dots  # no special treatment for file names with a leading dot
