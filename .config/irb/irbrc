@@ -9,8 +9,12 @@ IRB.conf[:PROMPT][:ALPHA] = {
 }
 IRB.conf[:PROMPT_MODE] = :ALPHA
 
-# needs prism and rbs
-IRB.conf[:COMPLETOR] = :type
+# use type completor if available
+begin
+  require "repl_type_completor"
+  IRB.conf[:COMPLETOR] = :type
+rescue LoadError
+end
 
 if defined?(Reline::Face) # https://github.com/ruby/irb/issues/328
   Reline::Face.config(:completion_dialog) do |conf|
