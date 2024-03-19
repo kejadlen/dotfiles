@@ -19,6 +19,17 @@
 			<key>utf8</key>
 			<true/>
 		</dict>
+		<key>26C50C44-91D7-404D-A972-FDFA0783622C</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>aa</string>
+			<key>text</key>
+			<string>Anna's Archive</string>
+			<key>url</key>
+			<string>https://annas-archive.org/search?q={query}</string>
+		</dict>
 		<key>57FEE37F-A055-4911-9537-D3F0FCCEDE08</key>
 		<dict>
 			<key>enabled</key>

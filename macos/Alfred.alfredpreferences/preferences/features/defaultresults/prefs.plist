@@ -6,7 +6,7 @@
 	<integer>1</integer>
 	<key>fallbacks</key>
 	<array>
-		<string>features.websearch.custom.CB3335FB-D778-42B6-9AF8-97590E88638F.fallback</string>
+		<string>features.websearch.custom.782529CA-CC7F-44E8-A77D-83D53CED47AA.fallback</string>
 		<string>features.websearch.duckduckgo.fallback</string>
 	</array>
 	<key>fallbacksMode</key>
