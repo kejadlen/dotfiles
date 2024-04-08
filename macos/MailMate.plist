@@ -11,7 +11,7 @@
   "g" = {
     "i" = ( "goToMailbox:", "935735E7-D46D-4B1E-AF63-4905ABB907BC" );
     "l" = ( "goToMailbox:", "94564F7D-DF9A-4759-A634-87752884B612" );
-    "j" = ( "goToMailbox:", "Junk" );
+    "j" = ( "goToMailbox:", "JUNK" );
     "l" = "goToMailbox:";
   };
 
@@ -25,4 +25,11 @@
   "f" = "forwardMessage:";
   "r" = "reply:";
   "s" = "toggleFlag:";
+  "u" = "undo:";
+  "J" = ( "markAsNotJunk:", "moveToMailbox:" );
+
+  "T" = {
+    "h" = ( "toggleTag:", "hidden" );
+    "s" = ( "toggleTag:", "set aside" );
+  };
 }

@@ -58,6 +58,17 @@
 			<key>url</key>
 			<string>https://app.thestorygraph.com/browse?search_term={query}</string>
 		</dict>
+		<key>782529CA-CC7F-44E8-A77D-83D53CED47AA</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>searxng</string>
+			<key>text</key>
+			<string>Search SearXNG for '{query}'</string>
+			<key>url</key>
+			<string>https://search.kejadlen.dev/search?q={query}&amp;language=auto&amp;time_range=&amp;safesearch=0&amp;categories=general</string>
+		</dict>
 		<key>A0D55B34-A5CE-44C9-8920-22144A82FE2B</key>
 		<dict>
 			<key>enabled</key>
