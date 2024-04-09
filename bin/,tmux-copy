@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+TMPFILE=$(mktemp)
+RG_OPTS="--word-regexp"
+PATTERNS=(
+  "[a-f0-9]{5,}" # hex, assuming only want to copy 5+ characters
+  "[^\\s]+"
+)
+PATTERN=${(j[|])PATTERNS}
+
+tmux capture-pane -p -S -2 > "$TMPFILE"
+
+rg "$RG_OPTS" --ignore-case --only-matching "$PATTERN" "$TMPFILE" |
+  ruby -e 'ARGF.readlines(chomp: true).uniq.each { puts _1 }' |
+  fzf-tmux -p 80%,60% --layout=reverse \
+    --print0 \
+    --preview "rg $RG_OPTS --color=always --context=3 {} $TMPFILE" \
+    --bind "enter:execute-silent(pbcopy <<< {})+abort" || true
