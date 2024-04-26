@@ -98,7 +98,6 @@ if (( $+commands[fzf] )); then
 fi
 z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh}
 z4h source ~/.dotfiles/src/fzf-git.sh/fzf-git.sh
-z4h source ~/.local.zsh
 
 # Use additional Git repositories pulled in with `z4h install`.
 #
@@ -190,5 +189,7 @@ setopt auto_menu  # require an extra TAB press to open the completion menu
 
 # default to ruby 3.3
 which chruby &>/dev/null && chruby 3.3
+
+for file in ~/.config/zsh/*; z4h source $file
 
 [ -z "$ZPROF" ] || zprof
