@@ -73,7 +73,7 @@ z4h init || return
 
 # Extend PATH.
 path=(
-  ~/bin
+  ~/.dotfiles/bin
   $path
 )
 
@@ -135,7 +135,7 @@ if (( $+commands[fzf] )); then
 
   # https://blog.revathskumar.com/2024/02/curl-fuzzy-search-options-using-fzf.html
   _fzf_complete_curl() {
-    _fzf_complete --header-lines=1  --prompt="curl> " -- "$@" < <(
+    _fzf_complete --header-lines=1 --prompt="curl> " -- "$@" < <(
       curl -h all
     )
   }
@@ -190,6 +190,6 @@ setopt auto_menu  # require an extra TAB press to open the completion menu
 # default to ruby 3.3
 which chruby &>/dev/null && chruby 3.3
 
-for file in ~/.config/zsh/*; z4h source $file
+for file in ~/.config/zsh/*(N); z4h source $file
 
 [ -z "$ZPROF" ] || zprof
