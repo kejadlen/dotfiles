@@ -37,12 +37,16 @@
     (vim.keymap.set :n :gd lsp.buf.definition bufopts)
     (vim.keymap.set :n :K lsp.buf.hover bufopts)
     (vim.keymap.set :n :gi lsp.buf.implementation bufopts)
+    (vim.keymap.set :n :<C-k> lsp.buf.signature_help bufopts)
     (vim.keymap.set :n :<leader>wa lsp.buf.add_workspace_folder bufopts)
     (vim.keymap.set :n :<leader>wr lsp.buf.remove_workspace_folder bufopts)
     (vim.keymap.set :n :<leader>wl
                     #(print (vim.inspect (lsp.buf.list_workspace_folders)))
                     bufopts)
     (vim.keymap.set :n :<leader>D lsp.buf.type_definition bufopts)
+    (vim.keymap.set :n :<leader>rn lsp.buf.rename bufopts)
+    (vim.keymap.set :n :<leader>ca lsp.buf.code_action bufopts)
+    (vim.keymap.set :n :gr lsp.buf.references bufopts)
     (vim.keymap.set :n :<leader>lf #(lsp.buf.format {:async true}) bufopts)))
 
 (fn on-attach-do [...]
