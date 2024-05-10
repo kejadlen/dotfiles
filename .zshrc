@@ -124,12 +124,6 @@ bindkey " " magic-space
 if (( $+commands[fzf] )); then
   z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh}
 
-  # Not sure how to do key sequences w/`z4h bindkey`
-  bindkey '^gg' fzf-git-branches-widget
-
-  # ^gl doesn't work in tmux, but I need reflogs more than remotes probably?
-  bindkey '^gr' fzf-git-lreflogs-widget
-
   # https://github.com/junegunn/fzf/issues/164#issuecomment-581837757
   z4h bindkey fzf-cd-widget ç
 
