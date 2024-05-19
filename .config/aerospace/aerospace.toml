@@ -114,7 +114,7 @@ alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 
-# TODO Try to get ctrl-left/right working here?
+# tried out ctrl-left/right, but it felt laggy
 alt-ctrl-h = 'workspace --wrap-around prev'
 alt-ctrl-l = 'workspace --wrap-around next'
 
@@ -159,6 +159,10 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'UniFi Protect'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
 run = 'layout floating'
 
 [workspace-to-monitor-force-assignment]
