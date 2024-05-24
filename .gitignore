@@ -4,6 +4,7 @@ private
 *.private
 
 .config/*
+!.config/aerospace
 !.config/alacritty
 !.config/bat
 !.config/direnv
@@ -16,6 +17,7 @@ private
 !.config/pip
 !.config/starship.toml
 !.config/tridactyl
+!.config/wezterm
 !.config/yabai
 
 .local/*
