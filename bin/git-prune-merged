@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+# cd "$(dirname "$0")"
+
+main() {
+  # https://stackoverflow.com/a/6127884
+  git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -d
+}
+
+main "$@"
+
+# vim: ft=sh
+
