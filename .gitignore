@@ -15,6 +15,7 @@ private
 !.config/nvim
 !.config/neovide
 !.config/pip
+!.config/sketchybar
 !.config/starship.toml
 !.config/tridactyl
 !.config/wezterm
