@@ -26,26 +26,26 @@ default=(
   label.font="SauceCodePro Nerd Font:Regular:14.0"
   icon.color=0xffffffff
   label.color=0xffffffff
-  icon.padding_left=4
-  icon.padding_right=4
-  label.padding_left=4
-  label.padding_right=4
+  icon.padding_left=3
+  icon.padding_right=3
+  label.padding_left=3
+  label.padding_right=3
 )
 sketchybar --default "${default[@]}"
 
 ### Aerospace
 
 sketchybar --add event aerospace_workspace_change
-sketchybar --add item focused_workspace left \
-           --subscribe focused_workspace aerospace_workspace_change \
-           --set focused_workspace \
-           background.color=0x44ffffff \
-           background.corner_radius=5 \
-           background.height=20 \
-           background.drawing=off \
-           icon.drawing=off \
-           label="$(aerospace list-workspaces --focused)" \
-           script="$CONFIG_DIR/plugins/aerospace.sh"
+sketchybar --add item aerospace left \
+           --subscribe aerospace aerospace_workspace_change \
+           --set aerospace \
+                 background.color=0x44ffffff \
+                 background.corner_radius=5 \
+                 background.height=20 \
+                 background.drawing=off \
+                 icon.drawing=off \
+                 label="$(aerospace list-workspaces --focused)" \
+                 script="$CONFIG_DIR/plugins/aerospace.sh"
 
 ##### Adding Left Items #####
 # We add some regular items to the left side of the bar, where
@@ -71,15 +71,22 @@ sketchybar --add item datetime right \
            --add item wifi right \
            --subscribe wifi wifi_change \
            --set wifi \
-           label.drawing=off \
-           update_freq=30 \
-           script="$PLUGIN_DIR/network.sh" \
+                 label.drawing=off \
+                 update_freq=30 \
+                 script="$PLUGIN_DIR/wifi.sh" \
            --add item volume right \
-           --set volume script="$PLUGIN_DIR/volume.sh" \
+           --set volume \
+                 label.drawing=off \
+                 click_script="sketchybar -m --set \$NAME label.drawing=toggle" \
+                 script="$PLUGIN_DIR/volume.sh" \
            --subscribe volume volume_change \
            --add item battery right \
-           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
-           --subscribe battery system_woke power_source_change \
+           --set battery \
+                 label.drawing=off \
+                 update_freq=120 \
+                 click_script="sketchybar -m --set \$NAME label.drawing=toggle" \
+                 script="$PLUGIN_DIR/battery.sh" \
+           --subscribe battery system_woke power_source_change
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update
