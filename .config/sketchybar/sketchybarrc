@@ -12,7 +12,7 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top height=40 blur_radius=30 color=0xff1c2023
+sketchybar --bar position=top height=40 blur_radius=30 color=0x00000000
 
 ##### Changing Defaults #####
 # We now change some default values, which are applied to all further items.
@@ -22,12 +22,14 @@ sketchybar --bar position=top height=40 blur_radius=30 color=0xff1c2023
 default=(
   padding_left=5
   padding_right=5
-  icon.font="SauceCodePro Nerd Font:Regular:16.0"
-  label.font="SauceCodePro Nerd Font:Regular:14.0"
+
   icon.color=0xffffffff
-  label.color=0xffffffff
+  icon.font="SauceCodePro Nerd Font:Regular:16.0"
   icon.padding_left=3
   icon.padding_right=3
+
+  label.color=0xffffffff
+  label.font="SauceCodePro Nerd Font:Regular:14.0"
   label.padding_left=3
   label.padding_right=3
 )
@@ -39,10 +41,6 @@ sketchybar --add event aerospace_workspace_change
 sketchybar --add item aerospace left \
            --subscribe aerospace aerospace_workspace_change \
            --set aerospace \
-                 background.color=0x44ffffff \
-                 background.corner_radius=5 \
-                 background.height=20 \
-                 background.drawing=off \
                  icon.drawing=off \
                  label="$(aerospace list-workspaces --focused)" \
                  script="$CONFIG_DIR/plugins/aerospace.sh"
