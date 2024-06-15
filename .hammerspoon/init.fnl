@@ -1,21 +1,12 @@
 ;; fennel-ls doesn't support arbitrary allowed globals, so
 ;; unwrap `hs` here to localize it to just one place
-(local {: application
-        : canvas
-        : dialog
-        : eventtap
-        : execute
+(local {: eventtap
         : fs
         : hotkey
-        : ipc
-        : inspect
         : loadSpoon
         : logger
         : notify
-        : osascript
         : pasteboard
-        : screen
-        : uielement
         : urlevent
         : window} hs)
 
@@ -25,8 +16,13 @@
 (local {: mash : smash : modal-bind} (require :hotkey))
 (local {: chomp : paste : replace-selection : run} (require :utils))
 
+;;; quitter
+
+(let [{: start} (require :quitter-v2)]
+  (start))
+
 ;; debugging
-; (hotkey.bind mash "d" #(dialog.blockAlert "message" "text" "one" "two"))
+; (hotkey.bind mash "d" #(hs.notify.show (: (hs.window.frontmostWindow) :title) "" ""))
 
 ;; ⌘⌥V - defeat paste blocking
 (hotkey.bind [:cmd :alt] :v #(eventtap.keyStrokes (pasteboard.getContents)))
@@ -69,12 +65,6 @@
 ;   ;; hold onto watcher as a global so it doesn't get GC'ed
 ;   (set _G.per-app-watcher (watcher:start)))
 
-;;; Elgato Key Light Air
-
-;; Run `package.loaded["key-light-air"]["find-hostname"]()`
-;; to find the hostname of the Key Light Air
-(require :key-light-air)
-
 ;;; Spoons
 
 (loadSpoon :SpoonInstall)
@@ -112,7 +102,11 @@
                     ["^https://(.*%.?)goodluckbread.com/?" handlers.safari]
                     ["^https://community.glowforge.com/?" handlers.arc]
                     ["^https://accounts.google.com/?" handlers.arc]
-                    ["^https://(.*%.?)fidelityinvestments.com/?" handlers.safari]]
+                    ["^https://(.*%.?)fidelityinvestments.com/?"
+                     handlers.safari]
+                    ["^https://mychartwa.providence.org/?"
+                     handlers.firefox-dev]
+                    ["^https://www.bankofamerica.com/?" handlers.safari]]
       url-redir-decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]]]
