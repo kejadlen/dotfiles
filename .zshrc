@@ -51,8 +51,10 @@ zstyle ':z4h:term-title:ssh' preexec '%n@'${${${Z4H_SSH##*:}//\%/%%}:-%m}': ${1/
 zstyle ':z4h:term-title:ssh' precmd  '%n@'${${${Z4H_SSH##*:}//\%/%%}:-%m}': %~'
 
 # https://github.com/romkatv/zsh4humans/issues/53#issuecomment-706493865
-zstyle ':zle:up-line-or-beginning-search'   leave-cursor false
-zstyle ':zle:down-line-or-beginning-search' leave-cursor false
+zstyle ':zle:up-line-or-beginning-search'   leave-cursor true
+zstyle ':zle:down-line-or-beginning-search' leave-cursor true
+
+zstyle ':z4h:*' fzf-flags --color=hl:7,hl+:7
 
 # Send these files over to the remote host when connecting over SSH to the
 # enabled hosts.
@@ -114,10 +116,15 @@ z4h bindkey undo Ctrl+/   Shift+Tab  # undo the last command line change
 # z4h bindkey z4h-cd-up      Shift+Up     # cd into the parent directory
 # z4h bindkey z4h-cd-down    Shift+Down   # cd into a child directory
 
+# history
 z4h bindkey z4h-up-prefix-local Ctrl+P
 z4h bindkey z4h-down-prefix-local Ctrl+N
 z4h bindkey z4h-up-prefix-global Option+P
 z4h bindkey z4h-down-prefix-global Option+N
+
+# navigation
+z4h bindkey z4h-forward-zword Ctrl+F
+z4h bindkey z4h-backward-zword Ctrl+B # conflicts w/tmux prefix, find a better alternative?
 
 z4h bindkey magic-space Space
 
