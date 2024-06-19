@@ -107,19 +107,19 @@ z4h source ~/.dotfiles/src/fzf-git.sh/fzf-git.sh
 
 # Define key bindings.
 z4h bindkey undo Ctrl+/   Shift+Tab  # undo the last command line change
-z4h bindkey redo Option+/            # redo the last undone command line change
+# z4h bindkey redo Option+/            # redo the last undone command line change
 
-z4h bindkey z4h-cd-back    Shift+Left   # cd into the previous directory
-z4h bindkey z4h-cd-forward Shift+Right  # cd into the next directory
-z4h bindkey z4h-cd-up      Shift+Up     # cd into the parent directory
-z4h bindkey z4h-cd-down    Shift+Down   # cd into a child directory
+# z4h bindkey z4h-cd-back    Shift+Left   # cd into the previous directory
+# z4h bindkey z4h-cd-forward Shift+Right  # cd into the next directory
+# z4h bindkey z4h-cd-up      Shift+Up     # cd into the parent directory
+# z4h bindkey z4h-cd-down    Shift+Down   # cd into a child directory
 
-# Both using `z4h bindkey` instead of just `bindkey` and `^` instead of `\e`
-# results in the cursor staying at the beginning of the command.
-bindkey "\ep" history-beginning-search-backward
-bindkey "\en" history-beginning-search-forward
+z4h bindkey z4h-up-prefix-local Ctrl+P
+z4h bindkey z4h-down-prefix-local Ctrl+N
+z4h bindkey z4h-up-prefix-global Option+P
+z4h bindkey z4h-down-prefix-global Option+N
 
-bindkey " " magic-space
+z4h bindkey magic-space Space
 
 if (( $+commands[fzf] )); then
   z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh}
