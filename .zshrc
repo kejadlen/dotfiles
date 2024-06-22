@@ -54,6 +54,7 @@ zstyle ':z4h:term-title:ssh' precmd  '%n@'${${${Z4H_SSH##*:}//\%/%%}:-%m}': %~'
 zstyle ':zle:up-line-or-beginning-search'   leave-cursor true
 zstyle ':zle:down-line-or-beginning-search' leave-cursor true
 
+# The default completion color is an obnoxiously loud pink, so make it whiter
 zstyle ':z4h:*' fzf-flags --color=hl:7,hl+:7
 
 # Send these files over to the remote host when connecting over SSH to the
