@@ -165,7 +165,3 @@
 	path = .local/share/nvim/site/pack/alpha/start/dispatch
 	url = https://github.com/tpope/vim-dispatch.git
 	branch = master
-[submodule "hardmode"]
-	path = .local/share/nvim/site/pack/alpha/start/hardmode
-	url = https://github.com/dusans/vim-hardmode.git
-	branch = master
