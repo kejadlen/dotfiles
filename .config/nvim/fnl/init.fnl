@@ -218,4 +218,3 @@
 ;; Load all of the helptags now, after plugins have been loaded.
 ;; All messages and errors will be ignored.
 (vim.api.nvim_command "silent! helptags ALL")
-
