@@ -28,7 +28,7 @@
 (hotkey.bind [:cmd :alt] :v #(eventtap.keyStrokes (pasteboard.getContents)))
 
 ;; ⌘⌥⌃E - edit selected text in neovide, inspired by quickcursor (hence the temporary filenme)
-(let [editor "/opt/homebrew/bin/neovide --nofork"
+(let [editor "/opt/homebrew/bin/neovide --no-fork"
       cb (fn [text]
            (let [home (os.getenv :HOME)
                  date (chomp (run "date -Iseconds -u"))
