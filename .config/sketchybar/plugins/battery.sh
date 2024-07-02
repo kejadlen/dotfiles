@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 PERCENTAGE="$(pmset -g batt | grep -Eo "\d+%" | cut -d% -f1)"
 CHARGING="$(pmset -g batt | grep 'AC Power')"
@@ -23,6 +23,9 @@ if [[ "$CHARGING" != "" ]]; then
   ICON=􀢋
 fi
 
-# The item invoking this script (name $NAME) will get its icon and label
-# updated with the current battery status
 sketchybar --set "$NAME" icon="$ICON" label="$PERCENTAGE%"
+
+# TDOO Move into the above sketchybar command
+if (( PERCENTAGE < 20 )); then
+  sketchybar --set label.drawing=on
+fi

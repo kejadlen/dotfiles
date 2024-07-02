@@ -65,6 +65,7 @@ sketchybar --add item front_app left \
 # https://felixkratz.github.io/SketchyBar/config/events
 
 sketchybar --add item datetime right \
+           --subscribe datetime system_woke \
            --set datetime update_freq=30 icon=􀉉 script="$PLUGIN_DIR/datetime.sh" \
            --add item wifi right \
            --subscribe wifi wifi_change \
