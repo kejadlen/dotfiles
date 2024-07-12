@@ -1,0 +1,6 @@
+# otherwise .github is ignored
+--hidden
+
+# ignore .git, now that we're searching hidden files/directories
+--glob
+!.git/*
