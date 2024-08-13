@@ -93,8 +93,8 @@
 [submodule "hotpot"]
 	path = .local/share/nvim/site/pack/alpha/start/hotpot
 	url = https://github.com/rktjmp/hotpot.nvim.git
-	branch = master
 	shallow = true
+	branch = main
 [submodule "fennel"]
 	path = .local/share/nvim/site/pack/alpha/start/fennel
 	url = https://github.com/jaawerth/fennel.vim.git
