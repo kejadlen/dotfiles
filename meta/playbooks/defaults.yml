@@ -21,6 +21,12 @@
           key: NSDisableAutomaticTermination
           type: bool
           value: true
+        - # disable window opening animations
+          # https://nikitabobko.github.io/AeroSpace/goodness#disable-open-animations
+          domain: -g
+          key: NSAutomaticWindowAnimationsEnabled
+          type: bool
+          value: false
         - # disable font smoothing
           key: AppleFontSmoothing
           type: int
