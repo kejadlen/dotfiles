@@ -21,6 +21,9 @@ private
 !.config/wezterm
 !.config/yabai
 
+.docker/*
+!.docker/config.json
+
 .local/*
 !.local/share/nvim/site/pack/alpha/start
 
