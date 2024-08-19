@@ -172,6 +172,34 @@ run = 'layout floating'
 if.app-id = 'com.1password.1password'
 run = 'layout floating'
 
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefoxdeveloperedition'
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'com.github.wez.wezterm'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari.WebApp.7265E5D5-F861-4F92-B368-7C3A64057CAB' # Akkoma
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari.WebApp.B0446EE7-BE08-4B3B-8077-208D39B89CD3' # Miniflux
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.freron.MailMate'
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = 'move-node-to-workspace 5'
+
 [workspace-to-monitor-force-assignment]
 1 = 'Retina'
 2 = 'LG'
