@@ -120,11 +120,6 @@
 	url = https://github.com/kejadlen/alfred-gemoji.git
 	branch = main
 	shallow = true
-[submodule "bqn"]
-	path = src/bqn
-	url = https://github.com/mlochbaum/BQN.git
-	branch = master
-	shallow = true
 [submodule "direnv.vim"]
 	path = .local/share/nvim/site/pack/alpha/start/direnv
 	url = https://github.com/direnv/direnv.vim.git
