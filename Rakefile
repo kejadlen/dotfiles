@@ -17,7 +17,8 @@ namespace :sync do
 
   desc "Sync submodules"
   task :submodules do
-    sh "git submodule update --init --recursive --remote"
+    sh "git submodule sync"
+    sh "git submodule foreach git pull"
   end
 
   desc "Sync puzzles from ~/Downloads"
