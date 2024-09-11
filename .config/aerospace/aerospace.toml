@@ -200,6 +200,18 @@ run = 'move-node-to-workspace 5'
 if.app-id = 'md.obsidian'
 run = 'move-node-to-workspace 5'
 
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari.WebApp.5DDD6FC6-DC16-4158-BE9C-B827212E01FC' # Work Slack
+run = 'move-node-to-workspace 5'
+
 [workspace-to-monitor-force-assignment]
 1 = 'Retina'
 2 = 'LG'
