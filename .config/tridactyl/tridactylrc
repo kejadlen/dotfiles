@@ -30,6 +30,7 @@ bind j scrollline 3
 bind k scrollline -3
 bind <C-n> tabnext
 bind <C-p> tabprev
+bind gR reader --tab
 
 " ignore modes
 autocmd DocStart nytimes.com/crosswords mode ignore
@@ -46,7 +47,7 @@ autocontain notion\.so work
 " github
 " https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
 unbindurl ^https://github.com/ s " focus the search bar
-" unbindurl ^https://github.com/ t " activate the file finder
+unbindurl ^https://github.com/ t " activate the file finder
 
 " youtube
 unbindurl ^https://youtube.com/ j " back 10s
