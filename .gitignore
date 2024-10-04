@@ -20,6 +20,7 @@ private
 !.config/tridactyl
 !.config/wezterm
 !.config/yabai
+!.config/zsh
 
 .docker/*
 !.docker/config.json
