@@ -27,6 +27,8 @@
 	diff = true
 [column]
 	ui = auto
+[advice]
+	detachedHead = false
 
 [core]
 	autocrlf = false
@@ -66,7 +68,7 @@
 	updateRefs = true
 [interactive]
 	singlekey = true
-	diffFilter = delta --color-only --features=interactive
+	; diffFilter = delta --color-only --features=interactive
 [submodule]
 	fetchJobs = 4
 	recurse = true
