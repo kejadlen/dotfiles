@@ -3,7 +3,7 @@
 ;; .envrc:
 ;;   use vim
 ;;
-;; $ rake init:local-nvim
+;; $ rake init:local-nvim[DIR]
 
 (local lspconfig (require :lspconfig))
 (local {: lsp} vim)
@@ -35,18 +35,8 @@
   (let [bufopts {:noremap true :silent true :buffer bufnr}]
     (vim.keymap.set :n :gD lsp.buf.declaration bufopts)
     (vim.keymap.set :n :gd lsp.buf.definition bufopts)
-    (vim.keymap.set :n :K lsp.buf.hover bufopts)
     (vim.keymap.set :n :gi lsp.buf.implementation bufopts)
-    (vim.keymap.set :n :<C-k> lsp.buf.signature_help bufopts)
-    (vim.keymap.set :n :<leader>wa lsp.buf.add_workspace_folder bufopts)
-    (vim.keymap.set :n :<leader>wr lsp.buf.remove_workspace_folder bufopts)
-    (vim.keymap.set :n :<leader>wl
-                    #(print (vim.inspect (lsp.buf.list_workspace_folders)))
-                    bufopts)
     (vim.keymap.set :n :<leader>D lsp.buf.type_definition bufopts)
-    (vim.keymap.set :n :<leader>rn lsp.buf.rename bufopts)
-    (vim.keymap.set :n :<leader>ca lsp.buf.code_action bufopts)
-    (vim.keymap.set :n :gr lsp.buf.references bufopts)
     (vim.keymap.set :n :<leader>lf #(lsp.buf.format {:async true}) bufopts)))
 
 (fn on-attach-do [...]
@@ -66,8 +56,10 @@
   (let [{: setup} (. lspconfig lsp)]
     (setup (or config {:on_attach on-attach}))))
 
+;; efm-langserver things
 (local fmt #{:formatCommand $1 :formatStdin true})
 (local lint #{:lintCommand $1 :lintFormats $2 :lintStdin true})
+
 (local fennel-lint
        "fennel --globals vim,hs,spoon --raw-errors $(realpath --relative-to . ${INPUT}) 2>&1")
 
@@ -80,8 +72,12 @@
 
 (local prettier (fmt "prettier --stdin-filepath ${INPUT}"))
 (local javascript [eslint prettier])
-
 (local yamlfmt (fmt "yamlfmt -in"))
+(local shellcheck {:lintCommand "shellcheck -f gcc -x"
+                   :lintSource :shellcheck
+                   :lintFormats ["%f:%l:%c: %trror: %m"
+                                 "%f:%l:%c: %tarning: %m"
+                                 "%f:%l:%c: %tote: %m"]})
 
 (setup-lsp :efm {:on_attach on-attach
                  :init_options {:documentFormatting true
@@ -91,12 +87,14 @@
                                 :completion true}
                  :settings {:languages {: fennel
                                         : javascript
+                                        :sh [shellcheck]
                                         :typescript javascript
                                         :typescriptreact javascript
                                         :vue [prettier]
                                         :yaml [yamlfmt]}}
                  :filetypes [:fennel
                              :javascript
+                             :sh
                              :typescript
                              :typescriptreact
                              :vue
@@ -108,7 +106,9 @@
 (setup-lsp :pyright
            {:on_attach on-attach
             :settings {:python {:analysis {:autoImportCompletions true}}}})
-(setup-lsp :ruff_lsp)
+
+(setup-lsp :ruff)
+(setup-lsp :ruby_lsp)
 (setup-lsp :rust_analyzer
            {:on_attach on-attach
             :cmd [:rustup :run :stable :rust-analyzer]
