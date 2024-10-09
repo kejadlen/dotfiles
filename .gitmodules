@@ -80,11 +80,6 @@
 	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
 	branch = master
 	shallow = true
-[submodule "navic"]
-	path = .local/share/nvim/site/pack/alpha/start/navic
-	url = https://github.com/SmiteshP/nvim-navic.git
-	branch = master
-	shallow = true
 [submodule "vue"]
 	path = .local/share/nvim/site/pack/alpha/start/vue
 	url = https://github.com/posva/vim-vue.git

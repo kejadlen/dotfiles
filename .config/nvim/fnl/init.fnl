@@ -124,12 +124,6 @@
     (tset palette f :middle [[:NONE :NONE :NONE :NONE]]))
   (tset vim.g palette-key palette))
 
-;;; navic
-
-;; TODO Enable this when 0.8 is released
-;; TODO Use fennel for this?
-; (set vim.o.winbar "%{%v:lua.require'nvim-navic'.get_location()%}")
-
 ;;; netrw
 
 ;; https://github.com/tpope/vim-vinegar/issues/13
