@@ -47,7 +47,7 @@
 ;; highlight
 (set vim.o.hlsearch true)
 (vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
-(let [{: nvim_command : nvim_create_autocmd : nvim_create_augroup} vim.api
+(let [{: nvim_create_autocmd : nvim_create_augroup} vim.api
       au-group (nvim_create_augroup :nvim-hl-on-yank {})
       cb #(vim.highlight.on_yank {:higroup :Search :timeout 100})]
   (nvim_create_autocmd :TextYankPost {:callback cb :group au-group}))
@@ -92,14 +92,6 @@
 
 (set vim.g.do_filetype_lua true)
 (vim.filetype.add {:extension {:ua :uiua}})
-
-;;; ftplugins in fennel
-
-;; https://github.com/rktjmp/hotpot.nvim/discussions/41#discussioncomment-3050564
-(let [{: nvim_create_autocmd : nvim_create_augroup} vim.api
-      au-group (nvim_create_augroup :hotpot-ft {})
-      cb #(pcall require (.. :ftplugin. (vim.fn.expand :<amatch>)))]
-  (nvim_create_autocmd :FileType {:callback cb :group au-group}))
 
 (require :fzf)
 (require :lsp)

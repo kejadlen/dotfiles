@@ -6,7 +6,7 @@
 ;; $ rake init:local-nvim[DIR]
 
 (local lspconfig (require :lspconfig))
-(local {: iter : lsp} vim)
+(local {:api {:nvim_create_autocmd nvim-create-autocmd} : iter : lsp} vim)
 
 ; (lsp.set_log_level :debug)
 
@@ -17,20 +17,35 @@
         (lsp.with hover {:border :rounded})))
 
 ;; set up key mappings
-(let [{: nvim_create_autocmd} vim.api
+(let [{: keymap} vim
       opts {:noremap true :silent true}
       callback (fn []
-                 (vim.keymap.set :n :<leader>e vim.diagnostic.open_float opts)
-                 (vim.keymap.set :n :<leader>q vim.diagnostic.setloclist opts)
+                 (keymap.set :n :<leader>e vim.diagnostic.open_float opts)
+                 (keymap.set :n :<leader>q vim.diagnostic.setloclist opts)
                  ;; for back-compat - remove once muscle memory has been remapped gd to CTRL+]
-                 (vim.keymap.set :n :gd lsp.buf.definition opts)
+                 (keymap.set :n :gd lsp.buf.definition opts)
                  ;; switch out formatting a single line for formatting the whole file instead
-                 (vim.keymap.set :n :gqq #(lsp.buf.format {:async true}) opts))]
-  (nvim_create_autocmd :LspAttach {: callback}))
+                 (keymap.set :n :gqq #(lsp.buf.format {:async true}) opts))]
+  (nvim-create-autocmd :LspAttach {: callback}))
 
-(lspconfig.pyright.setup {})
+;;; basic lsps
+
+(lspconfig.ansiblels.setup {})
+(lspconfig.fennel_ls.setup {:settings {:fennel-ls {:extra-globals "hs spoon vim"}}})
+(lspconfig.ruff.setup {})
 (lspconfig.terraformls.setup {})
-(lspconfig.yamlls.setup {:settings {:yaml {:schemas {"https://json.schemastore.org/github-workflow.json" :/.github/workflows/*}}}})
+
+;;; pyright
+
+(lspconfig.pyright.setup {:autostart false})
+(nvim-create-autocmd :FileType
+                     {:pattern :python
+                      :callback #(if (= (vim.fn.executable :pyright) 1)
+                                     (vim.cmd :LspStart))})
+
+(let [{: setup} lspconfig.yamlls
+      schemas {"https://json.schemastore.org/github-workflow.json" :/.github/workflows/*}]
+  (setup {:settings {:yaml {: schemas}}}))
 
 ;;; efm-langserver
 
@@ -44,34 +59,21 @@
                                "$(realpath --relative-to . ${INPUT})"
                                :2>&1])
                         (: :join " ")) ["%f:%l: %m"])]
+      js []
       yaml [(fmt "yamlfmt -in")]]
   (lspconfig.efm.setup {:init_options {:documentFormatting true
                                        :hover true
                                        :documentSymbol true
                                        :codeAction true
                                        :completion true}
-                        :settings {:languages {: fennel : yaml}}
+                        :settings {:languages {: fennel
+                                               : js
+                                               :typescript js
+                                               :typescriptreact js
+                                               : yaml}
+                                   ;; since otherwise eslint goes haywire
+                                   :lintDebounce 1000000000}
                         :filetypes [:fennel :yaml]}))
-
-;                    :settings {:languages {: fennel
-;                                           : js
-;                                           :typescript js
-;                                           :typescriptreact js
-;                                           :vue [(fmt "prettier --stdin-filepath ${INPUT}")]
-;                                           :yaml [(fmt "yamlfmt -in")]}
-;                               :lintDebounce 1000000000}
-;                    :filetypes [:fennel
-;                                :javascript
-;                                :typescript
-;                                :typescriptreact
-;                                :vue
-;                                :yaml]}))
-
-; (fn on-attach [_client bufnr])
-
-;   (let [bufopts {:noremap true :silent true :buffer bufnr}]
-;     (vim.keymap.set :n :gd lsp.buf.definition bufopts) ; here for back-compat - remove once muscle memory has been remapped to CTRL+]
-;     (vim.keymap.set :n :gqq #(lsp.buf.format {:async true}) bufopts)))
 
 ; (fn on-attach-do [...]
 ;   (let [fns [...]] ; https://benaiah.me/posts/everything-you-didnt-want-to-know-about-lua-multivals/
@@ -94,13 +96,6 @@
 ;   (let [{: setup} (. lspconfig lsp)]
 ;     (setup (or config {:on_attach on-attach}))))
 ;
-; ;; efm-langserver things
-; (local fmt #{:formatCommand $1 :formatStdin true})
-; (local lint #{:lintCommand $1 :lintFormats $2 :lintStdin true})
-;
-; (local fennel-lint
-;        "fennel --globals vim,hs,spoon --raw-errors $(realpath --relative-to . ${INPUT}) 2>&1")
-;
 ; (local eslint
 ;        {:lintCommand "eslint -f visualstudio --stdin --stdin-filename ${INPUT}"
 ;         :lintIgnoreExitCode true
@@ -109,40 +104,8 @@
 ;
 ; (local eslintd-fmt
 ;        (fmt "eslint_d --stdin --fix-to-stdout --stdin-filename=${INPUT}"))
-;
-; ;; setup efm
-; (let [fennel [(fmt "fnlfmt /dev/stdin") (lint fennel-lint ["%f:%l: %m"])]
-;       js [eslint eslintd-fmt]]
-;   (setup-lsp :efm {:on_attach (on-attach-do enable-fmt)
-;                    :init_options {:documentFormatting true
-;                                   :hover true
-;                                   :documentSymbol true
-;                                   :codeAction true
-;                                   :completion true}
-;                    :settings {:languages {: fennel
-;                                           : js
-;                                           :typescript js
-;                                           :typescriptreact js
-;                                           :vue [(fmt "prettier --stdin-filepath ${INPUT}")]
-;                                           :yaml [(fmt "yamlfmt -in")]}
-;                               :lintDebounce 1000000000}
-;                    :filetypes [:fennel
-;                                :javascript
-;                                :typescript
-;                                :typescriptreact
-;                                :vue
-;                                :yaml]}))
-;
-; (setup-lsp :ansiblels)
-; (setup-lsp :elmls)
-; (setup-lsp :fennel_ls {:settings {:fennel-ls {:extra-globals "hs spoon vim"}}})
-;
-; (setup-lsp :pyright
-;            {:on_attach on-attach
-;             :settings {:python {:analysis {:autoImportCompletions true}}}})
-;
+
 ; (setup-lsp :ruby_lsp)
-; (setup-lsp :ruff {:on_attach (on-attach-do enable-fmt)})
 ;
 ; (setup-lsp :rust_analyzer
 ;            {:on_attach on-attach
@@ -175,4 +138,4 @@
 ;   (let []
 ;     (setup-lsp :ruby_ls {:on_attach (on-attach-do request-diagnostics)})))
 
-{: setup-lsp}
+; {: setup-lsp}
