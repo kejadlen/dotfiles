@@ -1,4 +1,4 @@
-(vim.cmd "colorscheme paramount")
+(vim.cmd.colorscheme :paramount)
 
 (set vim.o.cmdheight 0)
 
@@ -90,7 +90,6 @@
 
 ;;; filetype
 
-(set vim.g.do_filetype_lua true)
 (vim.filetype.add {:extension {:ua :uiua}})
 
 (require :fzf)
@@ -183,8 +182,7 @@
 (set vim.g.neovide_cursor_animation_length 0)
 
 ;;; fidget
-(let [{: setup} (require :fidget)]
-  (setup))
+(let [{: setup} (require :fidget)] (setup))
 
 ;; dirvish
 
@@ -192,8 +190,7 @@
 
 ;; indent-blankline
 
-(let [{: setup} (require :ibl)]
-  (setup))
+(let [{: setup} (require :ibl)] (setup))
 
 ;;; generate help files
 
