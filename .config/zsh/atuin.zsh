@@ -1,7 +1,7 @@
 ### atuin
 
-export ATUIN_NOBIND=true
-eval "$(atuin init zsh)"
+# export ATUIN_NOBIND=true
+# eval "$(atuin init zsh)"
 
 # Reference: https://github.com/junegunn/fzf/discussions/3099
 fzf-atuin-history-widget() {
