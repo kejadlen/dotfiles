@@ -166,6 +166,18 @@ fi
 # has to go after compinit
 if (( $+commands[zoxide] )); then
   eval "$(zoxide init zsh)"
+
+  # https://junegunn.github.io/fzf/examples/directory-nagivation/#integration-with-fzf
+  # https://junegunn.github.io/fzf/examples/directory-nagivation/#zoxidehttpsgithubcomajeetdsouzazoxide
+  unalias z 2> /dev/null
+  z() {
+    local dir=$(
+      zoxide query --list --score |
+      fzf --height 40% --layout reverse --info inline \
+          --nth 2.. --tac --no-sort --query "$*" \
+          --bind 'enter:become:echo {2..}'
+    ) && cd "$dir"
+  }
 fi
 
 # Define named directories: ~w <=> Windows home directory on WSL.
