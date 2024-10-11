@@ -38,12 +38,15 @@ sketchybar --default "${default[@]}"
 ### Aerospace
 
 sketchybar --add event aerospace_workspace_change
-sketchybar --add item aerospace left \
-           --subscribe aerospace aerospace_workspace_change \
-           --set aerospace \
-                 icon.drawing=off \
-                 label="$(aerospace list-workspaces --focused)" \
-                 script="$CONFIG_DIR/plugins/aerospace.sh"
+for monitor in $(aerospace list-monitors | awk '{print $1}'); do
+  sketchybar --add item aerospace.$monitor left \
+             --subscribe aerospace.$monitor aerospace_workspace_change \
+             --set aerospace.$monitor \
+                   display=$monitor \
+                   icon.drawing=off \
+                   label="$(aerospace list-workspaces --focused)" \
+                   script="$CONFIG_DIR/plugins/aerospace.sh $monitor"
+done
 
 ##### Adding Left Items #####
 # We add some regular items to the left side of the bar, where
