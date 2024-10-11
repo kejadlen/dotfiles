@@ -40,7 +40,7 @@ sketchybar --default "${default[@]}"
 sketchybar --add event aerospace_workspace_change
 for monitor in $(aerospace list-monitors | awk '{print $1}'); do
   # pass in workspaces since it takes a noticeable amount of time to run
-  workspaces=("${(@f)$(aerospace list-workspaces --monitor "$monitor")}")
+  workspaces=($(aerospace list-workspaces --monitor "$monitor"))
   sketchybar --add item aerospace.$monitor left \
              --subscribe aerospace.$monitor aerospace_workspace_change \
              --set aerospace.$monitor \
