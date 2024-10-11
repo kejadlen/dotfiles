@@ -39,13 +39,15 @@ sketchybar --default "${default[@]}"
 
 sketchybar --add event aerospace_workspace_change
 for monitor in $(aerospace list-monitors | awk '{print $1}'); do
+  # pass in workspaces since it takes a noticeable amount of time to run
+  workspaces=("${(@f)$(aerospace list-workspaces --monitor "$monitor")}")
   sketchybar --add item aerospace.$monitor left \
              --subscribe aerospace.$monitor aerospace_workspace_change \
              --set aerospace.$monitor \
                    display=$monitor \
                    icon.drawing=off \
                    label="$(aerospace list-workspaces --focused)" \
-                   script="$CONFIG_DIR/plugins/aerospace.sh $monitor"
+                   script="$CONFIG_DIR/plugins/aerospace.sh $workspaces"
 done
 
 ##### Adding Left Items #####
