@@ -33,9 +33,14 @@
 (lspconfig.ansiblels.setup {})
 (lspconfig.fennel_ls.setup {:settings {:fennel-ls {:extra-globals "hs spoon vim"}}})
 (lspconfig.terraformls.setup {})
+(lspconfig.ts_ls.setup {})
+(let [{: setup} lspconfig.yamlls
+      schemas {"https://json.schemastore.org/github-workflow.json" :/.github/workflows/*}]
+  (setup {:settings {:yaml {: schemas}}}))
 
 ;;; python
 
+;; only enable pyright/ruff if they're there
 (lspconfig.pyright.setup {:autostart false})
 (lspconfig.ruff.setup {:autostart false})
 (nvim-create-autocmd :FileType
@@ -43,10 +48,6 @@
                       :callback #(each [_ lsp (ipairs [:pyright :ruff])]
                                    (if (= (vim.fn.executable lsp) 1)
                                        (vim.cmd :LspStart lsp)))})
-
-(let [{: setup} lspconfig.yamlls
-      schemas {"https://json.schemastore.org/github-workflow.json" :/.github/workflows/*}]
-  (setup {:settings {:yaml {: schemas}}}))
 
 ;;; efm-langserver
 

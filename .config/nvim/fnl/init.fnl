@@ -2,7 +2,8 @@
 
 (set vim.o.cmdheight 0)
 
-(set vim.o.foldlevel 2)
+(set vim.o.foldlevel 1)
+(set vim.o.foldminlines 2)
 (set vim.o.linebreak true)
 (set vim.o.list true)
 (set vim.o.listchars "tab:⇥ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·")
@@ -123,8 +124,7 @@
 
 ;;; treesitter
 (let [{: treesitter} vim
-      configs (require :nvim-treesitter.configs)
-      {: setup} configs]
+      {: setup} (require :nvim-treesitter.configs)]
   (setup {:ensure_installed [:fennel
                              :hcl
                              :lua
@@ -168,7 +168,16 @@
                                            :ib "@block.inner"
                                            :aa "@parameter.outer"
                                            :ia "@parameter.inner"}}}})
-  (treesitter.language.register :yaml :yaml.ansible))
+  (treesitter.language.register :yaml :yaml.ansible)
+  (treesitter.query.set :python :folds "[
+  (function_definition)
+  (class_definition)
+  (block)
+] @fold
+[
+  (import_statement)
+  (import_from_statement)
+]+ @fold"))
 
 (let [tscontext (require :treesitter-context)]
   (tscontext.setup))
