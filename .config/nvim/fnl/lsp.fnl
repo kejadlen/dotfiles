@@ -54,14 +54,19 @@
 (let [fmt #{:formatCommand $1 :formatStdin true}
       lint #{:lintCommand $1 :lintFormats $2 :lintStdin true}
       fennel [(fmt "fnlfmt /dev/stdin")
-              (lint (-> (iter [:fennel
-                               :--globals
-                               "vim,hs,spoon"
-                               :--raw-errors
-                               "$(realpath --relative-to . ${INPUT})"
-                               :2>&1])
-                        (: :join " ")) ["%f:%l: %m"])]
-      js []
+              (lint (let [x (iter [:fennel
+                                   "--globals vim,hs,spoon"
+                                   :--raw-errors
+                                   "$(realpath --relative-to . ${INPUT})"
+                                   :2>&1])]
+                      (x:join " ")) ["%f:%l: %m"])]
+      js [{:formatCommand (let [x (iter ["prettier --stdin --stdin-filepath ${INPUT}"
+                                         "${--range-start:charStart} ${--range-end:charEnd}"
+                                         "${--tab-width:tabWidth} ${--use-tabs:!insertSpaces}"])]
+                            (x:join " "))
+           :formatStdin true
+           :formatCanRange true
+           :rootMarkers [:.prettierrc.json]}]
       yaml [(fmt "yamlfmt -in")]]
   (lspconfig.efm.setup {:init_options {:documentFormatting true
                                        :hover true
@@ -75,7 +80,7 @@
                                                : yaml}
                                    ;; since otherwise eslint goes haywire
                                    :lintDebounce 1000000000}
-                        :filetypes [:fennel :yaml]}))
+                        :filetypes [:fennel :typescriptreact :yaml]}))
 
 ; (fn on-attach-do [...]
 ;   (let [fns [...]] ; https://benaiah.me/posts/everything-you-didnt-want-to-know-about-lua-multivals/
