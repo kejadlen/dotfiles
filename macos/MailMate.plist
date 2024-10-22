@@ -26,7 +26,10 @@
   "r" = "reply:";
   "s" = "toggleFlag:";
   "u" = "undo:";
-  "J" = ( "markAsNotJunk:", "moveToMailbox:" );
+  "J" = {
+    "e" = ( "goToMailbox:", "JUNK", "emptyMailbox:" );
+    "m" = ( "markAsNotJunk:", "moveToMailbox:" );
+  };
 
   "T" = {
     "h" = ( "toggleTag:", "hidden" );
