@@ -3,6 +3,8 @@ local.*
 private
 *.private
 
+.cargo/*
+
 .config/*
 !.config/aerospace
 !.config/alacritty
