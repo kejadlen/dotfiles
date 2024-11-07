@@ -155,6 +155,11 @@ autoload -Uz zmv
 function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
 
+tat() {
+  name=${1:-$(basename $PWD | ruby -e "puts ARGF.read.strip.downcase.gsub(/[^\w]+/, ?-)")}
+  tmux new-session -As $name
+}
+
 # https://docs.brew.sh/Shell-Completion
 if type brew &>/dev/null; then
   FPATH=${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/share/zsh/site-functions:${FPATH}}
@@ -189,7 +194,6 @@ alias clear=z4h-clear-screen-soft-bottom
 (( $+commands[eza] )) && alias ls=eza
 alias git='noglob git' # so that shortcuts like @^ work
 alias rake='noglob rake' # don't match on square brackets
-alias tat='tmux new-session -As `basename $PWD | ruby -e "puts ARGF.read.strip.downcase.gsub(/[^\w]+/, ?-)"`'
 alias tree='eza --tree'
 
 # Add flags to existing aliases.
