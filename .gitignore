@@ -11,6 +11,7 @@ private
 !.config/bat
 !.config/direnv
 !.config/git
+!.config/ghostty
 !.config/irb
 .config/irb/irb_history
 !.config/kitty
