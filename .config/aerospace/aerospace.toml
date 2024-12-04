@@ -185,7 +185,11 @@ if.app-id = 'com.github.wez.wezterm'
 run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
-if.app-id = 'com.apple.Safari.WebApp.7265E5D5-F861-4F92-B368-7C3A64057CAB' # Akkoma
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari.WebApp.F2BA9FC3-D7F2-41FB-A706-764DA721F16E' # Phanpy
 run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
@@ -210,6 +214,10 @@ run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari.WebApp.5DDD6FC6-DC16-4158-BE9C-B827212E01FC' # Work Slack
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari.WebApp.BE387A7E-EE5F-4967-B68C-77BAC8C3D842' # Raindrop
 run = 'move-node-to-workspace 5'
 
 [workspace-to-monitor-force-assignment]
