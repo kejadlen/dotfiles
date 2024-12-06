@@ -155,7 +155,3 @@
 	path = .local/share/nvim/site/pack/alpha/start/dispatch
 	url = https://github.com/tpope/vim-dispatch.git
 	branch = master
-[submodule "peekaboo"]
-	path = .local/share/nvim/site/pack/alpha/start/peekaboo
-	url = https://github.com/junegunn/vim-peekaboo.git
-	branch = master
