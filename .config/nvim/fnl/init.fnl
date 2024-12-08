@@ -201,12 +201,6 @@
 
 (let [{: setup} (require :ibl)] (setup))
 
-;; peekaboo
-
-; there's probably a better way to make this function accessible
-; from lua without putting it in another file to be required...
-(set vim.g.peekaboo_window "lua require('peekaboo')()")
-
 ;;; generate help files
 
 ;; Load all plugins now.
