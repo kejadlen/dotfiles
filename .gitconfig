@@ -51,6 +51,7 @@
 	fix = commit --fixup @
 	ctags = !.git/hooks/ctags
 	lg = log --date=format:'%a %b %e, %Y' --pretty=format:'%C(yellow)%h%C(reset) %s %C(cyan)%cd%C(reset) %C(blue)%an%C(reset) %C(green)%d%C(reset)' --graph ; https://roadrunnertwice.dreamwidth.org/596185.html
+	allbut = "!function fn { git push --force-with-lease origin $(git rev-parse HEAD~${1:-1}):$(git branch --show-current); }; fn"
 [grep]
 	extendRegexp = true
 	lineNumber = true
