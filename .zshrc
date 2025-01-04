@@ -211,7 +211,7 @@ setopt auto_menu  # require an extra TAB press to open the completion menu
 [[ ! -v functions[command_not_found_handler] ]] || unfunction command_not_found_handler
 
 # default to ruby 3.3
-which chruby &>/dev/null && chruby 3.3
+which chruby &>/dev/null && chruby 3.4
 
 for file in ~/.config/zsh/*(N); z4h source $file
 
