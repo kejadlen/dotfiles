@@ -155,3 +155,7 @@
 	path = .local/share/nvim/site/pack/alpha/start/dispatch
 	url = https://github.com/tpope/vim-dispatch.git
 	branch = master
+[submodule "mini.align"]
+	path = .local/share/nvim/site/pack/alpha/start/mini-align
+	url = https://github.com/echasnovski/mini.align.git
+	branch = main
