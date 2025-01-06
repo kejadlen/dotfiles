@@ -1,2 +1,5 @@
 font-family = "Source Code Pro with Numderline"
 font-size = 13
+
+keybind = global:ctrl+opt+cmd+g=toggle_quick_terminal
+keybind = global:ctrl+`=toggle_quick_terminal
