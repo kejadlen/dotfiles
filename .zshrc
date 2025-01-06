@@ -180,12 +180,19 @@ if (( $+commands[zoxide] )); then
   # https://junegunn.github.io/fzf/examples/directory-nagivation/#zoxidehttpsgithubcomajeetdsouzazoxide
   unalias z 2> /dev/null
   z() {
-    local dir=$(
-      zoxide query --list --score |
-      fzf --height 40% --layout reverse --info inline \
-          --nth 2.. --no-sort --query "$*" \
-          --bind 'enter:become:echo {2..}'
-    ) && cd "$dir"
+    # (@f) splits command output into array elements by newlines
+    local results=("${(@f)$(zoxide query --list --score "$*")}")
+
+    if (( ${#results} == 1 )); then
+      cd "$(awk '{print $NF}' <<< ${results[1]})"
+    else
+      local dir=$(
+        print -l $results |
+        fzf --height 40% --layout reverse --info inline \
+            --nth 2.. --no-sort \
+            --bind 'enter:become:echo {2..}'
+      ) && cd "$dir"
+    fi
   }
 fi
 
