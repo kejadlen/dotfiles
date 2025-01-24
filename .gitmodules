@@ -80,11 +80,6 @@
 	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
 	branch = master
 	shallow = true
-[submodule "vue"]
-	path = .local/share/nvim/site/pack/alpha/start/vue
-	url = https://github.com/posva/vim-vue.git
-	branch = master
-	shallow = true
 [submodule "hotpot"]
 	path = .local/share/nvim/site/pack/alpha/start/hotpot
 	url = https://github.com/rktjmp/hotpot.nvim.git
