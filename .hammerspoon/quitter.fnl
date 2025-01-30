@@ -23,12 +23,12 @@
       (t:stop)
       (set (. to-kill bundle-id) nil))))
 
-(fn on-wake [event]
+(fn mark-all-apps [event]
   (when (= event caffeinate.watcher.systemDidWake)
     (each [_ app (ipairs (application.find ""))]
       (mark app))))
 
-(local cw (caffeinate.watcher.new on-wake))
+(local cw (caffeinate.watcher.new mark-all-apps))
 
 (local wf (window.filter.new {:Safari false
                               :Arc false
@@ -41,6 +41,7 @@
 
 (fn start []
   (log.i :starting)
+  (mark-all-apps)
   (cw:start)
   (wf:subscribe {window.filter.windowFocused unmark
                  window.filter.windowUnfocused #(mark ($1:application))}))
