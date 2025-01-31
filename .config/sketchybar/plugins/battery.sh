@@ -12,9 +12,9 @@ case "${PERCENTAGE}" in
   ;;
   [6-8][0-9]) ICON=􀺸
   ;;
-  [3-5][0-9]) ICON=􀺶
+  [2-5][0-9]) ICON=􀺶
   ;;
-  [1-2][0-9]) ICON=􀛩
+  [1][0-9]) ICON=􀛩
   ;;
   *) ICON=􀛪
 esac
@@ -26,6 +26,6 @@ fi
 sketchybar --set "$NAME" icon="$ICON" label="$PERCENTAGE%"
 
 # TDOO Move into the above sketchybar command
-if (( PERCENTAGE < 20 )); then
-  sketchybar --set label.drawing=on
+if (( $PERCENTAGE < 20 )); then
+  sketchybar --set "$NAME" label.drawing=on
 fi
