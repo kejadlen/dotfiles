@@ -1,0 +1,34 @@
+[user]
+name = "Alpha Chen"
+email = "alpha@kejadlen.dev"
+
+[ui]
+diff-editor = ",jj-dirdiff"
+
+[diff.color-words]
+max-inline-alternation = 0
+
+[colors]
+"diff modified" = "blue"
+"diff token" = { underline = false }
+
+[signing]
+backend = "ssh"
+key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCttH8nEfk1uZ2291P4mbCoNcHxnr9iNBlbZckykeZ8"
+backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[git]
+sign-on-push = true
+
+[templates]
+draft_commit_description = '''
+concat(
+  description,
+  surround(
+    "\nJJ: This commit contains the following changes:\n", "",
+    indent("JJ:     ", diff.stat(72)),
+  ),
+  "\nJJ: ignore-rest\n",
+  diff.git(),
+)
+'''

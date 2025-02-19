@@ -154,3 +154,7 @@
 	path = .local/share/nvim/site/pack/alpha/start/mini-align
 	url = https://github.com/echasnovski/mini.align.git
 	branch = main
+[submodule "dirdiff"]
+	path = .local/share/nvim/site/pack/alpha/start/dirdiff
+	url = https://github.com/will133/vim-dirdiff.git
+	branch = master
