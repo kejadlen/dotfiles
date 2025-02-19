@@ -1,0 +1,11 @@
+# model
+# model: ollama_chat/deepseek-r1
+model: sonnet
+architect: true
+editor-model: sonnet
+
+# output
+dark-mode: true
+
+# git
+gitignore: false

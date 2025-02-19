@@ -27,3 +27,6 @@ xcuserdata
 # Python
 .ropeproject
 pyrightconfig.json
+
+# aider
+.aider*
