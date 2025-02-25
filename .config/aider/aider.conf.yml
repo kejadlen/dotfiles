@@ -9,3 +9,4 @@ dark-mode: true
 
 # git
 gitignore: false
+auto-commits: false
