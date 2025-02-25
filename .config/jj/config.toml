@@ -2,8 +2,8 @@
 name = "Alpha Chen"
 email = "alpha@kejadlen.dev"
 
-[ui]
-diff-editor = ",jj-dirdiff"
+[merge-tools.dirdiff]
+program = ",jj-dirdiff"
 
 [diff.color-words]
 max-inline-alternation = 0
