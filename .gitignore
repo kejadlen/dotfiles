@@ -36,12 +36,6 @@ private
 .ssh/*
 !.ssh/config
 
-.vim/.VimballRecord
-.vim/.netrwhist
-.vim/.scratch
-.vim/spell
-.vim/view
-
 .hammerspoon/Spoons/*
 !.hammerspoon/Spoons/SpoonInstall
 
