@@ -1,8 +1,8 @@
 # model
 # model: ollama_chat/deepseek-r1
-model: sonnet
+model: claude-3-7-sonnet-latest
 architect: true
-editor-model: sonnet
+editor-model: claude-3-7-sonnet-latest
 
 # output
 dark-mode: true
