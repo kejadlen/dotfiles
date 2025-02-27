@@ -90,7 +90,9 @@
                      handlers.safari]
                     ["^https://mychartwa.providence.org/?"
                      handlers.firefox-dev]
-                    ["^https://www.bankofamerica.com/?" handlers.safari]]
+                    ["^https://(.*%.?)bankofamerica.com/?" handlers.safari]
+                    ["^https://(.*%.?)betterment.com/?" handlers.safari]
+                    ["^https://(.*%.?)schwab.com/?" handlers.safari]]
       url-redir-decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]]]
