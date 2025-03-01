@@ -4,9 +4,6 @@
 [submodule "src/dark-sky.alfredworkflow"]
 	path = src/pirate-weather.alfredworkflow
 	url = https://github.com/kejadlen/pirate-weather.alfredworkflow.git
-[submodule "src/emoji.alfredworkflow"]
-	path = src/emoji.alfredworkflow
-	url = https://github.com/kejadlen/emoji.alfredworkflow.git
 [submodule "faker.alfredworkflow"]
 	path = src/faker.alfredworkflow
 	url = https://github.com/kejadlen/faker.alfredworkflow.git
