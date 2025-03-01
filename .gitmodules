@@ -102,11 +102,6 @@
 	url = https://github.com/hashivim/vim-terraform.git
 	branch = master
 	shallow = true
-[submodule "alfred-gemoji"]
-	path = src/alfred-gemoji
-	url = https://github.com/kejadlen/alfred-gemoji.git
-	branch = main
-	shallow = true
 [submodule "direnv.vim"]
 	path = .local/share/nvim/site/pack/alpha/start/direnv
 	url = https://github.com/direnv/direnv.vim.git
