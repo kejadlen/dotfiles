@@ -1,5 +1,14 @@
 font-family = "Source Code Pro with Numderline"
 font-size = 13
 
+# https://github.com/ghostty-org/ghostty/discussions/2812
+# doesn't actually seem to work, but not that big a deal since I'm almost
+# always in tmux anyway
+cursor-style = bar
+cursor-style-blink = false
+shell-integration-features = no-cursor
+
 keybind = global:ctrl+opt+cmd+g=toggle_quick_terminal
 keybind = global:ctrl+`=toggle_quick_terminal
+
+keybind = alt+m=text:μ
