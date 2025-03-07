@@ -92,7 +92,7 @@ export FZF_TMUX_OPTS="-p80%,60%"
 export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type d --strip-cwd-prefix --hidden --follow --exclude .git"
-export RIPGREP_CONFIG_PATH=~/.dotfiles/ripgreprc
+export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 
 export RUBY_YJIT_ENABLE=true
 
