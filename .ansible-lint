@@ -1,0 +1,6 @@
+exclude_paths:
+  - .terraform/
+
+skip_list:
+  - name[play]
+  - no-changed-when
