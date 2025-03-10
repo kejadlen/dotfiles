@@ -10,22 +10,16 @@
 
 ; (lsp.set_log_level :debug)
 
-;; rounded borders
-(let [{: hover} lsp.handlers]
-  (set lsp.handlers.textDocument/hover (lsp.with hover {:border :rounded}))
-  (set lsp.handlers.textDocument/signatureHelp
-       (lsp.with hover {:border :rounded})))
-
 ;; set up key mappings
 (let [{: keymap} vim
       opts {:noremap true :silent true}
       callback (fn []
                  (keymap.set :n :<leader>e vim.diagnostic.open_float opts)
                  (keymap.set :n :<leader>q vim.diagnostic.setloclist opts)
-                 ;; for back-compat - remove once muscle memory has been remapped gd to CTRL+]
-                 (keymap.set :n :gd lsp.buf.definition opts)
                  ;; switch out formatting a single line for formatting the whole file instead
                  (keymap.set :n :gqq #(lsp.buf.format {:async true}) opts))]
+  ;; override hover to have rounded corners
+  (keymap.set :n :K #(lsp.buf.hover {:border :rounded}) opts)
   (nvim-create-autocmd :LspAttach {: callback}))
 
 ;;; basic lsps
