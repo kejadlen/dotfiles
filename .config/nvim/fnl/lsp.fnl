@@ -25,9 +25,12 @@
 ;;; basic lsps
 
 (lspconfig.ansiblels.setup {})
-(lspconfig.fennel_ls.setup {:settings {:fennel-ls {:extra-globals "hs spoon vim"}}})
+(lspconfig.fennel_ls.setup {})
+(lspconfig.ruby_lsp.setup {})
+(lspconfig.rust_analyzer.setup {})
 (lspconfig.terraformls.setup {})
 (lspconfig.ts_ls.setup {})
+
 (let [{: setup} lspconfig.yamlls
       schemas {"https://json.schemastore.org/github-workflow.json" :/.github/workflows/*}]
   (setup {:settings {:yaml {: schemas}}}))
