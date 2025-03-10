@@ -20,9 +20,6 @@ backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 [git]
 sign-on-push = true
 
-# so .ssh/config is respected to use ssh keys in 1password
-subprocess = true
-
 [templates]
 draft_commit_description = '''
 concat(
