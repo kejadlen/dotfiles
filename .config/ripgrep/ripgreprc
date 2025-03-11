@@ -1,0 +1,7 @@
+# otherwise .github is ignored
+--hidden
+
+# now that we're searching hidden files/directories, ignore some standard ones
+--glob=!.git/*
+--glob=!.cargo/*
+--glob=!target/*
