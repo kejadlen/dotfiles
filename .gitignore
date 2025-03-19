@@ -20,6 +20,7 @@ private
 !.config/nvim
 !.config/neovide
 !.config/pip
+!.config/ripgrep
 !.config/sketchybar
 !.config/starship.toml
 !.config/tridactyl
