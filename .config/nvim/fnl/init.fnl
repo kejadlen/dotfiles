@@ -1,3 +1,6 @@
+(local {:nvim_create_autocmd create-autocmd
+        :nvim_create_augroup create-augroup} vim.api)
+
 (vim.cmd.colorscheme :paramount)
 
 (set vim.o.cmdheight 0)
@@ -48,10 +51,9 @@
 ;; highlight
 (set vim.o.hlsearch true)
 (vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
-(let [{: nvim_create_autocmd : nvim_create_augroup} vim.api
-      au-group (nvim_create_augroup :nvim-hl-on-yank {})
-      cb #(vim.highlight.on_yank {:higroup :Search :timeout 100})]
-  (nvim_create_autocmd :TextYankPost {:callback cb :group au-group}))
+(let [group (create-augroup :nvim-hl-on-yank {})
+      callback #(vim.highlight.on_yank {:higroup :Search :timeout 100})]
+  (create-autocmd :TextYankPost {: callback : group}))
 
 ;; non-shifted shortcuts for moving the cursor to the start/end of the current line
 (vim.keymap.set :n :H "^")
@@ -63,31 +65,29 @@
 ;; smart tab
 ;; https://vim.fandom.com/wiki/Smart_mapping_for_tab_completion
 (vim.keymap.set :i :<tab>
-                (fn []
-                  (let [line (vim.fn.getline ".")
-                        col (vim.fn.col ".")
-                        line (line:sub 1 (- col 1))
-                        substr (line:match "[^ \t]*$")]
-                    (if (= (substr:len) 0) :<tab> :<c-x><c-o>)))
+                #(let [line (vim.fn.getline ".")
+                       col (vim.fn.col ".")
+                       line (line:sub 1 (- col 1))
+                       substr (line:match "[^ \t]*$")]
+                   (if (= (substr:len) 0) :<tab> :<c-x><c-o>))
                 {:expr true})
 
 ;;; restore cursor location
 
 ;; https://github.com/vim/vim/blob/master/runtime/defaults.vim#L108
-(let [{: nvim_command : nvim_create_autocmd : nvim_create_augroup} vim.api
-      au-group (nvim_create_augroup :nvim-startup {})
-      cb (fn []
-           (when (and (< 0 (vim.fn.line "'\""))
-                      (<= (vim.fn.line "'\"") (vim.fn.line "$"))
-                      (not (string.find vim.bo.filetype :commit)))
-             (nvim_command "normal! g`\"")))]
+(let [{: nvim_command} vim.api
+      group (create-augroup :nvim-startup {})
+      callback #(when (and (< 0 (vim.fn.line "'\""))
+                           (<= (vim.fn.line "'\"") (vim.fn.line "$"))
+                           (not (string.find vim.bo.filetype :commit)))
+                  (nvim_command "normal! g`\""))]
   ;; when restoring the cursor, we want to ignore commit filetypes, so
   ;; we need to manually enable filetype detection to set up those
   ;; autocommands before creating the autocommand to restore the cursor
   ;;
   ;; https://github.com/neovim/neovim/issues/15536#issuecomment-909331778
   (nvim_command "filetype plugin indent on")
-  (nvim_create_autocmd :BufReadPost {:callback cb :group au-group}))
+  (create-autocmd :BufReadPost {: callback : group}))
 
 ;;; filetype
 
@@ -182,8 +182,17 @@
 (let [tscontext (require :treesitter-context)]
   (tscontext.setup))
 
+;; https://neovim.io/doc/user/lsp.html#vim.lsp.foldexpr()
 (set vim.o.foldmethod :expr)
-(set vim.o.foldexpr "nvim_treesitter#foldexpr()")
+;; Default to treesitter folding
+(set vim.o.foldexpr "v:lua.vim.treesitter.foldexpr()")
+;; Prefer LSP folding if client supports it
+(let [callback #(let [client (vim.lsp.get_client_by_id $1.data.client_id)
+                      current-win (vim.api.nvim_get_current_win)]
+                  (when (client:supports_method :textDocument/foldingRange)
+                    (tset (. vim.wo current-win) 0 :foldexpr
+                          "v:lua.vim.lsp.foldexpr()")))]
+  (vim.api.nvim_create_autocmd :LspAttach {: callback}))
 
 ;;; neovide
 
