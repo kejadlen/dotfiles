@@ -40,6 +40,7 @@ backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 sign-on-push = true
 ignore-lfs-files = true
 push-new-bookmarks = true
+private-commits = "description(glob:'private:*')"
 
 [templates]
 draft_commit_description = '''
@@ -69,4 +70,4 @@ add-parent = ["rebase", "-s", "@", "-d", "all:@-", "-d"]
 # https://github.com/jj-vcs/jj/discussions/3549
 [experimental-advance-branches]
 enabled-branches = ["glob:*"]
-disabled-branches = ["main"]
+disabled-branches = ["main", "megamerge"]
