@@ -30,23 +30,21 @@ update_monitor_workspace() {
 
     if [ -n "$workspace" ]; then
         local focused_workspace=$(aerospace list-workspaces --focused 2>/dev/null)
+        local monitor_count=$(aerospace list-monitors | wc -l)
 
-        if [ "$workspace" = "$focused_workspace" ]; then
+        # Only highlight if there are multiple monitors
+        if [ "$monitor_count" -gt 1 ] && [ "$workspace" = "$focused_workspace" ]; then
             # Highlight the focused workspace
             sketchybar --set $item_name \
                 label="$workspace" \
                 background.drawing=on \
-                background.color=0xffcccccc \
-                background.border_color=0xffcccccc \
-                background.corner_radius=6 \
-                background.height=26 \
                 label.padding_left=8 \
                 label.padding_right=8 \
                 padding_left=3 \
                 padding_right=3 \
                 label.color=0xff000000
         else
-            # Normal appearance for non-focused workspaces
+            # Normal appearance for non-focused workspaces or single monitor
             sketchybar --set $item_name \
                 label="$workspace" \
                 background.drawing=off \
