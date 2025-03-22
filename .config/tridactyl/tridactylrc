@@ -47,7 +47,6 @@ set autocontainmode relaxed  " https://github.com/tridactyl/tridactyl/issues/951
 autocontain facebook\.com Social
 autocontain youtube\.com Google
 " autocontain notion\.so Work
-autocontain reddit\.com Social
 
 " github
 " https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
@@ -61,8 +60,11 @@ unbindurl mail.google.com e " archive conversation
 unbindurl mail.google.com s " toggle star/rotate among superstars
 unbindurl mail.google.com ! " report as spam
 unbindurl mail.google.com # " delete
-unbindurl mail.google.com ] " archive conversation and go previous/next
-unbindurl mail.google.com [ " archive conversation and go previous/next
+" archive conversation and go previous/next
+bindurl mail.google.com/mail ] js \
+[...']'].forEach(c => document.dispatchEvent(new KeyboardEvent('keydown',{key: c})))
+bindurl mail.google.com/mail [ js \
+[...'['].forEach(c => document.dispatchEvent(new KeyboardEvent('keydown',{key: c})))
 " navigation
 unbindurl mail.google.com j " older conversation
 unbindurl mail.google.com k " newer conversation
