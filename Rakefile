@@ -44,6 +44,15 @@ namespace :sync do
   end
 end
 
+namespace :utils do
+  desc "Upgrade neovim"
+  task :upgrade_neovim do
+    chdir File.expand_path("~/Library/Caches/Homebrew/neovim--git") do
+      sh "git tag --delete nightly stable"
+    end
+  end
+end
+
 namespace :pave do
   PATHS = %w[
     Downloads/
