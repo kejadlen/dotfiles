@@ -71,7 +71,7 @@ mm-rebase = ["rebase", "--source", "all:roots(main..mm)", "--destination", "main
 mm-add = ["rebase", "--source", "mm", "--destination", "all:mm-", "--destination"]
 mm-rm = ["util", "exec", "--", "bash", "-c", '''
   jj rebase --source mm --destination "all:mm- ~ $1"
-  jj simplify-parents --revisions mm
+  jj simplify-parents --source mm
 ''', "jj-mm-rm"]
 
 # https://github.com/jj-vcs/jj/discussions/3549
