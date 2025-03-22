@@ -65,9 +65,22 @@ diff-editor = "gitpatch"
 
 [aliases]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
-add-parent = ["rebase", "-s", "@", "-d", "all:@-", "-d"]
+mm-rebase = ["rebase", "--source", "all:roots(main..mm)", "--destination", "main"]
+mm-add = ["rebase", "--source", "mm", "--destination", "all:mm-", "--destination"]
+mm-rm = ["util", "exec", "--", "bash", "-c", '''
+  jj rebase --source mm --destination "all:mm- ~ $1"
+  jj simplify-parents --revisions mm
+''', "jj-mm-rm"]
 
 # https://github.com/jj-vcs/jj/discussions/3549
 [experimental-advance-branches]
-enabled-branches = ["glob:*"]
-disabled-branches = ["main", "megamerge"]
+# enabled-branches = ["glob:*"]
+disabled-branches = ["main", "mm"]
+
+[fix.tools.ruff-format]
+command = ["ruff", "format", "--stdin-filename", "$path", "-"]
+patterns = ["glob:'**/*.py'"]
+
+[fix.tools.ruff-check]
+command = ["ruff", "check", "--fix", "--stdin-filename", "$path", "-"]
+patterns = ["glob:'**/*.py'"]
