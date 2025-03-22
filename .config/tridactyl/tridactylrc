@@ -16,6 +16,10 @@ command safari composite get_current_url | shellescape | !s open -a Safari | tab
 bindurl ^https://duckduckgo.com f hint -Jc [data-testid="result-title-a"]
 bindurl ^https://duckduckgo.com F hint -Jbc [data-testid="result-title-a"]
 
+" only hint search results on Kagi
+bindurl ^https://kagi.com f hint -Jc [class*="_0_URL"]
+bindurl ^https://kagi.com F hint -Jbc [class*="_0_URL"]
+
 bindurl ^https://www.instapaper.com/hello2 f hint -Jc button[type="submit"]
 
 " make d take you to the left (I find it much less confusing)
@@ -53,9 +57,11 @@ autocontain youtube\.com Google
 unbindurl github.com s " focus the search bar
 unbindurl github.com t " activate the file finder
 
-" google
+" gmail
 " https://support.google.com/mail/answer/6594?hl=en
+" https://gist.github.com/dradetsky/12b1e1aba4b699240b3e4ff266bdf3c8
 " actions
+unbindurl mail.google.com x " select conversation
 unbindurl mail.google.com e " archive conversation
 unbindurl mail.google.com s " toggle star/rotate among superstars
 unbindurl mail.google.com ! " report as spam
@@ -65,6 +71,9 @@ bindurl mail.google.com/mail ] js \
 [...']'].forEach(c => document.dispatchEvent(new KeyboardEvent('keydown',{key: c})))
 bindurl mail.google.com/mail [ js \
 [...'['].forEach(c => document.dispatchEvent(new KeyboardEvent('keydown',{key: c})))
+" jumping
+bindurl mail.google.com/mail gi js \
+[...'gi'].forEach(c => document.dispatchEvent(new KeyboardEvent('keydown',{key: c})))
 " navigation
 unbindurl mail.google.com j " older conversation
 unbindurl mail.google.com k " newer conversation
