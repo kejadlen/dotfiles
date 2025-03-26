@@ -18,8 +18,6 @@
                  (keymap.set :n :<leader>q vim.diagnostic.setloclist opts)
                  ;; switch out formatting a single line for formatting the whole file instead
                  (keymap.set :n :gqq #(lsp.buf.format {:async true}) opts))]
-  ;; override hover to have rounded corners
-  (keymap.set :n :K #(lsp.buf.hover {:border :rounded}) opts)
   (nvim-create-autocmd :LspAttach {: callback}))
 
 ;;; basic lsps

@@ -17,6 +17,8 @@
 (set vim.o.virtualedit :block)
 (set vim.o.wildmode "longest:full")
 
+(set vim.o.winborder :rounded)
+
 ;; search
 (set vim.o.gdefault true)
 (set vim.o.ignorecase true)
