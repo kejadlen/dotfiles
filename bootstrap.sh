@@ -23,17 +23,19 @@ main() {
     echo "Ansible is already installed."
   fi
 
-  mkdir -p boxen
+  mkdir -p ~/src/boxen
 
   if [ ! -d "$HOME/src/boxen" ]; then
     echo "Cloning boxen repository..."
     mkdir -p "$HOME/src"
     git clone https://git.kejadlen.dev/alpha/boxen.git "$HOME/src/boxen"
   else
-    echo "Boxen repository already exists."
+    echo "Boxen repository already exists. Updating..."
+    cd "$HOME/src/boxen"
+    git pull
   fi
 
-  cd ~/src/boxen
+  cd "$HOME/src/boxen"
   ansible-playbook -l localhost local/main.yml
 }
 
