@@ -9,7 +9,7 @@
         ;;       ^ check here (may not exist)
         ;; but dont do anything if that under runs the first character
         offset (- col (length :lambda) 1)]
-    (match [(< 0 offset) (string.sub line offset offset)]
+    (case [(< 0 offset) (string.sub line offset offset)]
       ;; replace term codes so the expr actually runs backspace, not inserts the string
       [true :\] (vim.api.nvim_replace_termcodes :<bs>λ true false true)
-      [false _] :lambda)))
+      [_ _] :lambda)))

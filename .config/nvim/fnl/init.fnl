@@ -201,16 +201,19 @@
 ;; disable animation
 (set vim.g.neovide_cursor_animation_length 0)
 
+;;; plugins
+
 ;;; fidget
 (let [{: setup} (require :fidget)] (setup))
 
 ;; dirvish
-
 (set vim.g.dirvish_mode ":sort ,^.*[\\/],")
 
 ;; indent-blankline
-
 (let [{: setup} (require :ibl)] (setup))
+
+;; mini.align
+(let [{: setup} (require :mini.align)] (setup))
 
 ;;; generate help files
 
