@@ -1,6 +1,3 @@
-namespace :clean do
-end
-
 namespace :sync do
   desc "Sync David Lanham wallpapers (assumes the unzipped updates are in ~/Downloads)"
   task :dlanham do
