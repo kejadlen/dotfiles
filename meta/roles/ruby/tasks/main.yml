@@ -1,9 +1,0 @@
-- name: install chruby
-  homebrew:
-    name:
-      - chruby
-      - ruby-install
-    state: present
-
-- name: install Ruby
-  command: ruby-install ruby creates=~/.rubies/ruby-*
