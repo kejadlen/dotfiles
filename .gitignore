@@ -16,7 +16,6 @@ private
 !.config/irb
 .config/irb/irb_history
 !.config/jj
-!.config/kitty
 !.config/nvim
 !.config/neovide
 !.config/pip
