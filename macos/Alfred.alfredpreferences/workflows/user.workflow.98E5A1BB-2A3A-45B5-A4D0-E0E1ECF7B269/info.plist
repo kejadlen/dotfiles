@@ -63,12 +63,14 @@
 			<dict>
 				<key>browser</key>
 				<string></string>
+				<key>skipqueryencode</key>
+				<false/>
+				<key>skipvarencode</key>
+				<false/>
 				<key>spaces</key>
 				<string></string>
 				<key>url</key>
-				<string>obsidian://open?vault=kejadlen.dev&amp;file={query}</string>
-				<key>utf8</key>
-				<true/>
+				<string>obsidian://open?vault=notes&amp;file={query}</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.openurl</string>
@@ -137,7 +139,7 @@
 				<string></string>
 				<key>scopes</key>
 				<array>
-					<string>~/Library/Mobile Documents/iCloud~md~obsidian/Documents/kejadlen.dev</string>
+					<string>~/sync/notes</string>
 				</array>
 				<key>sortmode</key>
 				<integer>0</integer>
@@ -163,7 +165,7 @@
 				<key>matchmode</key>
 				<integer>0</integer>
 				<key>matchstring</key>
-				<string>/Users/alpha/Library/Mobile Documents/iCloud~md~obsidian/Documents/kejadlen.dev</string>
+				<string>/Users/alpha/sync/notes/</string>
 				<key>replacestring</key>
 				<string></string>
 			</dict>
@@ -179,12 +181,14 @@
 			<dict>
 				<key>browser</key>
 				<string></string>
+				<key>skipqueryencode</key>
+				<false/>
+				<key>skipvarencode</key>
+				<false/>
 				<key>spaces</key>
 				<string></string>
 				<key>url</key>
-				<string>obsidian://new?vault=kejadlen.dev&amp;name={query}</string>
-				<key>utf8</key>
-				<true/>
+				<string>obsidian://new?vault=notes&amp;name={query}</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.openurl</string>
@@ -222,39 +226,41 @@
 		<key>2E379831-9130-499B-868D-F5F959EEDF16</key>
 		<dict>
 			<key>xpos</key>
-			<integer>255</integer>
+			<real>255</real>
 			<key>ypos</key>
-			<integer>85</integer>
+			<real>85</real>
 		</dict>
 		<key>71CB1F3A-43F0-45C2-8F1C-95C8FC340D19</key>
 		<dict>
 			<key>xpos</key>
-			<integer>385</integer>
+			<real>385</real>
 			<key>ypos</key>
-			<integer>55</integer>
+			<real>55</real>
 		</dict>
 		<key>879AF849-E729-481D-BDE6-DFC87C08FDC6</key>
 		<dict>
 			<key>xpos</key>
-			<integer>45</integer>
+			<real>45</real>
 			<key>ypos</key>
-			<integer>220</integer>
+			<real>220</real>
 		</dict>
 		<key>A58B3682-B80B-472D-8E22-F0DF93CBF89D</key>
 		<dict>
 			<key>xpos</key>
-			<integer>390</integer>
+			<real>390</real>
 			<key>ypos</key>
-			<integer>220</integer>
+			<real>220</real>
 		</dict>
 		<key>F7E2F4D4-E3B6-44A7-BAA6-EA1375F26CD1</key>
 		<dict>
 			<key>xpos</key>
-			<integer>45</integer>
+			<real>45</real>
 			<key>ypos</key>
-			<integer>55</integer>
+			<real>55</real>
 		</dict>
 	</dict>
+	<key>userconfigurationconfig</key>
+	<array/>
 	<key>version</key>
 	<string></string>
 	<key>webaddress</key>
