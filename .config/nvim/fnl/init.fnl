@@ -5,6 +5,8 @@
 
 (set vim.o.cmdheight 0)
 
+;; TODO Find some way or organizing these settings
+
 (set vim.o.foldlevel 1)
 (set vim.o.foldminlines 2)
 (set vim.o.linebreak true)
@@ -18,6 +20,7 @@
 (set vim.o.wildmode "longest:full")
 
 (set vim.o.winborder :rounded)
+(set vim.o.diffopt :inline:char)
 
 ;; search
 (set vim.o.gdefault true)
@@ -181,8 +184,8 @@
   (import_from_statement)
 ]+ @fold"))
 
-(let [tscontext (require :treesitter-context)]
-  (tscontext.setup))
+(let [{: setup} (require :treesitter-context)]
+  (setup))
 
 ;; https://neovim.io/doc/user/lsp.html#vim.lsp.foldexpr()
 (set vim.o.foldmethod :expr)
