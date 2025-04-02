@@ -4,10 +4,6 @@ set configversion 2.0
 
 set editorcmd /opt/homebrew/bin/neovide
 
-" searxng
-set searchengine searxng
-set searchurls.searxng https://search.kejadlen.dev/search?q=%s
-
 " vimperator hint mode
 set hintfiltermode vimperator-reflow
 set hintchars 1234567890
@@ -41,7 +37,7 @@ autocmd DocStart ^http(s?)://www.reddit.com js tri.excmds.urlmodify("-t", "www",
 " isolate Facebook in its own container
 set auconcreatecontainer true
 autocontain facebook\.com facebook
-autocontain google\.com google
+autocontain youtube\.com google
 autocontain notion\.so work
 
 " github
@@ -50,8 +46,8 @@ unbindurl ^https://github.com/ s " focus the search bar
 unbindurl ^https://github.com/ t " activate the file finder
 
 " youtube
-unbindurl ^https://youtube.com/ j " back 10s
-unbindurl ^https://youtube.com/ l " forward 10s
+unbindurl ^https://(www.)?youtube.com/ j " back 10s
+unbindurl ^https://(www.)?youtube.com/ l " forward 10s
 
 unbindurl ^https://docs.rs/ s " focus the search bar
 
