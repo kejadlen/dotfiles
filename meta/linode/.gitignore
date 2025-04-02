@@ -1,5 +1,0 @@
-.kube
-.terraform*
-terraform.tfstate*
-terraform.tfvars
-tf.log
