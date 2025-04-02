@@ -1,1 +1,0 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"deploy_nixos","Source":"git::https://github.com/tweag/terraform-nixos.git?ref=646cacb12439ca477c05315a7bfd49e9832bc4e3//deploy_nixos","Dir":".terraform/modules/deploy_nixos/deploy_nixos"}]}
