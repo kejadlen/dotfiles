@@ -1,4 +1,7 @@
 ;;; Elgato Key Light Air
+;;;
+;;; Run `package.loaded["key-light-air"]["find-hostname"]()`
+;;; to find the hostname of the Key Light Air
 
 (local {: bonjour : caffeinate : http : json : logger : usb} hs)
 (local log (logger.new :key-light-air :info))

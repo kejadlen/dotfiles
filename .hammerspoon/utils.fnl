@@ -1,5 +1,4 @@
-(local {: application : eventtap : execute : logger : pasteboard : uielement}
-       hs)
+(local {: eventtap : execute : logger : pasteboard : uielement} hs)
 
 (local log (logger.new :utils :info))
 
@@ -18,8 +17,7 @@
 
 (fn replace-selection [cb]
   "Replaces the current selection with the return value of the callback"
-  (let [app (application.frontmostApplication)
-        prev-pasteboard (pasteboard.getContents)
+  (let [prev-pasteboard (pasteboard.getContents)
         e (uielement.focusedElement)
         text (if e (e:selectedText)
                  (do
@@ -31,8 +29,7 @@
 
 (fn run [...]
   "Executes a list of commands"
-  (accumulate [last nil _ cmd (ipairs [...])]
+  (each [_ cmd (ipairs [...])]
     (execute cmd)))
 
 {: chomp : paste : replace-selection : run}
-

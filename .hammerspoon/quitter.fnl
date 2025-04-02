@@ -1,4 +1,10 @@
-(local {: application : caffeinate : fnutils : logger : timer : window} hs)
+(local {: application
+        : caffeinate
+        : fnutils
+        : logger
+        : notify
+        : timer
+        : window} hs)
 
 (local {: contains : ifilter} fnutils)
 
@@ -8,6 +14,7 @@
                   :Arc
                   "Firefox Developer Edition"
                   :Ghostty
+                  :LibreWolf
                   :Miniflux
                   :Phanpy
                   :Obsidian])
@@ -15,9 +22,16 @@
 (local to-kill {})
 
 (fn kill [app]
+  ;; in theory if the app is frontmost it shouldn't
+  ;; be marked, but an extra precaution since we never
+  ;; want to kill the focused app
   (when (not (app:isFrontmost))
-    (log.i (.. "killing " (app:name)))
-    (let [focused-win (window.focusedWindow)]
+    (let [app-name (app:name)
+          focused-win (window.focusedWindow)
+          msg (.. "Killing " app-name)
+          n (notify.new {:title :Quitter :informativeText msg :withdrawAfter 2})]
+      (log.i msg)
+      (n:send)
       (app:kill)
       (focused-win:focus))))
 
@@ -48,6 +62,7 @@
                               :Arc false
                               "Firefox Developer Edition" false
                               :Ghostty false
+                              :LibreWolf false
                               :Miniflux false
                               :Phanpy false
                               :Obsidian false
@@ -61,6 +76,6 @@
                  window.filter.windowUnfocused #(mark ($1:application))}))
 
 ;; use global so this isn't GC'ed
-(set _G.quitter {: to-kill})
+(set _G.quitter {: cw : to-kill : wf})
 
 {: start}

@@ -93,7 +93,8 @@
                     ["^https://(.*%.?)bankofamerica.com/?" handlers.safari]
                     ["^https://(.*%.?)betterment.com/?" handlers.safari]
                     ["^https://(.*%.?)schwab.com/?" handlers.safari]
-                    ["^https://(.*%.?)chase.com/?" handlers.safari]]
+                    ["^https://(.*%.?)chase.com/?" handlers.safari]
+                    ["^https://(.*%.?)xfinity.com/?" handlers.safari]]
       url-redir-decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]]]
@@ -109,7 +110,10 @@
 (when (fs.attributes :local.fnl)
   (require :local))
 
-(: (notify.new {:title :Hammerspoon
-                :informativeText "Config loaded"
-                :withdrawAfter 2}) :send)
+(let [n (notify.new {:title :Hammerspoon
+                     :informativeText "Config loaded"
+                     :withdrawAfter 2})]
+  (n:send))
 
+;; hold onto globals so they don't get GC'ed?
+{}
