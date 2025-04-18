@@ -24,6 +24,7 @@
       (if (v:match "/") (ok :directory (dirname dest)))
       (ok :symlink dest src))))
 
+;; probably should live in macOS?
 (let [jj-config (chomp (sh* :jj :config :path :--user))]
   (ok :directory (dirname jj-config))
   (ok :symlink jj-config (expand-env-vars :$HOME/.config/jj/config.toml)))

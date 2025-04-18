@@ -35,9 +35,11 @@
               ;; ignore recent apps
               (if (not (line:match "%srecentApps%s")) (line:match "%S+")))]
   (case items
-    (where [item _] (not= item :Downloads)) (do
-                                              (sh* :dockutil :--remove :all)
-                                              (sh* :dockutil :--add
-                                                   (expand-env-vars :$HOME/Downloads)
-                                                   :--view :list :--display
-                                                   :stack :--sort :datemodified))))
+    (where [item] (not= item :Downloads)) (do
+                                            (sh* :dockutil :--remove :all)
+                                            (sh* :dockutil :--add
+                                                 (expand-env-vars :$HOME/Downloads)
+                                                 :--view :auto :--display :stack
+                                                 :--sort :datemodified)
+                                            (sh* :killall :Dock))
+    _ (print "ok: dockutil")))

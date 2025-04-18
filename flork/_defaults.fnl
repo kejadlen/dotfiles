@@ -78,21 +78,21 @@
         :com.apple.Safari [[:IncludeInternalDebugMenu :bool true]]
         :com.apple.screensaver [[:askForPassword :int 1]]
         :com.freron.MailMate [[:MmSendMessageDelayEnabled :bool true]
-                              [:MmSendMessageDelay :int 60]
-                              [:MmAllowedImageURLRegexp
-                               :string
-                               (.. "https://("
-                                   (table.concat ["(i|images|d)\\.gr-assets\\.com"
-                                                  "www\\.goodreads\\.com"
-                                                  "massdrop-s3\\.imgix\\.net"
-                                                  ".*\\.cloudfront\\.net"
-                                                  "s3\\.amazonaws\\.com"
-                                                  "files\\.convertkitcdn\\.com/assets/pictures"
-                                                  "wizardzines\\.com"
-                                                  "www\\.redfin\\.com/stingray/do/api-get-listing-hero-shot"]
-                                                 "|")
-                                   ")")]]})
+                              [:MmSendMessageDelay :int 60]]})
 
 (each [domain defaults (pairs domain-defaults)]
   (each [_ [key typ val] (ipairs defaults)]
     (ok :defaults domain key typ val)))
+
+(let [allowed-image-urls ["(i|images|d)\\.gr-assets\\.com"
+                          "www\\.goodreads\\.com"
+                          "massdrop-s3\\.imgix\\.net"
+                          ".*\\.cloudfront\\.net"
+                          "s3\\.amazonaws\\.com"
+                          "files\\.convertkitcdn\\.com/assets/pictures"
+                          "wizardzines\\.com"
+                          "www\\.redfin\\.com/stingray/do/api-get-listing-hero-shot"
+                          "www\\.404media\\.co/content/images"
+                          "the-ergo-archive\\.zsa\\.io/assets/images"]]
+  (ok :defaults :com.freron.MailMate :MmAllowedImageURLRegexp :string
+      (.. "https://(" (table.concat allowed-image-urls "|") ")/.*")))
