@@ -133,9 +133,9 @@ alt-shift-8 = 'move-node-to-workspace 8'
 alt-shift-9 = 'move-node-to-workspace 9'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-alt-tab = 'workspace-back-and-forth'
+# alt-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+# alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 alt-shift-f = 'layout floating tiling' # Toggle between floating and tiling layout
 
@@ -182,6 +182,10 @@ if.app-id = 'org.mozilla.firefoxdeveloperedition'
 run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
+if.app-id = 'org.mozilla.librewolf'
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
 if.app-id = 'com.github.wez.wezterm'
 run = 'move-node-to-workspace 3'
 
@@ -194,7 +198,7 @@ if.app-id = 'com.apple.Safari.WebApp.F2BA9FC3-D7F2-41FB-A706-764DA721F16E' # Pha
 run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
-if.app-id = 'com.apple.Safari.WebApp.B0446EE7-BE08-4B3B-8077-208D39B89CD3' # Miniflux
+if.app-id = 'com.apple.Safari.WebApp.7B761815-DB06-4AC0-8E7D-5B80A0C17862' # Miniflux
 run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
