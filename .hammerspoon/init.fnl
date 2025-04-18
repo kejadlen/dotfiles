@@ -76,6 +76,7 @@
       handlers {:arc open-in-arc
                 :firefox-dev :org.mozilla.firefoxdeveloperedition
                 :firefox :org.mozilla.firefox
+                :librewolf :org.mozilla.librewolf
                 :safari :com.apple.Safari
                 :zoom :us.zoom.xos}
       url-patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
@@ -88,13 +89,13 @@
                     ["^https://accounts.google.com/?" handlers.arc]
                     ["^https://(.*%.?)fidelityinvestments.com/?"
                      handlers.safari]
-                    ["^https://mychartwa.providence.org/?"
-                     handlers.firefox-dev]
+                    ["^https://mychartwa.providence.org/?" handlers.safari]
                     ["^https://(.*%.?)bankofamerica.com/?" handlers.safari]
                     ["^https://(.*%.?)betterment.com/?" handlers.safari]
                     ["^https://(.*%.?)schwab.com/?" handlers.safari]
                     ["^https://(.*%.?)chase.com/?" handlers.safari]
-                    ["^https://(.*%.?)xfinity.com/?" handlers.safari]]
+                    ["^https://(.*%.?)xfinity.com/?" handlers.safari]
+                    ["^https://(.*%.?)pemco.com/?" handlers.safari]]
       url-redir-decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]]]
