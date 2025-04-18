@@ -33,3 +33,6 @@ concat(
   diff.git(),
 )
 '''
+
+[ui]
+default-command = "st"
