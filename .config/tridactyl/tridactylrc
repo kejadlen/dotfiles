@@ -29,6 +29,8 @@ bind <C-p> tabprev
 bind gR reader --tab
 
 " ignore modes
+autocmd DocStart gisnep.com mode ignore
+autocmd DocStart minutecryptic.com mode ignore
 autocmd DocStart nytimes.com/crosswords mode ignore
 
 " new reddit is bad
