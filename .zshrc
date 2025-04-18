@@ -85,6 +85,7 @@ export GPG_TTY=$TTY
 
 export EDITOR=nvim
 export VISUAL=nvim
+export MANPAGER="nvim +Man!"
 
 export BAT_THEME=ashes
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
