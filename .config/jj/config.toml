@@ -5,6 +5,25 @@ email = "alpha@kejadlen.dev"
 [merge-tools.dirdiff]
 program = ",jj-dirdiff"
 
+[merge-tools.gitpatch]
+program = "sh"
+edit-args = ["-c", '''
+  set -eu
+  rm -f "$right/JJ-INSTRUCTIONS"
+  git -C "$left" init -q
+  git -C "$left" add -A
+  git -C "$left" commit -q -m baseline --allow-empty
+  mv "$left/.git" "$right"
+  git -C "$right" add --intent-to-add -A
+  git -C "$right" add -p
+  git -C "$right" diff-index --quiet --cached HEAD && { echo "No changes done, aborting split."; exit 1; }
+  git -C "$right" commit -q -m split
+  git -C "$right" restore . # undo changes in modified files
+  git -C "$right" reset .   # undo --intent-to-add
+  git -C "$right" clean -q -df # remove untracked files
+''',
+]
+
 [diff.color-words]
 max-inline-alternation = 0
 
@@ -20,6 +39,7 @@ backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 [git]
 sign-on-push = true
 ignore-lfs-files = true
+push-new-bookmarks = true
 
 [templates]
 draft_commit_description = '''
@@ -36,3 +56,16 @@ concat(
 
 [ui]
 default-command = "st"
+diff-editor = "gitpatch"
+
+[revset-aliases]
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'
+
+[aliases]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+
+# https://github.com/jj-vcs/jj/discussions/3549
+[experimental-advance-branches]
+enabled-branches = ["glob:*"]
+disabled-branches = ["main"]
