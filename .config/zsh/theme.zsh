@@ -8,7 +8,7 @@ export BASE16_THEME=rose-pine
 color00="19/17/24" # Base 00 - Black
 color01="eb/6f/92" # Base 08 - Red
 # color02="31/74/8f" # Base 0B - Green
-color02="4a/a1/c4" # Base 0B - Green
+color02="4a/a1/7d" # Base 0B - Green
 color03="eb/bc/ba" # Base 0A - Yellow
 color04="c4/a7/e7" # Base 0D - Blue
 color05="f6/c1/77" # Base 0E - Magenta
@@ -146,7 +146,7 @@ if [ -n "$TINTED_SHELL_ENABLE_BASE16_VARS" ] || [ -n "$BASE16_SHELL_ENABLE_VARS"
   export BASE16_COLOR_09_HEX="f6c177"
   export BASE16_COLOR_0A_HEX="ebbcba"
   # export BASE16_COLOR_0B_HEX="31748f"
-  export BASE16_COLOR_0B_HEX="4aa1c4"
+  export BASE16_COLOR_0B_HEX="4aa17d"
   export BASE16_COLOR_0C_HEX="9ccfd8"
   export BASE16_COLOR_0D_HEX="c4a7e7"
   export BASE16_COLOR_0E_HEX="f6c177"
