@@ -24,6 +24,7 @@
   "e" = "archive:";
   "f" = "forwardMessage:";
   "r" = "reply:";
+  "m" = "moveToMailbox:";
   "s" = "toggleFlag:";
   "u" = "undo:";
   "J" = {
