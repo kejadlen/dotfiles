@@ -31,7 +31,7 @@
 
 ;;; completion
 
-(set vim.o.completeopt "longest,menuone")
+(set vim.o.completeopt "nearest,longest,menuone")
 
 ;; gui
 (set vim.o.guifont "Source Code Pro")
