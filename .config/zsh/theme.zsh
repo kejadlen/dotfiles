@@ -8,11 +8,10 @@ export BASE16_THEME=rose-pine
 color00="19/17/24" # Base 00 - Black
 color01="eb/6f/92" # Base 08 - Red
 # color02="31/74/8f" # Base 0B - Green
-color02="4a/a1/7d" # Base 0B - Green
 color03="eb/bc/ba" # Base 0A - Yellow
 color04="c4/a7/e7" # Base 0D - Blue
 color05="f6/c1/77" # Base 0E - Magenta
-color06="9c/cf/d8" # Base 0C - Cyan
+# color06="9c/cf/d8" # Base 0C - Cyan
 color07="e0/de/f4" # Base 05 - White
 color08="26/23/3a" # Base 03 - Bright Black
 color09="$color01" # Base 08 - Bright Red
@@ -30,6 +29,12 @@ color20="90/8c/aa" # Base 04
 color21="e0/de/f4" # Base 06
 color_foreground="e0/de/f4" # Base 05
 color_background="19/17/24" # Base 00
+
+# swap green and cyan
+color02="9c/cf/d8" # Base 0C - Green
+color06="31/74/8f" # Base 0B - Cyan
+color10="$color02" # Base 0B - Bright Green
+color14="$color06" # Base 0C - Bright Cyan
 
 if [ -z "$TTY" ] && ! TTY=$(tty); then
   put_template() { true; }
