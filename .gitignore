@@ -11,6 +11,7 @@ private
 !.config/alacritty
 !.config/bat
 !.config/direnv
+!.config/fish
 !.config/git
 !.config/ghostty
 !.config/irb
@@ -21,6 +22,7 @@ private
 !.config/pip
 !.config/ripgrep
 !.config/sketchybar
+!.config/starship
 !.config/starship.toml
 !.config/tridactyl
 !.config/wezterm
