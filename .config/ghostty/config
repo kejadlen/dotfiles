@@ -1,3 +1,29 @@
+background = "#121218"
+foreground = "#F0F0E4"
+
+palette = 0=#282A36
+palette = 1=#E97C7C
+palette = 2=#7BC275
+palette = 3=#E6E6A1
+palette = 4=#C4AAEA
+palette = 5=#E2A6D4
+palette = 6=#A2D6E0
+palette = 7=#F0F0E4
+
+palette = 8=#44475A
+palette = 9=#F09292
+palette = 10=#96D988
+palette = 11=#EFE9B0
+palette = 12=#D0BCF0
+palette = 13=#EDBBE0
+palette = 14=#B6E2EA
+palette = 15=#FFFFFF
+
+cursor-color = #f2d5cf
+cursor-text = #121218
+selection-background = #626880
+selection-foreground = #c6d0f5
+
 font-family = "Source Code Pro with Numderline"
 font-size = 13
 
