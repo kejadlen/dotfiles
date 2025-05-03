@@ -10,7 +10,7 @@
 
 (local log (logger.new :quitter :debug))
 
-(local keep-apps [:Safari
+(local permanent [:Safari
                   :Arc
                   "Firefox Developer Edition"
                   :Ghostty
@@ -18,6 +18,8 @@
                   :Miniflux
                   :Phanpy
                   :Obsidian])
+
+(local kill-delay {:Raindrop 900 "UniFi Protect" 900 :Zoom 1800})
 
 (local to-kill {})
 
@@ -47,12 +49,13 @@
   (when (= (app:kind) 1)
     (unmark app)
     (log.i (.. "marking " (app:name)))
-    (set (. to-kill (app:bundleID)) (timer.doAfter 300 #(kill app)))))
+    (set (. to-kill (app:bundleID))
+         (timer.doAfter (or (?. kill-delay (app:name)) 300) #(kill app)))))
 
 (fn mark-all-apps []
   (log.d :mark-all-apps)
   (each [_ app (ipairs (ifilter [(application.find "")]
-                                #(not (contains keep-apps ($1:name)))))]
+                                #(not (contains permanent ($1:name)))))]
     (mark app)))
 
 (local cw (caffeinate.watcher.new #(when (= $1 caffeinate.watcher.systemDidWake)
