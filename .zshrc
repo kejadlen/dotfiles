@@ -186,6 +186,10 @@ if (( $+commands[zoxide] )); then
   }
 fi
 
+if (( $+commands[jj] )); then
+  source <(COMPLETE=zsh jj)
+fi
+
 # Define named directories: ~w <=> Windows home directory on WSL.
 # [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
 
