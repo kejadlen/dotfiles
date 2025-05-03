@@ -86,13 +86,14 @@
 
 (let [allowed-image-urls ["(i|images|d)\\.gr-assets\\.com"
                           "www\\.goodreads\\.com"
-                          "massdrop-s3\\.imgix\\.net"
                           ".*\\.cloudfront\\.net"
                           "s3\\.amazonaws\\.com"
                           "files\\.convertkitcdn\\.com/assets/pictures"
                           "wizardzines\\.com"
                           "www\\.redfin\\.com/stingray/do/api-get-listing-hero-shot"
                           "www\\.404media\\.co/content/images"
-                          "the-ergo-archive\\.zsa\\.io/assets/images"]]
+                          "the-ergo-archive\\.zsa\\.io/assets/images"
+                          ;; rancho gordo
+                          ".*\\.soundestlink\\.com/image/newsletter"]]
   (ok :defaults :com.freron.MailMate :MmAllowedImageURLRegexp :string
       (.. "https://(" (table.concat allowed-image-urls "|") ")/.*")))
