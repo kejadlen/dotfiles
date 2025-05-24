@@ -76,7 +76,6 @@
       handlers {:arc open-in-arc
                 :firefox-dev :org.mozilla.firefoxdeveloperedition
                 :firefox :org.mozilla.firefox
-                :librewolf :org.mozilla.librewolf
                 :safari :com.apple.Safari
                 :zoom :us.zoom.xos}
       url-patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
@@ -85,7 +84,6 @@
                     ["^https://(.*%.?)bulletin.com/?" handlers.safari]
                     ["^https://(.*%.?)store.apple.com/?" handlers.safari]
                     ["^https://(.*%.?)goodluckbread.com/?" handlers.safari]
-                    ["^https://community.glowforge.com/?" handlers.arc]
                     ["^https://accounts.google.com/?" handlers.arc]
                     ["^https://(.*%.?)fidelityinvestments.com/?"
                      handlers.safari]
@@ -95,13 +93,15 @@
                     ["^https://(.*%.?)schwab.com/?" handlers.safari]
                     ["^https://(.*%.?)chase.com/?" handlers.safari]
                     ["^https://(.*%.?)xfinity.com/?" handlers.safari]
-                    ["^https://(.*%.?)pemco.com/?" handlers.safari]]
+                    ["^https://(.*%.?)pemco.com/?" handlers.safari]
+                    ["^https://(.*%.?)athenahealth.com/?" handlers.safari]
+                    ["^https://(.*%.?)experian.com/?" handlers.safari]]
       url-redir-decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]]]
   (Install:andUse :URLDispatcher {:config {:url_patterns url-patterns
                                            :url_redir_decoders url-redir-decoders
-                                           :default_handler handlers.arc
+                                           :default_handler handlers.firefox-dev
                                            :set_system_handler true}
                                   :start true}))
 
