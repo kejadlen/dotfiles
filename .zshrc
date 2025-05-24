@@ -88,11 +88,6 @@ export VISUAL=nvim
 export MANPAGER="nvim +Man!"
 
 export BAT_THEME=ashes
-export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
-export FZF_TMUX_OPTS="-p80%,60%"
-export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="fd --type d --strip-cwd-prefix --hidden --follow --exclude .git"
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 
 export RUBY_YJIT_ENABLE=true
@@ -102,7 +97,6 @@ if (( $+commands[fzf] )); then
   [[ $- == *i* ]] && z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh}
 fi
 z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh}
-z4h source ~/.dotfiles/src/fzf-git.sh/fzf-git.sh
 
 # Use additional Git repositories pulled in with `z4h install`.
 #
@@ -133,9 +127,28 @@ z4h bindkey magic-space Space
 
 if (( $+commands[fzf] )); then
   z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh}
+  z4h source ~/.dotfiles/src/fzf-git.sh/fzf-git.sh
 
   # https://github.com/junegunn/fzf/issues/164#issuecomment-581837757
   z4h bindkey fzf-cd-widget ç
+
+  export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
+  export FZF_TMUX_OPTS="-p80%,60%"
+  export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_CTRL_T_OPTS="
+    --walker-skip .git,node_modules,target
+    --preview 'bat -n --color=always {}'
+    --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+  # for some reason, `echo -n` just echoes the `-n`
+  export FZF_CTRL_R_OPTS="
+    --bind 'ctrl-y:execute-silent(echo {2..} | pbcopy)+abort'
+    --color header:italic
+    --header 'Press CTRL-Y to copy command into clipboard'"
+  export FZF_ALT_C_COMMAND="fd --type d --strip-cwd-prefix --hidden --follow --exclude .git"
+  export FZF_ALT_C_OPTS="
+    --walker-skip .git,node_modules,target
+    --preview 'eza --tree --color=always {}'"
 fi
 
 # Autoload functions.
