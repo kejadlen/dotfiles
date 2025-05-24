@@ -61,6 +61,7 @@ diff-editor = "gitpatch"
 pager = ":builtin"
 
 [revset-aliases]
+'immutable_heads()' = 'builtin_immutable_heads() | bookmarks() ~ bookmarks(regex:"^alpha/")'
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'
 
