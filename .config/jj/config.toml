@@ -58,6 +58,7 @@ concat(
 [ui]
 default-command = "st"
 diff-editor = "gitpatch"
+pager = ":builtin"
 
 [revset-aliases]
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
