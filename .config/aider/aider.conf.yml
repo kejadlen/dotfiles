@@ -1,6 +1,7 @@
 # model
 # model: ollama_chat/deepseek-r1
 model: claude-3-7-sonnet-latest
+# model: gemini-2.5-pro
 architect: true
 editor-model: claude-3-7-sonnet-latest
 
@@ -10,3 +11,7 @@ dark-mode: true
 # git
 gitignore: false
 auto-commits: false
+
+# other
+read:
+  - ~/.config/aider/CONVENTIONS.md
