@@ -165,7 +165,6 @@ tat() {
 
 # https://scriptingosx.com/2017/04/on-viewing-man-pages/
 function xman() { open x-man-page://$@ ; }
-function nman() { man $@ | col -bx | nvim -R - }
 
 # https://docs.brew.sh/Shell-Completion
 if type brew &>/dev/null; then
