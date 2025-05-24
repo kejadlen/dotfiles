@@ -1,8 +1,9 @@
-" General Settings
+" General Setting
 set update.lastchecktime 1670274234332
 set configversion 2.0
 
 set editorcmd /opt/homebrew/bin/neovide
+set smoothscroll true
 
 " vimperator hint mode
 set hintfiltermode vimperator-reflow
@@ -28,29 +29,49 @@ bind <C-n> tabnext
 bind <C-p> tabprev
 bind gR reader --tab
 
+" Nuke Tridactyl settings on exit (there's a bug if this is done
+" in the rc file) so that this is the source of truth.
+" https://github.com/tridactyl/tridactyl/issues/1409
+bind ZZ composite sanitise tridactyllocal tridactylsync; qall
+
 " ignore modes
 autocmd DocStart gisnep.com mode ignore
 autocmd DocStart minutecryptic.com mode ignore
 autocmd DocStart nytimes.com/crosswords mode ignore
 
 " new reddit is bad
-autocmd DocStart ^http(s?)://www.reddit.com js tri.excmds.urlmodify("-t", "www", "old")
+" autocmd DocStart ^http(s?)://www.reddit.com js tri.excmds.urlmodify("-t", "www", "old")
 
-" isolate Facebook in its own container
-set auconcreatecontainer true
-autocontain facebook\.com facebook
-autocontain youtube\.com google
-autocontain notion\.so work
+" set auconcreatecontainer true
+set autocontainmode relaxed  " https://github.com/tridactyl/tridactyl/issues/951
+autocontain facebook\.com Social
+autocontain youtube\.com Google
+" autocontain notion\.so Work
+autocontain reddit\.com Social
 
 " github
 " https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
-unbindurl ^https://github.com/ s " focus the search bar
-unbindurl ^https://github.com/ t " activate the file finder
+unbindurl github.com s " focus the search bar
+unbindurl github.com t " activate the file finder
+
+" google
+" https://support.google.com/mail/answer/6594?hl=en
+" actions
+unbindurl mail.google.com e " archive conversation
+unbindurl mail.google.com s " toggle star/rotate among superstars
+unbindurl mail.google.com ! " report as spam
+unbindurl mail.google.com # " delete
+unbindurl mail.google.com ] " archive conversation and go previous/next
+unbindurl mail.google.com [ " archive conversation and go previous/next
+" navigation
+unbindurl mail.google.com j " older conversation
+unbindurl mail.google.com k " newer conversation
+unbindurl mail.google.com o " open conversation
 
 " youtube
-unbindurl ^https://(www.)?youtube.com/ j " back 10s
-unbindurl ^https://(www.)?youtube.com/ l " forward 10s
+unbindurl youtube.com j " back 10s
+unbindurl youtube.com l " forward 10s
 
-unbindurl ^https://docs.rs/ s " focus the search bar
+unbindurl docs.rs s " focus the search bar
 
 " vim: set filetype=tridactyl
