@@ -15,9 +15,10 @@
 
 (local {: mash : smash : modal-bind} (require :hotkey))
 (local {: chomp : paste : replace-selection : run} (require :utils))
+(local little-ff (require :little-ff))
 
 ;; debugging
-; (hotkey.bind mash "d" #(hs.notify.show (: (hs.window.frontmostWindow) :title) "" ""))
+; (hotkey.bind mash :d #(little-ff.open "https://google.com"))
 
 ;; ⌘⌥V - defeat paste blocking
 (hotkey.bind [:cmd :alt] :v #(eventtap.keyStrokes (pasteboard.getContents)))
@@ -84,7 +85,7 @@
                     ["^https://(.*%.?)bulletin.com/?" handlers.safari]
                     ["^https://(.*%.?)store.apple.com/?" handlers.safari]
                     ["^https://(.*%.?)goodluckbread.com/?" handlers.safari]
-                    ["^https://accounts.google.com/?" handlers.arc]
+                    ; ["^https://accounts.google.com/?" handlers.arc]
                     ["^https://(.*%.?)fidelityinvestments.com/?"
                      handlers.safari]
                     ["^https://mychartwa.providence.org/?" handlers.safari]
@@ -101,9 +102,12 @@
                            "https://sci-hub.st/%1"]]]
   (Install:andUse :URLDispatcher {:config {:url_patterns url-patterns
                                            :url_redir_decoders url-redir-decoders
-                                           :default_handler handlers.firefox-dev
+                                           :default_handler little-ff.open
                                            :set_system_handler true}
                                   :start true}))
+
+; Reopen what's in Little Firefox in the main window
+(hotkey.bind mash :o little-ff.rehome)
 
 (Install:andUse :ReloadConfiguration {:start true})
 
