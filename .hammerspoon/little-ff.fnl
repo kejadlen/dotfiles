@@ -66,4 +66,4 @@
                                             ;; little ff window all that well
                                             )))))
 
-{: open : rehome}
+{: open : rehome : is-ff-focused : with-ax-hotfix}

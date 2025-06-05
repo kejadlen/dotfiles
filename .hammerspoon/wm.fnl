@@ -1,6 +1,7 @@
 ;; Ported from https://github.com/miromannino/miro-windows-manager/blob/master/MiroWindowsManager.spoon/init.lua#L95-L121
 
 (local {:fnutils {:indexOf index-of}} hs)
+(local {: is-ff-focused : with-ax-hotfix} (require :little-ff))
 
 (local log (hs.logger.new :init :info))
 
@@ -22,7 +23,9 @@
                               (or -1)
                               (% (length steps))
                               (+ 1))
-          next-step (. steps next-step-index)]
-      (hs.grid.set win next-step screen))))
+          next-step (. steps next-step-index)
+          around (if (is-ff-focused) #(with-ax-hotfix (win:application) $1)
+                     #($1))]
+      (around #(hs.grid.set win next-step screen)))))
 
 {: init : step}
