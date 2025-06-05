@@ -50,6 +50,12 @@
 (let [quitter (require :quitter)]
   (quitter:start))
 
+;;; wm
+
+(let [{: init : step} (require :wm)]
+  (init)
+  (hotkey.bind mash :m step))
+
 ;;; Spoons
 
 (loadSpoon :SpoonInstall)
@@ -57,15 +63,6 @@
 (set Install.use_syncinstall true)
 
 (set window.animationDuration 0.0)
-
-;; fnlfmt: skip
-(let [hotkeys {:up         [mash :k]
-               :left       [mash :h]
-               :down       [mash :j]
-               :right      [mash :l]
-               :fullscreen [mash :m]
-               :nextscreen [mash :n]}]
-  (Install:andUse :MiroWindowsManager {: hotkeys}))
 
 (Install:andUse :SleepCorners {:config {:feedbackSize 25 :neverSleepCorner "*"}
                                :start true})
