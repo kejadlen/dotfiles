@@ -47,7 +47,6 @@ end
 namespace :pave do
   PATHS = %w[
     Downloads/
-    Library/Preferences/com.YoruFukurouProject.YoruFukurou.plist
   ]
 
   desc "Backup files for paving"
