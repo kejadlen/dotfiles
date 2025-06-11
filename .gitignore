@@ -24,6 +24,7 @@ private
 !.config/sketchybar
 !.config/starship
 !.config/starship.toml
+!.config/tmux
 !.config/tridactyl
 !.config/wezterm
 !.config/yabai
