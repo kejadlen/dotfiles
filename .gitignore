@@ -25,6 +25,7 @@ private
 !.config/starship
 !.config/starship.toml
 !.config/tmux
+.config/tmux/plugins
 !.config/tridactyl
 !.config/wezterm
 !.config/yabai
