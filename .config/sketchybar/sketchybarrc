@@ -38,11 +38,22 @@ sketchybar --default "${default[@]}"
 ### Aerospace
 
 sketchybar --add event aerospace_workspace_change
-sketchybar --add item current_workspace left \
-    --subscribe current_workspace aerospace_workspace_change \
-    --set current_workspace \
-    label="$(aerospace list-workspaces --focused)" \
-    script="$CONFIG_DIR/plugins/aerospace.sh"
+
+if command -v aerospace >/dev/null 2>&1; then
+    aerospace list-monitors 2>/dev/null | while IFS= read -r monitor; do
+        monitor_id=$(echo "$monitor" | awk '{print $1}')
+        item_name="aerospace_$monitor_id"
+
+        initial_workspace=$(aerospace list-workspaces --monitor $monitor_id --focused 2>/dev/null)
+
+        sketchybar --add item $item_name left \
+            --subscribe $item_name aerospace_workspace_change \
+            --set $item_name \
+            label="$initial_workspace" \
+            icon.drawing=off \
+            script="$CONFIG_DIR/plugins/aerospace.sh"
+    done
+fi
 
 ##### Adding Left Items #####
 # We add some regular items to the left side of the bar, where
