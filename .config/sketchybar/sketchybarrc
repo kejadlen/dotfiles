@@ -55,6 +55,10 @@ if command -v aerospace >/dev/null 2>&1; then
             background.border_color=0xffcccccc \
             background.corner_radius=6 \
             background.height=26 \
+            label.padding_left=8 \
+            label.padding_right=8 \
+            padding_left=3 \
+            padding_right=3 \
             script="$CONFIG_DIR/plugins/aerospace.sh"
     done
 fi
