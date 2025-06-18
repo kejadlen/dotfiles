@@ -1,9 +1,9 @@
 ;; Ported from https://github.com/miromannino/miro-windows-manager/blob/master/MiroWindowsManager.spoon/init.lua#L95-L121
 
 (local {:fnutils {:indexOf index-of} : grid : logger : window} hs)
-(local {: is-ff-focused : with-ax-hotfix} (require :little-ff))
+(local {: with-ax-hotfix} (require :utils))
 
-(local log (logger.new :init :info))
+(local log (logger.new :wm :info))
 
 ;; fnlfmt: skip
 (local steps (let [full           {:x 0 :y 0 :w 8 :h 8}
@@ -24,9 +24,7 @@
                               (or -1)
                               (% (length steps))
                               (+ 1))
-          next-step (. steps next-step-index)
-          around (if (is-ff-focused) #(with-ax-hotfix (win:application) $1)
-                     #($1))]
-      (around #(grid.set win next-step screen)))))
+          next-step (. steps next-step-index)]
+      (with-ax-hotfix win #(grid.set win next-step screen)))))
 
 {: init : step}

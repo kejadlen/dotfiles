@@ -1,4 +1,6 @@
-(local log (hs.logger.new :init :info))
+(local {: with-ax-hotfix} (require :utils))
+
+(local log (hs.logger.new :little-ff :info))
 
 (local ff-bin
        "/Applications/Firefox\\ Developer\\ Edition.app/Contents/MacOS/firefox")
@@ -17,20 +19,12 @@
   (let [win (is-ff-focused)]
     (if win (cb win) (log:w "Firefox not focused"))))
 
-; https://github.com/Hammerspoon/hammerspoon/issues/3224#issuecomment-1294359070
-(λ with-ax-hotfix [app cb]
-  (let [ax-app (hs.axuielement.applicationElement app)
-        prev-val ax-app.AXEnhancedUserInterface]
-    (set ax-app.AXEnhancedUserInterface false)
-    (cb)
-    (set ax-app.AXEnhancedUserInterface prev-val)))
-
 (λ resize-little-ff []
   (check-ff (fn [win]
-              (with-ax-hotfix (win:application)
-                #(win:moveToUnit "[20,10,80,90]"))
-              ;; hide sidebar
-              (hs.eventtap.keyStroke [:ctrl] :z))))
+              (let [hide-sidebar #(hs.eventtap.keyStroke [:ctrl] :z)]
+                (with-ax-hotfix win
+                  #(win:moveToUnit "[20,10,80,90]"))
+                (hide-sidebar)))))
 
 (λ wait-for-little-ff [cb]
   (let [timer (hs.timer.waitUntil is-ff-focused cb 0.05)]
@@ -66,4 +60,4 @@
                                             ;; little ff window all that well
                                             )))))
 
-{: open : rehome : is-ff-focused : with-ax-hotfix}
+{: open : rehome : is-ff-focused}

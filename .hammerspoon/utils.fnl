@@ -32,4 +32,13 @@
   (each [_ cmd (ipairs [...])]
     (execute cmd)))
 
-{: chomp : paste : replace-selection : run}
+; https://github.com/Hammerspoon/hammerspoon/issues/3224#issuecomment-1294359070
+(λ with-ax-hotfix [win cb]
+  (let [app (win:application)
+        ax-app (hs.axuielement.applicationElement app)
+        prev-val ax-app.AXEnhancedUserInterface]
+    (set ax-app.AXEnhancedUserInterface false)
+    (cb)
+    (set ax-app.AXEnhancedUserInterface prev-val)))
+
+{: chomp : paste : replace-selection : run : with-ax-hotfix}
