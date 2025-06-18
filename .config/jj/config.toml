@@ -66,6 +66,7 @@ pager = ":builtin"
 'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'
 
 [aliases]
+accuse = ["file", "annotate"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
 mm-rebase = ["rebase", "--source", "all:roots(main..mm)", "--destination", "main"]
 mm-add = ["rebase", "--source", "mm", "--destination", "all:mm-", "--destination"]
