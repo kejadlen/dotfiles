@@ -31,7 +31,7 @@
     (hs.timer.doAfter 1 #(timer:stop))))
 
 (λ open [url]
-  (hs.execute (table.concat [ff-bin :--new-window url] " "))
+  (hs.execute (table.concat [ff-bin :--new-window (.. "\"" url "\"")] " "))
   (wait-for-little-ff resize-little-ff))
 
 (λ rehome []
