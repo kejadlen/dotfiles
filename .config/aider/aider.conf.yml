@@ -12,6 +12,9 @@ dark-mode: true
 gitignore: false
 auto-commits: false
 
+# upgrading
+check-update: false
+
 # other
 read:
   - ~/.config/aider/CONVENTIONS.md
