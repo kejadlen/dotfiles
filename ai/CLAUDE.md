@@ -1,1 +1,1 @@
-- Read ~/.dotfiles/ai/CONVENTIONS.md
+- Read ~/.dotfiles/ai/AI.md
