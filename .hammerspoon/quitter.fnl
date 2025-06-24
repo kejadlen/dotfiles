@@ -19,7 +19,7 @@
                   :Phanpy
                   :Obsidian])
 
-(local kill-delay {:Raindrop 900 "UniFi Protect" 900 :Zoom 1800})
+(local kill-delay {:Raindrop 900 "UniFi Protect" 1800 :Zoom 1800})
 
 (local to-kill {})
 
