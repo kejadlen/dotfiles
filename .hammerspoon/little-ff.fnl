@@ -40,7 +40,7 @@
                          (: :application)
                          (: :allWindows)
                          (length))]
-    (when (< 1 num-windows)
+    (when (and num-windows (< 1 num-windows))
       (hs.eventtap.keyStroke [] :escape)
       (hs.eventtap.keyStrokes :yy)
       (hs.pasteboard.callbackWhenChanged #(do
