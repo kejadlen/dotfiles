@@ -55,7 +55,7 @@ autocontain youtube\.com Google
 " github
 " https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
 unbindurl github.com s " focus the search bar
-unbindurl github.com t " activate the file finder
+" unbindurl github.com t " activate the file finder
 
 " gmail
 " https://support.google.com/mail/answer/6594?hl=en
