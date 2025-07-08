@@ -20,7 +20,7 @@
 (set vim.o.wildmode "longest:full")
 
 (set vim.o.winborder :rounded)
-(set vim.o.diffopt :inline:char)
+(set vim.o.diffopt "inline:char")
 
 ;; search
 (set vim.o.gdefault true)
@@ -97,6 +97,38 @@
 ;;; filetype
 
 (vim.filetype.add {:extension {:ua :uiua}})
+
+;;; vim.pack
+
+(vim.pack.add ["https://git.kejadlen.dev/alpha/vim-colors-paramount.git"
+               ;; was using jaawerth/fennel.vim, but there are some annoyances
+               ;; with it, so let's try this one instead
+               "https://github.com/atweiden/vim-fennel.git"
+               "https://github.com/christoomey/vim-tmux-navigator.git"
+               "https://github.com/direnv/direnv.vim.git"
+               "https://github.com/hashivim/vim-terraform.git"
+               "https://github.com/itchyny/lightline.vim.git"
+               "https://github.com/j-hui/fidget.nvim.git"
+               "https://github.com/junegunn/fzf.vim.git"
+               "https://github.com/justinmk/vim-dirvish.git"
+               "https://github.com/lukas-reineke/indent-blankline.nvim.git"
+               "https://github.com/neovim/nvim-lspconfig.git"
+               "https://github.com/nvim-treesitter/nvim-treesitter.git"
+               "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
+               "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
+               ;; here for completeness, but actually added in init.lua for
+               ;; bootstrapping purposes
+               ; "https://github.com/rktjmp/hotpot.nvim.git"
+               "https://github.com/suy/vim-context-commentstring.git"
+               "https://github.com/tpope/vim-abolish.git"
+               "https://github.com/tpope/vim-dispatch.git"
+               "https://github.com/tpope/vim-repeat.git"
+               "https://github.com/tpope/vim-sensible.git"
+               "https://github.com/tpope/vim-sleuth.git"
+               "https://github.com/tpope/vim-speeddating.git"
+               "https://github.com/tpope/vim-surround.git"
+               "https://github.com/tpope/vim-unimpaired.git"
+               "https://github.com/tpope/vim-vinegar.git"])
 
 (require :fzf)
 (require :lsp)
@@ -216,7 +248,7 @@
 (let [{: setup} (require :ibl)] (setup))
 
 ;; mini.align
-(let [{: setup} (require :mini.align)] (setup))
+; (let [{: setup} (require :mini.align)] (setup))
 
 ;;; generate help files
 

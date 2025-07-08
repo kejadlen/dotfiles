@@ -17,143 +17,15 @@
 [submodule "frink.alfredworkflow"]
 	path = src/frink.alfredworkflow
 	url = https://github.com/kejadlen/frink.alfredworkflow
-[submodule "lspconfig"]
-	path = .local/share/nvim/site/pack/alpha/start/lspconfig
-	url = https://github.com/neovim/nvim-lspconfig.git
-	branch = master
-	shallow = true
-[submodule "lightline"]
-	path = .local/share/nvim/site/pack/alpha/start/lightline
-	url = https://github.com/itchyny/lightline.vim.git
-	branch = master
-	shallow = true
-[submodule "treesitter"]
-	path = .local/share/nvim/site/pack/alpha/start/treesitter
-	url = https://github.com/nvim-treesitter/nvim-treesitter.git
-	branch = master
-	shallow = true
-[submodule "vim-tmux-navigator"]
-	path = .local/share/nvim/site/pack/alpha/start/vim-tmux-navigator
-	url = https://github.com/christoomey/vim-tmux-navigator.git
-	branch = master
-	shallow = true
-[submodule "unimpaired"]
-	path = .local/share/nvim/site/pack/alpha/start/unimpaired
-	url = https://github.com/tpope/vim-unimpaired.git
-	branch = master
-	shallow = true
-[submodule "sleuth"]
-	path = .local/share/nvim/site/pack/alpha/start/sleuth
-	url = https://github.com/tpope/vim-sleuth.git
-	branch = master
-	shallow = true
-[submodule "sensible"]
-	path = .local/share/nvim/site/pack/alpha/start/sensible
-	url = https://github.com/tpope/vim-sensible.git
-	branch = master
-	shallow = true
-[submodule "surround"]
-	path = .local/share/nvim/site/pack/alpha/start/surround
-	url = https://github.com/tpope/vim-surround.git
-	branch = master
-	shallow = true
-[submodule "fzf"]
-	path = .local/share/nvim/site/pack/alpha/start/fzf
-	url = https://github.com/junegunn/fzf.vim.git
-	branch = master
-	shallow = true
-[submodule "repeat"]
-	path = .local/share/nvim/site/pack/alpha/start/repeat
-	url = https://github.com/tpope/vim-repeat.git
-	branch = master
-	shallow = true
-[submodule "tabular"]
-	path = .local/share/nvim/site/pack/alpha/start/tabular
-	url = https://github.com/godlygeek/tabular.git
-	branch = master
-	shallow = true
-[submodule "treesitter-textobjects"]
-	path = .local/share/nvim/site/pack/alpha/start/treesitter-textobjects
-	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
-	branch = master
-	shallow = true
-[submodule "hotpot"]
-	path = .local/share/nvim/site/pack/alpha/start/hotpot
-	url = https://github.com/rktjmp/hotpot.nvim.git
-	shallow = true
-	branch = main
-[submodule "fennel"]
-	path = .local/share/nvim/site/pack/alpha/start/fennel
-	url = https://github.com/jaawerth/fennel.vim.git
-	branch = main
-	shallow = true
-[submodule "paramount"]
-	path = .local/share/nvim/site/pack/alpha/start/paramount
-	url = https://git.kejadlen.dev/alpha/vim-colors-paramount.git
-	branch = main
-	shallow = true
-[submodule "context-commentstring"]
-	path = .local/share/nvim/site/pack/alpha/start/context-commentstring
-	url = https://github.com/suy/vim-context-commentstring.git
-	branch = master
-	shallow = true
-[submodule "terraform"]
-	path = .local/share/nvim/site/pack/alpha/start/terraform
-	url = https://github.com/hashivim/vim-terraform.git
-	branch = master
-	shallow = true
-[submodule "direnv.vim"]
-	path = .local/share/nvim/site/pack/alpha/start/direnv
-	url = https://github.com/direnv/direnv.vim.git
-	branch = master
-	shallow = true
 [submodule "fzf-git.sh"]
 	path = src/fzf-git.sh
 	url = https://github.com/kejadlen/fzf-git.sh.git
 	branch = main
 	shallow = true
-[submodule "treesitter-context"]
-	path = .local/share/nvim/site/pack/alpha/start/treesitter-context
-	url = https://github.com/nvim-treesitter/nvim-treesitter-context.git
-	branch = master
-	shallow = true
-[submodule "fidget.nvim"]
-	path = .local/share/nvim/site/pack/alpha/start/fidget
-	url = https://github.com/j-hui/fidget.nvim.git
-	shallow = true
-[submodule "dirvish"]
-	path = .local/share/nvim/site/pack/alpha/start/dirvish
-	url = https://github.com/justinmk/vim-dirvish.git
-	branch = master
-	shallow = true
 [submodule "masked-email.alfredworkflow"]
 	path = src/masked-email.alfredworkflow
 	url = https://github.com/kejadlen/masked-email.alfredworkflow
 	branch = main
-[submodule "vim-speeddating"]
-	path = .local/share/nvim/site/pack/alpha/start/speeddating
-	url = https://github.com/tpope/vim-speeddating.git
-	branch = master
-[submodule "indent-blankline"]
-	path = .local/share/nvim/site/pack/alpha/start/indent-blankline
-	url = https://github.com/lukas-reineke/indent-blankline.nvim.git
-	branch = master
-[submodule "vim-dispatch"]
-	path = .local/share/nvim/site/pack/alpha/start/dispatch
-	url = https://github.com/tpope/vim-dispatch.git
-	branch = master
-[submodule "mini.align"]
-	path = .local/share/nvim/site/pack/alpha/start/mini-align
-	url = https://github.com/echasnovski/mini.align.git
-	branch = main
-[submodule "dirdiff"]
-	path = .local/share/nvim/site/pack/alpha/start/dirdiff
-	url = https://github.com/will133/vim-dirdiff.git
-	branch = master
-[submodule "vim-abolish"]
-	path = .local/share/nvim/site/pack/alpha/start/abolish
-	url = https://github.com/tpope/vim-abolish.git
-	branch = master
 [submodule "tpm"]
 	path = .config/tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
