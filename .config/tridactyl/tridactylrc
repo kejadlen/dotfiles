@@ -47,10 +47,14 @@ autocmd DocStart nytimes.com/crosswords mode ignore
 " autocmd DocStart ^http(s?)://www.reddit.com js tri.excmds.urlmodify("-t", "www", "old")
 
 " set auconcreatecontainer true
-set autocontainmode relaxed  " https://github.com/tridactyl/tridactyl/issues/951
-autocontain facebook\.com Social
+" https://github.com/tridactyl/tridactyl/issues/951
+set autocontainmode relaxed
+autocontain amazon\.com Shopping
+autocontain bsky\.app Social
+autocontain facebook\.com Facebook
+autocontain instagram\.com Facebook
+autocontain linkedin\.com Social
 autocontain youtube\.com Google
-" autocontain notion\.so Work
 
 " github
 " https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
