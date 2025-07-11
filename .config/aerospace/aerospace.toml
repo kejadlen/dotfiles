@@ -35,9 +35,9 @@ key-mapping.preset = 'qwerty'
 
 ### SketchyBar
 
+# https://nikitabobko.github.io/AeroSpace/goodness.html#show-aerospace-workspaces-in-sketchybar
 after-startup-command = ['exec-and-forget /opt/homebrew/opt/sketchybar/bin/sketchybar']
-exec-on-workspace-change = [
-  '/bin/bash', '-c',
+exec-on-workspace-change = [ '/bin/bash', '-c',
   'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]
 
