@@ -83,6 +83,9 @@ unbindurl mail.google.com j " older conversation
 unbindurl mail.google.com k " newer conversation
 unbindurl mail.google.com o " open conversation
 
+" linear
+unbindurl linear.app s
+
 " youtube
 unbindurl youtube.com j " back 10s
 unbindurl youtube.com l " forward 10s
