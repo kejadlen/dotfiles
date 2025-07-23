@@ -22,3 +22,5 @@
           dest (expand-env-vars (.. :$HOME/ v))]
       (if (v:match "/") (ok :directory (dirname dest)))
       (ok :symlink dest src))))
+
+(ok :directory (expand-env-vars :$HOME/.config/jj/conf.d))
