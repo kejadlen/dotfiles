@@ -1,4 +1,4 @@
-(local {: with-ax-hotfix} (require :utils))
+(local {: run : with-ax-hotfix} (require :utils))
 
 (local log (hs.logger.new :little-ff :info))
 
@@ -45,15 +45,11 @@
       (hs.eventtap.keyStrokes :yy)
       (hs.pasteboard.callbackWhenChanged #(do
                                             (win:close)
-                                            (hs.eventtap.keyStroke [:shift] :p)
-                                            ;; TODO figure out how to move the tab to
-                                            ;; the back - this doesn't seem to work,
-                                            ;; maybe create a custom tridactyl bind?
-                                            ;;
-                                            ;; (hs.eventtap.keyStroke [] :escape)
-                                            ;; (hs.eventtap.keyStrokes ":tabmove $")
-                                            ;; (hs.eventtap.keyStroke [] :enter)
-                                            ;;
+                                            (run (table.concat [:open
+                                                                :-a
+                                                                "\"Firefox Developer Edition\""
+                                                                (hs.pasteboard.readString)]
+                                                               " "))
                                             ;; TODO figure out how to focus the main
                                             ;; ff window - aerospace doesn't seem to
                                             ;; handle the programmatic closing of the
