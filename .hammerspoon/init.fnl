@@ -67,33 +67,33 @@
 (Install:andUse :SleepCorners {:config {:feedbackSize 25 :neverSleepCorner "*"}
                                :start true})
 
-;; By default, URLDispatcher focuses the application before opening the URL, but
-;; this interacts poorly with Arc since then we can be in the wrong space when
-;; the URL is opened in Little Arc.
-(let [open-in-arc #(urlevent.openURLWithBundle $1 :company.thebrowser.Browser)
-      handlers {:arc open-in-arc
-                :firefox-dev :org.mozilla.firefoxdeveloperedition
+(let [handlers {:firefox-dev :org.mozilla.firefoxdeveloperedition
                 :firefox :org.mozilla.firefox
                 :safari :com.apple.Safari
                 :zoom :us.zoom.xos}
+      ;; domains to be opened in Safari, usually either for Apple Pay or
+      ;; text-based 2FA
+      safari-domains [:aetnahealth.com
+                      :bankofamerica.com
+                      :betterment.com
+                      :bulletin.com
+                      :chase.com
+                      :discnw.org
+                      :experian.com
+                      :fidelityinvestments.com
+                      :goodluckbread.com
+                      :mychartwa.providence.org
+                      :patagonia.com
+                      :pemco.com
+                      :schwab.com
+                      :squareupmessagine.com
+                      :store.apple.com
+                      :xfinity.com]
+      safari-patterns (icollect [_ domain (ipairs safari-domains)]
+                        (.. "^https://(.*%.?)" (string.gsub domain "%." "%%.")
+                            "/?"))
       url-patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
-                    ["^https://(.*%.?)discnw.org/?" handlers.safari]
-                    ["^https://(.*%.?)squareupmessaging.com/?" handlers.safari]
-                    ["^https://(.*%.?)bulletin.com/?" handlers.safari]
-                    ["^https://(.*%.?)store.apple.com/?" handlers.safari]
-                    ["^https://(.*%.?)goodluckbread.com/?" handlers.safari]
-                    ; ["^https://accounts.google.com/?" handlers.arc]
-                    ["^https://(.*%.?)fidelityinvestments.com/?"
-                     handlers.safari]
-                    ["^https://mychartwa.providence.org/?" handlers.safari]
-                    ["^https://(.*%.?)bankofamerica.com/?" handlers.safari]
-                    ["^https://(.*%.?)betterment.com/?" handlers.safari]
-                    ["^https://(.*%.?)schwab.com/?" handlers.safari]
-                    ["^https://(.*%.?)chase.com/?" handlers.safari]
-                    ["^https://(.*%.?)xfinity.com/?" handlers.safari]
-                    ["^https://(.*%.?)pemco.com/?" handlers.safari]
-                    ["^https://(.*%.?)athenahealth.com/?" handlers.safari]
-                    ["^https://(.*%.?)experian.com/?" handlers.safari]]
+                    [safari-patterns handlers.safari]]
       url-redir-decoders [[:sci-hub
                            "^https://doi.org/(.*)"
                            "https://sci-hub.st/%1"]]]
