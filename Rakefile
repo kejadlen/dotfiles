@@ -44,13 +44,15 @@ namespace :sync do
   end
 end
 
-namespace :utils do
-  desc "Upgrade neovim"
-  task :upgrade_neovim do
-    chdir File.expand_path("~/Library/Caches/Homebrew/neovim--git") do
-      sh "git tag --delete nightly stable"
+desc "Upgrade neovim"
+task :upgrade_neovim do
+  chdir File.expand_path("~/Library/Caches/Homebrew/neovim--git") do
+    sh "git tag --delete nightly stable" do
+      # no-op so that `sh` doesn't throw an
+      # exception if a tag doesn't exist
     end
   end
+  sh "brew upgrade neovim --fetch-HEAD"
 end
 
 namespace :pave do
