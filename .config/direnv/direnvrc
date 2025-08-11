@@ -9,46 +9,46 @@ layout_k8s() {
 }
 
 # https://github.com/direnv/direnv/issues/98#issuecomment-33677881
+# use_ruby() {
+#   local ver=$1
+#   if [[ -z $ver ]] && [[ -f .ruby-version ]]; then
+#     ver=$(cat .ruby-version)
+#   fi
+#   if [[ -z $ver ]]; then
+#     echo Unknown ruby version
+#     exit 1
+#   fi
+#   chruby $ver
+#
+#   layout ruby
+#
+#   # For some reason, the PATH order is unstable and sometimes Ruby's
+#   # bin directory is in front of the direnv one, so force the direnv
+#   # bin directory to take precedence
+#   PATH_add ./.direnv/bin
+# }
+
+# https://github.com/direnv/direnv/wiki/ruby#-ruby-install
 use_ruby() {
-  local ver=$1
-  if [[ -z $ver ]] && [[ -f .ruby-version ]]; then
-    ver=$(cat .ruby-version)
-  fi
-  if [[ -z $ver ]]; then
-    echo Unknown ruby version
-    exit 1
-  fi
-  chruby $ver
+  local version=$1
 
-  layout ruby
+  # Get version from .ruby-version if not specified
+  if [[ -z $version ]] && [[ -f .ruby-version ]]; then
+    version=$(cat .ruby-version)
+  fi
 
-  # For some reason, the PATH order is unstable and sometimes Ruby's
-  # bin directory is in front of the direnv one, so force the direnv
-  # bin directory to take precedence
-  PATH_add ./.direnv/bin
+  # Find matching version (exact or prefix match)
+  if [[ -n $version ]] && [[ ! -d $HOME/.rubies/$version ]]; then
+    version=$(ls -1 $HOME/.rubies | grep "^$version" | sort -V | tail -1)
+  fi
+
+  # Fall back to latest version if still no match
+  if [[ -z $version ]]; then
+    version=$(ls -1 $HOME/.rubies | sort -V | tail -1)
+  fi
+
+  local ruby_root=$HOME/.rubies/$version
+  load_prefix "$ruby_root"
+  layout_ruby
 }
 
-# https://github.com/direnv/direnv/wiki/Python/#poetry
-layout_poetry() {
-    PYPROJECT_TOML="${PYPROJECT_TOML:-pyproject.toml}"
-    if [[ ! -f "$PYPROJECT_TOML" ]]; then
-        log_status "No pyproject.toml found. Executing \`poetry init\` to create a \`$PYPROJECT_TOML\` first."
-        poetry init
-    fi
-
-    if [[ -d ".venv" ]]; then
-        VIRTUAL_ENV="$(pwd)/.venv"
-    else
-        VIRTUAL_ENV=$(poetry env info --path 2>/dev/null ; true)
-    fi
-
-    if [[ -z $VIRTUAL_ENV || ! -d $VIRTUAL_ENV ]]; then
-        log_status "No virtual environment exists. Executing \`poetry install\` to create one."
-        poetry install
-        VIRTUAL_ENV=$(poetry env info --path)
-    fi
-
-    PATH_add "$VIRTUAL_ENV/bin"
-    export POETRY_ACTIVE=1
-    export VIRTUAL_ENV
-}
