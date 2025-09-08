@@ -112,12 +112,12 @@
                "https://github.com/junegunn/fzf.vim.git"
                "https://github.com/justinmk/vim-dirvish.git"
                "https://github.com/lukas-reineke/indent-blankline.nvim.git"
-               "https://github.com/neovim/nvim-lspconfig.git"
+               {:src "https://github.com/neovim/nvim-lspconfig.git"
+                :version :v2.4.0}
                "https://github.com/nvim-treesitter/nvim-treesitter.git"
                "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
                "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
-               ;; here for completeness, but actually added in init.lua for
-               ;; bootstrapping purposes
+               ;; here for completeness, but actually added in init.lua for bootstrapping purposes
                ; "https://github.com/rktjmp/hotpot.nvim.git"
                "https://github.com/suy/vim-context-commentstring.git"
                "https://github.com/tpope/vim-abolish.git"
