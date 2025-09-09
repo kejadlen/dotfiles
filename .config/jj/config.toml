@@ -45,9 +45,10 @@ push-new-bookmarks = true
 private-commits = "description(glob:'private:*')"
 
 [templates]
+# https://jj-vcs.github.io/jj/latest/config/#default-description
 draft_commit_description = '''
 concat(
-  description,
+  coalesce(description, default_commit_description, "\n"),
   surround(
     "\nJJ: This commit contains the following changes:\n", "",
     indent("JJ:     ", diff.stat(72)),
