@@ -7,6 +7,7 @@
         : logger
         : notify
         : pasteboard
+        : screen
         : urlevent
         : window} hs)
 
@@ -49,6 +50,15 @@
 
 (let [quitter (require :quitter)]
   (quitter:start))
+
+;;; sketchybar on screen changes
+
+(set _G.screen-watcher
+     (screen.watcher.new (fn []
+                           (log:i "Screen configuration changed, reloading sketchybar")
+                           (execute "sketchybar --reload"))))
+
+(_G.screen-watcher:start)
 
 ;;; wm
 
