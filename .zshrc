@@ -93,9 +93,6 @@ export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 export RUBY_YJIT_ENABLE=true
 
 # Source additional local files if they exist.
-if (( $+commands[fzf] )); then
-  [[ $- == *i* ]] && z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh}
-fi
 z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/chruby/share/chruby/chruby.sh}
 
 # Use additional Git repositories pulled in with `z4h install`.
@@ -126,7 +123,8 @@ z4h bindkey z4h-backward-zword Ctrl+B # conflicts w/tmux prefix, find a better a
 z4h bindkey magic-space Space
 
 if (( $+commands[fzf] )); then
-  z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh}
+  # z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh}
+  [[ $- == *i* ]] && z4h source <(fzf --zsh)
   z4h source ~/.dotfiles/src/fzf-git.sh/fzf-git.sh
 
   # https://github.com/junegunn/fzf/issues/164#issuecomment-581837757
