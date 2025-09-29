@@ -100,6 +100,7 @@
 
 ;;; vim.pack
 
+;; :lua vim.pack.update({ 'nvim-lspconfig' })
 (vim.pack.add ["https://git.kejadlen.dev/alpha/vim-colors-paramount.git"
                ;; was using jaawerth/fennel.vim, but there are some annoyances
                ;; with it, so let's try this one instead
@@ -113,7 +114,7 @@
                "https://github.com/justinmk/vim-dirvish.git"
                "https://github.com/lukas-reineke/indent-blankline.nvim.git"
                {:src "https://github.com/neovim/nvim-lspconfig.git"
-                :version :v2.4.0}
+                :version :v2.5.0}
                "https://github.com/nvim-treesitter/nvim-treesitter.git"
                "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
                "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
