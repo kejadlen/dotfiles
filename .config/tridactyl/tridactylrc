@@ -49,12 +49,13 @@ autocmd DocStart nytimes.com/crosswords mode ignore
 " set auconcreatecontainer true
 " https://github.com/tridactyl/tridactyl/issues/951
 set autocontainmode relaxed
-autocontain amazon\.com Shopping
-autocontain bsky\.app Social
-autocontain facebook\.com Facebook
-autocontain instagram\.com Facebook
-autocontain linkedin\.com Social
-autocontain youtube\.com Google
+autocontain -s amazon\.com Shopping
+autocontain -s bsky\.app Social
+autocontain -s facebook\.com Facebook
+autocontain -s instagram\.com Facebook
+autocontain -s linkedin\.com Social
+autocontain -s myworkday\.com Work
+autocontain -s youtube\.com Google
 
 " github
 " https://docs.github.com/en/get-started/using-github/keyboard-shortcuts
