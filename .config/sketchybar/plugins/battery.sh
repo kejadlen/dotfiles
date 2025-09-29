@@ -25,7 +25,8 @@ fi
 
 sketchybar --set "$NAME" icon="$ICON" label="$PERCENTAGE%"
 
-# TDOO Move into the above sketchybar command
-if (( $PERCENTAGE < 20 )); then
+if (( PERCENTAGE < 20 )); then
   sketchybar --set "$NAME" label.drawing=on
+elif (( PERCENTAGE == 100 )); then
+  sketchybar --set "$NAME" label.drawing=off
 fi
