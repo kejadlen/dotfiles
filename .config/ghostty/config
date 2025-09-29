@@ -1,3 +1,5 @@
+## colors
+
 background = "#121218"
 foreground = "#F0F0E4"
 
@@ -34,7 +36,13 @@ cursor-style = bar
 cursor-style-blink = false
 shell-integration-features = no-cursor
 
+## keybinds
+
 keybind = global:ctrl+opt+cmd+g=toggle_quick_terminal
 keybind = global:ctrl+`=toggle_quick_terminal
 
 keybind = alt+m=text:μ
+
+## macos
+
+macos-titlebar-style = hidden
