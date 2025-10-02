@@ -5,38 +5,35 @@
 
 (set vim.o.cmdheight 0)
 
-;; TODO Find some way or organizing these settings
-
+;; ui things
+(set vim.o.diffopt "inline:char")
 (set vim.o.foldlevel 1)
 (set vim.o.foldminlines 2)
 (set vim.o.linebreak true)
 (set vim.o.list true)
 (set vim.o.listchars "tab:⇥ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·")
-
 (set vim.o.number true)
 (set vim.o.showmode false)
 (set vim.o.termguicolors true)
 (set vim.o.virtualedit :block)
 (set vim.o.wildmode "longest:full")
-
 (set vim.o.winborder :rounded)
-(set vim.o.diffopt "inline:char")
 
 ;; search
 (set vim.o.gdefault true)
 (set vim.o.ignorecase true)
 (set vim.o.smartcase true)
 
-(set vim.o.mouse nil)
-
-;;; completion
-
+;; completion
 (set vim.o.completeopt "nearest,longest,menuone")
 
 ;; gui
+(set vim.o.mouse nil)
 (set vim.o.guifont "Source Code Pro")
 
+;; misc
 (set vim.g.markdown_fenced_languages [:ts=typescript])
+(set vim.o.undofile true)
 
 ;;; mappings
 
