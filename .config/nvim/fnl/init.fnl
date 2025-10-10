@@ -191,18 +191,22 @@
                                             :node_decremental :grm}}
           :textobjects {:move {:enable true
                                :set_jumps true
-                               :goto_next_start {"]f" "@function.outer"
+                               :goto_next_start {"]a" "@parameter.inner"
                                                  "]b" "@block.outer"
-                                                 "]a" "@parameter.inner"}
-                               :goto_next_end {"]F" "@function.outer"
+                                                 "]c" "@class.inner"
+                                                 "]f" "@function.outer"}
+                               :goto_next_end {"]A" "@parameter.inner"
                                                "]B" "@block.outer"
-                                               "]A" "@parameter.inner"}
-                               :goto_previous_start {"[f" "@function.outer"
+                                               "]C" "@class.outer"
+                                               "]F" "@function.outer"}
+                               :goto_previous_start {"[a" "@parameter.inner"
                                                      "[b" "@block.outer"
-                                                     "[a" "@parameter.inner"}
-                               :goto_previous_end {"[F" "@function.outer"
+                                                     "[c" "@class.outer"
+                                                     "[f" "@function.outer"}
+                               :goto_previous_end {"[A" "@parameter.inner"
                                                    "[B" "@block.outer"
-                                                   "[A" "@parameter.inner"}}
+                                                   "[C" "@class.outer"
+                                                   "[F" "@function.outer"}}
                         :select {:enable true
                                  :lookahead true
                                  :keymaps {:af "@function.outer"
@@ -212,7 +216,11 @@
                                            :ab "@block.outer"
                                            :ib "@block.inner"
                                            :aa "@parameter.outer"
-                                           :ia "@parameter.inner"}}}})
+                                           :ia "@parameter.inner
+                                           "}}
+                        :swap {:enable true
+                               :swap_next {:<leader>a "@parameter.inner"}
+                               :swap_previous {:<leader>A "@parameter.inner"}}}})
   (treesitter.language.register :yaml :yaml.ansible)
   (treesitter.query.set :python :folds "[
   (function_definition)
