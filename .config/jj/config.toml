@@ -4,9 +4,7 @@
 name = "Alpha Chen"
 email = "alpha@kejadlen.dev"
 
-[merge-tools.dirdiff]
-program = ",jj-dirdiff"
-
+# https://discord.com/channels/968932220549103686/968932220549103689/1324858422910255155
 [merge-tools.gitpatch]
 program = "sh"
 edit-args = ["-c", '''
@@ -25,6 +23,8 @@ edit-args = ["-c", '''
   git -C "$right" clean -q -df # remove untracked files
 ''',
 ]
+merge-args = ["-c", "echo gitpatch cannot be used as a diff tool"]
+diff-args = ["-c", "echo gitpatch cannot be used as a diff tool"]
 
 [diff.color-words]
 max-inline-alternation = 0
@@ -40,45 +40,71 @@ backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [git]
 sign-on-push = true
-ignore-lfs-files = true
 push-new-bookmarks = true
-private-commits = "description(glob:'private:*')"
+private-commits = "private()"
+# ignore-filters = ["lfs", "git-crypt"]
 
 [templates]
 # show diff when committing
 draft_commit_description = '''
-separate(
-  "\n",
-  builtin_draft_commit_description,
-  "JJ: ignore-rest",
-  diff.git(),
-)
+  separate(
+    "\n",
+    builtin_draft_commit_description,
+    "JJ: ignore-rest",
+    diff.git(),
+  )
 '''
+# show an empty diamond when unpushed
+log_node = '''
+  if(self && !current_working_copy && !immutable && !conflict && in_branch(self),
+    "◇",
+    builtin_log_node
+  )
+'''
+
+[template-aliases]
+'in_branch(commit)' = 'commit.contained_in("immutable_heads()..bookmarks()")'
 
 [ui]
 default-command = "st"
-diff-editor = "gitpatch"
+# diff-editor = "gitpatch"
+diff-editor = ",jj-nvimdiff"
 pager = ":builtin"
 
+[ui.movement]
+edit = true
+
 [revset-aliases]
-'immutable_heads()' = 'builtin_immutable_heads() | bookmarks() ~ bookmarks(regex:"^alpha/")'
+'immutable_heads()' = 'builtin_immutable_heads() | heads(~mine())'
+
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'closest_merge()' = 'closest_merge(@)'
+'closest_merge(to)' = 'heads(::to & merges())'
 'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'
+
+'user(x)' = 'author(x) | committer(x)'
+'mine()' = 'user("alpha@kejadlen.dev")'
+
+'wip()' = 'description("wip:*")'
+'private()' = 'description("private:*")'
 
 [aliases]
 accuse = ["file", "annotate"]
 jj = []
 tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
-mm-rebase = ["rebase", "--source", "all:roots(main..mm)", "--destination", "main"]
-mm-add = ["rebase", "--source", "mm", "--destination", "all:mm-", "--destination"]
-mm-rm = ["util", "exec", "--", "bash", "-c", '''
-  jj rebase --source mm --destination "all:mm- ~ $1"
-  jj simplify-parents --source mm
-''', "jj-mm-rm"]
+stack = ["rebase", "-A", "trunk()", "-B", "closest_merge(@)", "-r"]
+pr = ["util", "exec", "--", "bash", "-c", """
+  gh pr create --head \
+    $(jj log -r 'closest_bookmark(@)' -T 'bookmarks' --no-graph | cut -d ' ' -f 1)
+"""]
+pull = ["util", "exec", "--", "bash", "-c", """
+  jj git fetch
+  jj rebase --branch "visible_heads() & mutable()" --destination "trunk()"
+"""]
 
 # https://github.com/jj-vcs/jj/discussions/3549
 [experimental-advance-branches]
-# enabled-branches = ["glob:*"]
+enabled-branches = ["glob:*"]
 disabled-branches = ["main", "mm"]
 
 [fix.tools.ruff-format]
