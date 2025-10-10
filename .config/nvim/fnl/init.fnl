@@ -76,20 +76,30 @@
 
 ;;; restore cursor location
 
-;; https://github.com/vim/vim/blob/master/runtime/defaults.vim#L108
-(let [{: nvim_command} vim.api
-      group (create-augroup :nvim-startup {})
-      callback #(when (and (< 0 (vim.fn.line "'\""))
-                           (<= (vim.fn.line "'\"") (vim.fn.line "$"))
-                           (not (string.find vim.bo.filetype :commit)))
-                  (nvim_command "normal! g`\""))]
-  ;; when restoring the cursor, we want to ignore commit filetypes, so
-  ;; we need to manually enable filetype detection to set up those
-  ;; autocommands before creating the autocommand to restore the cursor
-  ;;
-  ;; https://github.com/neovim/neovim/issues/15536#issuecomment-909331778
-  (nvim_command "filetype plugin indent on")
-  (create-autocmd :BufReadPost {: callback : group}))
+;; Restore cursor position when re-opening a file:
+;;   https://github.com/neovim/neovim/issues/16339#issuecomment-1457394370
+;;
+;; See also (previously):
+;;   https://github.com/vim/vim/blob/master/runtime/defaults.vim#L108
+(let [{:nvim_buf_get_mark buf-get-mark
+       :nvim_buf_line_count buf-line-count
+       :nvim_feedkeys feedkeys} vim.api
+      restore-cursor-position (fn [opts]
+                                (let [ft (. (. vim.bo opts.buf) :filetype)
+                                      last-pos (buf-get-mark opts.buf "\"")
+                                      last-known-line (. last-pos 1)]
+                                  (when (and (not (or (ft:match :commit)
+                                                      (ft:match :rebase)))
+                                             (> last-known-line 1)
+                                             (<= last-known-line
+                                                 (buf-line-count opts.buf)))
+                                    (feedkeys "g`\"" :nx false))))
+      setup-cursor-restore (fn [opts]
+                             (create-autocmd :BufWinEnter
+                                             {:once true
+                                              :buffer opts.buf
+                                              :callback #(restore-cursor-position opts)}))]
+  (create-autocmd :BufRead {:callback setup-cursor-restore}))
 
 ;;; filetype
 
