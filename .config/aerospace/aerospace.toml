@@ -53,7 +53,7 @@ inner.horizontal = 8
 inner.vertical =   8
 outer.left =       8
 outer.bottom =     8
-outer.top =        [{ monitor.Retina = 8}, 40]
+outer.top =        [{ monitor.Retina = 8}, 48]
 outer.right =      8
 
 # See https://nikitabobko.github.io/AeroSpace/guide#exec-env-vars
