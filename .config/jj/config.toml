@@ -83,7 +83,6 @@ edit = true
 'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'
 
 'user(x)' = 'author(x) | committer(x)'
-'mine()' = 'user("alpha@kejadlen.dev")'
 
 'wip()' = 'description("wip:*")'
 'private()' = 'description("private:*")'
