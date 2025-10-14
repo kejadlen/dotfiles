@@ -130,18 +130,25 @@ if (( $+commands[fzf] )); then
   # https://github.com/junegunn/fzf/issues/164#issuecomment-581837757
   z4h bindkey fzf-cd-widget ç
 
+  skip_dirs=.direnv,.git,node_modules,target
+
   export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
   export FZF_TMUX_OPTS="-p80%,60%"
   export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
-  export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules,target \
+
+  # not sure why FZF_DEFAULT_COMMAND isn't being used here?
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_CTRL_T_OPTS="--walker-skip $skip_dirs \
     --preview 'bat -n --color=always {}' \
     --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+
   # for some reason, `echo -n` just echoes the `-n`
   export FZF_CTRL_R_OPTS="--bind 'ctrl-y:execute-silent(echo {2..} | pbcopy)+abort' \
     --color header:italic \
     --header 'Press CTRL-Y to copy command into clipboard'"
+
   export FZF_ALT_C_COMMAND="fd --type d --strip-cwd-prefix --hidden --follow --exclude .git"
-  export FZF_ALT_C_OPTS="--walker-skip .git,node_modules,target \
+  export FZF_ALT_C_OPTS="--walker-skip $skip_dirs \
     --preview 'eza --tree --color=always {}'"
 fi
 
@@ -193,7 +200,7 @@ if (( $+commands[zoxide] )); then
 fi
 
 if (( $+commands[jj] )); then
-  source <(COMPLETE=zsh jj)
+  source <(jj util completion zsh)
 fi
 
 # Define named directories: ~w <=> Windows home directory on WSL.
