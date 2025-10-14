@@ -19,6 +19,7 @@
 (lsp.enable :ruby_lsp)
 (lsp.enable :ruff)
 (lsp.enable :rust_analyzer)
+(lsp.enable :sorbet)
 (lsp.enable :terraformls)
 (lsp.enable :ts_ls)
 
