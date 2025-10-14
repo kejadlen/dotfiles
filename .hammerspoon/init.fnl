@@ -49,8 +49,8 @@
 
 ;;; quitter
 
-; (let [quitter (require :quitter)]
-;   (quitter:start))
+(let [quitter (require :quitter)]
+  (quitter:start))
 
 ;;; sketchybar on screen changes
 
