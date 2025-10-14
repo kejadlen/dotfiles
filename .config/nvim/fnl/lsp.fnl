@@ -1,5 +1,4 @@
-(local {:api {:nvim_create_autocmd nvim-create-autocmd} : keymap : iter : lsp}
-       vim)
+(local {:api {:nvim_create_autocmd nvim-create-autocmd} : keymap : lsp} vim)
 
 ; (lsp.set_log_level :debug)
 
@@ -32,16 +31,16 @@
 (let [fmt #{:formatCommand $1 :formatStdin true}
       lint #{:lintCommand $1 :lintFormats $2 :lintStdin true}
       fennel [(fmt "fnlfmt /dev/stdin")
-              (lint (: (iter [:fennel
-                              "--globals vim,hs,spoon"
-                              :--raw-errors
-                              "$(realpath --relative-to . ${INPUT})"
-                              :2>&1]) :join " ")
+              (lint (table.concat [:fennel
+                                   "--globals vim,hs,spoon"
+                                   :--raw-errors
+                                   "$(realpath --relative-to . ${INPUT})"
+                                   :2>&1] " ")
                     ["%f:%l: %m"])]
-      js [{:formatCommand (let [x (iter ["prettier --stdin --stdin-filepath ${INPUT}"
+      js [{:formatCommand (table.concat ["prettier --stdin --stdin-filepath ${INPUT}"
                                          "${--range-start:charStart} ${--range-end:charEnd}"
-                                         "${--tab-width:tabWidth} ${--use-tabs:!insertSpaces}"])]
-                            (x:join " "))
+                                         "${--tab-width:tabWidth} ${--use-tabs:!insertSpaces}"]
+                                        " ")
            :formatStdin true
            :formatCanRange true
            :rootMarkers [:.prettierrc.json]}]
