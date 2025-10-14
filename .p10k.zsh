@@ -1798,7 +1798,7 @@
     local status_color=${green}
     (( VCS_STATUS_COMMITS_AHEAD )) && status_color=${cyan}
     (( VCS_STATUS_COMMITS_BEHIND )) && status_color=${magenta}
-    (( VCS_STATUS_COMMITS_AHEAD && VCS_STATUS_COMMITS_BEHIND )) && status_color=${red}
+    (( VCS_STATUS_COMMITS_AHEAD && VCS_STATUS_COMMITS_BEHIND )) && status_color=${yellow}
 
     local res
     local where=${(V)VCS_STATUS_LOCAL_BRANCH}
@@ -1808,9 +1808,9 @@
     res+="${status_color}${where//\%/%%}"  # escape %
 
     # ‹42 if before the local bookmark
-    # (( VCS_STATUS_COMMITS_BEFORE )) && res+="‹${VCS_STATUS_COMMITS_BEFORE}"
+    (( VCS_STATUS_COMMITS_BEFORE )) && res+="‹${VCS_STATUS_COMMITS_BEFORE}"
     # ›42 if beyond the local bookmark
-    # (( VCS_STATUS_COMMITS_AFTER )) && res+="›${VCS_STATUS_COMMITS_AFTER}"
+    (( VCS_STATUS_COMMITS_AFTER )) && res+="›${VCS_STATUS_COMMITS_AFTER}"
 
 
     ## jj_remote
