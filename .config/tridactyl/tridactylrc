@@ -55,6 +55,7 @@ autocontain -s facebook\.com Facebook
 autocontain -s instagram\.com Facebook
 autocontain -s linkedin\.com Social
 autocontain -s myworkday\.com Work
+autocontain -s okta\.com Work
 autocontain -s youtube\.com Google
 
 " github
