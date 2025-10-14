@@ -67,8 +67,8 @@ log_node = '''
 
 [ui]
 default-command = "st"
-# diff-editor = "gitpatch"
-diff-editor = ",jj-nvimdiff"
+diff-editor = "gitpatch"
+# diff-editor = ",jj-nvimdiff"
 pager = ":builtin"
 
 [ui.movement]
