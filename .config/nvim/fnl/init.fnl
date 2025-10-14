@@ -1,6 +1,7 @@
 (local {:nvim_create_autocmd create-autocmd
         :nvim_create_augroup create-augroup} vim.api)
 
+(vim.pack.add ["https://git.kejadlen.dev/alpha/vim-colors-paramount.git"])
 (vim.cmd.colorscheme :paramount)
 
 (set vim.o.cmdheight 0)
@@ -108,8 +109,7 @@
 ;;; vim.pack
 
 ;; :lua vim.pack.update({ 'nvim-lspconfig' })
-(vim.pack.add ["https://git.kejadlen.dev/alpha/vim-colors-paramount.git"
-               ;; was using jaawerth/fennel.vim, but there are some annoyances
+(vim.pack.add [;; was using jaawerth/fennel.vim, but there are some annoyances
                ;; with it, so let's try this one instead
                "https://github.com/atweiden/vim-fennel.git"
                "https://github.com/christoomey/vim-tmux-navigator.git"

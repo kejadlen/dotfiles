@@ -1,31 +1,105 @@
 {
   "plugins": {
-    "direnv.vim": [],
-    "fidget.nvim": [],
-    "fzf.vim": [],
-    "hotpot.nvim": [],
-    "indent-blankline.nvim": [],
-    "lightline.vim": [],
+    "direnv.vim": {
+      "rev": "ab2a7e0",
+      "src": "https://github.com/direnv/direnv.vim.git"
+    },
+    "fidget.nvim": {
+      "rev": "3f54759",
+      "src": "https://github.com/j-hui/fidget.nvim.git"
+    },
+    "fzf.vim": {
+      "rev": "879db51",
+      "src": "https://github.com/junegunn/fzf.vim.git"
+    },
+    "hotpot.nvim": {
+      "rev": "443fe56",
+      "src": "https://github.com/rktjmp/hotpot.nvim.git"
+    },
+    "indent-blankline.nvim": {
+      "rev": "005b560",
+      "src": "https://github.com/lukas-reineke/indent-blankline.nvim.git"
+    },
+    "lightline.vim": {
+      "rev": "e358557",
+      "src": "https://github.com/itchyny/lightline.vim.git"
+    },
     "nvim-lspconfig": {
+      "rev": "5bfcc89",
+      "src": "https://github.com/neovim/nvim-lspconfig.git",
       "version": "'v2.5.0'"
     },
-    "nvim-treesitter": [],
-    "nvim-treesitter-context": [],
-    "nvim-treesitter-textobjects": [],
-    "vim-abolish": [],
-    "vim-colors-paramount": [],
-    "vim-context-commentstring": [],
-    "vim-dirvish": [],
-    "vim-dispatch": [],
-    "vim-fennel": [],
-    "vim-repeat": [],
-    "vim-sensible": [],
-    "vim-sleuth": [],
-    "vim-speeddating": [],
-    "vim-surround": [],
-    "vim-terraform": [],
-    "vim-tmux-navigator": [],
-    "vim-unimpaired": [],
-    "vim-vinegar": []
+    "nvim-treesitter": {
+      "rev": "42fc28ba",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
+    },
+    "nvim-treesitter-context": {
+      "rev": "41847d3",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
+    },
+    "nvim-treesitter-textobjects": {
+      "rev": "71385f1",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
+    },
+    "vim-abolish": {
+      "rev": "dcbfe06",
+      "src": "https://github.com/tpope/vim-abolish.git"
+    },
+    "vim-colors-paramount": {
+      "rev": "ceaed9d",
+      "src": "https://git.kejadlen.dev/alpha/vim-colors-paramount.git"
+    },
+    "vim-context-commentstring": {
+      "rev": "edcf56c",
+      "src": "https://github.com/suy/vim-context-commentstring.git"
+    },
+    "vim-dirvish": {
+      "rev": "5d1d1ef",
+      "src": "https://github.com/justinmk/vim-dirvish.git"
+    },
+    "vim-dispatch": {
+      "rev": "a2ff28a",
+      "src": "https://github.com/tpope/vim-dispatch.git"
+    },
+    "vim-fennel": {
+      "rev": "cb93482",
+      "src": "https://github.com/atweiden/vim-fennel.git"
+    },
+    "vim-repeat": {
+      "rev": "6584602",
+      "src": "https://github.com/tpope/vim-repeat.git"
+    },
+    "vim-sensible": {
+      "rev": "0ce2d84",
+      "src": "https://github.com/tpope/vim-sensible.git"
+    },
+    "vim-sleuth": {
+      "rev": "be69bff",
+      "src": "https://github.com/tpope/vim-sleuth.git"
+    },
+    "vim-speeddating": {
+      "rev": "c17eb01",
+      "src": "https://github.com/tpope/vim-speeddating.git"
+    },
+    "vim-surround": {
+      "rev": "3d188ed",
+      "src": "https://github.com/tpope/vim-surround.git"
+    },
+    "vim-terraform": {
+      "rev": "520498f",
+      "src": "https://github.com/hashivim/vim-terraform.git"
+    },
+    "vim-tmux-navigator": {
+      "rev": "c45243d",
+      "src": "https://github.com/christoomey/vim-tmux-navigator.git"
+    },
+    "vim-unimpaired": {
+      "rev": "db65482",
+      "src": "https://github.com/tpope/vim-unimpaired.git"
+    },
+    "vim-vinegar": {
+      "rev": "bb1bcdd",
+      "src": "https://github.com/tpope/vim-vinegar.git"
+    }
   }
 }

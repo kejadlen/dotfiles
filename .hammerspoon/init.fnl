@@ -1,6 +1,7 @@
 ;; fennel-ls doesn't support arbitrary allowed globals, so
 ;; unwrap `hs` here to localize it to just one place
 (local {: eventtap
+        : execute
         : fs
         : hotkey
         : loadSpoon
@@ -48,8 +49,8 @@
 
 ;;; quitter
 
-(let [quitter (require :quitter)]
-  (quitter:start))
+; (let [quitter (require :quitter)]
+;   (quitter:start))
 
 ;;; sketchybar on screen changes
 

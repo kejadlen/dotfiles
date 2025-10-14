@@ -30,3 +30,5 @@ pyrightconfig.json
 
 # aider
 .aider*
+
+**/.claude/settings.local.json

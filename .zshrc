@@ -169,8 +169,6 @@ function xman() { open x-man-page://$@ ; }
 
 # https://docs.brew.sh/Shell-Completion
 if type brew &>/dev/null; then
-  FPATH=${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/share/zsh/site-functions:${FPATH}}
-
   autoload -Uz compinit
   compinit
 fi

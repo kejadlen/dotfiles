@@ -27,3 +27,9 @@
         out (sh* :dscl "." :-read (expand-env-vars :$HOME/) :UserShell)
         actual-shell (chomp (out:match "UserShell: (.+)"))]
     (if (not= actual-shell desired-shell) (sh* :chsh :-s desired-shell))))
+
+;; TODO
+;; - brew bundle
+;;   - start sketchybar
+;; - install neovim plugins
+;; - install tmux plugins

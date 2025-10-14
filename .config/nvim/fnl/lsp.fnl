@@ -44,6 +44,7 @@
            :formatStdin true
            :formatCanRange true
            :rootMarkers [:.prettierrc.json]}]
+      json [(fmt "jq .")]
       yaml [(fmt "yamlfmt -in")]]
   (lsp.config :efm
               {:init_options {:documentFormatting true
@@ -53,9 +54,10 @@
                               :completion true}
                :settings {:languages {: fennel
                                       : js
+                                      : json
                                       :typescript js
                                       :typescriptreact js
                                       : yaml}
                           ;; since otherwise eslint goes haywire
                           :lintDebounce 1000000000}
-               :filetypes [:fennel :typescriptreact :yaml]}))
+               :filetypes [:fennel :json :typescriptreact :yaml]}))

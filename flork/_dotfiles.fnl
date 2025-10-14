@@ -4,19 +4,17 @@
                 :.digrc
                 :.gemrc
                 :.gitconfig
+                :.git_templates
                 :.hammerspoon
                 :.inputrc
-                :.local
                 :.p10k.zsh
                 :.profile
                 :.ruby-version
-                :.tmux.conf
                 :.zsh
                 :.zshenv
                 :.zshrc
                 :.bundle/config
-                :.cargo/config.toml
-                :.docker/config.json]]
+                :.cargo/config.toml]]
   (each [_ v (ipairs dotfiles)]
     (let [src (expand-env-vars (.. :$HOME/.dotfiles/ v))
           dest (expand-env-vars (.. :$HOME/ v))]

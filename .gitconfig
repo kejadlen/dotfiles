@@ -15,8 +15,6 @@
 	followTags = true
 	recurseSubmodules = on-demand
 	autoSetupRemote = true
-[url "git@github.com:"]
-	insteadof = https://github.com/
 [url "git@git.kejadlen.dev:"]
 	insteadof = https://git.kejadlen.dev/
 [transfer]
@@ -137,3 +135,7 @@
 
 [include]
 	path = ~/.gitconfig.local
+[credential]
+	helper = osxkeychain
+[maintenance]
+	repo = /Users/alpha.chen/src/gusto/zenpayroll
