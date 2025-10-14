@@ -1,0 +1,31 @@
+{
+  "plugins": {
+    "direnv.vim": [],
+    "fidget.nvim": [],
+    "fzf.vim": [],
+    "hotpot.nvim": [],
+    "indent-blankline.nvim": [],
+    "lightline.vim": [],
+    "nvim-lspconfig": {
+      "version": "'v2.5.0'"
+    },
+    "nvim-treesitter": [],
+    "nvim-treesitter-context": [],
+    "nvim-treesitter-textobjects": [],
+    "vim-abolish": [],
+    "vim-colors-paramount": [],
+    "vim-context-commentstring": [],
+    "vim-dirvish": [],
+    "vim-dispatch": [],
+    "vim-fennel": [],
+    "vim-repeat": [],
+    "vim-sensible": [],
+    "vim-sleuth": [],
+    "vim-speeddating": [],
+    "vim-surround": [],
+    "vim-terraform": [],
+    "vim-tmux-navigator": [],
+    "vim-unimpaired": [],
+    "vim-vinegar": []
+  }
+}
