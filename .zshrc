@@ -130,7 +130,7 @@ if (( $+commands[fzf] )); then
   # https://github.com/junegunn/fzf/issues/164#issuecomment-581837757
   z4h bindkey fzf-cd-widget ç
 
-  skip_dirs=.direnv,.git,node_modules,target
+  skip_dirs=.direnv,.git,.jj,node_modules,target
 
   export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
   export FZF_TMUX_OPTS="-p80%,60%"
