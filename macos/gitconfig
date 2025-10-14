@@ -1,0 +1,6 @@
+# GitHub over SSH, with keys from 1Password's agent.
+[url "git@github.com:"]
+	insteadof = https://github.com/
+
+[credential]
+	helper = osxkeychain

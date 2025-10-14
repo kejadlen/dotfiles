@@ -16,8 +16,6 @@
 	autoSetupRemote = true
 [url "git@git.kejadlen.dev:"]
 	insteadof = https://git.kejadlen.dev/
-[url "git@github.com:"]
-	insteadof = https://github.com/
 # pi requires owner/repo-shaped git URLs; quire has no owner, so strip the dummy pkg/ segment.
 [url "ssh://quire/"]
 	insteadof = ssh://quire/pkg/
@@ -126,7 +124,8 @@
 	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
 
+# Settings that only work on macOS, linked there by frork/_macos.fnl. Git
+# skips a missing include, so other machines go without.
 [include]
+	path = config.macos
 	path = config.local
-[credential]
-	helper = osxkeychain

@@ -5,6 +5,8 @@
 
 (require :_defaults)
 
+(ok :symlink "~/.gitconfig.macos" "~/.dotfiles/macos/gitconfig")
+
 (let [src "~/.dotfiles/macos/DefaultKeyBinding.dict"
       dest "~/Library/KeyBindings/DefaultKeyBinding.dict"]
   (ok :directory "~/Library/KeyBindings")
