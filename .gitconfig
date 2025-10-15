@@ -17,6 +17,8 @@
 	autoSetupRemote = true
 [url "git@git.kejadlen.dev:"]
 	insteadof = https://git.kejadlen.dev/
+[url "git@github.com:"]
+	insteadof = https://github.com/
 [transfer]
 	fsckobjects = true
 
