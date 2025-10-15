@@ -8,11 +8,9 @@
 
 (local log (logger.new :quitter :debug))
 
-(local config {:permanent-apps [:Arc
-                                :Arq
+(local config {:permanent-apps [:Arq
                                 "Firefox Developer Edition"
                                 :Ghostty
-                                :LibreWolf
                                 :Miniflux
                                 :Phanpy
                                 :Obsidian
