@@ -57,7 +57,7 @@
 (set _G.screen-watcher
      (screen.watcher.new (fn []
                            (log:i "Screen configuration changed, reloading sketchybar")
-                           (execute "sketchybar --reload"))))
+                           (execute "/opt/homebrew/bin/sketchybar --reload"))))
 
 (_G.screen-watcher:start)
 
