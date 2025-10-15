@@ -93,7 +93,9 @@
                           "www\\.redfin\\.com/stingray/do/api-get-listing-hero-shot"
                           "www\\.404media\\.co/content/images"
                           "the-ergo-archive\\.zsa\\.io/assets/images"
-                          ;; rancho gordo
-                          ".*\\.soundestlink\\.com/image/newsletter"]]
+                          ".*\\.soundestlink\\.com/image/newsletter"
+                          "c\\d+\\.patreon(usercontent)?\\.com"
+                          :mcusercontent.com
+                          "cdn\\.shopify\\.com/s/files"]]
   (ok :defaults :com.freron.MailMate :MmAllowedImageURLRegexp :string
       (.. "https://(" (table.concat allowed-image-urls "|") ")/.*")))
