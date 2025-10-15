@@ -1,25 +1,34 @@
 (local {: application
         : caffeinate
-        : fnutils
+        :fnutils {: contains : ifilter}
         : logger
         : notify
         : timer
         : window} hs)
 
-(local {: contains : ifilter} fnutils)
-
 (local log (logger.new :quitter :debug))
 
-(local permanent [:Safari
-                  :Arc
-                  "Firefox Developer Edition"
-                  :Ghostty
-                  :LibreWolf
-                  :Miniflux
-                  :Phanpy
-                  :Obsidian])
+(local config {:permanent-apps [:Arc
+                                :Arq
+                                "Firefox Developer Edition"
+                                :Ghostty
+                                :LibreWolf
+                                :Miniflux
+                                :Phanpy
+                                :Obsidian
+                                "Raspberry Pi Imager"
+                                :Safari]
+               :app-overrides {:Music [:hour 1]
+                               :Raindrop [:minute 15]
+                               "Unifi Protect" [:minute 30]
+                               :Zoom [:hour 1]}
+               :default-timeout [:minute 5]})
 
-(local kill-delay {:Raindrop 900 "UniFi Protect" 1800 :Zoom 1800})
+(fn kill-delay [app-name]
+  (let [[interval count] (or (?. config.app-overrides app-name)
+                             config.default-timeout)
+        seconds (. {:minute 60 :hour (* 60 60)} interval)]
+    (* count seconds)))
 
 (local to-kill {})
 
@@ -46,30 +55,25 @@
       (set (. to-kill bundle-id) nil))))
 
 (fn mark [app]
-  (when (= (app:kind) 1)
+  (when (and (not (contains config.permanent-apps (app:name))) (= (app:kind) 1))
     (unmark app)
-    (log.i (.. "marking " (app:name)))
-    (set (. to-kill (app:bundleID))
-         (timer.doAfter (or (?. kill-delay (app:name)) 300) #(kill app)))))
+    (let [delay (kill-delay (app:name))]
+      (log.i (.. "marking " (app:name) " to be killed after " delay))
+      (set (. to-kill (app:bundleID)) (timer.doAfter delay #(kill app))))))
 
 (fn mark-all-apps []
   (log.d :mark-all-apps)
   (each [_ app (ipairs (ifilter [(application.find "")]
-                                #(not (contains permanent ($1:name)))))]
+                                #(not (contains config.permanent-apps ($1:name)))))]
     (mark app)))
 
 (local cw (caffeinate.watcher.new #(when (= $1 caffeinate.watcher.systemDidWake)
                                      (mark-all-apps))))
 
-(local wf (window.filter.new {:Safari false
-                              :Arc false
-                              "Firefox Developer Edition" false
-                              :Ghostty false
-                              :LibreWolf false
-                              :Miniflux false
-                              :Phanpy false
-                              :Obsidian false
-                              :default true}))
+(local wf (let [filter-config {:default true}]
+            (each [_ app-name (ipairs config.permanent-apps)]
+              (tset filter-config app-name false))
+            (window.filter.new filter-config)))
 
 (fn start []
   (log.i :starting)
@@ -78,7 +82,7 @@
   (wf:subscribe {window.filter.windowFocused #(unmark ($1:application))
                  window.filter.windowUnfocused #(mark ($1:application))}))
 
-;; use global so this isn't GC'ed
+;; use global so this isn't GC'ed?
 (set _G.quitter {: cw : to-kill : wf})
 
 {: start}
