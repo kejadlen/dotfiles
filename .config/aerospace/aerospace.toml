@@ -157,10 +157,6 @@ alt-shift-k = ['join-with up', 'mode main']
 alt-shift-l = ['join-with right', 'mode main']
 
 [[on-window-detected]]
-if.app-id = 'company.thebrowser.Browser'
-run = 'layout floating'
-
-[[on-window-detected]]
 if.app-name-regex-substring = 'UniFi Protect'
 run = 'layout floating'
 
@@ -181,18 +177,9 @@ run = 'move-node-to-workspace 1'
 if.app-id = 'org.mozilla.firefoxdeveloperedition'
 if.during-aerospace-startup = false
 run = ['layout floating']
-
 [[on-window-detected]]
 if.app-id = 'org.mozilla.firefoxdeveloperedition'
 run = 'move-node-to-workspace 2'
-
-[[on-window-detected]]
-if.app-id = 'org.mozilla.librewolf'
-run = 'move-node-to-workspace 2'
-
-[[on-window-detected]]
-if.app-id = 'com.github.wez.wezterm'
-run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
@@ -220,10 +207,6 @@ run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace 5'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.Safari.WebApp.5DDD6FC6-DC16-4158-BE9C-B827212E01FC' # Work Slack
 run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
