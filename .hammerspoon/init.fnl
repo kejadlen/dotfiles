@@ -16,7 +16,7 @@
 ; (set logger.defaultLogLevel :info)
 
 (local {: mash : smash : modal-bind} (require :hotkey))
-(local {: chomp : paste : replace-selection : run} (require :utils))
+(local {: chomp : debounce : paste : replace-selection : run} (require :utils))
 (local little-ff (require :little-ff))
 
 ;; debugging
@@ -52,12 +52,13 @@
 (let [quitter (require :quitter)]
   (quitter:start))
 
-;;; sketchybar on screen changes
+;;; reload sketchybar on screen changes
 
 (set _G.screen-watcher
-     (screen.watcher.new (fn []
-                           (log:i "Screen configuration changed, reloading sketchybar")
-                           (execute "/opt/homebrew/bin/sketchybar --reload"))))
+     (screen.watcher.new #(debounce 1.0
+                                    (fn []
+                                      (log:i "Screen configuration changed, reloading sketchybar")
+                                      (execute "/opt/homebrew/bin/sketchybar --reload")))))
 
 (_G.screen-watcher:start)
 
