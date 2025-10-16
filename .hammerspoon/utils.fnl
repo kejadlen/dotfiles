@@ -41,4 +41,11 @@
     (cb)
     (set ax-app.AXEnhancedUserInterface prev-val)))
 
-{: chomp : paste : replace-selection : run : with-ax-hotfix}
+(fn debounce [delay f]
+  (var timer nil)
+  (fn []
+    (when timer
+      (timer:stop))
+    (set timer (hs.timer.doAfter delay f))))
+
+{: chomp : debounce : paste : replace-selection : run : with-ax-hotfix}
