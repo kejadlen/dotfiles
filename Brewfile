@@ -96,6 +96,7 @@ cask "topnotch"
 cask "vlc"
 # cask "yubico-yubikey-manager"
 # cask "vmware-fusion"
+cask "zed"
 cask "zoom"
 cask "zotero"
 
