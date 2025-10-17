@@ -92,11 +92,11 @@ sketchybar --add item datetime right \
                  update_freq=30 \
                  click_script="open x-apple.systempreferences:com.apple.wifi-settings-extension" \
                  script="$PLUGIN_DIR/wifi.sh" \
-           --add item tailscale right \
-           --set tailscale \
+           --add item vpn right \
+           --set vpn \
                  label.drawing=off \
                  update_freq=30 \
-                 script="$PLUGIN_DIR/tailscale.sh" \
+                 script="$PLUGIN_DIR/vpn.sh" \
            --add item volume right \
            --set volume \
                  label.drawing=off \
