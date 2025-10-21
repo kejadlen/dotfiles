@@ -41,7 +41,7 @@ backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 [git]
 sign-on-push = true
 push-new-bookmarks = true
-private-commits = "private()"
+private-commits = "private() | wip()"
 # ignore-filters = ["lfs", "git-crypt"]
 
 [templates]
@@ -84,8 +84,8 @@ edit = true
 
 'user(x)' = 'author(x) | committer(x)'
 
-'wip()' = 'description("wip:*")'
-'private()' = 'description("private:*")'
+'wip()' = 'description(glob:"wip:*")'
+'private()' = 'description(glob:"private:*")'
 
 [aliases]
 accuse = ["file", "annotate"]
@@ -102,9 +102,9 @@ pull = ["util", "exec", "--", "bash", "-c", """
 """]
 
 # https://github.com/jj-vcs/jj/discussions/3549
-[experimental-advance-branches]
-enabled-branches = ["glob:*"]
-disabled-branches = ["main", "mm"]
+# [experimental-advance-branches]
+# enabled-branches = ["glob:*"]
+# disabled-branches = ["main", "mm"]
 
 [fix.tools.ruff-format]
 command = ["ruff", "format", "--stdin-filename", "$path", "-"]
