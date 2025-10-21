@@ -19,7 +19,7 @@
                :app-overrides {:Music [:hour 1]
                                :Raindrop [:minute 15]
                                "Unifi Protect" [:minute 30]
-                               :Zoom [:hour 1]}
+                               :zoom.us [:hour 1]}
                :default-timeout [:minute 5]})
 
 (fn kill-delay [app-name]
