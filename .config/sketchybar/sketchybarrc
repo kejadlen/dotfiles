@@ -84,7 +84,7 @@ sketchybar --add item front_app left \
 
 sketchybar --add item datetime right \
            --subscribe datetime system_woke \
-           --set datetime update_freq=30 icon=􀉉 script="$PLUGIN_DIR/datetime.sh" \
+           --set datetime update_freq=30 script="$PLUGIN_DIR/datetime.sh" \
            --add item wifi right \
            --subscribe wifi wifi_change \
            --set wifi \
@@ -110,6 +110,13 @@ sketchybar --add item datetime right \
                  click_script="sketchybar -m --set \$NAME label.drawing=toggle" \
                  script="$PLUGIN_DIR/battery.sh" \
            --subscribe battery system_woke power_source_change
+           # --add item meetingbar right \
+           # --set meetingbar \
+           #       icon=􀉉 \
+           #       icon.padding_right=8 \
+           #       label.y_offset=2 \
+           #       update_freq=120 \
+           #       script="$PLUGIN_DIR/meetingbar.sh"
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update
