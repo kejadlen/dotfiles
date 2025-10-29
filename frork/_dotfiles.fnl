@@ -1,4 +1,4 @@
-(local {: ok :utils {: dirname : expand-env-vars}} (require :flork))
+(local {: ok :utils {: dirname}} (require :flork))
 
 (let [dotfiles [:.config
                 :.digrc
@@ -16,9 +16,12 @@
                 :.bundle/config
                 :.cargo/config.toml]]
   (each [_ v (ipairs dotfiles)]
-    (let [src (expand-env-vars (.. :$HOME/.dotfiles/ v))
-          dest (expand-env-vars (.. :$HOME/ v))]
-      (if (v:match "/") (ok :directory (dirname dest)))
+    (let [src (.. :$HOME/.dotfiles/ v)
+          dest (.. :$HOME/ v)]
+      (when (v:match "/")
+        (-?> dest dirname (partial #(ok :directory))))
       (ok :symlink dest src))))
 
-(ok :directory (expand-env-vars :$HOME/.config/jj/conf.d))
+(ok :directory :$HOME/.config/jj/conf.d)
+
+(ok :symlink :$HOME/CLAUDE.md :$HOME/.dotfiles/ai/CLAUDE.md)

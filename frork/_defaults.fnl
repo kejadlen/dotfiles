@@ -1,4 +1,4 @@
-(local {: ok} (require :flork))
+(local {: ok} (require :frork))
 
 ;; # TODO restart Dock, Finder, and SystemUIServer on changes
 
