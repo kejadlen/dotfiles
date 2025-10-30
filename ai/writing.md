@@ -4,8 +4,6 @@
 
 - Do not rewrite parts that are already fine
 - Do not make unnecessary changes to formatting
-- Avoid the "**emphasis**: explanation" pattern in lists
-- Lists themselves are acceptable
 
 ## Strunk & White Principles
 
