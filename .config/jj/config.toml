@@ -42,6 +42,7 @@ backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 sign-on-push = true
 push-new-bookmarks = true
 private-commits = "private() | wip()"
+write-change-id-header = true
 # ignore-filters = ["lfs", "git-crypt"]
 
 [templates]
