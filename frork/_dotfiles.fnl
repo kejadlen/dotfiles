@@ -23,5 +23,3 @@
       (ok :symlink dest src))))
 
 (ok :directory :$HOME/.config/jj/conf.d)
-
-(ok :symlink :$HOME/CLAUDE.md :$HOME/.dotfiles/ai/CLAUDE.md)

@@ -1,1 +1,0 @@
-- Read ~/.dotfiles/ai/AI.md
