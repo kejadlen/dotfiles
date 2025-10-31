@@ -10,6 +10,7 @@ private
 !.config/aider
 !.config/alacritty
 !.config/bat
+!.config/claude
 !.config/direnv
 !.config/fish
 !.config/git
