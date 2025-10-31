@@ -26,6 +26,13 @@ cursor-text = #121218
 selection-background = #626880
 selection-foreground = #c6d0f5
 
+# Split divider
+split-divider-color = #44475A
+
+# Unfocused splits
+unfocused-split-opacity = 0.5
+unfocused-split-fill = #0a0a0f
+
 font-family = "Source Code Pro with Numderline"
 font-size = 13
 
@@ -42,6 +49,18 @@ keybind = global:ctrl+opt+cmd+g=toggle_quick_terminal
 keybind = global:ctrl+`=toggle_quick_terminal
 
 keybind = alt+m=text:μ
+
+# Split navigation
+keybind = opt+cmd+h=goto_split:left
+keybind = opt+cmd+j=goto_split:down
+keybind = opt+cmd+k=goto_split:up
+keybind = opt+cmd+l=goto_split:right
+
+# Split resizing
+keybind = ctrl+cmd+h=resize_split:left,10
+keybind = ctrl+cmd+j=resize_split:down,10
+keybind = ctrl+cmd+k=resize_split:up,10
+keybind = ctrl+cmd+l=resize_split:right,10
 
 ## macos
 
