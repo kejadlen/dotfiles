@@ -14,7 +14,11 @@
   (ok :directory (dirname mailmate-keybindings))
   (ok :symlink mailmate-keybindings "~/.dotfiles/macos/MailMate.plist"))
 
+;; this is slow - maybe replace with a hand-rolled assertion type?
+(ok :brew-bundle "~/.dotfiles/Brewfile")
+
 (register :dock {:status (fn []
+                           ;; TODO install instead of asserting
                            (assert-bin :dockutil)
                            (let [out (sh! :dockutil :--list)
                                  items (icollect [line (out:gmatch "[^\n]+")]

@@ -39,6 +39,6 @@
                                                 :actual (normalize-value current-type
                                                                          current-value)})
                                        :ok)))
-                       :install #(defaults :write $1 $2 (.. "-" $3) $4)
-                       :upgrade #(defaults :write $1 $2 (.. "-" $3) $4)
+                       :install #(defaults :write $1 $2 (.. "-" $3) (tostring $4))
+                       :upgrade #(defaults :write $1 $2 (.. "-" $3) (tostring $4))
                        :remove #(defaults :delete $1 $2)}))
