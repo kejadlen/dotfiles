@@ -50,7 +50,10 @@ claim. That was incorrect and should have been labeled.
 
 Read ~/.dotfiles/ai/writing.md for more writing guidelines.
 
-## Commit Messages
+## Version Control
+
+Check for .jj directory in the repository root. If present, use jj commands
+instead of git commands for all version control operations.
 
 When AI assists in crafting commit messages, include an "assisted-by" footer
 with model and tool:
