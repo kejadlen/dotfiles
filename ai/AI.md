@@ -43,11 +43,21 @@ claim. That was incorrect and should have been labeled.
 
 ## Writing
 
-- Never use the "**emphasis**: explanation" pattern in lists (bold text followed by colon and explanation)
+- Never use the "**emphasis**: explanation" pattern in lists (bold text
+  followed by colon and explanation)
 - Bold text in lists is acceptable in other contexts
 - Lists themselves are acceptable
 
 Read ~/.dotfiles/ai/writing.md for more writing guidelines.
+
+## Commit Messages
+
+When AI assists in crafting commit messages, include an "assisted-by" footer
+with model and tool:
+
+```
+Assisted-by: Claude Sonnet 4 via Claude Code
+```
 
 ## Ruby
 
