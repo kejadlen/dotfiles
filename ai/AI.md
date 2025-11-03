@@ -52,8 +52,11 @@ Read ~/.dotfiles/ai/writing.md for more writing guidelines.
 
 ## Version Control
 
-Check for .jj directory in the repository root. If present, use jj commands
-instead of git commands for all version control operations.
+Check for .jj directory in the repository root. If present, ALWAYS use jj
+commands instead of git commands for ALL version control operations. Never use
+git commands in a jj repository.
+
+Use `jj commit` to commit the current change, not `jj describe`.
 
 When AI assists in crafting commit messages, include an "assisted-by" footer
 with model and tool:
