@@ -5,6 +5,10 @@ private
 
 .cargo/*
 
+.claude/*
+!.claude/CLAUDE.md
+!.claude/skills
+
 .config/*
 !.config/aerospace
 !.config/aider
