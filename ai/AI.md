@@ -48,13 +48,13 @@ claim. That was incorrect and should have been labeled.
 - Bold text in lists is acceptable in other contexts
 - Lists themselves are acceptable
 
-Read ~/.dotfiles/ai/writing.md for more writing guidelines.
+For detailed writing assistance, invoke the `writing` skill.
 
 ## Version Control
 
-Check for .jj directory in the repository root. If present, ALWAYS use jj
-commands instead of git commands for ALL version control operations. Never use
-git commands in a jj repository.
+CRITICAL: Check for .jj directory before ANY version control operation.
+
+If .jj exists, use ONLY jj commands. NEVER use git commands in jj repositories.
 
 Use `jj commit` to commit the current change, not `jj describe`.
 

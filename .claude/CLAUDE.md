@@ -1,1 +1,1 @@
-/Users/alpha/.dotfiles/ai/AI.md
+/Users/alpha.chen/.dotfiles/ai/AI.md
