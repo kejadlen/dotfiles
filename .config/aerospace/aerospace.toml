@@ -213,6 +213,10 @@ run = 'move-node-to-workspace 5'
 if.app-id = 'com.apple.Safari.WebApp.BE387A7E-EE5F-4967-B68C-77BAC8C3D842' # Raindrop
 run = 'move-node-to-workspace 5'
 
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari.WebApp.6B73A653-3DF2-47F5-B59C-84B69DB60C81' # Work Slack
+run = 'move-node-to-workspace 5'
+
 [workspace-to-monitor-force-assignment]
 1 = 'Retina'
 2 = 'LG'
