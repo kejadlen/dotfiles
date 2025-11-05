@@ -147,6 +147,49 @@ guard CommandLine.arguments.count > 1 else {
 
 let calendarTitle = CommandLine.arguments[1]
 
+func extractZoomURL(from event: EKEvent) -> String? {
+    // Check notes for Zoom URL
+    if let notes = event.notes {
+        if let url = extractZoomURL(from: notes) {
+            return url
+        }
+    }
+
+    // Check location for Zoom URL
+    if let location = event.location {
+        if let url = extractZoomURL(from: location) {
+            return url
+        }
+    }
+
+    // Check URL property
+    if let url = event.url?.absoluteString {
+        if url.contains("zoom.us") {
+            return url
+        }
+    }
+
+    return nil
+}
+
+func extractZoomURL(from text: String) -> String? {
+    // Pattern to match Zoom URLs
+    let pattern = "https://[a-zA-Z0-9.-]*\\.?zoom\\.us/[^\\s]+"
+
+    guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+        return nil
+    }
+
+    let nsString = text as NSString
+    let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: nsString.length))
+
+    if let match = matches.first {
+        return nsString.substring(with: match.range)
+    }
+
+    return nil
+}
+
 func formatTimeUntil(_ date: Date, from currentDate: Date) -> String {
     let minutes = Int(date.timeIntervalSince(currentDate) / 60)
     if minutes <= 0 {
@@ -174,12 +217,20 @@ do {
         let currentDate = Date()
         let isCurrentMeeting = currentDate >= event.startDate && currentDate <= event.endDate
 
+        let displayText: String
         if isCurrentMeeting {
             let timeStr = formatTimeUntil(event.endDate, from: currentDate)
-            print("\(event.title ?? "Untitled Event") ends \(timeStr)")
+            displayText = "\(event.title ?? "Untitled Event") ends \(timeStr)"
         } else {
             let timeStr = formatTimeUntil(event.startDate, from: currentDate)
-            print("\(event.title ?? "Untitled Event") \(timeStr)")
+            displayText = "\(event.title ?? "Untitled Event") \(timeStr)"
+        }
+
+        // Output format: DISPLAY_TEXT<||>ZOOM_URL (or just DISPLAY_TEXT if no Zoom URL)
+        if let zoomURL = extractZoomURL(from: event) {
+            print("\(displayText)<||>\(zoomURL)")
+        } else {
+            print(displayText)
         }
     } else {
         print("No meetings")
