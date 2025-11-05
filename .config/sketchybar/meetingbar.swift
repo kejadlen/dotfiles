@@ -96,7 +96,20 @@ class MeetingBar {
         let events = eventStore.events(matching: predicate).filter { !$0.isAllDay }
 
         let currentMeeting = events.first(where: { currentDate >= $0.startDate && currentDate <= $0.endDate })
-        let nextMeeting = events.first(where: { $0.startDate > currentDate })
+
+        // Find all events starting after current time
+        let upcomingEvents = events.filter { $0.startDate > currentDate }
+        // If multiple events start at the same time, pick the shortest one
+        let nextMeeting = upcomingEvents.min { first, second in
+            if first.startDate == second.startDate {
+                // Same start time, compare durations
+                let firstDuration = first.endDate.timeIntervalSince(first.startDate)
+                let secondDuration = second.endDate.timeIntervalSince(second.startDate)
+                return firstDuration < secondDuration
+            }
+            // Different start times, pick the earlier one
+            return first.startDate < second.startDate
+        }
 
         // No current meeting, show next meeting if available
         guard let current = currentMeeting else {

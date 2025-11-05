@@ -114,7 +114,6 @@ sketchybar --add item datetime right \
            # --set meetingbar \
            #       icon=􀉉 \
            #       icon.padding_right=8 \
-           #       label.y_offset=2 \
            #       update_freq=120 \
            #       script="$PLUGIN_DIR/meetingbar.sh"
 
