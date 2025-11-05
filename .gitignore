@@ -5,10 +5,6 @@ private
 
 .cargo/*
 
-.claude/*
-!.claude/CLAUDE.md
-!.claude/skills
-
 .config/*
 !.config/aerospace
 !.config/aider
@@ -47,6 +43,11 @@ private
 
 .hammerspoon/Spoons/*
 !.hammerspoon/Spoons/SpoonInstall
+
+/ai/claude/*
+!/ai/claude/CLAUDE.md
+!/ai/claude/skills
+
 
 # hack for now since I don't want to commit Alfred secrets
 macos/Alfred.alfredpreferences/workflows/*/prefs.plist
