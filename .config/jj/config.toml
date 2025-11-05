@@ -95,7 +95,10 @@ edit = true
 [aliases]
 accuse = ["file", "annotate"]
 jj = []
-tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+tug = ["util", "exec", "--", "bash", "-c", """
+  ref=${1:-@}
+  jj bookmark move --from "closest_bookmark($ref)" --to "closest_pushable($ref)"
+""", ""]
 stack = ["rebase", "-A", "trunk()", "-B", "closest_merge(@)", "-r"]
 pr = ["util", "exec", "--", "bash", "-c", """
   gh pr create --head \
