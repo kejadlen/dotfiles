@@ -38,10 +38,6 @@ backend = "ssh"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCttH8nEfk1uZ2291P4mbCoNcHxnr9iNBlbZckykeZ8"
 backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
-# Don't sign on change modification since with fsmonitor, this winds up sporadically
-# triggering the 1Password auth dialog when I'm not actually interacting with the repo.
-behavior = "drop"
-
 [git]
 sign-on-push = true
 push-new-bookmarks = true
@@ -107,7 +103,7 @@ pr = ["util", "exec", "--", "bash", "-c", """
 pull = ["util", "exec", "--", "bash", "-c", """
   jj git fetch
   jj rebase --branch "visible_heads() & mutable()" --destination "trunk()"
-  jj simplify-parents -r "visible_heads() & mutable()"
+  jj simplify-parents
 """]
 
 # https://github.com/jj-vcs/jj/discussions/3549
