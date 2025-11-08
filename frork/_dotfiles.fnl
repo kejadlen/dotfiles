@@ -25,5 +25,7 @@
         (-?> dest dirname (partial #(ok :directory))))
       (ok :symlink dest src))))
 
+(ok :symlink "~/.dotfiles/ai/claude" "~/.claude")
+
 ;; for per-system configuration
 (ok :directory :$HOME/.config/jj/conf.d)
