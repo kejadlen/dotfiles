@@ -26,6 +26,7 @@
       (ok :symlink dest src))))
 
 (ok :symlink "~/.dotfiles/ai/claude" "~/.claude")
+(ok :symlink "~/.dotfiles/ai/AI.md" "~/.claude/CLAUDE.md")
 
 ;; for per-system configuration
 (ok :directory :$HOME/.config/jj/conf.d)

@@ -1,1 +1,0 @@
-/Users/alpha.chen/.dotfiles/ai/AI.md
