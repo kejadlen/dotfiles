@@ -43,6 +43,7 @@ sign-on-push = true
 push-new-bookmarks = true
 private-commits = "private() | wip()"
 write-change-id-header = true
+track-default-bookmark-on-clone = false
 # ignore-filters = ["lfs", "git-crypt"]
 
 [templates]
