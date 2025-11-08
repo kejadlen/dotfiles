@@ -86,11 +86,11 @@
       ;; domains to be opened in Safari, usually either for Apple Pay or
       ;; text-based 2FA
       safari-domains [:aetnahealth.com
+                      :account.apple.com
                       :bankofamerica.com
                       :betterment.com
                       :bulletin.com
                       :chase.com
-                      :discnw.org
                       :experian.com
                       :fidelityinvestments.com
                       :goodluckbread.com

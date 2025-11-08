@@ -18,7 +18,7 @@
                                 :Safari]
                :app-overrides {:Music [:hour 1]
                                :Raindrop [:minute 15]
-                               "Unifi Protect" [:minute 30]
+                               "UniFi Protect" [:minute 30]
                                :zoom.us [:hour 1]}
                :default-timeout [:minute 5]})
 
