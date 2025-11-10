@@ -50,6 +50,20 @@ claim. That was incorrect and should have been labeled.
 
 For detailed writing assistance, invoke the `writing` skill.
 
+## Documentation Grounding
+
+Write documentation as standalone artifacts. Readers cannot access this
+conversation, so the prose must carry its own meaning.
+
+When editing documentation:
+- Link to repository context when needed
+- Write out details that cannot be linked
+- Avoid references to unavailable conversations or artifacts
+- Use domain knowledge that practitioners share, not chat-specific context
+- Skip template patterns (rule-of-three structures, bolded-list conventions)
+  unless they serve the document's purpose
+- Let new ideas establish their own internal connections
+
 ## Version Control
 
 CRITICAL: Check for .jj directory before ANY version control operation.
