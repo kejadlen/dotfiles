@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+# cd "$(dirname "$0")"
+
+main() {
+}
+
+main "$@"
+
+# vim: ft=sh
+
