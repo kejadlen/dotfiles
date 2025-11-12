@@ -43,22 +43,27 @@ unverified claim without labeling it."
 
 ## Writing
 
-Use the elements-of-style writing skill for documentation, commit
-messages, PR descriptions, and user-facing text. Apply it before
-considering prose complete.
+Invoke the elements-of-style writing skill before drafting prose for humans:
+documentation, commit messages, PR descriptions, and user-facing text. Do not
+rationalize skipping it—apply proactively.
 
-Style rules: Avoid the "**bold**: explanation" pattern in lists. Use
-plain text or structured prose instead.
+Avoid the "**bold**: explanation" pattern in lists. Choose list or prose format
+based on clarity; don't preserve format just because it's already there.
+
+Use lists for distinct, independent items (comparable options, sequential steps,
+standalone points). Use prose paragraphs when explaining relationships between
+ideas, cause-and-effect, or when items depend on each other. Use tables for
+multi-column data.
 
 Examples to avoid:
 - **Option A**: explanation text here
 - **Foo**: description follows
 
-Acceptable alternatives:
-- Use plain list items without bold labels
-- Use prose paragraphs for explanations
-- Use tables for multi-column comparisons
-- Bold text is acceptable in headers and inline emphasis
+Use instead:
+- Plain list items without bold labels for distinct options
+- Prose paragraphs when choices relate to each other
+- Tables for multi-column comparisons
+- Bold only in headers and inline emphasis
 
 ## Documentation Grounding
 
