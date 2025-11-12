@@ -1,83 +1,53 @@
 ---
-name: jj-vcs
-description: |
-  Expert assistance with Jujutsu (jj) version control system commands,
-  workflows, and best practices
+name: jj
+description: Use when needing jj command reference, syntax, or behavior - directs to jj --help for authoritative documentation and flags
 ---
 
-# Jujutsu (jj) VCS Skill
+# Jujutsu (jj) Version Control
 
-You are an expert in Jujutsu (jj), a modern version control system. Help users
-with commands, workflows, and Git transitions.
+Use `jj --help` for authoritative command reference and current flags.
 
-Communicate directly. Eliminate emojis, filler words, conversational padding,
-soft asks, transitional phrases, and engagement-optimized language. Deliver
-precise information only.
+## Quick Start
 
-## Core Concepts
+Run `jj <command> --help` for detailed command documentation:
 
-- Working Copy: Current file state
-- Bookmarks: Named commit references (like Git branches)
-- Operation Log: Complete operation history
-- Revsets: Commit query language
-- Conflicts: First-class conflict representation
+```bash
+jj --help           # Full command list
+jj status --help    # Specific command details
+jj log --help       # Syntax and options
+```
 
-## Essential Commands
+## Core Workflow
 
-### Repository Operations
-- `jj init` - Initialize repository
-- `jj git clone <url>` - Clone Git repository
-- `jj status` - Show working copy status
+1. Make file edits (changes exist in working copy)
+2. `jj describe <message>` (write commit message)
+3. `jj new` (create next commit, working copy becomes immutable)
+4. Repeat
 
-### Managing Changes
-- `jj new` - Create and check out new commit
-- `jj commit` - Commit working copy changes
-- `jj describe` - Edit commit description
-- `jj squash` - Move changes between commits
-- `jj split` - Split commit into multiple commits
+## Key Differences from Git
 
-### Navigation
-- `jj log` - Show commit history
-- `jj show` - Show commit details
-- `jj diff` - Show changes
-- `jj edit <commit>` - Check out commit for editing
+No staging area: working copy changes map directly to commits. Operations are immutable: `jj new`, `jj squash`, `jj rebase` create new commits rather than modify existing ones. Conflicts are queryable through `jj status` and `jj log`. The operation log (`jj op log`) shows all operations for undo/recovery.
 
-### Bookmarks
-- `jj bookmark create <name>` - Create bookmark
-- `jj bookmark list` - List bookmarks
-- `jj bookmark delete <name>` - Delete bookmark
+## Command Categories
 
-### Synchronization
-- `jj git fetch` - Fetch from remotes
-- `jj git push` - Push to remotes
+Run `jj --help` to see all commands. Main categories:
 
-### Advanced Operations
-- `jj rebase` - Move commits
-- `jj resolve` - Resolve conflicts
-- `jj abandon` - Mark commit obsolete
-- `jj undo` - Undo last operation
+Repository: init, clone, status
+Changes: new, describe, commit, edit
+History: log, show, diff
+Modification: squash, split, rebase
+Bookmarks: bookmark create/list/delete
+Sync: git fetch, git push
+Conflict: resolve
+Recovery: undo, op log, op undo
 
-## Git Differences
+## When to Use jj --help
 
-Jujutsu eliminates Git's staging area. Changes move directly from working copy
-to commits. Operations create new commits rather than modifying existing ones.
-Conflicts become first-class repository objects. The operation log provides
-complete audit trails.
+Direct command help is always more current than documentation. Use it for:
 
-## Best Practices
+- Exact flag names and syntax
+- Current command options
+- Command behavior details
+- Examples and edge cases
 
-Create commits frequently with `jj new`. Use descriptive messages with `jj
-describe`. Leverage revsets for commit selection. Track important commits with
-bookmarks. Sync regularly with remotes.
-
-## Troubleshooting
-
-Check `jj status` for working copy state. Review `jj log` for commit
-relationships. Use `jj op log` to see operations. Undo mistakes with `jj op
-undo`.
-
-## Guidance Approach
-
-Suggest appropriate commands for each situation. Explain underlying concepts
-when relevant. Provide concrete examples. Highlight Git differences for Git
-users. Recommend workflows leveraging jj's unique features.
+Never rely on this skill's command list as authoritative. Always run `jj <command> --help` to verify behavior, flags, and current options.
