@@ -43,9 +43,11 @@ unverified claim without labeling it."
 
 ## Writing
 
-Invoke the elements-of-style writing skill before drafting prose for humans:
-documentation, commit messages, PR descriptions, and user-facing text. Do not
-rationalize skipping it—apply proactively.
+**Mandatory:** Invoke the elements-of-style writing skill whenever drafting any
+prose for humans. This includes documentation, commit messages, PR descriptions,
+user-facing text, error messages, and comments. Apply the skill unconditionally—do
+not skip based on perceived simplicity or brevity. Do not rationalize exclusions.
+The skill prevents clarity errors that compound across projects.
 
 Avoid the "**bold**: explanation" pattern in lists. Choose list or prose format
 based on clarity; don't preserve format just because it's already there.
@@ -82,10 +84,10 @@ When editing documentation:
 
 ## Version Control
 
-CRITICAL: Check for .jj directory before ANY version control operation.
+**MANDATORY:** Before ANY version control operation, check for .jj directory.
 
-If .jj exists, use ONLY jj commands. NEVER use git commands in jj
-repositories.
+If .jj exists, use ONLY jj commands. Do not use git commands in jj repositories
+under any circumstances. No exceptions.
 
 Use `jj commit` to commit the current change, not `jj describe`.
 
