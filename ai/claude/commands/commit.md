@@ -13,15 +13,18 @@ When committing:
 2. If a fileset is provided, use `jj commit <fileset>` to commit only
 matching files
 3. If no fileset is provided, use `jj commit` to commit all changes
-4. Invoke the `writing` skill for assistance with commit message style
-and conventions
+4. Use any available writing skills for assistance with commit message style
+and conventions (e.g., elements-of-style)
 5. Draft a clear, concise commit message:
+   - Start with a single sentence that captures the change's purpose
    - Focus on why the change was made, not what changed (the diff shows
      what changed)
    - CRITICAL: Do NOT include information that is obvious from reading
      the diff. The reviewer has the diff; your message should provide
      context and reasoning that cannot be inferred from the code changes
      alone
+   - Only use a bulleted list if multiple distinct reasons or changes
+     require explanation; otherwise keep the message to one paragraph
    - Avoid describing file changes, added/removed lines, or renamed
      variables unless the reason for these changes is non-obvious
    - Follow repository conventions
