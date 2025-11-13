@@ -46,6 +46,7 @@ If you catch yourself thinking any of these, stop and apply the discipline:
 - "No one else works on this" → Lower standards = unmaintainable code later
 - "I can amend later" → Amending forces history rewrites. Do it right the first time
 - "The diff is small/obvious" → Document the *decision*, not the size
+- "I need to explain this thoroughly" → Verbosity obscures reasoning. Cut ruthlessly
 
 All of these mean: Stop. Follow the discipline. Your future self will thank you.
 
@@ -105,11 +106,10 @@ The diff shows what changed. Your message explains why:
 
 **Structure:**
 - **Opening line:** Succinct imperative + why (5-10 words). Must stand alone.
-- **Reasoning (if needed):** Why this approach? What alternatives were
-  considered? What constraints apply?
-- **Gotchas (if any):** Edge cases, known limitations, follow-up work needed
+- **Reasoning (if needed):** Default 2-3 sentences. Expand only if context genuinely requires it.
+- **Gotchas (if any):** Only if critical and non-obvious.
 
-**CRITICAL:** Do NOT include anything visible in the diff. Strip ruthlessly.
+**CRITICAL:** Do NOT include anything visible in the diff. Strip ruthlessly. Every sentence must earn its place. Default to brevity; expand only with justification.
 
 **Test for bad messages:** If you could write your commit message after reading
 only the diff (without context), you are describing changes. Rewrite it to
@@ -136,14 +136,12 @@ Cache stores user objects by ID with 5-minute expiry.
 
 **Better - explaining the reasoning:**
 ```
-Use API v2 endpoint to support new authentication requirements
+Use API v2 endpoint to support OAuth scope requirements
 
-API v1 doesn't support OAuth scopes needed for permission boundaries.
-v2 adds automatic retry logic, eliminating our previous custom retry handler.
-Tested against staging environment (see #1234).
+v1 lacks scope boundaries; v2 includes automatic retry, eliminating custom handler.
 ```
 
-Message explains the business/technical decision, not the code itself.
+Message explains the business/technical decision in two sentences, not the code itself.
 
 ### 5. Add Metadata Footer
 
@@ -217,12 +215,8 @@ You've fixed a caching bug in src/services/cache.ts. It was a simple one-line ch
    ```
    Fix cache TTL comparison by normalizing to milliseconds
 
-   Cache entries were expiring prematurely because TTL duration and
-   timestamp were compared without unit conversion. Both are numbers
-   but TTL is in seconds (from config) while timestamp is in
-   milliseconds (Date.now()).
-
-   Now both are normalized to milliseconds before comparison.
+   TTL (seconds) and timestamp (milliseconds) were compared without unit
+   conversion, causing premature expiry. Now normalize both to milliseconds.
    ```
 5. **Verify:** `jj show` → confirms only the TTL comparison line changed ✓
 
@@ -255,3 +249,5 @@ When using this skill:
 | "I'll remember why I did this" | You won't. Write it down in the commit message now |
 | "The message format doesn't matter much" | Format matters less than context, but use HEREDOC for clean formatting |
 | "I've already reviewed the code, skip jj show" | Reviewing code ≠ verifying commit contents. Run `jj show` every time |
+| "I need to add more detail to be clear" | More words ≠ more clarity. Verbosity hides the real reason. Cut first; expand only if necessary |
+| "This deserves a long explanation" | Default to 2-3 sentences. Expand only if the commit genuinely needs more context to justify its changes |

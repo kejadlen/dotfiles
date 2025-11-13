@@ -84,12 +84,19 @@ When editing documentation:
 
 ## Version Control
 
-**MANDATORY:** Before ANY version control operation, check for .jj directory.
+**MANDATORY:** Check for .jj directory before ANY version control operation.
 
-If .jj exists, use ONLY jj commands. Do not use git commands in jj repositories
-under any circumstances. No exceptions.
+If .jj exists:
+- Use ONLY jj commands. Do not use git commands under any circumstances. No exceptions.
+- Never suggest, propose, or execute git commands
+- Replace all mental git workflows with jj equivalents
 
 Use `jj commit` to commit the current change, not `jj describe`.
+
+Common replacements:
+- `git status` → `jj status`
+- `git diff` → `jj diff`
+- `git log` → `jj log`
 
 When AI assists in crafting commit messages, include an "assisted-by"
 footer with model and tool:
@@ -97,6 +104,10 @@ footer with model and tool:
 ```
 Assisted-by: Claude Sonnet 4 via Claude Code
 ```
+
+Use the committing-with-discipline skill whenever crafting commit messages,
+especially when working with superpowers plugins. This ensures commits are
+well-structured, intentional, and follow your project's conventions.
 
 ## Ruby
 
