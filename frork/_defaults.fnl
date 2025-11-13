@@ -1,5 +1,7 @@
 (local {: ok} (require :frork))
 
+(require :types)
+
 ;; # TODO restart Dock, Finder, and SystemUIServer on changes
 
 (local domain-defaults

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>tags</key>
+	<array>
+		<dict>
+			<key>displayName</key>
+			<string>good feelings</string>
+			<key>gmail</key>
+			<string>good feelings</string>
+			<key>shortDisplayName</key>
+			<string>😍</string>
+		</dict>
+		<dict>
+			<key>displayName</key>
+			<string>focus &amp; reply</string>
+			<key>gmail</key>
+			<string>focus and reply</string>
+			<key>serverKeyword</key>
+			<string>focusandreply</string>
+			<key>shortDisplayName</key>
+			<string>🎯</string>
+		</dict>
+		<dict>
+			<key>displayName</key>
+			<string>set aside</string>
+			<key>gmail</key>
+			<string>set aside</string>
+			<key>shortDisplayName</key>
+			<string>📌</string>
+		</dict>
+		<dict>
+			<key>displayName</key>
+			<string>hidden</string>
+			<key>gmail</key>
+			<string>hidden</string>
+			<key>serverKeyword</key>
+			<string>hidden</string>
+			<key>shortDisplayName</key>
+			<string>👻</string>
+		</dict>
+		<dict>
+			<key>displayName</key>
+			<string>awaiting reply</string>
+			<key>gmail</key>
+			<string>awaiting reply</string>
+			<key>shortDisplayName</key>
+			<string>📝</string>
+		</dict>
+		<dict>
+			<key>displayName</key>
+			<string>discount</string>
+			<key>gmail</key>
+			<string>discount</string>
+			<key>serverKeyword</key>
+			<string>discount</string>
+			<key>shortDisplayName</key>
+			<string>💵</string>
+		</dict>
+	</array>
+</dict>
+</plist>

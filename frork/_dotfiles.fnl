@@ -12,6 +12,7 @@
                 :.p10k.zsh
                 :.profile
                 :.ruby-version
+                :.ssh
                 :.zsh
                 :.zshenv
                 :.zshrc

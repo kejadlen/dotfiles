@@ -10,9 +10,13 @@
   (ok :directory "~/Library/KeyBindings")
   (ok :symlink dest src))
 
-(let [mailmate-keybindings "~/Library/Application Support/MailMate/Resources/KeyBindings/Alpha.plist"]
-  (ok :directory (dirname mailmate-keybindings))
-  (ok :symlink mailmate-keybindings "~/.dotfiles/macos/MailMate.plist"))
+(let [mailmate "~/Library/Application Support/MailMate/"
+      resources (.. mailmate :Resources/)]
+  (ok :directory (dirname resources))
+  (ok :symlink (.. resources :KeyBindings/Alpha.plist)
+      "~/.dotfiles/macos/MailMate/KeyBindings.plist")
+  (ok :symlink (.. mailmate :Tags.plist)
+      "~/.dotfiles/macos/MailMate/Tags.plist"))
 
 ;; this is slow - maybe replace with a hand-rolled assertion type?
 (ok :brew-bundle "~/.dotfiles/Brewfile")
@@ -36,4 +40,8 @@
                                  :datemodified)
                             ;; TODO if we add handlers, do this there instead
                             (sh! :killall :Dock))})
+
 (ok :dock)
+
+;; TODO
+;; - install numderline fonts
