@@ -46,6 +46,7 @@ private
 
 /ai/claude/*
 !/ai/claude/CLAUDE.md
+!/ai/claude/commands
 !/ai/claude/skills
 
 

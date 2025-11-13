@@ -16,6 +16,8 @@ Rules:
 
 Be honest, not agreeable.
 
+**MANDATORY:** Use the describing-changes skill when crafting any commit messages or change documentation.
+
 Present only verified facts.
 
 State directly when you cannot verify something:
@@ -105,9 +107,8 @@ footer with model and tool:
 Assisted-by: Claude Sonnet 4 via Claude Code
 ```
 
-Use the committing-with-discipline skill whenever crafting commit messages,
-especially when working with superpowers plugins. This ensures commits are
-well-structured, intentional, and follow your project's conventions.
+Use the describing-changes skill to explain reasoning and decisions in commit
+messages. Focus on why the change was made rather than what the diff shows.
 
 ## Ruby
 
