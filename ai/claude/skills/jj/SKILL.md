@@ -28,6 +28,26 @@ jj log --help       # Syntax and options
 
 No staging area: working copy changes map directly to commits. Operations are immutable: `jj new`, `jj squash`, `jj rebase` create new commits rather than modify existing ones. Conflicts are queryable through `jj status` and `jj log`. The operation log (`jj op log`) shows all operations for undo/recovery.
 
+## Bookmarks (Named References)
+
+In jj, **bookmarks** are named references to commits, similar to git branches. Create and manage them:
+
+```bash
+jj bookmark create feature-auth main       # Create bookmark from main
+jj bookmark list                           # Show all bookmarks
+jj bookmark list -r feature-auth           # Show specific bookmark
+jj bookmark delete feature-auth            # Delete bookmark
+jj checkout feature-auth                   # Switch to bookmark
+jj bookmark set feature-auth -r <rev>      # Move bookmark to different commit
+```
+
+**Key differences from git branches:**
+- Bookmarks are immutable references (can't be modified in place)
+- Multiple bookmarks can point to same commit
+- `jj checkout` switches working copy to bookmark; use `jj new` to create commits on that bookmark
+
+**Use bookmarks for:** Feature branches, parallel work, named release points. NOT for temporary work (use detached state instead).
+
 ## Command Categories
 
 Run `jj --help` to see all commands. Main categories:
