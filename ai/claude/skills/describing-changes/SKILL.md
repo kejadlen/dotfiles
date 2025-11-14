@@ -122,14 +122,26 @@ on comparison avoids data migration and works immediately.
 
 Stop and trim if you catch yourself:
 
-- Writing more than 3-4 sentences (you're over-explaining)
+- Writing more than 3 sentences - PAUSE and ask: does each sentence explain reasoning not visible in diff?
 - Including implementation details visible in the diff
 - Explaining what the code does rather than why the change exists
 - Justifying the approach as "good" instead of explaining the constraint
 - Enumerating multiple alternatives considered (mention only the blocker)
 - Adding foundational context readers can find in issue tickets
+- "But this change is complex/important/multi-faceted" → Still 2-3 sentences max. If genuinely complex, it's multiple commits, not one wordy message.
 
-**Max length:** 50-75 words for most changes. Under 30 words for simple fixes.
+**Length discipline:**
+- Commit messages: typically 2-3 sentences (50-75 words)
+- Simple fixes: Under 30 words
+
+**Before finalizing, audit every sentence:**
+- Is this sentence invisible in the diff? (Yes → keep it, No → delete it)
+- Does this describe implementation visible in the code? (Yes → delete it, No → keep it)
+- Does this just restate what a careful diff reader would already see? (Yes → delete it, No → keep it)
+
+If any sentence fails this audit, remove it. The diff shows WHAT changed. Your message explains WHY (and only if WHY is not obvious from reading the code change itself).
+
+**NEVER rationalize:** "This change is complex so I need to explain the cases" - if all cases are visible in the diff, don't list them. "This change is important so the message should be thorough" - thorough means every word earns its place, not verbose.
 
 ## Red Flags - When You're Describing the Change Instead of Explaining It
 
@@ -199,3 +211,15 @@ Use these to validate your change description:
 5. **What does the reader need to understand?** - What context am I providing that isn't in the diff?
 
 If you skip any of these, add more context to your description.
+
+## Footer Requirements
+
+**If AI assisted in crafting the message, include Assisted-by footer:**
+
+```
+Assisted-by: Claude Haiku 4.5 via Claude Code
+```
+
+Format: `Assisted-by: [Model name] via Claude Code`
+
+This is MANDATORY when using this skill. Do NOT omit it.

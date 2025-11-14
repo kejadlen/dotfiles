@@ -101,14 +101,28 @@ Common replacements:
 - `git log` → `jj log`
 
 When AI assists in crafting commit messages, include an "assisted-by"
-footer with model and tool:
+footer with model and tool. Format: `Assisted-by: [Model] via Claude Code`
 
+Example:
 ```
-Assisted-by: Claude Sonnet 4 via Claude Code
+Assisted-by: Claude Haiku 4.5 via Claude Code
 ```
+
+**Commit message discipline:**
+- First line: under 60 characters, concrete problem or fix
+- Body: typically 2-3 sentences (50-75 words)
+- Use describing-changes skill AND elements-of-style skill
+- Each sentence must earn its place. If exceeding 3 sentences, rigorously question whether every sentence is necessary (not nice-to-have)
+- Problem → Solution format only. Strip what's visible in diff.
 
 Use the describing-changes skill to explain reasoning and decisions in commit
 messages. Focus on why the change was made rather than what the diff shows.
+If you find the message getting long, you're describing the change instead of
+explaining it.
+
+**Before committing:** Ask "Is every sentence in this message invisible in the diff?"
+If any sentence just restates what the code change shows, delete it. The diff shows
+what changed. Only explain why if it's not obvious from reading the diff.
 
 ## Ruby
 
