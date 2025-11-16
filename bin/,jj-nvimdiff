@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# https://github.com/jj-vcs/jj/wiki/Vim,-Neovim#using-vim-as-a-diff-tool
+
+# Shell-escape each path
+left=$(printf '%q' "$1"); shift
+right=$(printf '%q' "$1"); shift
+
+nvim "$@" -c "packadd nvim.difftool" -c "DiffTool $left $right"
