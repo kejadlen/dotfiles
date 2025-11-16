@@ -186,11 +186,11 @@ if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
-if.app-id = 'com.apple.Safari.WebApp.F2BA9FC3-D7F2-41FB-A706-764DA721F16E' # Phanpy
+if.app-id = 'com.apple.Safari.WebApp.EAC47826-F539-48B6-8126-641DADF13328' # Phanpy
 run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
-if.app-id = 'com.apple.Safari.WebApp.7B761815-DB06-4AC0-8E7D-5B80A0C17862' # Miniflux
+if.app-id = 'com.apple.Safari.WebApp.67908C06-BA3F-471A-99E9-865BB7DD1885' # Miniflux
 run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
@@ -214,7 +214,7 @@ if.app-id = 'com.apple.Safari.WebApp.BE387A7E-EE5F-4967-B68C-77BAC8C3D842' # Rai
 run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
-if.app-id = 'com.apple.Safari.WebApp.6B73A653-3DF2-47F5-B59C-84B69DB60C81' # Work Slack
+if.app-id = 'com.apple.Safari.WebApp.C5374ADA-B0C7-4F9D-9760-CAD955736CF1' # Work Slack
 run = 'move-node-to-workspace 5'
 
 [workspace-to-monitor-force-assignment]
