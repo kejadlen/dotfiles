@@ -9,10 +9,10 @@
   "/" = "SearchAllMessages:";
 
   "g" = {
-    "i" = ( "goToMailbox:", "935735E7-D46D-4B1E-AF63-4905ABB907BC" );
-    "l" = ( "goToMailbox:", "94564F7D-DF9A-4759-A634-87752884B612" );
+    "i" = ( "goToMailbox:", "A13B0792-0C64-4E36-80AF-61777A27D7C7" );
+    "l" = ( "goToMailbox:", "7729C67E-42FD-42F3-AD4B-EB9CFD82015D" );
     "j" = ( "goToMailbox:", "JUNK" );
-    "l" = "goToMailbox:";
+    "g" = "goToMailbox:";
   };
 
   // actions
