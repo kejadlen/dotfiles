@@ -9,7 +9,7 @@ description: Use when drafting any explanation of changes (commit messages, PRs,
 
 A change description should explain *why* a decision was made, not *what* the code does. The diff already shows what. Your explanation adds reasoning the code alone cannot convey.
 
-**Core principle:** Be concise. Readers skip lengthy explanations. 2-3 sentences explaining the problem, solution, and why this approach work.
+**Core principle:** Most commits need only a title. Add body text only when reasoning is truly non-obvious from the diff. Omit needless words.
 
 ## When NOT to Use
 
@@ -55,25 +55,37 @@ What's the impact?
 
 ### 5. Write the Description
 
-Begin with type prefix (fix:, feat:, docs:, ai:, refactor:, etc.) followed by concise reasoning:
+**Start with title only.** Type prefix + concise reasoning:
+
+```
+refactor: Reduce visual noise in error construction
+```
+
+**STOP: Is the title sufficient?** If yes, you're done. No body needed.
+
+**Add body ONLY if:**
+- Reasoning is truly non-obvious from diff
+- Multiple approaches existed and you chose this one for specific reasons
+- Impact is invisible without explanation
+
+When body is necessary:
 
 ```
 fix: Normalize TTL unit mismatch
 
-Cache entries expired because TTL (seconds) and timestamp (milliseconds)
-were compared directly. Normalize both to milliseconds on comparison
-to avoid data migration.
+TTL (seconds) and timestamp (milliseconds) compared directly.
+Normalizing both to milliseconds avoids migration.
 ```
 
 **Format:**
-- First line: Under 60 characters, concrete problem or fix
-- Body: 2-3 sentences (50-75 words typical)
-- Problem → Solution → Why this approach
+- Title: Under 60 characters, concrete problem or fix
+- Body: 1-2 sentences maximum, under 20 words total
+- Problem → Solution (omit needless words)
 
-**Before finalizing, audit every sentence:**
+**Before adding ANY body text, audit:**
 - Is this sentence invisible in the diff? (No → delete it)
 - Does this describe implementation visible in the code? (Yes → delete it)
-- Does this just restate what a careful diff reader would already see? (Yes → delete it)
+- Does this just restate what a careful diff reader would see? (Yes → delete it)
 
 Each sentence must explain reasoning not visible in the code change itself.
 
@@ -92,6 +104,7 @@ Each sentence must explain reasoning not visible in the code change itself.
 | "I'll remember why I did this" | You won't. Lost context in weeks. | Write it down now. Future-you needs this. |
 | "It's just cleanup/refactor" | Doesn't explain business motivation | Why now? Why this code? What problem does it solve? |
 | "This is obvious from the code" | Obvious to you ≠ obvious to reviewers | Obvious what changed. Not obvious why. |
+| "Need to explain the approach" | Title may be sufficient | STOP: Is title sufficient? Most commits need no body. |
 
 ## Footer Requirements
 
