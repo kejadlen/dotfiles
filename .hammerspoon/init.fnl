@@ -83,9 +83,9 @@
                 :firefox :org.mozilla.firefox
                 :safari :com.apple.Safari
                 :zoom :us.zoom.xos}
-      ;; domains to be opened in Safari, usually either for Apple Pay or
-      ;; text-based 2FA
-      safari-domains [:aetnahealth.com
+      ;; domains to be opened in Safari, usually either for Apple Pay or text-based 2FA
+      safari-domains [:adafruit.com
+                      :aetnahealth.com
                       :account.apple.com
                       :bankofamerica.com
                       :betterment.com
