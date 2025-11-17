@@ -52,3 +52,9 @@ use_ruby() {
   layout_ruby
 }
 
+# https://hynek.me/articles/python-virtualenv-redux/#:~:text=Then%2C%20I%20add%20the%20following%20to%20the%20project%E2%80%99s%20%2Eenvrc%3A
+use_uv() {
+  test -d .venv || uv venv
+  source .venv/bin/activate
+  uv sync
+}
