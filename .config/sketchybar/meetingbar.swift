@@ -147,24 +147,24 @@ guard CommandLine.arguments.count > 1 else {
 
 let calendarTitle = CommandLine.arguments[1]
 
-func extractZoomURL(from event: EKEvent) -> String? {
-    // Check notes for Zoom URL
+func extractMeetingURL(from event: EKEvent) -> String? {
+    // Check notes for meeting URL
     if let notes = event.notes {
-        if let url = extractZoomURL(from: notes) {
+        if let url = extractMeetingURL(from: notes) {
             return url
         }
     }
 
-    // Check location for Zoom URL
+    // Check location for meeting URL
     if let location = event.location {
-        if let url = extractZoomURL(from: location) {
+        if let url = extractMeetingURL(from: location) {
             return url
         }
     }
 
     // Check URL property
     if let url = event.url?.absoluteString {
-        if url.contains("zoom.us") {
+        if url.contains("zoom.us") || url.contains("vimeo.com") {
             return url
         }
     }
@@ -172,19 +172,25 @@ func extractZoomURL(from event: EKEvent) -> String? {
     return nil
 }
 
-func extractZoomURL(from text: String) -> String? {
+func extractMeetingURL(from text: String) -> String? {
     // Pattern to match Zoom URLs
-    let pattern = "https://[a-zA-Z0-9.-]*\\.?zoom\\.us/[^\\s]+"
+    let zoomPattern = "https://[a-zA-Z0-9.-]*\\.?zoom\\.us/[^\\s]+"
+    // Pattern to match Vimeo URLs
+    let vimeoPattern = "https://(?:www\\.)?vimeo\\.com/[^\\s]+"
 
-    guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
-        return nil
-    }
+    for pattern in [zoomPattern, vimeoPattern] {
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            continue
+        }
 
-    let nsString = text as NSString
-    let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: nsString.length))
+        let nsString = text as NSString
+        let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: nsString.length))
 
-    if let match = matches.first {
-        return nsString.substring(with: match.range)
+        if let match = matches.first {
+            let url = nsString.substring(with: match.range)
+            // Remove trailing quotes
+            return url.trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
+        }
     }
 
     return nil
@@ -227,8 +233,8 @@ do {
         }
 
         // Output format: markdown link [DISPLAY_TEXT](URL) or just DISPLAY_TEXT if no URL
-        if let zoomURL = extractZoomURL(from: event) {
-            print("[\(displayText)](\(zoomURL))")
+        if let meetingURL = extractMeetingURL(from: event) {
+            print("[\(displayText)](\(meetingURL))")
         } else {
             print(displayText)
         }
