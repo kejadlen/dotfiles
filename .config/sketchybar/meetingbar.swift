@@ -226,9 +226,9 @@ do {
             displayText = "\(event.title ?? "Untitled Event") \(timeStr)"
         }
 
-        // Output format: DISPLAY_TEXT<||>ZOOM_URL (or just DISPLAY_TEXT if no Zoom URL)
+        // Output format: markdown link [DISPLAY_TEXT](URL) or just DISPLAY_TEXT if no URL
         if let zoomURL = extractZoomURL(from: event) {
-            print("\(displayText)<||>\(zoomURL)")
+            print("[\(displayText)](\(zoomURL))")
         } else {
             print(displayText)
         }
