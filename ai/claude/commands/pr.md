@@ -19,16 +19,20 @@ When creating a pull request:
 2. Run `jj log -r 'trunk()::<bookmark>'` to list all commits from trunk to the bookmark
 3. Run `jj diff -r 'trunk()::<bookmark>' --stat` to review all changes
 4. Check for .github PR templates and follow them
-5. Generate a PR title summarizing all commits in the changeset (not just the
-   most recent). The title reflects the overall change, not individual commits
-6. Draft a PR summary explaining why the changes were made and their impact.
-   Focus on context and motivation, not implementation details. Include only
-   "Assisted-by" footer for attribution—no "Generated with Claude Code"
+5. Use the writing skill to generate a PR title summarizing all commits in the
+   changeset (not just the most recent). The title reflects the overall change,
+   not individual commits. Apply Strunk's principles for clarity and concision.
+6. Use the writing skill to draft a PR summary explaining why the changes were
+   made and their impact. Focus on context and motivation, not implementation
+   details. Include only "Assisted-by" footer for attribution—no "Generated
+   with Claude Code"
    - Do not repeat information obvious from the diff
    - Omit details like "added function X" or "modified file Y" unless
      non-obvious reasoning justifies them
    - Explain user-facing impact, architectural decisions, and tradeoffs
    - Follow repository conventions
-7. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
+   - Apply elements-of-style rules: active voice, positive form, definite
+     language, omit needless words, keep related words together
+7. Create the PR as draft: `gh pr create --head <bookmark-name> --title "<title>" --draft` using
    a HEREDOC to pass the body
 8. Return the PR URL
