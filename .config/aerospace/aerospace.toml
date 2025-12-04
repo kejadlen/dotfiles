@@ -218,6 +218,6 @@ if.app-id = 'com.apple.Safari.WebApp.C5374ADA-B0C7-4F9D-9760-CAD955736CF1' # Wor
 run = 'move-node-to-workspace 5'
 
 [workspace-to-monitor-force-assignment]
-1 = 'Retina'
-2 = 'LG'
-3 = 'HP'
+1 = 'retina'
+2 = 'lg'
+3 = 'hp'
