@@ -100,7 +100,7 @@ sketchybar --add item datetime right \
            --add item volume right \
            --set volume \
                  label.drawing=off \
-                 click_script="sketchybar -m --set \$NAME label.drawing=toggle" \
+                 click_script="osascript -e 'set volume output muted not (output muted of (get volume settings))'" \
                  script="$PLUGIN_DIR/volume.sh" \
            --subscribe volume volume_change \
            --add item battery right \
