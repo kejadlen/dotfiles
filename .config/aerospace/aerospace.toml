@@ -182,6 +182,14 @@ if.app-id = 'org.mozilla.firefoxdeveloperedition'
 run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
+if.app-id = 'app.glide-browser.glide'
+if.during-aerospace-startup = false
+run = ['layout floating']
+[[on-window-detected]]
+if.app-id = 'app.glide-browser.glide'
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace 3'
 

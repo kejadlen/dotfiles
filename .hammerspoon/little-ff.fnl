@@ -2,17 +2,22 @@
 
 (local log (hs.logger.new :little-ff :info))
 
-(local ff-bin
-       "/Applications/Firefox\\ Developer\\ Edition.app/Contents/MacOS/firefox")
+(local ff {:bin "/Applications/Firefox\\ Developer\\ Edition.app/Contents/MacOS/firefox"
+           :bundle-id :org.mozilla.firefoxdeveloperedition
+           :name "Firefox Developer Addition"})
 
-(local ff-bundle-id :org.mozilla.firefoxdeveloperedition)
+(local glide {:bin :/Applications/Glide.app/Contents/MacOS/glide
+              :bundle-id :app.glide-browser.glide
+              :name :Glide})
+
+(local browser glide)
 
 (λ is-ff-focused []
   (let [win (hs.window.focusedWindow)
         bundle-id (-> win
                       (: :application)
                       (: :bundleID))]
-    (if (= bundle-id ff-bundle-id)
+    (if (= bundle-id browser.bundle-id)
         win)))
 
 (λ check-ff [cb]
@@ -31,8 +36,10 @@
     (hs.timer.doAfter 1 #(timer:stop))))
 
 (λ open [url]
-  (hs.execute (table.concat [ff-bin :--new-window (.. "\"" url "\"")] " "))
-  (wait-for-little-ff resize-little-ff))
+  (let [cmd (table.concat [browser.bin :--new-window (.. "\"" url "\"")] " ")]
+    (log:d "Executing:" cmd)
+    (hs.execute cmd)
+    (wait-for-little-ff resize-little-ff)))
 
 (λ rehome []
   (let [win (is-ff-focused)
@@ -47,7 +54,9 @@
                                             (win:close)
                                             (run (table.concat [:open
                                                                 :-a
-                                                                "\"Firefox Developer Edition\""
+                                                                (.. "\""
+                                                                    browser.name
+                                                                    "\"")
                                                                 (hs.pasteboard.readString)]
                                                                " "))
                                             ;; TODO figure out how to focus the main
