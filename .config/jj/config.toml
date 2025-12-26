@@ -43,7 +43,6 @@ sign-on-push = true
 private-commits = "private() | wip()"
 write-change-id-header = true
 track-default-bookmark-on-clone = false
-# ignore-filters = ["lfs", "git-crypt"]
 
 [templates]
 # show diff when committing
@@ -72,6 +71,10 @@ diff-editor = "gitpatch"
 # diff-editor = ",jj-nvimdiff"
 pager = ":builtin"
 
+# default will be `glob:` in the future, so switch to it proactively
+# and remove this once it actually becomes the default
+revsets-use-glob-by-default = true
+
 [ui.movement]
 edit = true
 
@@ -85,8 +88,8 @@ edit = true
 
 'user(x)' = 'author(x) | committer(x)'
 
-'wip()' = 'description(glob:"wip:*")'
-'private()' = 'description(glob:"private:*")'
+'wip()' = 'description("wip:*")'
+'private()' = 'description("private:*")'
 
 [aliases]
 accuse = ["file", "annotate"]
@@ -113,8 +116,8 @@ pull = ["util", "exec", "--", "bash", "-c", """
 
 [fix.tools.ruff-format]
 command = ["ruff", "format", "--stdin-filename", "$path", "-"]
-patterns = ["glob:'**/*.py'"]
+patterns = ["'**/*.py'"]
 
 [fix.tools.ruff-check]
 command = ["ruff", "check", "--fix", "--stdin-filename", "$path", "-"]
-patterns = ["glob:'**/*.py'"]
+patterns = ["'**/*.py'"]
