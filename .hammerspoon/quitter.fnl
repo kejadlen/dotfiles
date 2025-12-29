@@ -45,12 +45,14 @@
       (focused-win:focus))))
 
 (fn unmark [app]
-  (let [bundle-id (app:bundleID)
-        t (?. to-kill bundle-id)]
-    (when (not= t nil)
-      (log.i (.. "unmarking " (app:name)))
-      (t:stop)
-      (set (. to-kill bundle-id) nil))))
+  ;; app can be nil - maybe when a window loses focus because its app is terminating?
+  (when app
+    (let [bundle-id (app:bundleID)
+          t (?. to-kill bundle-id)]
+      (when (not= t nil)
+        (log.i (.. "unmarking " (app:name)))
+        (t:stop)
+        (set (. to-kill bundle-id) nil)))))
 
 (fn mark [app]
   (when (and (not (contains config.permanent-apps (app:name))) (= (app:kind) 1))
