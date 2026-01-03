@@ -1,6 +1,6 @@
 // Source: https://github.com/jyn514/dotfiles/blob/master/config/glide.ts
 
-function shorten_unique_prefixes(haystack) {
+function shorten_unique_prefixes(haystack: string[]): string[] {
   // first, construct a set of duplicates
   const seen = new Set();
   const duplicates = new Set();
@@ -28,12 +28,12 @@ function shorten_unique_prefixes(haystack) {
   });
 }
 
-function strip(text) {
+function strip(text: string): string {
   // strip numbers, non-ascii text, and annoying-to-type characters
   return text.replace(/[0-9]+/g, '').replace(/[^a-zA-Z0-9-]/g, '').toLowerCase();
 }
 
-function labels(texts) {
+function labels(texts: string[]) {
   // now shorten as much as we can without losing info
   const haystack = shorten_unique_prefixes(texts);
 
@@ -51,7 +51,7 @@ function labels(texts) {
       const base = prefix.substring(0, 2);
       // try each character after the 3rd in turn.
       // consider the original text, not the shortened prefix.
-      for (const c of texts[index].substring(2)) {
+      for (const c of texts[index]!.substring(2)) {
         const candidate = base + c;
         if (!used.has(candidate)) {
           result[index] = candidate;
@@ -73,7 +73,7 @@ function labels(texts) {
 }
 
 glide.o.hint_label_generator = async ({ content }) => {
-  const texts = await content.map(element => [element.textContent, element.ariaLabel]);
-  const haystack = texts.map(([text, label]) => strip(text) || strip(label || ""));
+  const texts: [string, string | null][] = await content.map(element => [element.textContent, element.ariaLabel]);
+  const haystack: string[] = texts.map(([text, label]) => strip(text) || strip(label || ""));
   return labels(haystack);
 };

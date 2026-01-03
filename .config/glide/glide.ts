@@ -17,6 +17,10 @@
 // Try typing `glide.` and see what you can do!
 
 glide.unstable.include("hints.glide.ts");
+glide.unstable.include("tridactyl.glide.ts");
+
+glide.g.mapleader = "," // too used to using space for scrolling
+glide.buf.keymaps.del("normal", "s"); // use `s` for searching
 
 glide.styles.add(`
   .yank-notification {
@@ -38,42 +42,6 @@ glide.styles.add(`
   }
 `);
 
-glide.keymaps.set("normal", "zi", async ({ tab_id }) => {
-  const zoom = await browser.tabs.getZoom(tab_id);
-  await browser.tabs.setZoom(tab_id, zoom + 0.1);
-});
-
-glide.keymaps.set("normal", "zo", async ({ tab_id }) => {
-  const zoom = await browser.tabs.getZoom(tab_id);
-  await browser.tabs.setZoom(tab_id, zoom - 0.1);
-});
-
-glide.keymaps.set("normal", "zz", async ({ tab_id }) => {
-  await browser.tabs.setZoom(tab_id, 1);
-});
-
-glide.keymaps.set("normal", "u", async () => {
-  const sessions = await browser.sessions.getRecentlyClosed({ maxResults: 1 });
-  const [session, ..._] = sessions;
-  if (session) {
-    await browser.sessions.restore(session.tab?.sessionId ?? session.window?.sessionId);
-  }
-});
-
-glide.keymaps.set("normal", "H", "back");
-glide.keymaps.set("normal", "L", "forward");
-glide.keymaps.set("normal", "d", "tab_close");
-
-glide.keymaps.set("normal", "p", async ({ tab_id }) => {
-  const url = await navigator.clipboard.readText();
-  await browser.tabs.update(tab_id, { url });
-});
-
-glide.keymaps.set("normal", "P", async () => {
-  const url = await navigator.clipboard.readText();
-  await browser.tabs.create({ url });
-});
-
 glide.keymaps.set("normal", "yy", async () => {
   const url = glide.ctx.url;
   await navigator.clipboard.writeText(url.toString());
@@ -87,3 +55,39 @@ glide.keymaps.set("normal", "yy", async () => {
   setTimeout(() => notification.remove(), 2000);
 });
 
+glide.keymaps.set("normal", "ZZ", async () => {
+  const tabs = await browser.tabs.query({});
+
+  const bookmarkTree = await browser.bookmarks.getTree();
+  const toolbarFolder = bookmarkTree[0]?.children?.find(
+    (child) => child.id === "toolbar_____" || child.title === "Bookmarks Toolbar"
+  );
+
+  if (toolbarFolder) {
+    let stashesFolder = toolbarFolder.children?.find((child) => child.title === "stashes");
+    if (!stashesFolder) {
+      stashesFolder = await browser.bookmarks.create({
+        parentId: toolbarFolder.id,
+        title: "stashes",
+      });
+    }
+
+    const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
+    const stashFolder = await browser.bookmarks.create({
+      parentId: stashesFolder.id,
+      title: timestamp,
+    });
+
+    for (const tab of tabs) {
+      if (tab.url && !tab.url.startsWith("about:")) {
+        await browser.bookmarks.create({
+          parentId: stashFolder.id,
+          title: tab.title || tab.url,
+          url: tab.url,
+        });
+      }
+    }
+  }
+
+  await glide.excmds.execute("quit");
+});
