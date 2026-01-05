@@ -22,6 +22,12 @@ glide.unstable.include("tridactyl.glide.ts");
 glide.g.mapleader = "," // too used to using space for scrolling
 glide.buf.keymaps.del("normal", "s"); // use `s` for searching
 
+glide.autocmds.create("UrlEnter", {hostname: "mail.google.com"}, async () => {
+  glide.buf.keymaps.del("normal", "gi");
+  glide.buf.keymaps.del("normal", "e");
+  glide.buf.keymaps.del("normal", "o");
+});
+
 glide.styles.add(`
   .yank-notification {
     position: fixed;
