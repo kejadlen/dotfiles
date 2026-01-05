@@ -8,6 +8,7 @@
         : logger
         : notify
         : pasteboard
+        : pathwatcher
         : screen
         : urlevent
         : window} hs)
@@ -61,6 +62,20 @@
                                       (execute "/opt/homebrew/bin/sketchybar --reload")))))
 
 (_G.screen-watcher:start)
+
+;;; reload aerospace on config changes
+
+(let [home (os.getenv :HOME)
+      aerospace-config (.. home :/.config/aerospace/aerospace.toml)]
+  (set _G.aerospace-watcher
+       (pathwatcher.new aerospace-config
+                        (fn []
+                          (execute "/opt/homebrew/bin/aerospace reload-config")
+                          (let [n (notify.new {:title :Aerospace
+                                               :informativeText "Config reloaded"
+                                               :withdrawAfter 2})]
+                            (n:send)))))
+  (_G.aerospace-watcher:start))
 
 ;;; wm
 
