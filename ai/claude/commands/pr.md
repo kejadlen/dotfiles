@@ -3,9 +3,10 @@
 Create a pull request using gh for a specified revision.
 
 Usage:
-- `/pr <revision>` - Create a PR for the specified revision (bookmark, change ID, revset, or commit hash)
+- `/pr <revision>` - Create a draft PR for the specified revision
+- `/pr <revision> ready` - Create a ready-for-review PR
 
-Revision must be provided. The revision will be resolved to a bookmark for the PR.
+Revision must be provided (bookmark, change ID, revset, or commit hash). The revision will be resolved to a bookmark for the PR.
 
 When creating a pull request:
 1. Resolve revision to bookmark name:
@@ -33,6 +34,6 @@ When creating a pull request:
    - Follow repository conventions
    - Apply elements-of-style rules: active voice, positive form, definite
      language, omit needless words, keep related words together
-7. Create the PR as draft: `gh pr create --head <bookmark-name> --title "<title>" --draft` using
-   a HEREDOC to pass the body
+7. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
+   a HEREDOC to pass the body. Add `--draft` unless `ready` was specified.
 8. Return the PR URL
