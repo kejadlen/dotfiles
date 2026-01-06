@@ -169,6 +169,10 @@ if.app-id = 'com.1password.1password'
 run = 'layout floating'
 
 [[on-window-detected]]
+if.app-id = 'com.kapeli.dashdoc'
+run = 'layout floating'
+
+[[on-window-detected]]
 if.app-id = 'com.apple.Safari'
 if.during-aerospace-startup = true
 run = 'move-node-to-workspace 1'
