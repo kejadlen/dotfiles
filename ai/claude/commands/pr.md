@@ -17,8 +17,8 @@ When creating a pull request:
    - If revision is a revset/change ID/commit hash but you lack naming context, push with auto-generated name:
      `jj git push -c <revision>`
      Then retrieve the auto-generated bookmark name from the push output
-2. Run `jj log -r 'trunk()::<bookmark>'` to list all commits from trunk to the bookmark
-3. Run `jj diff -r 'trunk()::<bookmark>' --stat` to review all changes
+2. Run `jj log -r 'trunk()..<bookmark>'` to list commits between trunk and the bookmark
+3. Run `jj diff --from trunk() --to <bookmark> --stat` to review all changes in the PR
 4. Check for .github PR templates and follow them
 5. Use the writing skill to generate a PR title summarizing all commits in the
    changeset (not just the most recent). The title reflects the overall change,
