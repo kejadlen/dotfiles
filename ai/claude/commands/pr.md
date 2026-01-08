@@ -10,7 +10,7 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
 
 When creating a pull request:
 1. Resolve revision to bookmark name:
-   - If revision is already a bookmark, use it directly
+   - If revision is already a bookmark or has a bookmark, use the bookmark directly
    - If revision is a revset/change ID/commit hash and you have context for what to name it, create a descriptive bookmark, track it, and push:
      `jj bookmark create <descriptive-name> -r <revision>`
      `jj bookmark track <descriptive-name>@origin`
