@@ -32,4 +32,8 @@ When creating a pull request:
    - Follow repository conventions
 8. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
    a HEREDOC to pass the body. Add `--draft` unless `ready` was specified.
-9. Return the PR URL
+9. **If a Jira card is detected**, transition it to "In Review":
+   - Check workspace name or bookmark for pattern like `PROJ-123` (e.g., `LDE-488`)
+   - If found: `acli jira workitem transition --key <KEY> --status "In Review"`
+   - If not found, skip this step silently
+10. Return the PR URL
