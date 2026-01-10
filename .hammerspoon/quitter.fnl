@@ -9,16 +9,20 @@
 (local log (logger.new :quitter :debug))
 
 (local config {:permanent-apps [:Arq
+                                "CleanShot X"
                                 "Firefox Developer Edition"
                                 :Ghostty
+                                :Glide
                                 :Miniflux
                                 :Phanpy
                                 :Obsidian
                                 "Raspberry Pi Imager"
                                 :Safari]
-               :app-overrides {:Music [:hour 1]
+               :app-overrides {:Fusion [:minute 30]
+                               :Music [:hour 1]
                                :Raindrop [:minute 15]
                                "UniFi Protect" [:minute 30]
+                               :Xcode [:hour 1]
                                :zoom.us [:hour 1]}
                :default-timeout [:minute 5]})
 
