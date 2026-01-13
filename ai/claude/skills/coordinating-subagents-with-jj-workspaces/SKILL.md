@@ -44,8 +44,7 @@ Enable safe parallel feature development by dispatching independent subagents to
 
 - [ ] Agent makes file edits in workspace
 - [ ] Agent runs verification (tests, type checks)
-- [ ] Agent describes change: `jj describe -m "..."`
-- [ ] Agent creates new change: `jj new -A @ -B mm`
+- [ ] Agent commits change: `jj commit -m "..."`
 - [ ] Agent reports completion with results and change ID
 
 ### Phase 4: Review (Coordinator)
@@ -144,19 +143,15 @@ Task 3: Dispatch DB agent to db workspace
 1. Work ONLY in their assigned workspace path
 2. Make file edits to implement the task
 3. Run verification steps (tests, type checks, etc.)
-4. Describe the change: `jj describe -m "feat: ..."` (use describing-changes skill)
-5. Create new change: `jj new -A @ -B mm`
-6. Report results: what changed, verification output, final change ID
+4. Commit the change: `jj commit -m "feat: ..."` (use describing-changes skill)
+5. Report results: what changed, verification output, final change ID
 7. Make NO changes outside their workspace
 
 **Agent workflow:**
 1. Make file edits in workspace
 2. Run verification commands
-3. Describe changes with `jj describe -m "..."`
-4. Create new change with `jj new -A @ -B mm`
-5. Report completion with results and change ID
-
-This inserts a new empty change between the completed work and the workspace's stable parent, ready for the next task.
+3. Commit changes with `jj commit -m "..."`
+4. Report completion with results and change ID
 
 **FORBIDDEN for agents:**
 - `jj workspace` commands - breaks isolation
@@ -203,8 +198,7 @@ jj status
 | Mistake | Fix |
 |---------|-----|
 | Skipping DAG placement | Must run `jj rebase -r <ws>@ -A 'trunk()' -B mm` after creating workspace |
-| Agent skipping `jj describe` | Agent must describe their changes before creating new change |
-| Agent skipping `jj new` | Agent must run `jj new -A @ -B mm` after describing |
+| Agent skipping `jj commit` | Agent must commit their changes with `jj commit -m "..."` |
 | Skipping `jj workspace update-stale` | Run in main workspace after agent completes to sync and detect conflicts |
 | Creating workspaces during dispatch | Create all workspaces and place in DAG BEFORE dispatch |
 | Agent touching other workspaces | Agents work ONLY in their assigned workspace path |
@@ -217,8 +211,7 @@ If you catch yourself thinking ANY of these, you're about to violate the workflo
 | Red Flag | Reality |
 |----------|---------|
 | "I'll skip DAG placement" | NO. Must insert workspace between trunk and mm for clean integration. |
-| "Agent doesn't need to describe" | NO. Agent must run `jj describe` to document the change. |
-| "Agent doesn't need jj new" | NO. Agent must run `jj new -A @ -B mm` after describing. |
+| "Agent doesn't need to commit" | NO. Agent must run `jj commit` to finalize the change. |
 | "I'll create workspaces during dispatch" | Create ALL workspaces and place in DAG first. |
 | "I'll skip `jj workspace update-stale`" | Run after agent completes. This syncs main workspace. |
 | "I'll create a custom directory" | NO. Always use `~/src/workspaces/`. No exceptions. |
