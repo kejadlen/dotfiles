@@ -1,31 +1,15 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version='1.0'>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
 <dict>
 	<key>DHCheatRepo</key>
 	<dict>
 		<key>installed</key>
 		<dict/>
 		<key>uninstalled</key>
-		<dict>
-			<key>YAML</key>
-			<dict>
-				<key>date</key>
-				<date/>
-				<key>entry</key>
-				<dict>
-					<key>aliases</key>
-					<array/>
-					<key>name</key>
-					<string>YAML</string>
-					<key>platform</key>
-					<string>cheatsheet</string>
-					<key>uniqueIdentifier</key>
-					<string>YAML</string>
-				</dict>
-			</dict>
-		</dict>
+		<dict/>
 	</dict>
-	<key>DHCocoaRepo</key>
+	<key>DHClojureRepo</key>
 	<dict>
 		<key>installed</key>
 		<dict/>
@@ -33,6 +17,13 @@
 		<dict/>
 	</dict>
 	<key>DHDartRepo</key>
+	<dict>
+		<key>installed</key>
+		<dict/>
+		<key>uninstalled</key>
+		<dict/>
+	</dict>
+	<key>DHDocsetGeneratorRepo</key>
 	<dict>
 		<key>installed</key>
 		<dict/>
@@ -81,25 +72,24 @@
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
+	<key>DHPythonRepo</key>
+	<dict>
+		<key>installed</key>
+		<dict/>
+		<key>uninstalled</key>
+		<dict/>
+	</dict>
 	<key>DHRubyRepo</key>
 	<dict>
 		<key>installed</key>
-		<dict>
-			<key>rake</key>
-			<dict>
-				<key>date</key>
-				<date/>
-				<key>entry</key>
-				<dict>
-					<key>name</key>
-					<string>rake</string>
-					<key>platform</key>
-					<string>rubyGems</string>
-					<key>uniqueIdentifier</key>
-					<string>rake</string>
-				</dict>
-			</dict>
-		</dict>
+		<dict/>
+		<key>uninstalled</key>
+		<dict/>
+	</dict>
+	<key>DHRustRepo</key>
+	<dict>
+		<key>installed</key>
+		<dict/>
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
@@ -117,6 +107,13 @@
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
+	<key>DHSwiftRepo</key>
+	<dict>
+		<key>installed</key>
+		<dict/>
+		<key>uninstalled</key>
+		<dict/>
+	</dict>
 	<key>DHUserRepo</key>
 	<dict>
 		<key>installed</key>
@@ -124,7 +121,7 @@
 			<key>Hammerspoon</key>
 			<dict>
 				<key>date</key>
-				<date/>
+				<date>2026-01-06T04:02:32Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -141,218 +138,34 @@
 					<string>Hammerspoon</string>
 				</dict>
 			</dict>
-			<key>Neovim</key>
-			<dict>
-				<key>date</key>
-				<date/>
-				<key>entry</key>
-				<dict>
-					<key>aliases</key>
-					<array>
-						<string>Nvim</string>
-						<string>Neovim</string>
-					</array>
-					<key>authorLinkHref</key>
-					<string>https://github.com/Kapeli/Dash-User-Contributions/tree/master/docsets/Neovim#readme</string>
-					<key>authorLinkText</key>
-					<string>h-hg</string>
-					<key>name</key>
-					<string>Neovim</string>
-					<key>platform</key>
-					<string>usercontribNeovim</string>
-					<key>uniqueIdentifier</key>
-					<string>Neovim</string>
-				</dict>
-			</dict>
-			<key>Terraform</key>
-			<dict>
-				<key>date</key>
-				<date/>
-				<key>entry</key>
-				<dict>
-					<key>aliases</key>
-					<array>
-						<string>terraform</string>
-						<string>tf</string>
-						<string>terra</string>
-					</array>
-					<key>authorLinkHref</key>
-					<string>https://github.com/Kapeli/Dash-User-Contributions/tree/master/docsets/Terraform#readme</string>
-					<key>authorLinkText</key>
-					<string>Roberth Kulbin</string>
-					<key>name</key>
-					<string>Terraform</string>
-					<key>platform</key>
-					<string>usercontribTerraform</string>
-					<key>uniqueIdentifier</key>
-					<string>Terraform</string>
-				</dict>
-			</dict>
 		</dict>
 		<key>uninstalled</key>
-		<dict>
-			<key>J</key>
-			<dict>
-				<key>date</key>
-				<date/>
-				<key>entry</key>
-				<dict>
-					<key>aliases</key>
-					<array>
-						<string>JSoftware</string>
-					</array>
-					<key>authorLinkHref</key>
-					<string>https://github.com/Kapeli/Dash-User-Contributions/tree/master/docsets/J#readme</string>
-					<key>authorLinkText</key>
-					<string>Tim Hosgood</string>
-					<key>name</key>
-					<string>J</string>
-					<key>platform</key>
-					<string>usercontribJ</string>
-					<key>uniqueIdentifier</key>
-					<string>J</string>
-				</dict>
-			</dict>
-		</dict>
+		<dict/>
 	</dict>
-	<key>DHWebViewIsDark</key>
-	<false/>
 	<key>actuallyDarkWebView</key>
-	<true/>
-	<key>annotationsAreShown</key>
 	<true/>
 	<key>docsets</key>
 	<dict>
 		<key>keywords</key>
 		<dict>
-			<key>~/Library/Application Support/Dash/DocSets/JavaScript/JavaScript.docset</key>
-			<string>js:</string>
-			<key>~/Library/Application Support/Dash/DocSets/Man_Pages/Man Pages.docset</key>
-			<string>man:</string>
-			<key>~/Library/Application Support/Dash/DocSets/Markdown/Markdown.docset</key>
-			<string>md:</string>
-			<key>~/Library/Application Support/Dash/DocSets/NodeJS/NodeJS.docset</key>
-			<string>node:</string>
-			<key>~/Library/Application Support/Dash/DocSets/Python_3/Python 3.docset</key>
-			<string>py:</string>
-			<key>~/Library/Application Support/Dash/DocSets/Ruby_3/Ruby.docset</key>
+			<key>~/Library/Application Support/Dash/DocSets/Ruby/Ruby.docset</key>
 			<string>rb:</string>
-			<key>~/Library/Application Support/Dash/DocSets/Rust/Rust.docset</key>
-			<string>rs:</string>
-			<key>~/Library/Application Support/Dash/Ruby DocSets/rake/rake.docset</key>
-			<string>gem:</string>
 			<key>~/Library/Application Support/Dash/User Contributed/Hammerspoon/Hammerspoon.docset</key>
 			<string>hs:</string>
-			<key>~/Library/Application Support/Dash/User Contributed/Neovim/Neovim.docset</key>
-			<string>nvim:</string>
-			<key>~/Library/Application Support/Dash/User Contributed/Terraform/Terraform.docset</key>
-			<string>tf:</string>
-			<key>~/Library/Application Support/Dash/Versioned DocSets/Django - DHDocsetDownloader/3-2-10/Django.docset</key>
-			<string>dj:</string>
-			<key>~/Library/Application Support/Dash/Versioned DocSets/Python 3 - DHDocsetDownloader/3-7-12/Python 3.docset</key>
-			<string>py:</string>
-			<key>~/Library/Application Support/Dash/Versioned DocSets/Ruby 2 - DHDocsetDownloader/2-7-2/Ruby.docset</key>
-			<string>rb:</string>
 		</dict>
 	</dict>
 	<key>feeds</key>
 	<dict>
 		<key>installed</key>
 		<dict>
-			<key>http://kapeli.com/feeds/Ansible.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Docker.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/JavaScript.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Markdown.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/NodeJS.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Ruby_3.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Rust.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-		</dict>
-		<key>uninstalled</key>
-		<dict>
-			<key>http://kapeli.com/feeds/CSS.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Django.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Haskell.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Python_3.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Racket.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
 			<key>http://kapeli.com/feeds/Ruby.xml</key>
 			<dict>
 				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Ruby_on_Rails_7.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/Vim.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
-			</dict>
-			<key>http://kapeli.com/feeds/VueJS.xml</key>
-			<dict>
-				<key>date</key>
-				<date/>
+				<date>2026-01-10T03:45:16Z</date>
 			</dict>
 		</dict>
+		<key>uninstalled</key>
+		<dict/>
 	</dict>
 	<key>isPinned</key>
 	<true/>
@@ -379,25 +192,9 @@
 			<true/>
 		</dict>
 	</array>
-	<key>searchKey</key>
-	<dict>
-		<key>keyCode</key>
-		<integer>-1</integer>
-		<key>modifiers</key>
-		<integer>8395520</integer>
-	</dict>
-	<key>searchUsingSelectedTextKey</key>
-	<dict>
-		<key>keyCode</key>
-		<integer>-1</integer>
-		<key>modifiers</key>
-		<integer>8395520</integer>
-	</dict>
 	<key>shouldRestoreTabs</key>
-	<false/>
+	<true/>
 	<key>shouldShowStatusIcon</key>
-	<false/>
-	<key>shouldStartAtLogin</key>
 	<false/>
 	<key>shouldSyncBookmarks</key>
 	<true/>
@@ -416,7 +213,7 @@
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
-	<key>versionedDHCocoaRepo</key>
+	<key>versionedDHClojureRepo</key>
 	<dict>
 		<key>installed</key>
 		<dict/>
@@ -424,6 +221,13 @@
 		<dict/>
 	</dict>
 	<key>versionedDHDartRepo</key>
+	<dict>
+		<key>installed</key>
+		<dict/>
+		<key>uninstalled</key>
+		<dict/>
+	</dict>
+	<key>versionedDHDocsetGeneratorRepo</key>
 	<dict>
 		<key>installed</key>
 		<dict/>
@@ -472,7 +276,21 @@
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
+	<key>versionedDHPythonRepo</key>
+	<dict>
+		<key>installed</key>
+		<dict/>
+		<key>uninstalled</key>
+		<dict/>
+	</dict>
 	<key>versionedDHRubyRepo</key>
+	<dict>
+		<key>installed</key>
+		<dict/>
+		<key>uninstalled</key>
+		<dict/>
+	</dict>
+	<key>versionedDHRustRepo</key>
 	<dict>
 		<key>installed</key>
 		<dict/>
@@ -493,6 +311,13 @@
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
+	<key>versionedDHSwiftRepo</key>
+	<dict>
+		<key>installed</key>
+		<dict/>
+		<key>uninstalled</key>
+		<dict/>
+	</dict>
 	<key>versionedDHUserRepo</key>
 	<dict>
 		<key>installed</key>
@@ -503,65 +328,31 @@
 	<key>versionedFeeds</key>
 	<dict>
 		<key>installed</key>
-		<dict>
-			<key>http://kapeli.com/feeds/Django.xml</key>
-			<dict>
-				<key>3.2.10</key>
-				<dict>
-					<key>date</key>
-					<date/>
-				</dict>
-			</dict>
-			<key>http://kapeli.com/feeds/Python_3.xml</key>
-			<dict>
-				<key>3.7.12</key>
-				<dict>
-					<key>date</key>
-					<date/>
-				</dict>
-			</dict>
-			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
-			<dict/>
-			<key>http://kapeli.com/feeds/VueJS.xml</key>
-			<dict>
-				<key>2.6.12</key>
-				<dict>
-					<key>date</key>
-					<date/>
-				</dict>
-			</dict>
-		</dict>
+		<dict/>
 		<key>uninstalled</key>
-		<dict>
-			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
-			<dict>
-				<key>2.6.5</key>
-				<dict>
-					<key>date</key>
-					<date/>
-				</dict>
-				<key>2.7.0</key>
-				<dict>
-					<key>date</key>
-					<date/>
-				</dict>
-				<key>2.7.2</key>
-				<dict>
-					<key>date</key>
-					<date/>
-				</dict>
-			</dict>
-		</dict>
+		<dict/>
 	</dict>
 	<key>webSearches</key>
 	<array>
+		<dict>
+			<key>icon</key>
+			<string>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAEKADAAQAAAABAAAAEAAAAAA0VXHyAAABRklEQVQ4EWNkAIL/myUnAKl8EJtowMgwi9HneTrj/02SMxkYGdKI1oiqcCIj0Pb/qGKYvHsvGRhsahkYuNkZGG5PRpVnQeUieHsuMTDETUHwcbGwGqCYxcDw8w+qFnagSnTbQSqYUJUxMLz4gND8bBYDAwiDAMjAB68hbGQSwwCPFog0TCOI93AaRCywC0IjkxgGsEI9dfUxQtnt5xA2OytCDMbCiIV/wDiRSYdIzweGxddfDAw5cyB8ZFfBDMAIxOk7YVIMDIlQp4NEMt0Q4sgsDANa10GkQbZ1bmBg+PGbgaE+FFkLKhvDAJj0D6DTC7whvF/AGGDDoRKHMAODUg7MKASNLQwwAhGkPG0mA8ONpwwMKhIMDII8DAwXHzAwXHsCMQjdEJABROVEtxYGhk1lDAwcbBCDwCQoR4IYZObIiYy+zwsAHXhY223z5QYAAAAASUVORK5CYII=</string>
+			<key>isEnabled</key>
+			<true/>
+			<key>name</key>
+			<string>Kagi</string>
+			<key>shouldNotAddSearchTerm</key>
+			<integer>0</integer>
+			<key>url</key>
+			<string>https://kagi.com/search?q={query}</string>
+		</dict>
 		<dict>
 			<key>iconName</key>
 			<string>Google</string>
 			<key>isDefault</key>
 			<true/>
 			<key>isEnabled</key>
-			<true/>
+			<false/>
 			<key>name</key>
 			<string>Google</string>
 			<key>url</key>
@@ -573,7 +364,7 @@
 			<key>isDefault</key>
 			<true/>
 			<key>isEnabled</key>
-			<true/>
+			<false/>
 			<key>name</key>
 			<string>DuckDuckGo</string>
 			<key>url</key>
@@ -592,7 +383,5 @@
 			<string>https://stackoverflow.com/search?q={query}</string>
 		</dict>
 	</array>
-	<key>windowStyle</key>
-	<string>Standard</string>
 </dict>
 </plist>
