@@ -39,7 +39,7 @@ use_ruby() {
 
   # Find matching version (exact or prefix match)
   if [[ -n $version ]] && [[ ! -d $HOME/.rubies/$version ]]; then
-    version=$(ls -1 $HOME/.rubies | grep "^$version" | sort -V | tail -1)
+    version=$(ls -1 $HOME/.rubies | grep "^ruby-$version" | sort -V | tail -1)
   fi
 
   # Fall back to latest version if still no match
