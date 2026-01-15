@@ -6,7 +6,7 @@
         : timer
         : window} hs)
 
-(local log (logger.new :quitter :debug))
+(local log (logger.new :quitter :info))
 
 (local config {:keep [:Arq
                       "CleanShot X"
