@@ -17,12 +17,15 @@ When creating a pull request:
    - Retrieve the bookmark name from the output
 2. Run `jj log -r 'trunk()..<bookmark>'` to list commits between trunk and the bookmark
 3. Run `jj diff --from trunk() --to <bookmark> --stat` to review all changes in the PR
-4. Check for .github PR templates and follow them
-5. **Invoke the `elements-of-style:writing-clearly-and-concisely` skill** before
+4. Consider whether the pending changes should be organized into smaller, easier
+   to review commits. If so, use `jj split` or `jj squash` to reorganize before
+   proceeding.
+5. Check for .github PR templates and follow them
+6. **Invoke the `elements-of-style:writing-clearly-and-concisely` skill** before
    drafting any prose. This is mandatory.
-6. Generate a PR title summarizing all commits in the changeset (not just the
+7. Generate a PR title summarizing all commits in the changeset (not just the
    most recent). The title reflects the overall change, not individual commits.
-7. Draft a PR summary explaining why the changes were made and their impact.
+8. Draft a PR summary explaining why the changes were made and their impact.
    Focus on context and motivation, not implementation details. Include only
    "Assisted-by" footer for attribution—no "Generated with Claude Code"
    - Do not repeat information obvious from the diff
@@ -30,10 +33,16 @@ When creating a pull request:
      non-obvious reasoning justifies them
    - Explain user-facing impact, architectural decisions, and tradeoffs
    - Follow repository conventions
-8. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
-   a HEREDOC to pass the body. Add `--draft` unless `ready` was specified.
-9. **If a Jira card is detected**, transition it to "In Review":
-   - Check workspace name or bookmark for pattern like `PROJ-123` (e.g., `LDE-488`)
-   - If found: `acli jira workitem transition --key <KEY> --status "In Review"`
-   - If not found, skip this step silently
-10. Return the PR URL
+9. **Self-review**: Review the PR changes as a code reviewer. Check for:
+   - Code smells or antipatterns
+   - Missing tests for new functionality
+   - Code repetition that should be refactored
+   - Lengthy or poorly-documented modules
+   - Report findings to the user; address any issues before proceeding
+10. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
+    a HEREDOC to pass the body. Add `--draft` unless `ready` was specified.
+11. **If a Jira card is detected**, transition it to "In Review":
+    - Check workspace name or bookmark for pattern like `PROJ-123` (e.g., `LDE-488`)
+    - If found: `acli jira workitem transition --key <KEY> --status "In Review"`
+    - If not found, skip this step silently
+12. Return the PR URL
