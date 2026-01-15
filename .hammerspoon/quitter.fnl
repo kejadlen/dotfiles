@@ -8,27 +8,26 @@
 
 (local log (logger.new :quitter :debug))
 
-(local config {:permanent-apps [:Arq
-                                "CleanShot X"
-                                "Firefox Developer Edition"
-                                :Ghostty
-                                :Glide
-                                :Miniflux
-                                :Phanpy
-                                :Obsidian
-                                "Raspberry Pi Imager"
-                                :Safari]
-               :app-overrides {:Fusion [:minute 30]
-                               :Music [:hour 1]
-                               :Raindrop [:minute 15]
-                               "UniFi Protect" [:minute 30]
-                               :Xcode [:hour 1]
-                               :zoom.us [:hour 1]}
-               :default-timeout [:minute 5]})
+(local config {:keep [:Arq
+                      "CleanShot X"
+                      "Firefox Developer Edition"
+                      :Ghostty
+                      :Glide
+                      :Miniflux
+                      :Phanpy
+                      :Obsidian
+                      "Raspberry Pi Imager"
+                      :Safari]
+               :timeouts {:Fusion [:minute 30]
+                          :Music [:hour 1]
+                          :Raindrop [:minute 15]
+                          "UniFi Protect" [:minute 30]
+                          :Xcode [:hour 1]
+                          :zoom.us [:hour 1]}
+               :default [:minute 5]})
 
 (fn kill-delay [app-name]
-  (let [[interval count] (or (?. config.app-overrides app-name)
-                             config.default-timeout)
+  (let [[interval count] (or (?. config.timeouts app-name) config.default)
         seconds (. {:minute 60 :hour (* 60 60)} interval)]
     (* count seconds)))
 
@@ -59,7 +58,7 @@
         (set (. to-kill bundle-id) nil)))))
 
 (fn mark [app]
-  (when (and (not (contains config.permanent-apps (app:name))) (= (app:kind) 1))
+  (when (and (not (contains config.keep (app:name))) (= (app:kind) 1))
     (unmark app)
     (let [delay (kill-delay (app:name))]
       (log.i (.. "marking " (app:name) " to be killed after " delay))
@@ -68,14 +67,14 @@
 (fn mark-all-apps []
   (log.d :mark-all-apps)
   (each [_ app (ipairs (ifilter [(application.find "")]
-                                #(not (contains config.permanent-apps ($1:name)))))]
+                                #(not (contains config.keep ($1:name)))))]
     (mark app)))
 
 (local cw (caffeinate.watcher.new #(when (= $1 caffeinate.watcher.systemDidWake)
                                      (mark-all-apps))))
 
 (local wf (let [filter-config {:default true}]
-            (each [_ app-name (ipairs config.permanent-apps)]
+            (each [_ app-name (ipairs config.keep)]
               (tset filter-config app-name false))
             (window.filter.new filter-config)))
 
