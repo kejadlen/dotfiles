@@ -27,6 +27,20 @@ struct MeetingBarError: Error {
     let message: String
 }
 
+// Returns priority for participation status (lower = higher priority)
+func participationPriority(for event: EKEvent) -> Int {
+    guard let attendees = event.attendees else { return 100 }
+    guard let me = attendees.first(where: { $0.isCurrentUser }) else { return 100 }
+
+    switch me.participantStatus {
+    case .accepted: return 0
+    case .tentative: return 1
+    case .pending: return 2
+    case .unknown: return 3
+    default: return 100
+    }
+}
+
 class MeetingBar {
     let calendarTitle: String
     let eventStore: EKEventStore
@@ -95,20 +109,37 @@ class MeetingBar {
         let predicate = eventStore.predicateForEvents(withStart: startDate, end: endDate, calendars: calendars)
         let events = eventStore.events(matching: predicate).filter { !$0.isAllDay }
 
-        let currentMeeting = events.first(where: { currentDate >= $0.startDate && currentDate <= $0.endDate })
+        // Find current meetings, preferring accepted ones
+        let currentMeetings = events.filter { currentDate >= $0.startDate && currentDate <= $0.endDate }
+        let currentMeeting = currentMeetings.min { first, second in
+            let firstPriority = participationPriority(for: first)
+            let secondPriority = participationPriority(for: second)
+            if firstPriority != secondPriority {
+                return firstPriority < secondPriority
+            }
+            // Same status, prefer shorter meeting
+            let firstDuration = first.endDate.timeIntervalSince(first.startDate)
+            let secondDuration = second.endDate.timeIntervalSince(second.startDate)
+            return firstDuration < secondDuration
+        }
 
         // Find all events starting after current time
         let upcomingEvents = events.filter { $0.startDate > currentDate }
-        // If multiple events start at the same time, pick the shortest one
+        // Priority: earliest start > accepted status > shortest duration
         let nextMeeting = upcomingEvents.min { first, second in
-            if first.startDate == second.startDate {
-                // Same start time, compare durations
-                let firstDuration = first.endDate.timeIntervalSince(first.startDate)
-                let secondDuration = second.endDate.timeIntervalSince(second.startDate)
-                return firstDuration < secondDuration
+            if first.startDate != second.startDate {
+                return first.startDate < second.startDate
             }
-            // Different start times, pick the earlier one
-            return first.startDate < second.startDate
+            // Same start time, prefer accepted events
+            let firstPriority = participationPriority(for: first)
+            let secondPriority = participationPriority(for: second)
+            if firstPriority != secondPriority {
+                return firstPriority < secondPriority
+            }
+            // Same status, pick the shortest one
+            let firstDuration = first.endDate.timeIntervalSince(first.startDate)
+            let secondDuration = second.endDate.timeIntervalSince(second.startDate)
+            return firstDuration < secondDuration
         }
 
         // No current meeting, show next meeting if available
