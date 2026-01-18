@@ -28,4 +28,7 @@ xcuserdata
 .ropeproject
 pyrightconfig.json
 
+# vim
+Session.vim
+
 **/.claude/settings.local.json

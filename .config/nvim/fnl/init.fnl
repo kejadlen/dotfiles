@@ -131,6 +131,7 @@
                "https://github.com/tpope/vim-abolish.git"
                "https://github.com/tpope/vim-dispatch.git"
                "https://github.com/tpope/vim-repeat.git"
+               "https://github.com/tpope/vim-obsession.git"
                "https://github.com/tpope/vim-sensible.git"
                "https://github.com/tpope/vim-sleuth.git"
                "https://github.com/tpope/vim-speeddating.git"

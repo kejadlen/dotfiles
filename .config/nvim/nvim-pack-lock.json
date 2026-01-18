@@ -65,6 +65,10 @@
       "rev": "cb93482",
       "src": "https://github.com/atweiden/vim-fennel.git"
     },
+    "vim-obsession": {
+      "rev": "ed9dfc7c2cc917ace8b24f4f9f80a91e05614b63",
+      "src": "https://github.com/tpope/vim-obsession.git"
+    },
     "vim-repeat": {
       "rev": "6584602",
       "src": "https://github.com/tpope/vim-repeat.git"
