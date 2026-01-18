@@ -138,6 +138,17 @@
                "https://github.com/tpope/vim-unimpaired.git"
                "https://github.com/tpope/vim-vinegar.git"])
 
+;; Run :TSUpdate after updating nvim-treesitter
+(let [callback (fn [opts]
+                 (when (and (opts.data.path:match "nvim%-treesitter$")
+                            (or (= opts.data.kind :install)
+                                (= opts.data.kind :update)))
+                   ;; packadd is required because PackChanged fires before the plugin
+                   ;; is loaded, so :TSUpdate wouldn't be available otherwise
+                   (vim.cmd.packadd :nvim-treesitter)
+                   (vim.cmd.TSUpdate)))]
+  (create-autocmd :PackChanged {: callback}))
+
 (require :fzf)
 (require :lsp)
 
