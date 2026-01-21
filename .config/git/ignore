@@ -31,4 +31,6 @@ pyrightconfig.json
 # vim
 Session.vim
 
-**/.claude/settings.local.json
+# Claude
+CLAUDE.local.md
+.claude/settings.local.json

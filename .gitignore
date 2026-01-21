@@ -46,6 +46,7 @@ private
 
 /ai/claude/*
 !/ai/claude/commands
+!/ai/claude/marketplace
 !/ai/claude/skills
 
 # hack for now since I don't want to commit Alfred secrets
