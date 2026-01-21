@@ -23,26 +23,35 @@ When creating a pull request:
 5. Check for .github PR templates and follow them
 6. **Invoke the `elements-of-style:writing-clearly-and-concisely` skill** before
    drafting any prose. This is mandatory.
-7. Generate a PR title summarizing all commits in the changeset (not just the
+7. **Search episodic memory for design decisions**: Use `episodic-memory:search`
+   to find conversations related to the files changed in this PR. Look for:
+   - Design decisions and their rationale
+   - Alternative approaches that were considered and rejected
+   - Tradeoffs discussed during implementation
+   - Requirements or constraints that shaped the solution
+   Extract key decisions to include in the PR summary's "Design Decisions" section.
+8. Generate a PR title summarizing all commits in the changeset (not just the
    most recent). The title reflects the overall change, not individual commits.
-8. Draft a PR summary explaining why the changes were made and their impact.
+9. Draft a PR summary explaining why the changes were made and their impact.
    Focus on context and motivation, not implementation details. Include only
    "Assisted-by" footer for attribution—no "Generated with Claude Code"
    - Do not repeat information obvious from the diff
    - Omit details like "added function X" or "modified file Y" unless
      non-obvious reasoning justifies them
    - Explain user-facing impact, architectural decisions, and tradeoffs
+   - If design decisions were found in episodic memory, include a "Design Decisions"
+     section highlighting key choices and their rationale
    - Follow repository conventions
-9. **Self-review**: Review the PR changes as a code reviewer. Check for:
-   - Code smells or antipatterns
-   - Missing tests for new functionality
-   - Code repetition that should be refactored
-   - Lengthy or poorly-documented modules
-   - Report findings to the user; address any issues before proceeding
-10. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
+10. **Self-review**: Review the PR changes as a code reviewer. Check for:
+    - Code smells or antipatterns
+    - Missing tests for new functionality
+    - Code repetition that should be refactored
+    - Lengthy or poorly-documented modules
+    - Report findings to the user; address any issues before proceeding
+11. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
     a HEREDOC to pass the body. Add `--draft` unless `ready` was specified.
-11. **If a Jira card is detected**, transition it to "In Review":
+12. **If a Jira card is detected**, transition it to "In Review":
     - Check workspace name or bookmark for pattern like `PROJ-123` (e.g., `LDE-488`)
     - If found: `acli jira workitem transition --key <KEY> --status "In Review"`
     - If not found, skip this step silently
-12. Return the PR URL
+13. Return the PR URL
