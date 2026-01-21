@@ -89,7 +89,22 @@
 	<key>DHRustRepo</key>
 	<dict>
 		<key>installed</key>
-		<dict/>
+		<dict>
+			<key>xdg</key>
+			<dict>
+				<key>date</key>
+				<date>2026-01-21T01:59:39Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>xdg</string>
+					<key>platform</key>
+					<string>crate</string>
+					<key>uniqueIdentifier</key>
+					<string>xdg</string>
+				</dict>
+			</dict>
+		</dict>
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
@@ -150,6 +165,8 @@
 		<dict>
 			<key>~/Library/Application Support/Dash/DocSets/Ruby/Ruby.docset</key>
 			<string>rb:</string>
+			<key>~/Library/Application Support/Dash/DocSets/Rust/Rust.docset</key>
+			<string>rs:</string>
 			<key>~/Library/Application Support/Dash/User Contributed/Hammerspoon/Hammerspoon.docset</key>
 			<string>hs:</string>
 		</dict>
@@ -162,6 +179,11 @@
 			<dict>
 				<key>date</key>
 				<date>2026-01-10T03:45:16Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Rust.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2026-01-21T01:59:31Z</date>
 			</dict>
 		</dict>
 		<key>uninstalled</key>
