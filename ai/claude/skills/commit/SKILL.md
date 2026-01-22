@@ -1,7 +1,6 @@
 ---
 name: commit
-description: This skill should be used when the user asks to "commit changes", "commit my work", "/commit", "create a commit", or "jj commit". Drafts clear, reasoning-focused commit messages using jj.
-argument-hint: [fileset]
+description: Use when the user asks to "commit changes", "commit my work", "/commit", "create a commit", or "jj commit"
 ---
 
 # Commit Changes

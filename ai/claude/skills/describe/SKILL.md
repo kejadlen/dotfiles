@@ -1,6 +1,6 @@
 ---
 name: describe
-description: This skill should be used when the user asks to "describe a change", "describe a revision", "/describe", "rewrite commit message", or "update revision description". Drafts reasoning-focused descriptions for jj revisions.
+description: Use when the user asks to "describe a change", "describe a revision", "/describe", "rewrite commit message", or "update revision description"
 argument-hint: <revision>
 ---
 

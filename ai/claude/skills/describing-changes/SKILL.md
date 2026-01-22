@@ -1,6 +1,6 @@
 ---
 name: describing-changes
-description: Use when drafting any explanation of changes (commit messages, PRs, code reviews, docs) - focuses on documenting reasoning and decisions rather than describing what changed
+description: Use when drafting any explanation of changes (commit messages, PRs, code reviews, docs)
 ---
 
 # Describing Changes

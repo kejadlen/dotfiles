@@ -1,6 +1,6 @@
 ---
 name: galahad
-description: how to approach tests, types and coverage
+description: Use when running tests, fixing type errors, or improving coverage - prioritizes 100% green checks as a trustworthy signal
 source: https://github.com/lambdamechanic/skills/blob/main/galahad/SKILL.md
 ---
 

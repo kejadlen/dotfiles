@@ -1,6 +1,6 @@
 ---
 name: pr
-description: This skill should be used when the user asks to "create a pull request", "create a PR", "/pr", "open a PR", "submit for review", or "push and create PR". Creates pull requests using gh for jj revisions.
+description: Use when the user asks to "create a pull request", "create a PR", "/pr", "open a PR", "submit for review", or "push and create PR"
 argument-hint: <revision> [ready]
 ---
 
