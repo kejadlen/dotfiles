@@ -27,8 +27,12 @@ The `elements-of-style:writing-clearly-and-concisely` skill is required as a sub
    - For each sentence, ask: "Does this explain something not visible in the code change?"
    - If the answer is "no" (sentence just restates what the diff shows), delete it
    - If all sentences pass the audit, proceed. If any fail, rewrite until they do.
-6. If a fileset is provided, use `jj commit $ARGUMENTS` to commit only matching files (include the changelog in the fileset if it was updated)
-7. If no fileset is provided (empty `$ARGUMENTS`), use `jj commit` to commit all changes
-8. Include the "Assisted-by" footer with the current model and tool being used
-9. Use a HEREDOC for the commit message to ensure proper formatting
-10. Verify the commit with `jj show` to confirm only intended changes were committed
+6. Check if a changelog exists (CHANGELOG.md, CHANGELOG, CHANGES.md, or similar)
+   - If found, add an entry for this change under the appropriate section (usually "Unreleased" or the current version)
+   - The entry should be concise: what changed and why it matters to users
+   - If a fileset is provided, scope the changelog entry to only the changes in that fileset
+7. If a fileset is provided, use `jj commit $ARGUMENTS` to commit only matching files (include the changelog in the fileset if it was updated)
+8. If no fileset is provided (empty `$ARGUMENTS`), use `jj commit` to commit all changes
+9. Include the "Assisted-by" footer with the current model and tool being used
+10. Use a HEREDOC for the commit message to ensure proper formatting
+11. Verify the commit with `jj show` to confirm only intended changes were committed
