@@ -1,14 +1,23 @@
+---
+name: pr
+description: This skill should be used when the user asks to "create a pull request", "create a PR", "/pr", "open a PR", "submit for review", or "push and create PR". Creates pull requests using gh for jj revisions.
+argument-hint: <revision> [ready]
+---
+
 # Create Pull Request
 
 Create a pull request using gh for a specified revision.
 
-Usage:
-- `/pr <revision>` - Create a draft PR for the specified revision
-- `/pr <revision> ready` - Create a ready-for-review PR
+## Arguments
+
+`$ARGUMENTS`
+
+Parse arguments: first word is the revision, second word (if "ready") creates a ready-for-review PR instead of draft.
 
 Revision must be provided (bookmark, change ID, revset, or commit hash). The revision will be resolved to a bookmark for the PR.
 
-When creating a pull request:
+## Process
+
 1. Push revision and get bookmark name:
    - If revision has a remote-tracked bookmark: `jj git push --bookmark <name>`
    - If revision has a local-only bookmark: track then push:
