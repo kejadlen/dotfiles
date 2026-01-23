@@ -11,6 +11,8 @@ Create isolated jj workspaces for experimentation, parallel development, and sub
 
 **Core principle:** Isolation by design. Each workspace operates independently with zero risk of interference.
 
+**Important:** Run `jj` (or `jj status`) periodically in each workspace. jj only snapshots the working copy when you run a command—it doesn't watch for file changes. Running `jj` ensures it sees your edits.
+
 ## When to Use
 
 **Triggers:**
@@ -166,6 +168,7 @@ jj workspace update-stale
 | Creating workspaces during dispatch | Create ALL workspaces BEFORE dispatch |
 | Agent touching other workspaces | Agents work ONLY in assigned path |
 | Forgetting cleanup | Remove directories after forgetting workspace |
+| jj not seeing file changes | Run `jj` or `jj status` periodically—jj only snapshots on command execution |
 
 ## Red Flags
 
