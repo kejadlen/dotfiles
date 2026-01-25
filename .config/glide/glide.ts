@@ -16,17 +16,30 @@
 //
 // Try typing `glide.` and see what you can do!
 
-glide.unstable.include("hints.glide.ts");
-glide.unstable.include("tridactyl.glide.ts");
+glide.include("hints.glide.ts");
+glide.include("tridactyl.glide.ts");
 glide.fs.exists("local.glide.ts").then(exists => {
-  if (exists) glide.unstable.include("local.glide.ts");
+  if (exists) glide.include("local.glide.ts");
 });
 
 glide.g.mapleader = "," // too used to using space for scrolling
 glide.buf.keymaps.del("normal", "s"); // use `s` for searching
 
+glide.search_engines.add({
+  name: "Kagi",
+  keyword: "kagi",
+  search_url: "https://kagi.com/search?q={searchTerms}",
+  is_default: true,
+});
+
+glide.search_engines.add({
+  name: "Seattle Public Library",
+  keyword: "spl",
+  search_url: "https://www.spl.org/search?terms={searchTerms}",
+});
+
 // fix gmail keybindings
-glide.autocmds.create("UrlEnter", {hostname: "mail.google.com"}, async () => {
+glide.autocmds.create("UrlEnter", { hostname: "mail.google.com" }, async () => {
   glide.buf.keymaps.del("normal", "gi");
   glide.buf.keymaps.del("normal", "e");
   glide.buf.keymaps.del("normal", "j");
@@ -36,7 +49,7 @@ glide.autocmds.create("UrlEnter", {hostname: "mail.google.com"}, async () => {
 });
 
 // new reddit is bad
-glide.autocmds.create("UrlEnter", {hostname: "www.reddit.com"}, async () => {
+glide.autocmds.create("UrlEnter", { hostname: "www.reddit.com" }, async () => {
   const url = new URL(glide.ctx.url);
   url.hostname = "old.reddit.com";
   await browser.tabs.update({ url: url.toString() });
