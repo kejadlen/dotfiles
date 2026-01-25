@@ -8,6 +8,7 @@
 
 ;; ui things
 (set vim.o.diffopt "inline:char")
+(set vim.o.foldlevelstart 3)
 (set vim.o.foldminlines 2)
 (set vim.o.linebreak true)
 (set vim.o.list true)
