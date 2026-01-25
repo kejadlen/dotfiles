@@ -55,6 +55,13 @@ glide.autocmds.create("UrlEnter", { hostname: "www.reddit.com" }, async () => {
   await browser.tabs.update({ url: url.toString() });
 });
 
+// x -> xcancel
+glide.autocmds.create("UrlEnter", { hostname: "x.com" }, async () => {
+  const url = new URL(glide.ctx.url);
+  url.hostname = "xcancel.com";
+  await browser.tabs.update({ url: url.toString() });
+});
+
 glide.styles.add(`
   .yank-notification {
     position: fixed;
