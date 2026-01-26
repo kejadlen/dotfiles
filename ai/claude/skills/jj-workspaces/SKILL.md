@@ -29,7 +29,8 @@ Create isolated jj workspaces for experimentation, parallel development, and sub
 ## Creating a Workspace
 
 ```bash
-# 1. Create workspace
+# 1. Ensure work directory exists and create workspace
+mkdir -p work
 jj workspace add --name=<name> work/<name>
 
 # Or from specific revision
@@ -133,8 +134,8 @@ rm -rf work/<name>
 ## Commands Reference
 
 ```bash
-# Create workspace
-jj workspace add --name=<name> work/<name>
+# Create workspace (ensure work/ exists first)
+mkdir -p work && jj workspace add --name=<name> work/<name>
 jj workspace add --name=<name> -r <rev> work/<name>
 
 # List workspaces
