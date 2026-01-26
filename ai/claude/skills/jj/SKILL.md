@@ -33,7 +33,7 @@ No staging area: working copy changes map directly to commits. Operations are im
 In jj, **bookmarks** are named references to commits, similar to git branches. Create and manage them:
 
 ```bash
-jj bookmark create feature-auth main       # Create bookmark from main
+jj bookmark create feature-auth -r main    # Create bookmark from main
 jj bookmark list                           # Show all bookmarks
 jj bookmark list -r feature-auth           # Show specific bookmark
 jj bookmark delete feature-auth            # Delete bookmark
@@ -47,6 +47,21 @@ jj bookmark set feature-auth -r <rev>      # Move bookmark to different commit
 - `jj checkout` switches working copy to bookmark; use `jj new` to create commits on that bookmark
 
 **Use bookmarks for:** Feature branches, parallel work, named release points. NOT for temporary work (use detached state instead).
+
+## Pushing to Remote
+
+```bash
+# Push existing tracked bookmarks
+jj git push -b <bookmark-name>
+
+# Create and push new bookmark in one step (preferred)
+jj git push --named <bookmark-name>=<revision>
+
+# Push all bookmarks including new ones
+jj git push --all
+```
+
+**Note:** `--named` creates the bookmark, pushes it, and auto-tracks it. Use this for PRs.
 
 ## Command Categories
 
