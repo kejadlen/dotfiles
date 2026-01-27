@@ -95,9 +95,9 @@ Create workspace(s) using the standard process above.
 
 ### Phase 2: Dispatch (Coordinator)
 
-Use Task tool to dispatch in parallel. Each agent gets:
+Use Task tool to dispatch in parallel. **Start agents in the workspace directory** using the Task tool's working directory or by instructing the agent to `cd` first. Each agent gets:
 - Task specification
-- Workspace path (exactly one)
+- Workspace path (exactly one) - agent starts here
 - Verification commands
 - Success criteria
 
@@ -107,8 +107,10 @@ Use Task tool to dispatch in parallel. Each agent gets:
 1. Work ONLY in assigned workspace path
 2. Make file edits to implement task
 3. Run verification (tests, type checks)
-4. Commit: `jj commit -m "feat: ..."`
+4. Split changes to parent: `jj split .` then provide commit message when prompted (selects all files, creates parent commit with changes, leaves working copy empty)
 5. Report: what changed, verification output, change ID
+
+**Why `jj split` instead of `jj commit`:** Splitting moves changes into a new parent commit while leaving the workspace's working copy commit empty. This keeps the workspace commit as the megamerge parent, maintaining the DAG structure.
 
 **FORBIDDEN for agents:**
 - `jj workspace` commands
@@ -159,7 +161,7 @@ jj workspace update-stale
 | Mistake | Fix |
 |---------|-----|
 | Skipping DAG placement | Must run `jj rebase` to place in DAG (with `-B mm` if megamerge exists) |
-| Agent skipping commit | Agent must run `jj commit -m "..."` |
+| Agent skipping split | Agent must run `jj split .` to finalize changes |
 | Skipping `jj workspace update-stale` | Run in main workspace after workspace operations |
 | Creating workspaces during dispatch | Create ALL workspaces BEFORE dispatch |
 | Agent touching other workspaces | Agents work ONLY in assigned path |
@@ -170,7 +172,7 @@ jj workspace update-stale
 | Thought | Reality |
 |---------|---------|
 | "I'll skip DAG placement" | Must place in DAG for clean integration |
-| "Agent doesn't need to commit" | Agent must run `jj commit` to finalize change |
+| "Agent doesn't need to split" | Agent must run `jj split .` to finalize changes |
 | "I'll create workspaces during dispatch" | Create ALL workspaces first |
 | "Custom directory is fine" | Always use `work/` directory |
 | "This is overkill for one agent" | Single-agent workflow maintains consistency |
