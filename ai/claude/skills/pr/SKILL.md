@@ -51,12 +51,10 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
    - If design decisions were found in episodic memory, include a "Design Decisions"
      section highlighting key choices and their rationale
    - Follow repository conventions
-10. **Self-review**: Review the PR changes as a code reviewer. Check for:
-    - Code smells or antipatterns
-    - Missing tests for new functionality
-    - Code repetition that should be refactored
-    - Lengthy or poorly-documented modules
-    - Report findings to the user; address any issues before proceeding
+10. **Code review**: Dispatch the `superpowers:code-reviewer` subagent to review
+    the changes. Use `trunk()` as base and `<bookmark>` as head. Provide a brief
+    description of what was implemented. Address Critical and Important issues
+    before proceeding; Minor issues can be noted for later.
 11. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
     a HEREDOC to pass the body. Add `--draft` unless `ready` was specified.
 12. **If a Jira card is detected**, transition it to "In Review":
