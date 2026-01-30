@@ -106,7 +106,7 @@ Use Task tool to dispatch in parallel. **Start agents in the workspace directory
 ### Phase 3: Execution (Agent)
 
 **Agent MUST:**
-1. Work ONLY in assigned workspace path
+1. `cd` into workspace directory first—all work happens FROM that directory
 2. Make file edits to implement task
 3. Run verification (tests, type checks)
 4. Split changes to parent: `jj split .` then provide commit message when prompted (selects all files, creates parent commit with changes, leaves working copy empty)
@@ -162,6 +162,7 @@ jj workspace update-stale
 
 | Mistake | Fix |
 |---------|-----|
+| Working from wrong directory | Agent must `cd` into workspace directory first—all commands run FROM there |
 | Skipping DAG placement | Must run `jj rebase` to place in DAG (with `-B mm` if megamerge exists) |
 | Agent skipping split | Agent must run `jj split .` to finalize changes |
 | Skipping `jj workspace update-stale` | Run in main workspace after workspace operations |
@@ -174,6 +175,7 @@ jj workspace update-stale
 
 | Thought | Reality |
 |---------|---------|
+| "I can work from the main workspace" | Must `cd` into workspace directory—jj context depends on cwd |
 | "I'll skip DAG placement" | Must place in DAG for clean integration |
 | "Agent doesn't need to split" | Agent must run `jj split .` to finalize changes |
 | "I'll create workspaces during dispatch" | Create ALL workspaces first |
