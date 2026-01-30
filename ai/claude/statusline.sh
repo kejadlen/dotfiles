@@ -77,10 +77,10 @@ if [ "$total_input" != "0" ] || [ "$total_output" != "0" ]; then
         input_cost=$(echo "scale=4; $total_input * 3 / 1000000" | bc)
         output_cost=$(echo "scale=4; $total_output * 15 / 1000000" | bc)
     fi
-    total_cost=$(echo "scale=2; $input_cost + $output_cost" | bc)
+    total_cost=$(echo "scale=4; $input_cost + $output_cost" | bc)
     # Only show if non-zero
     if (( $(echo "$total_cost > 0" | bc -l) )); then
-        cost=$(printf " \033[2m•\033[0m \033[36m\$%s\033[0m" "$total_cost")
+        cost=$(printf " \033[2m•\033[0m \033[36m\$%.2f\033[0m" "$total_cost")
     fi
 fi
 
@@ -99,7 +99,7 @@ parts=""
 if [ -n "$model" ]; then
     parts=$(printf "\033[32m%s\033[0m" "$model")
     if [ -n "$loc" ] || [ -n "$ctx" ] || [ -n "$cost" ] || [ -n "$sty" ]; then
-        parts="${parts} \033[2m•\033[0m"
+        parts=$(printf '%s \033[2m•\033[0m' "$parts")
     fi
 fi
 
@@ -111,5 +111,7 @@ fi
 # Add remaining parts
 parts="${parts}${ctx}${cost}${sty}"
 
-# Output with left-aligned prefix indicator (Claude brand starburst)
-printf "✴️%s\n" "$parts"
+# Current time
+parts=$(printf "%s \033[2m•\033[0m \033[2m%s\033[0m" "$parts" "$(date +%H:%M)")
+
+printf "✴️ %s\n" "$parts"
