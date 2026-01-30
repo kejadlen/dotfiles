@@ -90,6 +90,20 @@
 	<dict>
 		<key>installed</key>
 		<dict>
+			<key>color-eyre</key>
+			<dict>
+				<key>date</key>
+				<date>2026-01-29T14:59:00Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>color-eyre</string>
+					<key>platform</key>
+					<string>crate</string>
+					<key>uniqueIdentifier</key>
+					<string>color-eyre</string>
+				</dict>
+			</dict>
 			<key>xdg</key>
 			<dict>
 				<key>date</key>
