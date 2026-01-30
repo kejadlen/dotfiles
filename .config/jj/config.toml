@@ -26,6 +26,13 @@ edit-args = ["-c", '''
 merge-args = ["-c", "echo gitpatch cannot be used as a diff tool"]
 diff-args = ["-c", "echo gitpatch cannot be used as a diff tool"]
 
+# https://github.com/bryceberger/config/commit/9a3185b6b3a7a81246f84325448e878a5a8281f4
+[merge-tools.git-pkgs]
+program = "git-pkgs"
+diff-args = ["diff-file", "--color=always", "$left", "$right"]
+diff-invocation-mode = "file-by-file"
+edit-args = []
+
 [diff.color-words]
 max-inline-alternation = 0
 
