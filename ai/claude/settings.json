@@ -19,18 +19,17 @@
     ]
   },
   "enabledMcpjsonServers": [
-    "dash-api",
     "episodic-memory"
   ],
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  },
   "enabledPlugins": {
     "elements-of-style@superpowers-marketplace": true,
     "superpowers-developing-for-claude-code@superpowers-marketplace": true,
     "episodic-memory@superpowers-marketplace": true,
     "superpowers@superpowers-marketplace": true,
-    "playwright-cli@playwright-cli": true
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
+    "claude-md-management@claude-plugins-official": true
   }
 }
