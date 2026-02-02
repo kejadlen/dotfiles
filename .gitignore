@@ -47,7 +47,9 @@ private
 /ai/claude/*
 !/ai/claude/commands
 !/ai/claude/marketplace
+!/ai/claude/settings.json
 !/ai/claude/skills
+!/ai/claude/statusline.sh
 
 # hack for now since I don't want to commit Alfred secrets
 macos/Alfred.alfredpreferences/workflows/*/prefs.plist
