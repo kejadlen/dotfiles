@@ -96,26 +96,17 @@
 
 (let [handlers {:firefox-dev :org.mozilla.firefoxdeveloperedition
                 :firefox :org.mozilla.firefox
+                :glide :app.glide-browser.glide
                 :safari :com.apple.Safari
                 :zoom :us.zoom.xos}
-      ;; domains to be opened in Safari, usually either for Apple Pay or text-based 2FA
+      ;; domains to be opened in Safari, most for Apple Pay
       safari-domains [:adafruit.com
-                      :aetnahealth.com
+                      :apps.apple.com
                       :account.apple.com
-                      :bankofamerica.com
-                      :betterment.com
-                      :bulletin.com
-                      :chase.com
-                      :experian.com
-                      :fidelityinvestments.com
                       :goodluckbread.com
-                      :mychartwa.providence.org
                       :patagonia.com
-                      :pemco.com
-                      :schwab.com
                       :squareupmessagine.com
-                      :store.apple.com
-                      :xfinity.com]
+                      :store.apple.com]
       safari-patterns (icollect [_ domain (ipairs safari-domains)]
                         (.. "^https://(.*%.?)" (string.gsub domain "%." "%%.")
                             "/?"))

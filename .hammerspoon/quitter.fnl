@@ -10,6 +10,7 @@
 
 (local config {:keep [:Arq
                       "CleanShot X"
+                      :Dash
                       "Firefox Developer Edition"
                       :Ghostty
                       :Glide
