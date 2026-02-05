@@ -68,6 +68,17 @@ Use instead:
 - Tables for multi-column comparisons
 - Bold only in headers and inline emphasis
 
+## Writing Voice
+
+When writing prose on my behalf (documentation, messages, commits, etc.), match my voice:
+
+- First person, direct ("I like", "I find")
+- Informal but clear
+- Contractions welcome
+- Dashes for quick asides
+- Practical over abstract
+- Concise — omit needless words
+
 ## Documentation Grounding
 
 Write documentation as standalone artifacts. Readers cannot access this
@@ -85,12 +96,18 @@ When editing documentation:
 
 ## Version Control
 
-**MANDATORY:** Check for .jj directory before ANY version control operation.
+**MANDATORY:** Always use jj (Jujutsu) for version control. Never use git commands.
 
-If .jj exists:
 - Use ONLY jj commands. Do not use git commands under any circumstances. No exceptions.
 - Never suggest, propose, or execute git commands
 - Replace all mental git workflows with jj equivalents
+- For command syntax and flags, use the `jj` skill or run `jj --help`
+
+**MANDATORY skills for jj operations:**
+- `commit` skill: MUST use when committing changes
+- `describe` skill: MUST use when updating revision descriptions
+- `jj-workspaces` skill: MUST use for isolated workspaces (replaces git worktrees)
+- `describing-changes` skill: MUST use for all commit messages and change descriptions
 
 Use `jj commit` to commit the current change, not `jj describe`.
 
@@ -98,9 +115,7 @@ Common replacements:
 - `git status` → `jj status`
 - `git diff` → `jj diff`
 - `git log` → `jj log`
-
-**Mandatory:** Use the `describing-changes` skill for all commit messages. The skill
-covers format, length, the "invisible in the diff" audit, and assisted-by footers.
+- `git worktree` → `jj workspace` (use `jj-workspaces` skill)
 
 ## Ruby
 
