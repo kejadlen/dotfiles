@@ -126,7 +126,7 @@ z4h bindkey magic-space Space
 if (( $+commands[fzf] )); then
   # z4h source ${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh}
   [[ $- == *i* ]] && z4h source <(fzf --zsh)
-  z4h source ~/.dotfiles/src/fzf-git.sh/fzf-git.sh
+  # z4h source ~/.dotfiles/src/fzf-git.sh/fzf-git.sh
 
   # https://github.com/junegunn/fzf/issues/164#issuecomment-581837757
   z4h bindkey fzf-cd-widget ç
