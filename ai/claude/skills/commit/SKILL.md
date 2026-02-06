@@ -1,6 +1,7 @@
 ---
 name: commit
 description: Use when the user asks to "commit changes", "commit my work", "/commit", "create a commit", or "jj commit"
+argument-hint: <fileset>
 ---
 
 # Commit Changes
