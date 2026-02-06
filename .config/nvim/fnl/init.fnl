@@ -1,8 +1,12 @@
 (local {:nvim_create_autocmd create-autocmd
         :nvim_create_augroup create-augroup} vim.api)
 
+;;; colorscheme (toggle between these to compare)
+;; Option 1: paramount
 (vim.pack.add ["https://git.kejadlen.dev/alpha/vim-colors-paramount.git"])
-(vim.cmd.colorscheme :paramount)
+; (vim.cmd.colorscheme :paramount)
+;; Option 2: alphabaster
+(vim.cmd.colorscheme :alphabaster)
 
 (set vim.o.cmdheight 0)
 
@@ -164,6 +168,7 @@
 ;;; lightline
 
 ;; https://github.com/itchyny/lightline.vim/issues/168#issuecomment-232183744
+;; Option 1: powerline theme (for paramount)
 (let [colorscheme :powerline
       component {:filename "%{expand(\"%:~:.\")}"} ; relative path
       palette-key (.. "lightline#colorscheme#" colorscheme "#palette")
@@ -172,6 +177,11 @@
   (each [_ f (ipairs [:normal :inactive :tabline])]
     (tset palette f :middle [[:NONE :NONE :NONE :NONE]]))
   (tset vim.g palette-key palette))
+;; Option 2: alphabaster theme (uncomment when using alphabaster colorscheme)
+; (let [alphabaster-ll (require :alphabaster.lightline)]
+;   (alphabaster-ll.setup)
+;   (set vim.g.lightline {:colorscheme :alphabaster
+;                         :component {:filename "%{expand(\"%:~:.\")}"}}))
 
 ;;; netrw
 
