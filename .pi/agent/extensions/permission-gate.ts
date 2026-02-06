@@ -79,6 +79,7 @@ function isAllowed(toolName: string, input: Record<string, unknown>, ctx: Extens
 
   if (toolName === "bash") {
     const cmd = stripCdToCwd(String(input.command ?? "").trimStart(), ctx.cwd);
+    if (cmd.includes("&&") || cmd.includes(";")) return false;
     if (cmd.startsWith("jj ")) {
       const subcommand = cmd.slice(3).trimStart().split(/\s/)[0];
       return ALLOWED_JJ_SUBCOMMANDS.includes(subcommand);
