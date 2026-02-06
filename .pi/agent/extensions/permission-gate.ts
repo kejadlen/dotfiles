@@ -58,6 +58,19 @@ function isInSkillsDirectory(filePath: string, ctx: ExtensionContext): boolean {
   return false;
 }
 
+/**
+ * Strip a leading `cd <cwd> && ` or `cd <cwd> ; ` prefix from a command.
+ * The agent often wraps commands this way, which is a no-op but obscures the
+ * real command from permission checks.
+ */
+function stripCdToCwd(cmd: string, cwd: string): string {
+  const prefix = `cd ${cwd} && `;
+  if (cmd.startsWith(prefix)) return cmd.slice(prefix.length);
+  const prefixSemi = `cd ${cwd} ; `;
+  if (cmd.startsWith(prefixSemi)) return cmd.slice(prefixSemi.length);
+  return cmd;
+}
+
 function isAllowed(toolName: string, input: Record<string, unknown>, ctx: ExtensionContext): boolean {
   if (toolName === "read") {
     const filePath = path.resolve(ctx.cwd, String(input.path ?? ""));
@@ -65,7 +78,7 @@ function isAllowed(toolName: string, input: Record<string, unknown>, ctx: Extens
   }
 
   if (toolName === "bash") {
-    const cmd = String(input.command ?? "").trimStart();
+    const cmd = stripCdToCwd(String(input.command ?? "").trimStart(), ctx.cwd);
     if (cmd.startsWith("jj ")) {
       const subcommand = cmd.slice(3).trimStart().split(/\s/)[0];
       return ALLOWED_JJ_SUBCOMMANDS.includes(subcommand);
