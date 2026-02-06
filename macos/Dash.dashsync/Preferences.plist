@@ -232,6 +232,8 @@
 	<true/>
 	<key>shouldShowStatusIcon</key>
 	<false/>
+	<key>shouldStartAtLogin</key>
+	<true/>
 	<key>shouldSyncBookmarks</key>
 	<true/>
 	<key>shouldSyncDocsets</key>
@@ -241,7 +243,7 @@
 	<key>shouldSyncView</key>
 	<true/>
 	<key>showInDock</key>
-	<true/>
+	<false/>
 	<key>versionedDHCheatRepo</key>
 	<dict>
 		<key>installed</key>
