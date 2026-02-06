@@ -28,6 +28,7 @@
    :bright-white   "#FFFFFF"
 
    ;; Special
+   :comment-gray "#888888"
    :cursor     "#f2d5cf"
    :selection-bg "#626880"
    :selection-fg "#c6d0f5"})
@@ -35,7 +36,7 @@
 ;; Semantic roles (Alabaster philosophy)
 ;; Only 4 categories get color. Everything else is default fg.
 (local semantic
-  {:comment    colors.yellow      ;; warm, like sticky notes (not red — looks like errors)
+  {:comment    colors.comment-gray   ;; visible but secondary
    :string     colors.blue        ;; lavender/purple
    :constant   colors.blue        ;; same as strings — all literal values are lavender
    :definition colors.cyan

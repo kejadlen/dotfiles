@@ -7,7 +7,7 @@
 ;; Your eye adapts and considers it a new norm.
 ;;
 ;; Only 4 semantic categories get color:
-;;   1. Comments   — important explanations, not "visual noise"
+;;   1. Comments   — secondary, subdued so code stays prominent
 ;;   2. Strings    — reference points, easy to scan for
 ;;   3. Constants  — numbers, booleans, symbols (logic starts from constants)
 ;;   4. Definitions — where functions/types/classes are defined (not called)
@@ -35,9 +35,8 @@
 
   ;;; === THE 4 SEMANTIC CATEGORIES ===
 
-  ;; Comments are important. The tradition of dimming comments comes from
-  ;; when people were paid by line. If code was complex enough to deserve
-  ;; an explanation, that explanation should be read first.
+  ;; Comments are secondary. They explain code but shouldn't compete for
+  ;; attention. Subdued color keeps focus on the code itself.
   (hi :Comment {:fg semantic.comment})
 
   ;; Strings are reference points. Logic often starts from string literals.
