@@ -6,11 +6,15 @@
  * Auto-allows reading from tracked files, skills directories, and pi docs.
  * Shows tool name and a summary of the arguments, then asks to allow or block.
  *
- * Allowed bash commands are configured declaratively in ALLOWED_COMMANDS below.
+ * Allowed bash commands are configured declaratively in BASE_COMMANDS below.
+ * Projects can add to the allowlist via `.pi/permissions.json`, which requires
+ * a one-time user confirmation (re-prompted if the file changes).
  */
 
 import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
 import { execSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 
@@ -33,10 +37,118 @@ import * as path from "node:path";
 // ---------------------------------------------------------------------------
 type CommandRule = true | string[] | ((args: string) => boolean) | { [subcommand: string]: CommandRule };
 
-const ALLOWED_COMMANDS: CommandRule = {
+/** JSON-safe subset of CommandRule (no predicates) for .pi/permissions.json */
+type JsonCommandRule = true | string[] | { [subcommand: string]: JsonCommandRule };
+
+const BASE_COMMANDS: CommandRule = {
   // version control (read-only subcommands)
   jj: ["diff", "log", "show", "status"],
 };
+
+// ---------------------------------------------------------------------------
+// Per-project permission overrides
+//
+// Projects can place a `.pi/permissions.json` in the project root:
+//
+//   { "allow": { "cargo": ["test", "check"], "make": ["test"] } }
+//
+// On first use (or when the file changes), the user is shown a summary
+// and asked to confirm. Approvals are stored in ~/.pi/agent/ keyed by
+// a hash of the file content.
+// ---------------------------------------------------------------------------
+const APPROVALS_PATH = path.join(os.homedir(), ".pi/agent/approved-permissions.json");
+
+interface ApprovalRecord {
+  hash: string;
+}
+
+function loadApprovals(): Record<string, ApprovalRecord> {
+  try {
+    return JSON.parse(fs.readFileSync(APPROVALS_PATH, "utf-8"));
+  } catch {
+    return {};
+  }
+}
+
+function saveApprovals(approvals: Record<string, ApprovalRecord>): void {
+  fs.mkdirSync(path.dirname(APPROVALS_PATH), { recursive: true });
+  fs.writeFileSync(APPROVALS_PATH, JSON.stringify(approvals, null, 2) + "\n");
+}
+
+function hashContent(content: string): string {
+  return createHash("sha256").update(content).digest("hex");
+}
+
+/**
+ * Render a command rule tree as a human-readable list of allowed command paths.
+ * e.g. { cargo: ["test", "check"] } → ["cargo test", "cargo check"]
+ */
+function summarizeRules(rule: JsonCommandRule, prefix = ""): string[] {
+  if (rule === true) return [prefix || "(all commands)"];
+  if (Array.isArray(rule)) return rule.map((s) => `${prefix} ${s}`.trim());
+  const lines: string[] = [];
+  for (const [key, sub] of Object.entries(rule)) {
+    lines.push(...summarizeRules(sub, `${prefix} ${key}`.trim()));
+  }
+  return lines;
+}
+
+/**
+ * Deep-merge a JSON rule tree into an existing CommandRule tree.
+ * Project rules can only add — they cannot override `true` with something
+ * more restrictive, and predicates in the base are preserved.
+ */
+function mergeRules(base: CommandRule, override: JsonCommandRule): CommandRule {
+  // base is already fully permissive — nothing to add
+  if (base === true) return true;
+  // override grants blanket access at this level
+  if (override === true) return true;
+
+  // base is a predicate or array — wrap into object form to merge
+  if (typeof base === "function" || Array.isArray(base)) {
+    // Can't cleanly merge a predicate/array with an object override.
+    // Convert base array to object, keep predicates as-is.
+    if (Array.isArray(base) && !Array.isArray(override)) {
+      const obj: { [k: string]: CommandRule } = {};
+      for (const k of base) obj[k] = true;
+      return mergeRules(obj, override);
+    }
+    if (Array.isArray(base) && Array.isArray(override)) {
+      return [...new Set([...base, ...override])];
+    }
+    // predicate base + object override — keep predicate (it's more expressive)
+    return base;
+  }
+
+  // Both are objects (or override is array)
+  if (Array.isArray(override)) {
+    // Convert override array to object and merge
+    const obj: { [k: string]: JsonCommandRule } = {};
+    for (const k of override) obj[k] = true;
+    return mergeRules(base, obj);
+  }
+
+  // Both are objects — recurse
+  const merged: { [k: string]: CommandRule } = { ...base };
+  for (const [key, val] of Object.entries(override)) {
+    if (key in merged) {
+      merged[key] = mergeRules(merged[key], val);
+    } else {
+      merged[key] = val;
+    }
+  }
+  return merged;
+}
+
+/** The effective merged command tree, updated after approval. */
+let allowedCommands: CommandRule = BASE_COMMANDS;
+
+/**
+ * Pending project rules awaiting user approval. Set at session start if the
+ * project has a .pi/permissions.json that hasn't been approved yet. Cleared
+ * after the user accepts or rejects.
+ */
+let pendingProjectRules: { raw: string; rules: JsonCommandRule } | null = null;
 
 // ---------------------------------------------------------------------------
 // Helpers for read-tool path checks
@@ -111,12 +223,12 @@ function hasChaining(cmd: string): boolean {
 }
 
 /**
- * Walk the ALLOWED_COMMANDS tree to check if a command is allowed.
+ * Walk the allowedCommands tree to check if a command is allowed.
  * Arrays are shorthand for an object whose keys all map to `true`.
  */
 function isCommandAllowed(cmd: string): boolean {
   const tokens = cmd.trimStart().split(/\s+/);
-  let rule: CommandRule = ALLOWED_COMMANDS;
+  let rule: CommandRule = allowedCommands;
 
   for (let i = 0; i < tokens.length; i++) {
     if (rule === true) return true;
@@ -164,6 +276,41 @@ function isAllowed(toolName: string, input: Record<string, unknown>, ctx: Extens
 // ---------------------------------------------------------------------------
 
 export default function (pi: ExtensionAPI) {
+  pi.on("session_start", async (_event, ctx) => {
+    // Reset state each session
+    allowedCommands = BASE_COMMANDS;
+    pendingProjectRules = null;
+
+    const permPath = path.join(ctx.cwd, ".pi/permissions.json");
+    let raw: string;
+    try {
+      raw = fs.readFileSync(permPath, "utf-8");
+    } catch {
+      return; // No project permissions file
+    }
+
+    let projectRules: JsonCommandRule;
+    try {
+      const parsed = JSON.parse(raw);
+      projectRules = parsed.allow;
+      if (!projectRules) return;
+    } catch {
+      if (ctx.hasUI) ctx.ui.notify("Invalid .pi/permissions.json — ignoring", "warning");
+      return;
+    }
+
+    const hash = hashContent(raw);
+    const approvals = loadApprovals();
+
+    if (approvals[ctx.cwd]?.hash === hash) {
+      // Already approved this exact version
+      allowedCommands = mergeRules(BASE_COMMANDS, projectRules);
+    } else {
+      // Defer approval prompt to first tool_call (UI isn't ready here)
+      pendingProjectRules = { raw, rules: projectRules };
+    }
+  });
+
   pi.on("tool_result", async (event) => {
     if (event.toolName === "bash") {
       const cmd = String(event.input.command ?? "").trimStart();
