@@ -42,7 +42,6 @@ type JsonCommandRule = true | string[] | { [subcommand: string]: JsonCommandRule
 
 const BASE_COMMANDS: CommandRule = {
   gh: { "issue": ["list", "view"], "project": ["item-list", "list"], "repo": ["list"] },
-  // version control (read-only subcommands)
   jj: ["diff", "log", "show", "st", "status"],
 };
 
