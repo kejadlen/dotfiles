@@ -322,6 +322,24 @@ export default function (pi: ExtensionAPI) {
 
   pi.on("tool_call", async (event, ctx) => {
     if (!ctx.hasUI) return;
+
+    // Prompt for pending project permissions on first tool_call
+    if (pendingProjectRules) {
+      const pending = pendingProjectRules;
+      pendingProjectRules = null; // Clear so we only prompt once
+
+      const summary = summarizeRules(pending.rules);
+      const message = "Project wants to auto-allow:\n" + summary.map((s) => `  ${s}`).join("\n");
+      const approved = await ctx.ui.confirm("Project permissions", message);
+
+      if (approved) {
+        const approvals = loadApprovals();
+        approvals[ctx.cwd] = { hash: hashContent(pending.raw) };
+        saveApprovals(approvals);
+        allowedCommands = mergeRules(BASE_COMMANDS, pending.rules);
+      }
+    }
+
     if (isAllowed(event.toolName, event.input, ctx)) return;
 
     const summary = formatArgs(event.toolName, event.input);
