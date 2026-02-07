@@ -63,6 +63,17 @@ jj git push --all
 
 **Note:** `--named` creates the bookmark, pushes it, and auto-tracks it. Use this for PRs.
 
+## Common Pitfalls
+
+**`jj show` does not accept path arguments.** Unlike `git show`, you cannot
+write `jj show @- -- path/to/file`. Use `jj diff` instead:
+
+```bash
+jj diff -r @-                        # all changes in parent revision
+jj diff -r @- path/to/file           # specific file in parent revision
+jj diff --from @-- --to @- some/dir  # between two revisions, scoped to path
+```
+
 ## Command Categories
 
 Run `jj --help` to see all commands. Main categories:
