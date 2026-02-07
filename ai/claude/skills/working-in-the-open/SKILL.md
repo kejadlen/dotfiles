@@ -13,6 +13,10 @@ Document the reasoning behind code changes as you work. The diff shows *what* ch
 - User says "I'm working on the X issue in [tracker]"
 - Continuing work on a previously-linked issue
 
+## When NOT to Use
+
+- **Work is complete and a PR is being opened.** The PR itself links to the issue (via `Closes #N`) and serves as the summary. A separate issue comment is redundant — skip it.
+
 ## The Three Milestones
 
 | Milestone | Trigger | Content |
@@ -44,7 +48,7 @@ Always attribute comments to yourself. Begin each comment with:
 
 > *Posted by `<program> (<model>)`*
 
-Use your actual program and model identity as shown in the system prompt (e.g. "Claude Code, Claude Opus 4.6 (anthropic/claude-opus-4-6)"). This makes it clear to anyone reading the issue history which AI and program wrote the comment.
+Use your actual program and model identity as shown in the system prompt. This makes it clear to anyone reading the issue history which AI and program wrote the comment.
 
 ## Format Guidance
 
