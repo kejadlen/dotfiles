@@ -111,9 +111,11 @@ Each sentence must explain reasoning not visible in the code change itself.
 If AI assisted in crafting the message, include Assisted-by footer:
 
 ```
-Assisted-by: Claude Haiku 4.5 via Claude Code
+Assisted-by: Claude Haiku 4.5 via pi
 ```
 
-Format: `Assisted-by: [Model name] via Claude Code`
+Format: `Assisted-by: [Model name] via [tool name]`
+
+Use the actual tool you are running inside (e.g., pi, Claude Code). Do NOT copy the example blindly.
 
 This is MANDATORY when using this skill. Do NOT omit it.
