@@ -38,6 +38,14 @@ Check available tools in order:
 - Linear/Jira: Use available MCP tools
 - Fallback: Present formatted comment for manual posting
 
+## Attribution
+
+Always attribute comments to yourself. Begin each comment with:
+
+> *Posted by `<program> (<model>)`*
+
+Use your actual program and model identity as shown in the system prompt (e.g. "Claude Code, Claude Opus 4.6 (anthropic/claude-opus-4-6)"). This makes it clear to anyone reading the issue history which AI and program wrote the comment.
+
 ## Format Guidance
 
 Write clear prose, not templates. Focus on:
