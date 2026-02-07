@@ -41,8 +41,9 @@ type CommandRule = true | string[] | ((args: string) => boolean) | { [subcommand
 type JsonCommandRule = true | string[] | { [subcommand: string]: JsonCommandRule };
 
 const BASE_COMMANDS: CommandRule = {
+  gh: { "issue": ["list", "view"], "project": ["item-list", "list"], "repo": ["list"] },
   // version control (read-only subcommands)
-  jj: ["diff", "log", "show", "status"],
+  jj: ["diff", "log", "show", "st", "status"],
 };
 
 // ---------------------------------------------------------------------------
@@ -275,7 +276,7 @@ function isAllowed(toolName: string, input: Record<string, unknown>, ctx: Extens
 // Extension entry point
 // ---------------------------------------------------------------------------
 
-export default function (pi: ExtensionAPI) {
+export default function(pi: ExtensionAPI) {
   pi.on("session_start", async (_event, ctx) => {
     // Reset state each session
     allowedCommands = BASE_COMMANDS;
