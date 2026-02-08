@@ -1,5 +1,5 @@
 ---
-name: pr
+name: gh-pr
 description: Use when the user asks to "create a pull request", "create a PR", "/pr", "open a PR", "submit for review", or "push and create PR"
 argument-hint: <revision> [ready|web]
 ---

@@ -1,5 +1,5 @@
 ---
-name: describe
+name: jj-describe
 description: Use when the user asks to "describe a change", "describe a revision", "/describe", "rewrite commit message", or "update revision description"
 argument-hint: <revision>
 ---
