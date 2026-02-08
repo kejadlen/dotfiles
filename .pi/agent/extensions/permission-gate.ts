@@ -187,7 +187,12 @@ function getSkillsDirectories(ctx: ExtensionContext): Set<string> {
   const locationRe = /<location>(.*?)<\/location>/g;
   let match;
   while ((match = locationRe.exec(prompt)) !== null) {
-    dirs.add(path.dirname(match[1]));
+    const dir = path.dirname(match[1]);
+    dirs.add(dir);
+    // Also resolve symlinks so that paths through symlinked directories
+    // (e.g. ~/.claude -> ~/.dotfiles/ai/claude/) still match after
+    // realpathSync is applied to the file being read.
+    try { dirs.add(fs.realpathSync(dir)); } catch { /* ignore */ }
   }
   skillsDirs = dirs;
   return skillsDirs;
