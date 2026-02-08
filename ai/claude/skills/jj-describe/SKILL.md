@@ -23,5 +23,5 @@ The `elements-of-style:writing-clearly-and-concisely` skill is required as a sub
    - Start from scratch explaining why this change exists
    - The skill requires `elements-of-style:writing-clearly-and-concisely` for clarity
 3. Use `jj describe -r $ARGUMENTS` with the drafted message, including the "Assisted-by" footer
-4. Use a HEREDOC for the description to ensure proper formatting
+4. Pass the description as a single-quoted string to `-m` (supports multiline)
 5. Verify with `jj show -r $ARGUMENTS` to confirm the message was updated

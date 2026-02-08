@@ -35,5 +35,5 @@ The `elements-of-style:writing-clearly-and-concisely` skill is required as a sub
 7. If a fileset is provided, use `jj commit $ARGUMENTS` to commit only matching files (include the changelog in the fileset if it was updated)
 8. If no fileset is provided (empty `$ARGUMENTS`), use `jj commit` to commit all changes
 9. Include the "Assisted-by" footer with the current model and tool being used
-10. Use a HEREDOC for the commit message to ensure proper formatting
+10. Pass the commit message as a single-quoted string to `-m` (supports multiline)
 11. Verify the commit with `jj show` to confirm only intended changes were committed
