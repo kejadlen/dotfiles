@@ -19,14 +19,28 @@ tea pulls create --help # Syntax and options
 
 tea auto-discovers the Gitea instance and repo from the current directory's git remote.
 
+## Targeting Remote Repos
+
+When not inside a clone of the target repo, specify the repo and login explicitly:
+
+```bash
+tea issues list -r owner/repo -l instance-name
+tea issues create -r owner/repo -l instance-name -t "Title" -d "Body"
+```
+
+`-l` matches the NAME column from `tea logins list`. Use `-r owner/repo` (the slug, not a URL).
+These flags are needed on **every command** when the cwd isn't a clone with a matching remote.
+
 ## Core Workflows
 
 **Issues:**
 ```bash
 tea issues                      # List open issues
 tea issues <index>              # Show issue details
-tea issues create               # Create an issue
+tea issues create -t "Title" -d "Description"  # Create (inline)
+tea issues create               # Create (interactive)
 tea issues edit <index>         # Edit an issue
+tea issues edit <idx> [<idx>...] --add-labels "a,b"  # Bulk label
 tea issues close <index>        # Close an issue
 tea comment <index> "<body>"    # Comment on an issue or PR
 ```
@@ -41,6 +55,14 @@ tea pulls merge <index>         # Merge a PR
 tea pulls approve <index>       # Approve a PR
 tea pulls reject <index>        # Request changes
 tea pulls review <index>        # Interactive review
+```
+
+**Labels & milestones:**
+```bash
+tea labels list                 # List labels
+tea labels create --name "bug" --color "e11d48" --description "Bug reports"
+tea milestones list             # List milestones
+tea milestones create           # Create a milestone
 ```
 
 **Repositories:**
@@ -58,13 +80,59 @@ tea releases list               # List releases
 tea releases create             # Create a release
 ```
 
-**Labels & milestones:**
+## Common Patterns
+
+### Batch issue creation with labels
+
+Create labels first, then apply on create or after:
+
 ```bash
-tea labels list                 # List labels
-tea labels create               # Create a label
-tea milestones list             # List milestones
-tea milestones create           # Create a milestone
+# 1. Create labels
+tea labels create -r o/r -l inst --name "security" --color "e11d48"
+tea labels create -r o/r -l inst --name "component" --color "0075ca"
+
+# 2a. Create issues with labels inline
+tea issues create -r o/r -l inst -t "Title" -d "Body" -L "security,component"
+
+# 2b. Or add labels to existing issues (supports multiple indices)
+tea issues edit -r o/r -l inst --add-labels "security,component" 1 2 3
 ```
+
+### Bulk labeling in a loop
+
+```bash
+for i in 1 2 3 4 5; do
+  tea issues edit -r o/r -l inst --add-labels "label1,label2" "$i"
+done
+```
+
+### Issue descriptions with markdown
+
+Pass multiline markdown via `-d` with shell quoting:
+
+```bash
+tea issues create -r o/r -l inst \
+  -t '[CRITICAL] Issue title' \
+  -d '## Summary
+
+Description with **markdown** and code:
+
+```typescript
+const x = 1;
+```
+
+## Impact
+
+Bullet points:
+- First
+- Second'
+```
+
+## Gotchas
+
+- **No project board support:** tea cannot add issues to Gitea project boards. Use the web UI or Gitea API directly.
+- **Labels flag differs between create and edit:** `issues create` uses `-L`/`--labels`, while `issues edit` uses `--add-labels`/`--remove-labels`.
+- **`-l` is `--login`, not `--labels`:** The `-L` (uppercase) shorthand is for labels. Mixing these up silently targets the wrong Gitea instance.
 
 ## Command Categories
 
