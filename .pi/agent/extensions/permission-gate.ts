@@ -213,13 +213,14 @@ function stripCdToCwd(cmd: string, cwd: string): string {
   return cmd;
 }
 
-/** Returns true if the command string contains shell chaining or piping operators. */
+/** Returns true if the command string contains shell chaining, piping, or injection operators. */
 function hasChaining(cmd: string): boolean {
-  // Block semicolons, &&, ||, pipes, and command substitution.
-  // This is intentionally conservative — if the agent needs chaining it can
+  // Intentionally conservative — if the agent needs any of these it can
   // ask for permission on the full command.
-  return cmd.includes(";") || cmd.includes("&&") || cmd.includes("||")
-    || cmd.includes("|") || cmd.includes("$(") || cmd.includes("`");
+  return /[;|&`\n]/.test(cmd)
+    || cmd.includes("$(")
+    || cmd.includes("<(") || cmd.includes(">(")
+    || cmd.includes("<<");
 }
 
 /**
