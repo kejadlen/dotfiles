@@ -42,7 +42,7 @@ type JsonCommandRule = true | string[] | { [subcommand: string]: JsonCommandRule
 
 const BASE_COMMANDS: CommandRule = {
   gh: { "issue": ["list", "view"], "project": ["item-list", "list"], "repo": ["list"] },
-  jj: ["diff", "log", "show", "st", "status"],
+  jj: { "bookmark": ["list"], "diff": true, "log": true, "show": true, "st": true, "status": true },
 };
 
 // ---------------------------------------------------------------------------
@@ -165,7 +165,10 @@ function getTrackedFiles(cwd: string): Set<string> {
   if (trackedFiles) return trackedFiles;
   try {
     const output = execSync("jj file list", { cwd, encoding: "utf-8" });
-    trackedFiles = new Set(output.trim().split("\n").map((f) => path.resolve(cwd, f)));
+    trackedFiles = new Set(output.trim().split("\n").map((f) => {
+      const resolved = path.resolve(cwd, f);
+      try { return fs.realpathSync(resolved); } catch { return resolved; }
+    }));
   } catch {
     trackedFiles = new Set();
   }
@@ -256,10 +259,18 @@ function isCommandAllowed(cmd: string): boolean {
 function isAllowed(toolName: string, input: Record<string, unknown>, ctx: ExtensionContext): boolean {
   if (toolName === "read") {
     const filePath = path.resolve(ctx.cwd, String(input.path ?? ""));
+    // Resolve symlinks so a tracked symlink pointing outside the repo
+    // doesn't auto-allow reading its target.
+    let realPath: string;
+    try {
+      realPath = fs.realpathSync(filePath);
+    } catch {
+      return false; // Can't resolve — require prompt
+    }
     return (
-      getTrackedFiles(ctx.cwd).has(filePath) ||
-      isInSkillsDirectory(filePath, ctx) ||
-      filePath.startsWith(PI_DOCS_PREFIX)
+      getTrackedFiles(ctx.cwd).has(realPath) ||
+      isInSkillsDirectory(realPath, ctx) ||
+      realPath.startsWith(PI_DOCS_PREFIX)
     );
   }
 
