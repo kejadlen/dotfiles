@@ -53,6 +53,8 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
    - Explain user-facing impact, architectural decisions, and tradeoffs
    - If design decisions were found in episodic memory, include a "Design Decisions"
      section highlighting key choices and their rationale
+   - Never wrap commit SHAs or PR/issue numbers in backticks—GitHub
+     auto-links raw `a1b2c3d` and `#123` but backticks prevent it
    - Follow repository conventions
 10. **Code review**: Dispatch the `superpowers:code-reviewer` subagent to review
     the changes. Use `trunk()` as base and `<bookmark>` as head. Provide a brief
