@@ -5,7 +5,7 @@ input=$(cat)
 
 # Extract and format model name (e.g., "claude-sonnet-4-5-..." -> "sonnet-4.5")
 model_id=$(echo "$input" | jq -r '.model.id')
-model=$(echo "$model_id" | sed -E 's/.*claude-([^-]+)-([0-9]+)-?([0-9]+)?-.*/\1-\2.\3/' | sed 's/-\.$//')
+model=$(echo "$model_id" | sed -E 's/^.*claude-//; s/-[0-9]{8,}.*$//; s/^([a-z]+)-([0-9]+)-([0-9]+)$/\1-\2.\3/')
 
 # Get the default model from settings and format it the same way
 default_model=$(jq -r '.model // "sonnet"' ~/.claude/settings.json)
