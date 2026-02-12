@@ -2,6 +2,7 @@
 name: gh-pr
 description: Use when the user asks to "create a pull request", "create a PR", "/pr", "open a PR", "submit for review", or "push and create PR"
 argument-hint: <revision> [ready|web]
+allowed-tools: Bash(jj diff:*) Bash(jj log:*) Bash(jj show:*) Bash(jj bookmark list:*)
 ---
 
 # Create Pull Request
@@ -21,6 +22,7 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
 ## Process
 
 1. Push revision and get bookmark name:
+   - First, run `jj log -r '<revision>' --no-graph` to check for existing bookmarks
    - If revision has a remote-tracked bookmark: `jj git push --bookmark <name>`
    - If revision has a local-only bookmark: track then push:
      `jj bookmark track <name>@origin && jj git push --bookmark <name>`
