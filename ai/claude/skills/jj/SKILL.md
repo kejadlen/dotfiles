@@ -65,6 +65,15 @@ jj git push --all
 
 ## Common Pitfalls
 
+**Quote revsets containing parentheses.** Bash interprets `()` as subshell
+syntax. Always quote revsets like `trunk()`:
+
+```bash
+jj log -r 'trunk()'                  # correct
+jj diff --from 'trunk()' --to @      # correct
+jj log -r trunk()                    # WRONG — bash syntax error
+```
+
 **`jj show` does not accept path arguments.** Unlike `git show`, you cannot
 write `jj show @- -- path/to/file`. Use `jj diff` instead:
 
@@ -72,6 +81,14 @@ write `jj show @- -- path/to/file`. Use `jj diff` instead:
 jj diff -r @-                        # all changes in parent revision
 jj diff -r @- path/to/file           # specific file in parent revision
 jj diff --from @-- --to @- some/dir  # between two revisions, scoped to path
+```
+
+**Path filtering uses positional fileset args, not revset syntax.** To find
+revisions that touched a path, pass the path as a positional argument:
+
+```bash
+jj log ai/src/main.rs                # revisions touching this file
+jj log -r '::@' ai/src/              # scoped to ancestors of @
 ```
 
 ## Command Categories
