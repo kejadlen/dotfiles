@@ -1,5 +1,6 @@
 ---
 name: jj-workspaces
+user-invocable: false
 description: Use when needing isolated workspace for experiments, parallel development, or subagent coordination - covers solo experimentation and multi-agent workflows with jj workspaces
 ---
 

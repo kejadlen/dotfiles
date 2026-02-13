@@ -1,5 +1,5 @@
 ---
-name: jj-commit
+name: commit
 description: Use when the user asks to "commit changes", "commit my work", "/commit", "create a commit", or "jj commit"
 argument-hint: <fileset>
 allowed-tools: Bash(jj diff:*) Bash(jj show:*) Bash(jj log:*)

@@ -1,5 +1,5 @@
 ---
-name: gh-pr
+name: pr
 description: Use when the user asks to "create a pull request", "create a PR", "/pr", "open a PR", "submit for review", or "push and create PR"
 argument-hint: <revision> [ready|web]
 allowed-tools: Bash(jj diff:*) Bash(jj log:*) Bash(jj show:*) Bash(jj bookmark list:*)
