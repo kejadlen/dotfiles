@@ -7,6 +7,12 @@ allowed-tools: Bash(jj diff:*) Bash(jj show:*) Bash(jj log:*)
 
 # Commit Changes
 
+## Workflow
+
+Execute directly without exploring the codebase first. When asked to
+commit and create a PR, use this skill followed by the `/pr` skill
+unless told otherwise.
+
 ## Fileset (optional)
 
 `$ARGUMENTS`

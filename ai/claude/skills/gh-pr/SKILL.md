@@ -55,6 +55,9 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
    - Explain user-facing impact, architectural decisions, and tradeoffs
    - If design decisions were found in episodic memory, include a "Design Decisions"
      section highlighting key choices and their rationale
+   - If the session references a blocking PR, linked issue, Slack thread,
+     or other related context, include it in the description automatically
+     (e.g., "Depends on #123", "Closes #456", or a Slack permalink)
    - Never wrap commit SHAs or PR/issue numbers in backticks—GitHub
      auto-links raw `a1b2c3d` and `#123` but backticks prevent it
    - Follow repository conventions
