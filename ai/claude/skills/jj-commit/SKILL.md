@@ -18,5 +18,6 @@ allowed-tools: Bash(jj diff:*) Bash(jj show:*) Bash(jj log:*)
 3. Check if a changelog exists (CHANGELOG.md, CHANGELOG, CHANGES.md, or similar)
    - If found, add an entry under the appropriate section
    - Scope the entry to only the changes in the fileset, if provided
-4. Commit with `jj commit $ARGUMENTS -m '...'` (omit fileset args to commit all; include changelog in fileset if updated)
+4. Commit with `jj commit -m '...' $ARGUMENTS` (omit fileset args to commit all; include changelog in fileset if updated)
+   - **Put `-m` before `--` or fileset args.** jj parses everything after `--` as fileset, so `-m` content placed after `--` becomes a parse error.
 5. Verify with `jj show`
