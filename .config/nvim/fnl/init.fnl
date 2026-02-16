@@ -123,7 +123,8 @@
                "https://github.com/j-hui/fidget.nvim.git"
                "https://github.com/junegunn/fzf.vim.git"
                "https://github.com/justinmk/vim-dirvish.git"
-               "https://github.com/lukas-reineke/indent-blankline.nvim.git"
+               {:src "https://github.com/lukas-reineke/indent-blankline.nvim.git"
+                :version :v3.9.1}
                {:src "https://github.com/neovim/nvim-lspconfig.git"
                 :version :v2.5.0}
                "https://github.com/nvim-treesitter/nvim-treesitter.git"
@@ -177,6 +178,7 @@
   (each [_ f (ipairs [:normal :inactive :tabline])]
     (tset palette f :middle [[:NONE :NONE :NONE :NONE]]))
   (tset vim.g palette-key palette))
+
 ;; Option 2: alphabaster theme (uncomment when using alphabaster colorscheme)
 ; (let [alphabaster-ll (require :alphabaster.lightline)]
 ;   (alphabaster-ll.setup)
