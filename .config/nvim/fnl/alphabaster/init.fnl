@@ -92,9 +92,9 @@
   (hi :TabLineFill {:bg colors.black})
 
   ;;; Search — high contrast, needs to pop
-  (hi :Search {:fg colors.bg :bg colors.yellow})
+  (hi :Search {:fg colors.fg :bg colors.bright-black})
   (hi :IncSearch {:fg colors.bg :bg colors.bright-yellow})
-  (hi :CurSearch {:fg colors.bg :bg colors.bright-yellow})
+  (hi :CurSearch {:fg colors.bg :bg colors.bright-green})
 
   ;;; Diagnostics — these are actionable, worth color
   (hi :DiagnosticError {:fg semantic.error})
