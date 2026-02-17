@@ -88,7 +88,6 @@ export EDITOR=nvim
 export VISUAL=nvim
 export MANPAGER="nvim +Man!"
 
-export BAT_THEME=ashes
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 
 export RUBY_YJIT_ENABLE=true
