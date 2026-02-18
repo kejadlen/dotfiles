@@ -24,8 +24,8 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
 1. Push revision and get bookmark name:
    - First, run `jj log -r '<revision>' --no-graph` to check for existing bookmarks
    - If revision has a remote-tracked bookmark: `jj git push --bookmark <name>`
-   - If revision has a local-only bookmark: track then push:
-     `jj bookmark track <name>@origin && jj git push --bookmark <name>`
+   - If revision has a local-only bookmark (no `@origin`): push with
+     `jj git push --named <name>=<revision>` (pushes and auto-tracks)
    - If revision has no bookmark: `jj git push -c <revision>` (creates and pushes)
    - Retrieve the bookmark name from the output
 2. Run `jj log -r 'trunk()..<bookmark>'` to list commits between trunk and the bookmark

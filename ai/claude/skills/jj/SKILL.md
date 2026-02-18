@@ -54,7 +54,7 @@ jj bookmark set feature-auth -r <rev>      # Move bookmark to different commit
 # Push existing tracked bookmarks
 jj git push -b <bookmark-name>
 
-# Create and push new bookmark in one step (preferred)
+# Create and push new bookmark in one step (preferred for PRs)
 jj git push --named <bookmark-name>=<revision>
 
 # Push all bookmarks including new ones
@@ -62,6 +62,12 @@ jj git push --all
 ```
 
 **Note:** `--named` creates the bookmark, pushes it, and auto-tracks it. Use this for PRs.
+
+**`-b` / `--bookmark` refuses to push untracked (local-only) bookmarks.** If a
+bookmark exists locally but has never been pushed, `-b` will error with
+"Refusing to create new remote bookmark". Use `--named` instead to push and
+auto-track it in one step. Use `-b` only for bookmarks that are already tracked
+(previously pushed or fetched).
 
 ## Common Pitfalls
 
