@@ -26,7 +26,7 @@ OUTPUT="${2:-/dev/stdout}"
     if .role == "user" and .kind == "skill" then
       (.content | split("\n") | map(select(startswith("# ")))[0] // "Skill Content" |
         ltrimstr("# ")) as $skill_name |
-      "<details><summary>Skill loaded: \($skill_name)</summary>\n\n\(.content)\n\n</details>\n"
+      "<details><summary>Skill loaded: \($skill_name)</summary>\n\n[Skill content omitted]\n\n</details>\n"
     elif .role == "user" then
       "### User <sub>\(.timestamp)</sub>\n\n\(.content)\n"
     elif .role == "assistant" then

@@ -67,7 +67,7 @@ MESSAGES_HTML=$(echo "$JSON" | jq -r '.messages[] | @base64' | while read -r enc
 <div class="message message-skill">
   <details class="skill-content">
     <summary>Skill loaded: ${skill_name}</summary>
-    <div class="skill-body">${content_html}</div>
+    <div class="skill-body"><p><em>Skill content omitted</em></p></div>
   </details>
 </div>
 MSGEOF
