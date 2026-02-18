@@ -53,14 +53,11 @@ Use the bundled script to convert the JSONL to Markdown:
 The first argument accepts either a path to a JSONL file or a session UUID. When
 given a UUID, the script searches `~/.claude/projects/` for a matching file.
 
-The script produces a complete Markdown document with:
+The script produces a Markdown document designed for GitHub PR descriptions:
 
-- A metadata table (session ID, Claude Code version, working directory, branch,
-  timestamps, message counts, models)
-- A tool usage summary
-- A `## Summary` section containing a placeholder comment
-- A `## Conversation` section with all user and assistant messages, tool calls
-  in collapsible `<details>` blocks
+- A summary placeholder at the top (visible without expanding)
+- The full conversation in a collapsible `<details>` block
+- Session metadata (IDs, timestamps, tools) in a second collapsible block
 
 ## Writing the Summary
 
@@ -129,7 +126,11 @@ docs/sessions/YYYY-MM-DD-topic-slug.html
 
 ## Scripts
 
-- `scripts/dump-session.sh` — Converts a session JSONL file to Markdown in a
-  single `jq` pass. Requires `jq` 1.6+.
-- `scripts/dump-session-html.sh` — Converts a session JSONL file to a
-  self-contained HTML thread view. Requires `jq` 1.6+ and `pandoc`.
+- `scripts/parse-session.sh` — Parses a session JSONL file into structured
+  JSON (metadata, tool counts, filtered messages). Both formatters depend on
+  this script. Requires `jq` 1.6+.
+- `scripts/dump-session.sh` — Converts the intermediate JSON from
+  `parse-session.sh` into Markdown. Requires `jq` 1.6+.
+- `scripts/dump-session-html.sh` — Converts the intermediate JSON from
+  `parse-session.sh` into a self-contained HTML thread view. Requires `jq`
+  1.6+ and `pandoc`.
