@@ -46,6 +46,9 @@ glide.autocmds.create("UrlEnter", { hostname: "mail.google.com" }, async () => {
   glide.buf.keymaps.del("normal", "k");
   glide.buf.keymaps.del("normal", "o");
   glide.buf.keymaps.del("normal", "x");
+  glide.buf.keymaps.del("normal", "I");
+  glide.buf.keymaps.del("normal", "[");
+  glide.buf.keymaps.del("normal", "]");
 });
 
 // new reddit is bad
@@ -95,39 +98,115 @@ glide.keymaps.set("normal", "yy", async () => {
   setTimeout(() => notification.remove(), 2000);
 });
 
-glide.keymaps.set("normal", "ZZ", async () => {
-  const tabs = await browser.tabs.query({});
-
+async function getStashesFolder() {
   const bookmarkTree = await browser.bookmarks.getTree();
   const toolbarFolder = bookmarkTree[0]?.children?.find(
     (child) => child.id === "toolbar_____" || child.title === "Bookmarks Toolbar"
   );
+  if (!toolbarFolder) return null;
 
-  if (toolbarFolder) {
-    let stashesFolder = toolbarFolder.children?.find((child) => child.title === "stashes");
-    if (!stashesFolder) {
-      stashesFolder = await browser.bookmarks.create({
-        parentId: toolbarFolder.id,
-        title: "stashes",
+  let stashesFolder = toolbarFolder.children?.find((child) => child.title === "stashes");
+  if (!stashesFolder) {
+    stashesFolder = await browser.bookmarks.create({
+      parentId: toolbarFolder.id,
+      title: "stashes",
+    });
+  }
+  return stashesFolder;
+}
+
+async function stashTabs() {
+  const tabs = await browser.tabs.query({});
+  const stashesFolder = await getStashesFolder();
+  if (!stashesFolder) return;
+
+  const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
+  const stashFolder = await browser.bookmarks.create({
+    parentId: stashesFolder.id,
+    title: timestamp,
+  });
+
+  const groupFolders = new Map<number, string>();
+
+  for (const tab of tabs) {
+    if (tab.url && !tab.url.startsWith("about:") && !tab.pinned) {
+      let parentId = stashFolder.id;
+
+      if (tab.groupId && tab.groupId !== -1) {
+        if (!groupFolders.has(tab.groupId)) {
+          const group = await browser.tabGroups.get(tab.groupId);
+          const groupFolder = await browser.bookmarks.create({
+            parentId: stashFolder.id,
+            title: group.title || `Group ${tab.groupId}`,
+          });
+          groupFolders.set(tab.groupId, groupFolder.id);
+        }
+        parentId = groupFolders.get(tab.groupId)!;
+      }
+
+      await browser.bookmarks.create({
+        parentId,
+        title: tab.title || tab.url,
+        url: tab.url,
       });
     }
+  }
+}
 
-    const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
-    const stashFolder = await browser.bookmarks.create({
-      parentId: stashesFolder.id,
-      title: timestamp,
-    });
+async function unstashTabs(stashId: string) {
+  const children = await browser.bookmarks.getChildren(stashId);
 
-    for (const tab of tabs) {
-      if (tab.url && !tab.url.startsWith("about:")) {
-        await browser.bookmarks.create({
-          parentId: stashFolder.id,
-          title: tab.title || tab.url,
-          url: tab.url,
-        });
+  for (const child of children) {
+    if (child.url) {
+      // Top-level bookmark (ungrouped tab)
+      await browser.tabs.create({ url: child.url });
+    } else {
+      // Folder = tab group
+      const groupBookmarks = await browser.bookmarks.getChildren(child.id);
+      const tabIds: number[] = [];
+
+      for (const bookmark of groupBookmarks) {
+        if (bookmark.url) {
+          const tab = await browser.tabs.create({ url: bookmark.url });
+          if (tab.id) tabIds.push(tab.id);
+        }
+      }
+
+      if (tabIds.length > 0) {
+        const groupId = await browser.tabs.group({ tabIds });
+        await browser.tabGroups.update(groupId, { title: child.title });
       }
     }
   }
+}
 
+glide.excmds.create(
+  { name: "stash", description: "Stash all tabs as bookmarks (tab groups get their own folders)" },
+  async () => { await stashTabs(); },
+);
+
+glide.excmds.create(
+  { name: "unstash", description: "Restore tabs and tab groups from a stash" },
+  async () => {
+    const stashesFolder = await getStashesFolder();
+    if (!stashesFolder) return;
+
+    const stashes = await browser.bookmarks.getChildren(stashesFolder.id);
+    if (stashes.length === 0) return;
+
+    await glide.commandline.show({
+      title: "unstash",
+      options: stashes.map((stash) => ({
+        label: stash.title,
+        async execute() {
+          await unstashTabs(stash.id);
+        },
+      })),
+    });
+  },
+);
+
+glide.keymaps.set("normal", "ZZ", async () => {
+  await stashTabs();
   await glide.excmds.execute("quit");
 });
