@@ -54,6 +54,7 @@ private
 /ai/claude/*
 !/ai/claude/commands
 !/ai/claude/marketplace
+!/ai/claude/rules
 !/ai/claude/settings.json
 !/ai/claude/skills
 !/ai/claude/statusline.sh
