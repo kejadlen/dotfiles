@@ -2,7 +2,7 @@
 name: pr
 description: Use when the user asks to "create a pull request", "create a PR", "/pr", "open a PR", "submit for review", or "push and create PR"
 argument-hint: <revision> [ready|web]
-allowed-tools: Bash(jj diff:*) Bash(jj log:*) Bash(jj show:*) Bash(jj bookmark list:*)
+allowed-tools: Bash(jj diff:*), Bash(jj log:*), Bash(jj show:*), Bash(jj bookmark list:*)
 ---
 
 # Create Pull Request
@@ -34,8 +34,9 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
         and why), the full set of commits from trunk to the revision, and the
         diff — generate a short kebab-case bookmark name that summarizes the
         overall PR purpose:
+        - Prefix with `alpha/` (e.g., `alpha/fix-widget-layout`)
         - Lowercase, words joined by hyphens
-        - Max ~50 chars, truncate at a word boundary
+        - Max ~50 chars (excluding prefix), truncate at a word boundary
         - Only alphanumeric and hyphens; no leading/trailing/double hyphens
      2. If a good name was generated, check `jj bookmark list` to ensure it's
         not taken (append `-2` etc. if it is), then push with
