@@ -44,6 +44,11 @@ namespace :sync do
   end
 end
 
+desc "Update dotslash files from their GitHub releases"
+task :update_dotslash do
+  sh "gh release download --repo kejadlen/pinch --pattern pinch --output bin/pinch --clobber"
+end
+
 desc "Upgrade neovim"
 task :upgrade_neovim do
   chdir File.expand_path("~/Library/Caches/Homebrew/neovim--git") do
