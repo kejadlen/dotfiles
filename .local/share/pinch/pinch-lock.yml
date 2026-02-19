@@ -1,0 +1,5 @@
+plugins:
+  learning-opportunities:
+    src: https://github.com/DrCatHicks/learning-opportunities
+    path: learning-opportunities
+    rev: '3890a30f0e3ae29fa8ead6444855228d8e39ad89'

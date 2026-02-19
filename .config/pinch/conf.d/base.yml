@@ -1,0 +1,8 @@
+marketplaces:
+  learning-opportunities:
+    src: https://github.com/DrCatHicks/learning-opportunities
+    version: main
+
+plugins:
+  learning-opportunities:
+    marketplace: learning-opportunities
