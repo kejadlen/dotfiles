@@ -30,6 +30,7 @@
 
   ;;; Base
   (hi :Normal {:fg colors.fg :bg colors.bg})
+  (hi :NormalNC {:fg colors.fg :bg colors.dim-bg})  ;; inactive splits dimmed
   (hi :NormalFloat {:fg colors.fg :bg colors.black})
   (hi :FloatBorder {:fg colors.bright-black})
 

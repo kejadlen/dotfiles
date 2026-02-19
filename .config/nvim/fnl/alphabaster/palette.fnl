@@ -31,7 +31,10 @@
    :comment-gray "#888888"
    :cursor     "#f2d5cf"
    :selection-bg "#626880"
-   :selection-fg "#c6d0f5"})
+   :selection-fg "#c6d0f5"
+
+   ;; Dimmed background for unfocused windows (matches tmux pane-focus-out)
+   :dim-bg     "#333333"})
 
 ;; Semantic roles (Alabaster philosophy)
 ;; Only 4 categories get color. Everything else is default fg.

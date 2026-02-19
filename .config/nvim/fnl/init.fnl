@@ -271,6 +271,18 @@
                           "v:lua.vim.lsp.foldexpr()")))]
   (vim.api.nvim_create_autocmd :LspAttach {: callback}))
 
+;;; focus dimming
+;; Fade the background when neovim loses focus (matches tmux pane-focus-out behavior).
+;; FocusLost/FocusGained fire when the terminal pane loses/gains focus.
+(let [group (create-augroup :focus-dim {})
+      {: colors} (require :alphabaster.palette)]
+  (create-autocmd :FocusLost
+                  {:callback #(vim.api.nvim_set_hl 0 :Normal {:fg colors.fg :bg colors.dim-bg})
+                   : group})
+  (create-autocmd :FocusGained
+                  {:callback #(vim.api.nvim_set_hl 0 :Normal {:fg colors.fg :bg colors.bg})
+                   : group}))
+
 ;;; neovide
 
 ;; disable animation
