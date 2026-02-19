@@ -1,0 +1,1 @@
+/Users/alpha/.cache/pinch/repos/github.com/anthropics/claude-plugins-official.git/pinch-worktrees/8deab8460a9d/plugins/claude-md-management/commands/revise-claude-md.md

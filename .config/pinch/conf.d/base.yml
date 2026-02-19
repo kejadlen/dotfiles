@@ -1,8 +1,13 @@
 marketplaces:
+  claude-plugins-official:
+    src: https://github.com/anthropics/claude-plugins-official
+    version: main
   learning-opportunities:
     src: https://github.com/DrCatHicks/learning-opportunities
     version: main
 
 plugins:
+  claude-md-management:
+    marketplace: claude-plugins-official
   learning-opportunities:
     marketplace: learning-opportunities
