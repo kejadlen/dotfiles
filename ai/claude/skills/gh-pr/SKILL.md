@@ -21,32 +21,45 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
 
 ## Process
 
-1. Push revision and get bookmark name:
-   - First, run `jj log -r '<revision>' --no-graph` to check for existing bookmarks
+1. Gather context for the PR:
+   - Run `jj log -r '<revision>' --no-graph` to check for existing bookmarks
+   - Run `jj log -r 'trunk()..<revision>'` to list commits between trunk and the revision
+   - Run `jj diff --from trunk() --to <revision> --stat` to review all changes
+2. Push revision and get bookmark name:
    - If revision has a remote-tracked bookmark: `jj git push --bookmark <name>`
    - If revision has a local-only bookmark (no `@origin`): push with
      `jj git push --named <name>=<revision>` (pushes and auto-tracks)
-   - If revision has no bookmark: `jj git push -c <revision>` (creates and pushes)
+   - If revision has no bookmark:
+     1. Using all available context — the current session (what was discussed
+        and why), the full set of commits from trunk to the revision, and the
+        diff — generate a short kebab-case bookmark name that summarizes the
+        overall PR purpose:
+        - Lowercase, words joined by hyphens
+        - Max ~50 chars, truncate at a word boundary
+        - Only alphanumeric and hyphens; no leading/trailing/double hyphens
+     2. If a good name was generated, check `jj bookmark list` to ensure it's
+        not taken (append `-2` etc. if it is), then push with
+        `jj git push --named <generated-name>=<revision>`
+     3. If there isn't enough context to produce a meaningful name,
+        fall back to `jj git push -c <revision>`
    - Retrieve the bookmark name from the output
-2. Run `jj log -r 'trunk()..<bookmark>'` to list commits between trunk and the bookmark
-3. Run `jj diff --from trunk() --to <bookmark> --stat` to review all changes in the PR
-4. Consider whether the pending changes should be organized into smaller, easier
+3. Consider whether the pending changes should be organized into smaller, easier
    to review commits. If so, use `jj split` or `jj squash` to reorganize before
    proceeding.
-5. Check for .github PR templates and follow them. For checklist items that do
+4. Check for .github PR templates and follow them. For checklist items that do
    not apply, use strikethrough: `- ~~Irrelevant item~~`
-6. **Invoke the `elements-of-style:writing-clearly-and-concisely` skill** before
+5. **Invoke the `elements-of-style:writing-clearly-and-concisely` skill** before
    drafting any prose. This is mandatory.
-7. **Search episodic memory for design decisions**: Use `episodic-memory:search`
+6. **Search episodic memory for design decisions**: Use `episodic-memory:search`
    to find conversations related to the files changed in this PR. Look for:
    - Design decisions and their rationale
    - Alternative approaches that were considered and rejected
    - Tradeoffs discussed during implementation
    - Requirements or constraints that shaped the solution
    Extract key decisions to include in the PR summary's "Design Decisions" section.
-8. Generate a PR title summarizing all commits in the changeset (not just the
+7. Generate a PR title summarizing all commits in the changeset (not just the
    most recent). The title reflects the overall change, not individual commits.
-9. Draft a PR summary explaining why the changes were made and their impact.
+8. Draft a PR summary explaining why the changes were made and their impact.
    Focus on context and motivation, not implementation details. Include only
    "Assisted-by" footer for attribution—no "Generated with Claude Code"
    - Do not repeat information obvious from the diff
@@ -61,17 +74,17 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
    - Never wrap commit SHAs or PR/issue numbers in backticks—GitHub
      auto-links raw `a1b2c3d` and `#123` but backticks prevent it
    - Follow repository conventions
-10. **Code review**: Dispatch the `superpowers:code-reviewer` subagent to review
+9. **Code review**: Dispatch the `superpowers:code-reviewer` subagent to review
     the changes. Use `trunk()` as base and `<bookmark>` as head. Provide a brief
     description of what was implemented. Address Critical and Important issues
     before proceeding; Minor issues can be noted for later.
-11. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
+10. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
     a HEREDOC to pass the body.
     - If `web` was specified: add `--web` flag to open prepopulated PR in browser for manual editing, then stop (skip remaining steps)
     - If `ready` was specified: create directly without `--draft`
     - Otherwise: add `--draft` flag
-12. **If a Jira card is detected**, transition it to "In Review":
+11. **If a Jira card is detected**, transition it to "In Review":
     - Check workspace name or bookmark for pattern like `PROJ-123` (e.g., `LDE-488`)
     - If found: `acli jira workitem transition --key <KEY> --status "In Review"`
     - If not found, skip this step silently
-13. Return the PR URL
+12. Return the PR URL
