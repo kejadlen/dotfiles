@@ -65,6 +65,11 @@ glide.autocmds.create("UrlEnter", { hostname: "x.com" }, async () => {
   await browser.tabs.update({ url: url.toString() });
 });
 
+// doi -> sci-hub
+glide.autocmds.create("UrlEnter", { hostname: "doi.org" }, async () => {
+  await browser.tabs.update({ url: `https://sci-hub.st/${glide.ctx.url}` });
+});
+
 glide.styles.add(`
   .yank-notification {
     position: fixed;
