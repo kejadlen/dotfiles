@@ -18,7 +18,8 @@
     },
     "indent-blankline.nvim": {
       "rev": "d28a3f70721c79e3c5f6693057ae929f3d9c0a03",
-      "src": "https://github.com/lukas-reineke/indent-blankline.nvim.git"
+      "src": "https://github.com/lukas-reineke/indent-blankline.nvim.git",
+      "version": "'v3.9.1'"
     },
     "lightline.vim": {
       "rev": "e358557",
