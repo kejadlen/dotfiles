@@ -13,6 +13,12 @@ Execute directly without exploring the codebase first. When asked to
 commit and create a PR, use this skill followed by the `/pr` skill
 unless told otherwise.
 
+**Prefer new commits over squashing.** Use `jj commit` to create a new
+commit by default — even for refactors, cleanups, or small follow-ups.
+Only squash (`jj squash`) when the prior commit specifically needs
+fixing up (e.g., correcting a bug introduced in that commit, fixing a
+typo in code it added). If in doubt, make a new commit.
+
 ## Fileset (optional)
 
 `$ARGUMENTS`
