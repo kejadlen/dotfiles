@@ -6,6 +6,7 @@ private
 .cargo/*
 
 .config/*
+!.config/1Password
 !.config/aerospace
 !.config/aider
 !.config/alacritty
