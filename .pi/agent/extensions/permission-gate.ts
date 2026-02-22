@@ -6,6 +6,11 @@
  * Auto-allows reading from tracked files, skills directories, and pi docs.
  * Shows tool name and a summary of the arguments, then asks to allow or block.
  *
+ * Write/edit prompts offer "Allow for session" — once accepted, subsequent
+ * writes/edits to tracked files are auto-allowed for the remainder of the
+ * session. Writes to untracked files still require confirmation. Resets on
+ * session start.
+ *
  * Allowed bash commands are configured declaratively in BASE_COMMANDS below.
  * Projects can add to the allowlist via `.pi/permissions.json`, which requires
  * a one-time user confirmation (re-prompted if the file changes).
@@ -150,6 +155,9 @@ let allowedCommands: CommandRule = BASE_COMMANDS;
  */
 let pendingProjectRules: { raw: string; rules: JsonCommandRule } | null = null;
 
+/** Per-session opt-in: when true, write/edit to tracked files are auto-allowed. */
+let sessionAllowEdits = false;
+
 // ---------------------------------------------------------------------------
 // Helpers for read-tool path checks
 // ---------------------------------------------------------------------------
@@ -261,6 +269,16 @@ function isCommandAllowed(cmd: string): boolean {
 // Main permission check
 // ---------------------------------------------------------------------------
 
+function isTrackedFile(filePath: string, ctx: ExtensionContext): boolean {
+  let realPath: string;
+  try {
+    realPath = fs.realpathSync(filePath);
+  } catch {
+    return false;
+  }
+  return getTrackedFiles(ctx.cwd).has(realPath);
+}
+
 function isAllowed(toolName: string, input: Record<string, unknown>, ctx: ExtensionContext): boolean {
   if (toolName === "read") {
     const filePath = path.resolve(ctx.cwd, String(input.path ?? ""));
@@ -277,6 +295,12 @@ function isAllowed(toolName: string, input: Record<string, unknown>, ctx: Extens
       isInSkillsDirectory(realPath, ctx) ||
       realPath.startsWith(PI_DOCS_PREFIX)
     );
+  }
+
+  if (toolName === "write" || toolName === "edit") {
+    if (!sessionAllowEdits) return false;
+    const filePath = path.resolve(ctx.cwd, String(input.path ?? ""));
+    return isTrackedFile(filePath, ctx);
   }
 
   if (toolName === "bash") {
@@ -297,6 +321,7 @@ export default function(pi: ExtensionAPI) {
     // Reset state each session
     allowedCommands = BASE_COMMANDS;
     pendingProjectRules = null;
+    sessionAllowEdits = false;
 
     const permPath = path.join(ctx.cwd, ".pi/permissions.json");
     let raw: string;
@@ -360,6 +385,24 @@ export default function(pi: ExtensionAPI) {
     if (isAllowed(event.toolName, event.input, ctx)) return;
 
     const summary = formatArgs(event.toolName, event.input);
+
+    // For write/edit, offer a "allow for session" option
+    if (event.toolName === "write" || event.toolName === "edit") {
+      const choice = await ctx.ui.select(`${event.toolName}: ${summary}`, [
+        "Allow once",
+        "Allow for session",
+        "Block",
+      ]);
+
+      if (choice === "Allow for session") {
+        sessionAllowEdits = true;
+        ctx.ui.notify("Edits allowed for this session (tracked files only)", "info");
+        return;
+      }
+      if (choice === "Allow once") return;
+      return { block: true, reason: "Blocked by user" };
+    }
+
     const allowed = await ctx.ui.confirm(event.toolName, summary);
 
     if (!allowed) {

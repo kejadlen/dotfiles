@@ -1,10 +1,10 @@
 {
-  "lastChangelogVersion": "0.52.6",
+  "lastChangelogVersion": "0.54.0",
   "defaultProvider": "anthropic",
   "defaultModel": "claude-opus-4-6",
   "skills": [
     "~/.claude/skills"
   ],
   "enableSkillCommands": true,
-  "defaultThinkingLevel": "off"
+  "defaultThinkingLevel": "high"
 }
