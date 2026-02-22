@@ -1,6 +1,6 @@
 ---
 name: diataxis
-description: Use when writing, reviewing, or restructuring documentation — applies the Diataxis framework to classify content by user need and keep documentation modes separate
+description: Use when writing, reviewing, or restructuring documentation — READMEs, project descriptions, guides, API docs, or any prose meant for readers. Applies the Diataxis framework to classify content by user need and keep documentation modes separate
 ---
 
 # Diataxis

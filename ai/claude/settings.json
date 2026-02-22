@@ -5,16 +5,23 @@
   },
   "permissions": {
     "allow": [
+      "Bash(gh issue view:*)",
+      "Bash(gh project field-list:*)",
+      "Bash(gh project issue view:*)",
+      "Bash(gh project item-list:*)",
+      "Bash(gh project view:*)",
       "Bash(jj diff:*)",
       "Bash(jj log:*)",
       "Bash(jj show:*)",
       "Bash(jj status:*)",
+      "Bash(jj workspace update-stale:*)",
       "mcp__dash-api__list_installed_docsets",
       "mcp__dash-api__search_documentation",
       "mcp__plugin_episodic-memory_episodic-memory__read",
       "mcp__plugin_episodic-memory_episodic-memory__search",
       "Skill(describing-changes)",
       "Skill(elements-of-style:writing-clearly-and-concisely)",
+      "Skill(jj-commit)",
       "Skill(superpowers:brainstorming)"
     ]
   },
@@ -26,10 +33,11 @@
     "command": "~/.claude/statusline.sh"
   },
   "enabledPlugins": {
+    "claude-md-management@claude-plugins-official": true,
     "elements-of-style@superpowers-marketplace": true,
-    "superpowers-developing-for-claude-code@superpowers-marketplace": true,
     "episodic-memory@superpowers-marketplace": true,
-    "superpowers@superpowers-marketplace": true,
-    "claude-md-management@claude-plugins-official": true
+    "learning-opportunities@learning-opportunities": true,
+    "superpowers-developing-for-claude-code@superpowers-marketplace": true,
+    "superpowers@superpowers-marketplace": true
   }
 }
