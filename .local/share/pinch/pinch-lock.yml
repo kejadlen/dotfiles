@@ -1,9 +1,11 @@
 plugins:
   claude-md-management:
-    src: https://github.com/anthropics/claude-plugins-official
+    marketplace: claude-plugins-official
     path: plugins/claude-md-management
-    rev: '8deab8460a9d4df5a01315ef722a5ca6b061c074'
+    version: '1.0.0'
+    rev: aa296ec81e8ccb49c9784f167c2c0aa625a86cec
   learning-opportunities:
-    src: https://github.com/DrCatHicks/learning-opportunities
+    marketplace: learning-opportunities
     path: learning-opportunities
+    version: '1.0.0'
     rev: '3890a30f0e3ae29fa8ead6444855228d8e39ad89'

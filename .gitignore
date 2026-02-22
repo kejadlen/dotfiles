@@ -45,6 +45,7 @@ private
 !.local/share
 .local/share/*
 !.local/share/pinch
+.local/share/pinch/plugins
 
 .ssh/*
 !.ssh/config
