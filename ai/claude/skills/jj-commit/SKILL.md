@@ -26,10 +26,16 @@ typo in code it added). If in doubt, make a new commit.
 ## Process
 
 1. Run `jj diff $ARGUMENTS` to view changes being committed
-2. Invoke the `describing-changes` skill to draft the commit message
-3. Check if a changelog exists (CHANGELOG.md, CHANGELOG, CHANGES.md, or similar)
+2. When a fileset is given, run `jj diff` (no args) to see all pending
+   changes. Review the remaining files and mention any that look related
+   to the fileset — e.g., a lockfile updated alongside a manifest, or a
+   config change paired with the code that uses it. Ask the user whether
+   to include them. Skip this step when no fileset is provided (all
+   changes are already included).
+3. Invoke the `describing-changes` skill to draft the commit message
+4. Check if a changelog exists (CHANGELOG.md, CHANGELOG, CHANGES.md, or similar)
    - If found, add an entry under the appropriate section
    - Scope the entry to only the changes in the fileset, if provided
-4. Commit with `jj commit -m '...' $ARGUMENTS` (omit fileset args to commit all; include changelog in fileset if updated)
+5. Commit with `jj commit -m '...' $ARGUMENTS` (omit fileset args to commit all; include changelog in fileset if updated)
    - **Put `-m` before `--` or fileset args.** jj parses everything after `--` as fileset, so `-m` content placed after `--` becomes a parse error.
-5. Verify with `jj show`
+6. Verify with `jj show`
