@@ -47,6 +47,37 @@ end
 desc "Update dotslash files from their GitHub releases"
 task :update_dotslash do
   sh "gh release download --repo kejadlen/pinch --pattern pinch --output bin/pinch --clobber"
+
+  require "json"
+  require "open3"
+
+  # Update jq dotslash file with latest release
+  release_json, = Open3.capture2("gh", "release", "view", "--repo", "jqlang/jq", "--json", "tagName,assets")
+  release = JSON.parse(release_json)
+  tag = release["tagName"]
+  asset = release["assets"].find { |a| a["name"] == "jq-macos-arm64" }
+
+  url = "https://github.com/jqlang/jq/releases/download/#{tag}/jq-macos-arm64"
+  digest, = Open3.capture2("dotslash", "--", "create-url-entry", url)
+  entry = JSON.parse(digest)
+
+  dotslash = {
+    name: "jq",
+    platforms: {
+      "macos-aarch64" => {
+        size: entry["size"],
+        hash: "blake3",
+        digest: entry["digest"],
+        path: "jq",
+        providers: [
+          { url: url },
+          { type: "github-release", repo: "https://github.com/jqlang/jq", tag: tag, name: "jq-macos-arm64" },
+        ],
+      },
+    },
+  }
+
+  File.write("bin/jq", "#!/usr/bin/env dotslash\n\n#{JSON.pretty_generate(dotslash)}\n")
 end
 
 desc "Upgrade neovim"
