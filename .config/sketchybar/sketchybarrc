@@ -115,7 +115,12 @@ sketchybar --add item datetime right \
            #       icon=􀉉 \
            #       icon.padding_right=8 \
            #       update_freq=120 \
-           #       script="$PLUGIN_DIR/meetingbar.sh"
+           #       popup.background.color=0xff222222 \
+           #       popup.background.corner_radius=6 \
+           #       popup.background.border_color=0xff444444 \
+           #       popup.background.border_width=1 \
+           #       script="$PLUGIN_DIR/meetingbar.sh" \
+           #       click_script="$PLUGIN_DIR/meetingbar_click.sh"
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update

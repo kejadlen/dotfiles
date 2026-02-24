@@ -1,23 +1,18 @@
 #!/usr/bin/swift
 
-/* Usage:
+/*
+Outputs JSON with the primary event (for bar label) and all remaining events today (for popup).
 
-In ~/.config/sketchybar/sketchybarrc:
+Output format:
+{
+  "primary": { "display": "Standup ends in 5 minutes", "url": "https://..." },
+  "events": [
+    { "time": "9:00 - 9:30 AM", "title": "Standup", "url": "https://..." },
+    { "time": "10:00 - 11:00 AM", "title": "Design Review", "url": null }
+  ]
+}
 
-    --add item meetingbar right \
-    --set meetingbar \
-          icon=􀉉 \
-          icon.padding_right=8 \
-          label.y_offset=2 \
-          update_freq=120 \
-          script="$PLUGIN_DIR/meetingbar.sh"
-
-In ~/.config/sketchybar/plugins/meetingbar.sh:
-
-    CALENDAR="alice@example.com"
-    MEETING=$("$CONFIG_DIR/meetingbar.swift" "$CALENDAR")
-    sketchybar --set "$NAME" label="$MEETING"
-
+When there are no meetings: { "primary": null, "events": [] }
 */
 
 import Foundation
@@ -82,32 +77,38 @@ class MeetingBar {
         }
     }
 
-    // Computed property to get the next meeting
-    var nextMeeting: EKEvent? {
-        get throws {
+    /// All non-all-day, non-declined events from now until end of day, sorted by start time.
+    func remainingEventsToday() throws -> [EKEvent] {
         let currentDate = Date()
+        let calendar = Calendar.current
 
-        // Get all calendars and filter for the specified calendar title
         let calendars = eventStore.calendars(for: .event).filter { $0.title.contains(self.calendarTitle) }
-
         guard !calendars.isEmpty else {
             throw MeetingBarError(message: "No calendar found for '\(self.calendarTitle)'")
         }
 
-        // Create a predicate for events starting from now until the end of the day
-        let startDate = currentDate
-
-        // Create a date for the end of tomorrow
-        let calendar = Calendar.current
         guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: currentDate),
-              let endOfTomorrow = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: tomorrow) else {
+              let endOfDay = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: tomorrow) else {
             throw MeetingBarError(message: "Failed to calculate date")
         }
 
-        let endDate = endOfTomorrow
+        let predicate = eventStore.predicateForEvents(withStart: currentDate, end: endOfDay, calendars: calendars)
+        return eventStore.events(matching: predicate)
+            .filter { event in
+                guard !event.isAllDay else { return false }
+                if let attendees = event.attendees,
+                   let me = attendees.first(where: { $0.isCurrentUser }),
+                   me.participantStatus == .declined {
+                    return false
+                }
+                return true
+            }
+            .sorted { $0.startDate < $1.startDate }
+    }
 
-        let predicate = eventStore.predicateForEvents(withStart: startDate, end: endDate, calendars: calendars)
-        let events = eventStore.events(matching: predicate).filter { !$0.isAllDay }
+    /// Smart selection of which event to feature in the bar, using the full priority logic.
+    func primaryEvent(from events: [EKEvent]) -> EKEvent? {
+        let currentDate = Date()
 
         // Find current meetings, preferring accepted ones
         let currentMeetings = events.filter { currentDate >= $0.startDate && currentDate <= $0.endDate }
@@ -117,7 +118,6 @@ class MeetingBar {
             if firstPriority != secondPriority {
                 return firstPriority < secondPriority
             }
-            // Same status, prefer shorter meeting
             let firstDuration = first.endDate.timeIntervalSince(first.startDate)
             let secondDuration = second.endDate.timeIntervalSince(second.startDate)
             return firstDuration < secondDuration
@@ -125,39 +125,25 @@ class MeetingBar {
 
         // Find all events starting after current time
         let upcomingEvents = events.filter { $0.startDate > currentDate }
-        // Priority: earliest start > accepted status > shortest duration
         let nextMeeting = upcomingEvents.min { first, second in
             if first.startDate != second.startDate {
                 return first.startDate < second.startDate
             }
-            // Same start time, prefer accepted events
             let firstPriority = participationPriority(for: first)
             let secondPriority = participationPriority(for: second)
             if firstPriority != secondPriority {
                 return firstPriority < secondPriority
             }
-            // Same status, pick the shortest one
             let firstDuration = first.endDate.timeIntervalSince(first.startDate)
             let secondDuration = second.endDate.timeIntervalSince(second.startDate)
             return firstDuration < secondDuration
         }
 
-        // No current meeting, show next meeting if available
-        guard let current = currentMeeting else {
-            return nextMeeting
-        }
+        guard let current = currentMeeting else { return nextMeeting }
+        guard let next = nextMeeting else { return current }
 
-        // No next meeting, show current meeting
-        guard let next = nextMeeting else {
-            return current
-        }
-
-        // Decide which meeting to show based on both meetings
         let duration = current.endDate.timeIntervalSince(current.startDate)
         let timeUntilNext = next.startDate.timeIntervalSince(currentDate)
-
-        // The longer the current meeting, the more we prioritize showing the next one
-        // Threshold increases with meeting duration: 5 min base + 10 min per hour of meeting
         let threshold = 5 * 60 + (duration / 3600) * 10 * 60
 
         if timeUntilNext < threshold {
@@ -165,65 +151,41 @@ class MeetingBar {
         }
 
         return current
-        }
     }
 }
 
-// Get calendar title from command line arguments
-guard CommandLine.arguments.count > 1 else {
-    print("Error: Calendar title argument is required")
-    print("Usage: \(CommandLine.arguments[0]) <calendar-title>")
-    exit(1)
-}
-
-let calendarTitle = CommandLine.arguments[1]
+// MARK: - Helpers
 
 func extractMeetingURL(from event: EKEvent) -> String? {
-    // Check notes for meeting URL
-    if let notes = event.notes {
-        if let url = extractMeetingURL(from: notes) {
-            return url
-        }
+    if let notes = event.notes, let url = extractMeetingURL(from: notes) {
+        return url
     }
-
-    // Check location for meeting URL
-    if let location = event.location {
-        if let url = extractMeetingURL(from: location) {
-            return url
-        }
+    if let location = event.location, let url = extractMeetingURL(from: location) {
+        return url
     }
-
-    // Check URL property
     if let url = event.url?.absoluteString {
         if url.contains("zoom.us") || url.contains("vimeo.com") {
             return url
         }
     }
-
     return nil
 }
 
 func extractMeetingURL(from text: String) -> String? {
-    // Pattern to match Zoom URLs
-    let zoomPattern = "https://[a-zA-Z0-9.-]*\\.?zoom\\.us/[^\\s]+"
-    // Pattern to match Vimeo URLs
-    let vimeoPattern = "https://(?:www\\.)?vimeo\\.com/[^\\s]+"
+    let patterns = [
+        "https://[a-zA-Z0-9.-]*\\.?zoom\\.us/[^\\s]+",
+        "https://(?:www\\.)?vimeo\\.com/[^\\s]+"
+    ]
 
-    for pattern in [zoomPattern, vimeoPattern] {
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
-            continue
-        }
-
+    for pattern in patterns {
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { continue }
         let nsString = text as NSString
         let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: nsString.length))
-
         if let match = matches.first {
             let url = nsString.substring(with: match.range)
-            // Remove trailing quotes
             return url.trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
         }
     }
-
     return nil
 }
 
@@ -232,28 +194,53 @@ func formatTimeUntil(_ date: Date, from currentDate: Date) -> String {
     if minutes <= 0 {
         return "now"
     } else if minutes < 60 {
-        if minutes == 1 {
-            return "in 1 minute"
-        } else {
-            return "in \(minutes) minutes"
-        }
+        return minutes == 1 ? "in 1 minute" : "in \(minutes) minutes"
     } else {
         let hours = minutes / 60
         let remainingMinutes = minutes % 60
-        if remainingMinutes == 0 {
-            return "in \(hours)h"
-        } else {
-            return "in \(hours)h\(remainingMinutes)m"
-        }
+        return remainingMinutes == 0 ? "in \(hours)h" : "in \(hours)h\(remainingMinutes)m"
     }
 }
 
+func jsonString(_ s: String) -> String {
+    // Escape backslashes, quotes, and control characters for JSON
+    var result = s
+    result = result.replacingOccurrences(of: "\\", with: "\\\\")
+    result = result.replacingOccurrences(of: "\"", with: "\\\"")
+    result = result.replacingOccurrences(of: "\n", with: "\\n")
+    result = result.replacingOccurrences(of: "\r", with: "\\r")
+    result = result.replacingOccurrences(of: "\t", with: "\\t")
+    return "\"\(result)\""
+}
+
+func jsonStringOrNull(_ s: String?) -> String {
+    guard let s = s else { return "null" }
+    return jsonString(s)
+}
+
+// MARK: - Main
+
+guard CommandLine.arguments.count > 1 else {
+    print("Error: Calendar title argument is required")
+    print("Usage: \(CommandLine.arguments[0]) <calendar-title>")
+    exit(1)
+}
+
+let calendarTitle = CommandLine.arguments[1]
+
 do {
     let manager = try MeetingBar(calendarTitle: calendarTitle)
-    if let event = try manager.nextMeeting {
-        let currentDate = Date()
-        let isCurrentMeeting = currentDate >= event.startDate && currentDate <= event.endDate
+    let events = try manager.remainingEventsToday()
+    let primary = manager.primaryEvent(from: events)
+    let currentDate = Date()
 
+    let timeFormatter = DateFormatter()
+    timeFormatter.dateFormat = "h:mm a"
+
+    // Build primary object
+    let primaryJSON: String
+    if let event = primary {
+        let isCurrentMeeting = currentDate >= event.startDate && currentDate <= event.endDate
         let displayText: String
         if isCurrentMeeting {
             let timeStr = formatTimeUntil(event.endDate, from: currentDate)
@@ -262,20 +249,30 @@ do {
             let timeStr = formatTimeUntil(event.startDate, from: currentDate)
             displayText = "\(event.title ?? "Untitled Event") \(timeStr)"
         }
-
-        // Output format: markdown link [DISPLAY_TEXT](URL) or just DISPLAY_TEXT if no URL
-        if let meetingURL = extractMeetingURL(from: event) {
-            print("[\(displayText)](\(meetingURL))")
-        } else {
-            print(displayText)
-        }
+        let url = extractMeetingURL(from: event)
+        primaryJSON = "{ \"display\": \(jsonString(displayText)), \"url\": \(jsonStringOrNull(url)) }"
     } else {
-        print("No meetings")
+        primaryJSON = "null"
     }
+
+    // Build events array
+    var eventJSONs: [String] = []
+    for event in events {
+        let start = timeFormatter.string(from: event.startDate)
+        let end = timeFormatter.string(from: event.endDate)
+        let time = "\(start) - \(end)"
+        let title = event.title ?? "Untitled Event"
+        let url = extractMeetingURL(from: event)
+        let isCurrent = currentDate >= event.startDate && currentDate <= event.endDate
+        eventJSONs.append("{ \"time\": \(jsonString(time)), \"title\": \(jsonString(title)), \"url\": \(jsonStringOrNull(url)), \"current\": \(isCurrent) }")
+    }
+
+    let eventsJSON = "[\(eventJSONs.joined(separator: ", "))]"
+    print("{ \"primary\": \(primaryJSON), \"events\": \(eventsJSON) }")
 } catch let error as MeetingBarError {
-    print("Error: \(error.message)")
+    fputs("Error: \(error.message)\n", stderr)
     exit(1)
 } catch {
-    print("Error: \(error)")
+    fputs("Error: \(error)\n", stderr)
     exit(1)
 }
