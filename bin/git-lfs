@@ -1,0 +1,19 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "git-lfs",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 5289015,
+      "hash": "blake3",
+      "digest": "979501ac3ed205320f79cd4fb8a6c208c1d3d3287c6567d5d485f644a72a2ef0",
+      "format": "zip",
+      "path": "git-lfs-3.7.1/git-lfs",
+      "providers": [
+        {
+          "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-darwin-arm64-v3.7.1.zip"
+        }
+      ]
+    }
+  }
+}

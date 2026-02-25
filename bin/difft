@@ -1,0 +1,19 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "difft",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 11559788,
+      "hash": "blake3",
+      "digest": "f3559027eda797499a91ff66c3924ade0df6b01fad9a66b20f43bf66c75c59f5",
+      "format": "tar.gz",
+      "path": "difft",
+      "providers": [
+        {
+          "url": "https://github.com/Wilfred/difftastic/releases/download/0.67.0/difft-aarch64-apple-darwin.tar.gz"
+        }
+      ]
+    }
+  }
+}

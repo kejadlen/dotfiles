@@ -1,0 +1,19 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "gh",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 13118103,
+      "hash": "blake3",
+      "digest": "db14b88675c84e234d5b14741c7e533605221768db6ad2bcb989e9393eeaa040",
+      "format": "zip",
+      "path": "gh_2.87.3_macOS_arm64/bin/gh",
+      "providers": [
+        {
+          "url": "https://github.com/cli/cli/releases/download/v2.87.3/gh_2.87.3_macOS_arm64.zip"
+        }
+      ]
+    }
+  }
+}

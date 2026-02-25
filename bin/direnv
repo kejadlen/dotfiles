@@ -1,0 +1,18 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "direnv",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 7899154,
+      "hash": "blake3",
+      "digest": "c6eabcde5fbd389aa0f0ca2a3ded9be347ecf1b937794aa98738feccbdcef8b0",
+      "path": "direnv",
+      "providers": [
+        {
+          "url": "https://github.com/direnv/direnv/releases/download/v2.37.1/direnv.darwin-arm64"
+        }
+      ]
+    }
+  }
+}

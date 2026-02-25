@@ -1,0 +1,19 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "hyperfine",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 582508,
+      "hash": "blake3",
+      "digest": "706b2ffad225abe3bbe290e942e69116dce94ecc3dc9046a5bd6168501695658",
+      "format": "tar.gz",
+      "path": "hyperfine-v1.20.0-aarch64-apple-darwin/hyperfine",
+      "providers": [
+        {
+          "url": "https://github.com/sharkdp/hyperfine/releases/download/v1.20.0/hyperfine-v1.20.0-aarch64-apple-darwin.tar.gz"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "fzf",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 1762432,
+      "hash": "blake3",
+      "digest": "d2539a1e86a4e11827dff1f13c65b3d68b982beb537aee2f2d8c1f37c812edab",
+      "format": "tar.gz",
+      "path": "fzf",
+      "providers": [
+        {
+          "url": "https://github.com/junegunn/fzf/releases/download/v0.68.0/fzf-0.68.0-darwin_arm64.tar.gz"
+        }
+      ]
+    }
+  }
+}

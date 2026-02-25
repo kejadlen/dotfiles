@@ -1,0 +1,19 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "efm-langserver",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 1364219,
+      "hash": "blake3",
+      "digest": "58d9affab1a721124dcf1e3ef30ec75e1487cd4d17eb965e664b16aaa29e136b",
+      "format": "zip",
+      "path": "efm-langserver_v0.0.55_darwin_arm64/efm-langserver",
+      "providers": [
+        {
+          "url": "https://github.com/mattn/efm-langserver/releases/download/v0.0.55/efm-langserver_v0.0.55_darwin_arm64.zip"
+        }
+      ]
+    }
+  }
+}

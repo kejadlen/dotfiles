@@ -1,0 +1,18 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "yt-dlp",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 36744560,
+      "hash": "blake3",
+      "digest": "7b4308bb0f9f1e9d4919a86bfc756e96a6c9772a67fc5639344e4bf22782806a",
+      "path": "yt-dlp",
+      "providers": [
+        {
+          "url": "https://github.com/yt-dlp/yt-dlp/releases/download/2026.02.21/yt-dlp_macos"
+        }
+      ]
+    }
+  }
+}

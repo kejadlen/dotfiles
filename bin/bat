@@ -1,0 +1,19 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "bat",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 3216703,
+      "hash": "blake3",
+      "digest": "5a3de674ad3fa40cd9784086f9b3c4fe1ce096e9a4aa60e186a309aba7a0ebbc",
+      "format": "tar.gz",
+      "path": "bat-v0.26.1-aarch64-apple-darwin/bat",
+      "providers": [
+        {
+          "url": "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-aarch64-apple-darwin.tar.gz"
+        }
+      ]
+    }
+  }
+}

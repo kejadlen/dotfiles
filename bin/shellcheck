@@ -1,0 +1,19 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "shellcheck",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 7245972,
+      "hash": "blake3",
+      "digest": "ad4957ed937da4e876d19e3500fc31d104e43b6e4e11d57a7b7c40140bc870d6",
+      "format": "tar.xz",
+      "path": "shellcheck-v0.11.0/shellcheck",
+      "providers": [
+        {
+          "url": "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.darwin.aarch64.tar.xz"
+        }
+      ]
+    }
+  }
+}

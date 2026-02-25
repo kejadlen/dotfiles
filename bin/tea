@@ -1,0 +1,18 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "tea",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 22711698,
+      "hash": "blake3",
+      "digest": "14a3430de9855adeea22645c14e1730b5030d7603027438a07f992377d23951b",
+      "path": "tea",
+      "providers": [
+        {
+          "url": "https://gitea.com/gitea/tea/releases/download/v0.12.0/tea-0.12.0-darwin-arm64"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "yamlfmt",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 1848266,
+      "hash": "blake3",
+      "digest": "4a519d2e03f2340ed5afce21fc4ecbfb7e7bc6c181111f27afe94f922709e26b",
+      "format": "tar.gz",
+      "path": "yamlfmt",
+      "providers": [
+        {
+          "url": "https://github.com/google/yamlfmt/releases/download/v0.21.0/yamlfmt_0.21.0_Darwin_arm64.tar.gz"
+        }
+      ]
+    }
+  }
+}
