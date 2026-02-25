@@ -233,3 +233,17 @@ When reviewing your own technical writing:
 - Test sample code
 - Write captions for every illustration
 - Reread from the audience's perspective for curse-of-knowledge gaps
+- Set it aside and return with fresh eyes
+- Change the visual context: different font, format, or medium
+- Ask a peer to review; they need style awareness, not domain expertise
+
+## Related Skills
+
+For error messages, use `writing-error-messages`. For accessibility
+concerns (alt text, color contrast, inclusive language), use
+`writing-for-accessibility`.
+
+## Source
+
+[Google Technical Writing Courses](https://developers.google.com/tech-writing/overview),
+licensed CC BY 4.0.
