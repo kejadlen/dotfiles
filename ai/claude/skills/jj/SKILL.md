@@ -97,6 +97,20 @@ jj log ai/src/main.rs                # revisions touching this file
 jj log -r '::@' ai/src/              # scoped to ancestors of @
 ```
 
+**Fileset expressions with special characters need quoting.** Filenames
+containing commas, parentheses, or other meta characters must be quoted
+inside `glob:` patterns. Use `glob:"pattern"` with the pattern in double
+quotes:
+
+```bash
+jj diff -- 'glob:"bin/*" ~ glob:"bin/,special"'   # exclude a file with comma
+jj commit -m 'msg' -- 'glob:"bin/*" ~ glob:"bin/,clean-url"'
+```
+
+Without quotes around the pattern, characters like `,` are parsed as fileset
+syntax and cause errors. Plain paths without meta characters don't need inner
+quotes: `bin/de-utm` is fine as-is.
+
 ## Command Categories
 
 Run `jj --help` to see all commands. Main categories:
