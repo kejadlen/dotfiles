@@ -112,9 +112,8 @@
                             "/?"))
       url-patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
                     [safari-patterns handlers.safari]]
-      url-redir-decoders [[:sci-hub
-                           "^https://doi.org/(.*)"
-                           "https://sci-hub.st/%1"]]]
+      ; url-redir-decoders [[:clean-url #(execute (.. "/Users/alpha/.dotfiles/bin/,clean-url" $4))]]
+      ]
   (Install:andUse :URLDispatcher {:config {:url_patterns url-patterns
                                            :url_redir_decoders url-redir-decoders
                                            :default_handler little-ff.open

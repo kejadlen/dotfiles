@@ -1,0 +1,44 @@
+#!/usr/bin/env -S cargo +nightly -Zscript
+---cargo
+[dependencies]
+color-eyre = "*"
+url = "*"
+---
+
+use std::env;
+
+use color_eyre::eyre::{OptionExt, Result, WrapErr};
+use url::Url;
+
+const TRACKING_PREFIXES: &[&str] = &["utm_"];
+const TRACKING_PARAMS: &[&str] = &["fbclid", "gclid"];
+
+fn is_tracking_param(key: &str) -> bool {
+    TRACKING_PREFIXES
+        .iter()
+        .any(|prefix| key.starts_with(prefix))
+        || TRACKING_PARAMS.contains(&key)
+}
+
+fn main() -> Result<()> {
+    color_eyre::install()?;
+
+    let arg = env::args().nth(1).ok_or_eyre("usage: ,clean-url <url>")?;
+    let mut url = Url::parse(&arg).wrap_err_with(|| format!("failed to parse URL: {arg}"))?;
+
+    let kept: Vec<(String, String)> = url
+        .query_pairs()
+        .filter(|(key, _)| !is_tracking_param(key))
+        .map(|(k, v)| (k.into_owned(), v.into_owned()))
+        .collect();
+
+    url.query_pairs_mut().clear().extend_pairs(&kept);
+
+    if url.query() == Some("") {
+        url.set_query(None);
+    }
+
+    println!("{url}");
+
+    Ok(())
+}
