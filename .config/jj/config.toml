@@ -76,6 +76,7 @@ log_node = '''
 default-command = "st"
 diff-editor = "gitpatch"
 # diff-editor = ",jj-nvimdiff"
+diff-formatter = ["difft", "--color=always", "$left", "$right"]
 pager = ":builtin"
 
 # default will be `glob:` in the future, so switch to it proactively
