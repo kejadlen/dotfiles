@@ -1,5 +1,11 @@
-(local {:nvim_create_autocmd create-autocmd
-        :nvim_create_augroup create-augroup} vim.api)
+(local {:nvim_buf_get_mark nvim-buf-get-mark
+        :nvim_buf_line_count nvim-buf-line-count
+        :nvim_command nvim-command
+        :nvim_create_augroup nvim-create-augroup
+        :nvim_create_autocmd nvim-create-autocmd
+        :nvim_feedkeys nvim-feedkeys
+        :nvim_get_current_win nvim-get-current-win
+        :nvim_set_hl nvim-set-hl} vim.api)
 
 ;;; colorscheme (toggle between these to compare)
 ;; Option 1: paramount
@@ -58,9 +64,9 @@
 ;; highlight
 (set vim.o.hlsearch true)
 (vim.keymap.set :n :<leader>/ ":nohlsearch<cr>")
-(let [group (create-augroup :nvim-hl-on-yank {})
+(let [group (nvim-create-augroup :nvim-hl-on-yank {})
       callback #(vim.highlight.on_yank {:higroup :Search :timeout 100})]
-  (create-autocmd :TextYankPost {: callback : group}))
+  (nvim-create-autocmd :TextYankPost {: callback : group}))
 
 ;; non-shifted shortcuts for moving the cursor to the start/end of the current line
 (vim.keymap.set :n :H "^")
@@ -86,25 +92,22 @@
 ;;
 ;; See also (previously):
 ;;   https://github.com/vim/vim/blob/master/runtime/defaults.vim#L108
-(let [{:nvim_buf_get_mark buf-get-mark
-       :nvim_buf_line_count buf-line-count
-       :nvim_feedkeys feedkeys} vim.api
-      restore-cursor-position (fn [opts]
+(let [restore-cursor-position (fn [opts]
                                 (let [ft (. (. vim.bo opts.buf) :filetype)
-                                      last-pos (buf-get-mark opts.buf "\"")
+                                      last-pos (nvim-buf-get-mark opts.buf "\"")
                                       last-known-line (. last-pos 1)]
                                   (when (and (not (or (ft:match :commit)
                                                       (ft:match :rebase)))
                                              (> last-known-line 1)
                                              (<= last-known-line
-                                                 (buf-line-count opts.buf)))
-                                    (feedkeys "g`\"" :nx false))))
+                                                 (nvim-buf-line-count opts.buf)))
+                                    (nvim-feedkeys "g`\"" :nx false))))
       setup-cursor-restore (fn [opts]
-                             (create-autocmd :BufWinEnter
-                                             {:once true
-                                              :buffer opts.buf
-                                              :callback #(restore-cursor-position opts)}))]
-  (create-autocmd :BufRead {:callback setup-cursor-restore}))
+                             (nvim-create-autocmd :BufWinEnter
+                                                  {:once true
+                                                   :buffer opts.buf
+                                                   :callback #(restore-cursor-position opts)}))]
+  (nvim-create-autocmd :BufRead {:callback setup-cursor-restore}))
 
 ;;; filetype
 
@@ -113,6 +116,7 @@
 ;;; vim.pack
 
 ;; :lua vim.pack.update({ 'nvim-lspconfig' })
+;; :lua vim.pack.update(nil, { target = 'lockfile' })
 (vim.pack.add [;; was using jaawerth/fennel.vim, but there are some annoyances
                ;; with it, so let's try this one instead
                "https://github.com/atweiden/vim-fennel.git"
@@ -121,6 +125,7 @@
                "https://github.com/hashivim/vim-terraform.git"
                "https://github.com/itchyny/lightline.vim.git"
                "https://github.com/j-hui/fidget.nvim.git"
+               "https://github.com/junegunn/fzf.git"
                "https://github.com/junegunn/fzf.vim.git"
                "https://github.com/justinmk/vim-dirvish.git"
                {:src "https://github.com/lukas-reineke/indent-blankline.nvim.git"
@@ -144,16 +149,17 @@
                "https://github.com/tpope/vim-unimpaired.git"
                "https://github.com/tpope/vim-vinegar.git"])
 
-;; Run :TSUpdate after updating nvim-treesitter
-(let [callback (fn [opts]
-                 (when (and (opts.data.path:match "nvim%-treesitter$")
-                            (or (= opts.data.kind :install)
-                                (= opts.data.kind :update)))
-                   ;; packadd is required because PackChanged fires before the plugin
-                   ;; is loaded, so :TSUpdate wouldn't be available otherwise
-                   (vim.cmd.packadd :nvim-treesitter)
-                   (vim.cmd.TSUpdate)))]
-  (create-autocmd :PackChanged {: callback}))
+(let [callback (fn [event]
+                 (let [{:spec {: name} : kind} event.data]
+                   ;; Run :TSUpdate after updating nvim-treesitter
+                   (when (and (= name :nvim-treesitter)
+                              (or (= kind :install) (= kind :update)))
+                     (if (not event.data.active)
+                         ;; packadd is required because PackChanged fires before the plugin
+                         ;; is loaded, so :TSUpdate wouldn't be available otherwise
+                         (vim.cmd.packadd :nvim-treesitter))
+                     (vim.cmd.TSUpdate))))]
+  (nvim-create-autocmd :PackChanged {: callback}))
 
 (require :fzf)
 (require :lsp)
@@ -265,23 +271,21 @@
 (set vim.o.foldexpr "v:lua.vim.treesitter.foldexpr()")
 ;; Prefer LSP folding if client supports it
 (let [callback #(let [client (vim.lsp.get_client_by_id $1.data.client_id)
-                      current-win (vim.api.nvim_get_current_win)]
+                      current-win (nvim-get-current-win)]
                   (when (client:supports_method :textDocument/foldingRange)
                     (tset (. vim.wo current-win) 0 :foldexpr
                           "v:lua.vim.lsp.foldexpr()")))]
-  (vim.api.nvim_create_autocmd :LspAttach {: callback}))
+  (nvim-create-autocmd :LspAttach {: callback}))
 
 ;;; focus dimming
 ;; Fade the background when neovim loses focus (matches tmux pane-focus-out behavior).
 ;; FocusLost/FocusGained fire when the terminal pane loses/gains focus.
-(let [group (create-augroup :focus-dim {})
-      {: colors} (require :alphabaster.palette)]
-  (create-autocmd :FocusLost
-                  {:callback #(vim.api.nvim_set_hl 0 :Normal {:fg colors.fg :bg colors.dim-bg})
-                   : group})
-  (create-autocmd :FocusGained
-                  {:callback #(vim.api.nvim_set_hl 0 :Normal {:fg colors.fg :bg colors.bg})
-                   : group}))
+(let [group (nvim-create-augroup :focus-dim {})
+      {: colors} (require :alphabaster.palette)
+      dim-bg #(nvim-set-hl 0 :Normal {:fg colors.fg :bg colors.dim-bg})
+      restore-bg #(nvim-set-hl 0 :Normal {:fg colors.fg :bg colors.bg})]
+  (nvim-create-autocmd :FocusLost {:callback dim-bg : group})
+  (nvim-create-autocmd :FocusGained {:callback restore-bg : group}))
 
 ;;; neovide
 
@@ -306,8 +310,8 @@
 
 ;; Load all plugins now.
 ;; Plugins need to be added to runtimepath before helptags can be generated.
-(vim.api.nvim_command :packloadall)
+(nvim-command :packloadall)
 
 ;; Load all of the helptags now, after plugins have been loaded.
 ;; All messages and errors will be ignored.
-(vim.api.nvim_command "silent! helptags ALL")
+(nvim-command "silent! helptags ALL")

@@ -8,6 +8,10 @@
       "rev": "3f54759",
       "src": "https://github.com/j-hui/fidget.nvim.git"
     },
+    "fzf": {
+      "rev": "90c4269d4e5d88ec3a04697a8714ee86a43b2474",
+      "src": "https://github.com/junegunn/fzf.git"
+    },
     "fzf.vim": {
       "rev": "879db51",
       "src": "https://github.com/junegunn/fzf.vim.git"

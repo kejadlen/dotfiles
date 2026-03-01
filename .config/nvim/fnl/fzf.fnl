@@ -8,13 +8,14 @@
 
 ;; https://coreyja.com/vim-spelling-suggestions-fzf/
 (fn init-fzf-spell []
-  (let [{: nvim_command : nvim_create_user_command} vim.api
+  (let [{:nvim_command nvim-command
+         :nvim_create_user_command nvim-create-user-command} vim.api
         {: expand "fzf#run" fzf-run "fzf#wrap" fzf-wrap : spellsuggest} vim.fn
-        sink #(nvim_command (.. "normal! \"_ciw" $1))
+        sink #(nvim-command (.. "normal! \"_ciw" $1))
         fzf-spell #(fzf-run (fzf-wrap {:source (spellsuggest (expand :<cword>))
                                        : sink
                                        :window {:width 0.9 :height 0.6}}))]
-    (vim.api.nvim_create_user_command :FzfSpell fzf-spell {})
+    (nvim-create-user-command :FzfSpell fzf-spell {})
     (vim.keymap.set :n :z= ":FzfSpell<cr>" {:noremap true})))
 
 (if (vim.fn.exists :TMUX)
@@ -24,4 +25,3 @@
   (vim.opt.rtp:append :/opt/homebrew/opt/fzf)
   (init-keymaps)
   (init-fzf-spell))
-
