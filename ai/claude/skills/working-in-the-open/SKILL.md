@@ -13,9 +13,18 @@ Document the reasoning behind code changes as you work. The diff shows *what* ch
 - User says "I'm working on the X issue in [tracker]"
 - Continuing work on a previously-linked issue
 
-## When NOT to Use
+## Default: Don't Comment
 
-- **Work is complete and a PR is being opened.** The PR itself links to the issue (via `Closes #N`) and serves as the summary. A separate issue comment is redundant — skip it.
+**Most work does not need a comment.** The commit message is the record. Only comment when you have context the commit cannot capture — a decision between alternatives, a blocker that changed scope, or a summary the user explicitly asked for.
+
+Before even considering a comment, ask: "Does this say something the commit doesn't?" If no, skip it entirely — don't draft it, don't propose it, don't ask the user about it.
+
+### Specifically, Do NOT Comment When
+
+- **Work is complete and a PR is being opened.** The PR links to the issue and serves as the summary.
+- **The comment would restate the commit message.** Even partially. "Switched X to Y, updated CI" after a commit that says exactly that is pure noise — regardless of whether it's phrased differently.
+- **You're announcing you're starting work.** The state change (→ in_progress) already signals that.
+- **The work was straightforward.** If there were no surprises, no alternatives considered, no scope changes — there's nothing to document beyond the commit.
 
 ## The Three Milestones
 
@@ -28,12 +37,12 @@ Document the reasoning behind code changes as you work. The diff shows *what* ch
 ## Workflow
 
 1. **Detect** — Note issue context when referenced
-2. **Recognize** — Identify milestone moments during work
+2. **Filter** — After committing, ask: "Does this need a comment, or does the commit say it all?" Default answer is no. Only proceed if there's genuinely new context (a decision rationale, a blocker, a scope change).
 3. **Draft** — Write update in appropriate format
 4. **Present** — Show draft to user: "I'd like to document this on the issue. Here's the draft: [content]. Post this?"
 5. **Confirm** — Wait for user approval before posting
 
-Never post without explicit confirmation.
+Never post without explicit confirmation. But more importantly, don't even propose comments that restate commits.
 
 ## Posting
 
