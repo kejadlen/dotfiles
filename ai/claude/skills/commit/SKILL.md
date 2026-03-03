@@ -1,13 +1,37 @@
 ---
 name: commit
-description: Use when the user asks to "commit changes", "commit my work", "/commit", "create a commit", or "jj commit"
-argument-hint: <fileset>
+description: Use when the user asks to "commit changes", "commit my work", "/commit", "create a commit", "jj commit", "describe a change", "describe a revision", "/describe", "rewrite commit message", or "update revision description"
+argument-hint: <revision or fileset>
 allowed-tools: Bash(jj diff:*), Bash(jj show:*), Bash(jj log:*)
 ---
 
-# Commit Changes
+# Commit or Describe Changes
 
-## Workflow
+## Mode Detection
+
+`$ARGUMENTS`
+
+Determine which mode to use:
+
+- **Describe mode** — argument names an existing revision (e.g., `@-`,
+  `abc123`, a bookmark name). Use when the user says "describe",
+  "rewrite commit message", or "update revision description".
+- **Commit mode** — argument is empty, a fileset, or the user says
+  "commit". This is the default.
+
+When ambiguous, ask.
+
+## Describe Mode
+
+Rewrite the description of an existing revision from scratch. Completely
+discard the existing description.
+
+1. Run `jj show -r $ARGUMENTS` to view the changes
+2. Invoke the `describing-changes` skill to draft a new description
+3. Apply with `jj describe -r $ARGUMENTS -m '...'`
+4. Verify with `jj show -r $ARGUMENTS`
+
+## Commit Mode
 
 Execute directly without exploring the codebase first. When asked to
 commit and create a PR, use this skill followed by the `/pr` skill
@@ -19,11 +43,11 @@ Only squash (`jj squash`) when the prior commit specifically needs
 fixing up (e.g., correcting a bug introduced in that commit, fixing a
 typo in code it added). If in doubt, make a new commit.
 
-## Fileset (optional)
+### Fileset (optional)
 
 `$ARGUMENTS`
 
-## Process
+### Process
 
 1. Run `jj diff $ARGUMENTS` to view changes being committed
 2. When a fileset is given, run `jj diff` (no args) to see all pending
