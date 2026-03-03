@@ -32,10 +32,22 @@ typo in code it added). If in doubt, make a new commit.
    config change paired with the code that uses it. Ask the user whether
    to include them. Skip this step when no fileset is provided (all
    changes are already included).
-3. Invoke the `describing-changes` skill to draft the commit message
-4. Check if a changelog exists (CHANGELOG.md, CHANGELOG, CHANGES.md, or similar)
+3. **Adversarial review.** Before writing the commit message, re-read the
+   diff as a skeptical reviewer trying to find reasons NOT to commit.
+   Check for:
+   - Bugs or logic errors introduced by the change
+   - Incomplete work (TODOs, half-finished refactors, dead code left behind)
+   - Unintended side effects or behavioral changes
+   - Debug artifacts (print statements, hardcoded values, commented-out code)
+   - Changes that don't belong together (should be separate commits)
+
+   If you find issues, list them concisely and ask the user whether to
+   proceed, fix first, or split the commit. If the diff is clean, say so
+   in one line and move on — don't invent problems.
+4. Invoke the `describing-changes` skill to draft the commit message
+5. Check if a changelog exists (CHANGELOG.md, CHANGELOG, CHANGES.md, or similar)
    - If found, add an entry under the appropriate section
    - Scope the entry to only the changes in the fileset, if provided
-5. Commit with `jj commit -m '...' $ARGUMENTS` (omit fileset args to commit all; include changelog in fileset if updated)
+6. Commit with `jj commit -m '...' $ARGUMENTS` (omit fileset args to commit all; include changelog in fileset if updated)
    - **Put `-m` before `--` or fileset args.** jj parses everything after `--` as fileset, so `-m` content placed after `--` becomes a parse error.
-6. Verify with `jj show`
+7. Verify with `jj show`
