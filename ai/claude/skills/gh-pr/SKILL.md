@@ -76,9 +76,12 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
      auto-links raw `a1b2c3d` and `#123` but backticks prevent it
    - Follow repository conventions
 9. **Code review**: Dispatch the `superpowers:code-reviewer` subagent to review
-    the changes. Use `trunk()` as base and `<bookmark>` as head. Provide a brief
-    description of what was implemented. Address Critical and Important issues
-    before proceeding; Minor issues can be noted for later.
+    the changes. Tell the reviewer to run
+    `jj diff --from trunk() --to <revision>` to get the actual commit diff—do
+    not let it grep or read the working directory, which may be on a different
+    revision. Provide a brief description of what was implemented. Address
+    Critical and Important issues before proceeding; Minor issues can be noted
+    for later.
 10. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
     a HEREDOC to pass the body.
     - If `web` was specified: add `--web` flag to open prepopulated PR in browser for manual editing, then stop (skip remaining steps)

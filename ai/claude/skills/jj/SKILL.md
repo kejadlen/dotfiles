@@ -69,6 +69,21 @@ bookmark exists locally but has never been pushed, `-b` will error with
 auto-track it in one step. Use `-b` only for bookmarks that are already tracked
 (previously pushed or fetched).
 
+## Restoring Files
+
+`jj restore` does **not** have `-r`/`--revision`. It uses `--from` (source)
+and `--into`/`--to` (destination):
+
+```bash
+jj restore --from kn --into kn gdev-genie/Cargo.lock   # restore one file in a revision from its parent
+jj restore --changes-in @                               # undo all changes in working copy (like jj abandon but keeps metadata)
+jj restore gdev-genie/Cargo.lock                        # restore file in working copy from parent
+```
+
+`--changes-in <REVSET>` undoes changes in a revision compared to its
+parents — equivalent to `--into REVSET --from REVSET-` for single-parent
+revisions.
+
 ## Common Pitfalls
 
 **Quote revsets containing parentheses.** Bash interprets `()` as subshell
@@ -110,6 +125,15 @@ jj commit -m 'msg' -- 'glob:"bin/*" ~ glob:"bin/,clean-url"'
 Without quotes around the pattern, characters like `,` are parsed as fileset
 syntax and cause errors. Plain paths without meta characters don't need inner
 quotes: `bin/de-utm` is fine as-is.
+
+**Inherited conflicts are baked into the commit.** If a revision inherits a
+conflict from its parent, `jj restore --from parent --into child` won't help
+because the child doesn't introduce the conflict itself (`jj diff -r child`
+shows nothing for that file). Check with `jj resolve --list -r <rev>` and
+`jj log -r '<rev> | parents(<rev>)'` to see where the conflict originates.
+To drop an inherited conflict, rebase the revision onto a non-conflicted
+ancestor — but only if the revision's own changes don't depend on the
+conflicted parent's work.
 
 ## Command Categories
 
