@@ -1,0 +1,25 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "zoekt-git-index",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 16782078,
+      "hash": "blake3",
+      "digest": "d18d92fc4eb8a4791b786f1767bc0e288752e92f52239a951924f3e2f161860c",
+      "format": "tar.gz",
+      "path": "zoekt-git-index",
+      "providers": [
+        {
+          "url": "https://github.com/kejadlen/zoekt/releases/download/v2026-03-03%2B2b6608c/zoekt-git-index-aarch64-apple-darwin.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/kejadlen/zoekt",
+          "tag": "v2026-03-03+2b6608c",
+          "name": "zoekt-git-index-aarch64-apple-darwin.tar.gz"
+        }
+      ]
+    }
+  }
+}
