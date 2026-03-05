@@ -1,0 +1,25 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "pinch",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 919512,
+      "hash": "blake3",
+      "digest": "d5fa8d08d16c0622c4b56af2b7adf780433e5f3f972c7040bd104694700f1320",
+      "format": "tar.gz",
+      "path": "pinch",
+      "providers": [
+        {
+          "url": "https://github.com/kejadlen/pinch/releases/download/v2026-02-19%2B5d7c190/pinch-aarch64-apple-darwin.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/kejadlen/pinch",
+          "tag": "v2026-02-19+5d7c190",
+          "name": "pinch-aarch64-apple-darwin.tar.gz"
+        }
+      ]
+    }
+  }
+}

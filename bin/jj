@@ -1,0 +1,25 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "jj",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 9539094,
+      "hash": "blake3",
+      "digest": "b02f04d09557b41e3bf0a84a0bc7421c2b67bdbabccafc3ca00773e786e8eedc",
+      "path": "jj",
+      "providers": [
+        {
+          "url": "https://github.com/jj-vcs/jj/releases/download/v0.39.0/jj-v0.39.0-aarch64-apple-darwin.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/jj-vcs/jj",
+          "tag": "v0.39.0",
+          "name": "jj-v0.39.0-aarch64-apple-darwin.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    }
+  }
+}

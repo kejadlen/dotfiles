@@ -44,40 +44,41 @@ namespace :sync do
   end
 end
 
+require "json"
+require "open3"
+
+def update_dotslash_release(name:, repo:, path: name, &asset)
+  release_json, = Open3.capture2("gh", "release", "view", "--repo", repo, "--json", "tagName")
+  tag = JSON.parse(release_json)["tagName"]
+  asset_name = asset.call(tag)
+
+  url = "https://github.com/#{repo}/releases/download/#{tag}/#{asset_name}"
+  entry_json, = Open3.capture2("dotslash", "--", "create-url-entry", url)
+  entry = JSON.parse(entry_json)
+
+  platform = {
+    size: entry["size"],
+    hash: "blake3",
+    digest: entry["digest"],
+    path: path,
+    providers: [
+      { url: url },
+      { type: "github-release", repo: "https://github.com/#{repo}", tag: tag, name: asset_name },
+    ],
+  }
+  platform[:format] = entry["format"] if entry["format"] && !entry["format"].start_with?("TODO")
+
+  dotslash = { name: name, platforms: { "macos-aarch64" => platform } }
+  File.write("bin/#{name}", "#!/usr/bin/env dotslash\n\n#{JSON.pretty_generate(dotslash)}\n")
+end
+
 desc "Update dotslash files from their GitHub releases"
 task :update_dotslash do
   sh "gh release download --repo kejadlen/pinch --pattern pinch --output bin/pinch --clobber"
 
-  require "json"
-  require "open3"
-
-  # Update jq dotslash file with latest release
-  release_json, = Open3.capture2("gh", "release", "view", "--repo", "jqlang/jq", "--json", "tagName,assets")
-  release = JSON.parse(release_json)
-  tag = release["tagName"]
-  asset = release["assets"].find { |a| a["name"] == "jq-macos-arm64" }
-
-  url = "https://github.com/jqlang/jq/releases/download/#{tag}/jq-macos-arm64"
-  digest, = Open3.capture2("dotslash", "--", "create-url-entry", url)
-  entry = JSON.parse(digest)
-
-  dotslash = {
-    name: "jq",
-    platforms: {
-      "macos-aarch64" => {
-        size: entry["size"],
-        hash: "blake3",
-        digest: entry["digest"],
-        path: "jq",
-        providers: [
-          { url: url },
-          { type: "github-release", repo: "https://github.com/jqlang/jq", tag: tag, name: "jq-macos-arm64" },
-        ],
-      },
-    },
-  }
-
-  File.write("bin/jq", "#!/usr/bin/env dotslash\n\n#{JSON.pretty_generate(dotslash)}\n")
+  update_dotslash_release(name: "jq", repo: "jqlang/jq") { "jq-macos-arm64" }
+  update_dotslash_release(name: "jj", repo: "jj-vcs/jj") { |tag| "jj-#{tag}-aarch64-apple-darwin.tar.gz" }
+  update_dotslash_release(name: "just", repo: "casey/just") { |tag| "just-#{tag}-aarch64-apple-darwin.tar.gz" }
 end
 
 desc "Upgrade neovim"
