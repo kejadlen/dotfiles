@@ -52,8 +52,10 @@ For private channels, the Slack MCP app must be invited to the channel.
 
 ## Common Mistakes
 
-- Parentheses in OR queries silently fail. Write `from:@me OR to:@me`,
-  not `(from:@me OR to:@me)`.
+- The `@` prefix on `from:` and `to:` modifiers doesn't work reliably.
+  Use bare names: `from:me to:martin.emde`, not `from:@me to:@Martin Emde`.
+- Parentheses in OR queries silently fail. Write `from:me OR to:me`,
+  not `(from:me OR to:me)`.
 - Passing timestamps as `key=value` coerces them to numbers and fails
   schema validation. Use `--args` JSON instead.
 - Sending to user IDs instead of channel IDs. Always resolve the channel
@@ -62,11 +64,11 @@ For private channels, the Slack MCP app must be invited to the channel.
 ## Search Queries
 
 ```bash
-mcporter call slack.slack_search_public query="from:@user OR to:@user after:2025-01-01 before:2025-01-07"
-mcporter call slack.slack_search_public query="from:@user on:2025-01-15"
+mcporter call slack.slack_search_public query="from:user OR to:user after:2025-01-01 before:2025-01-07"
+mcporter call slack.slack_search_public query="from:user on:2025-01-15"
 ```
 
-Modifiers: `from:@user`, `to:@user`, `mentions:@user`, `in:#channel`,
+Modifiers: `from:user`, `to:user`, `mentions:user`, `in:#channel`,
 `before:` / `after:` / `on:` with `YYYY-MM-DD` or `today`,
 `is:thread`, `has:pin`.
 
