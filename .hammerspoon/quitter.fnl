@@ -23,6 +23,9 @@
                           :Music [:hour 1]
                           :Raindrop [:minute 15]
                           "UniFi Protect" [:minute 30]
+                          :Steam [:hour 1]
+                          "Steam Helper" [:hour 1]
+                          "Slay the Spire 2" [:hour 2]
                           :Xcode [:hour 1]
                           :zoom.us [:hour 1]}
                :default [:minute 5]})
