@@ -137,5 +137,6 @@
 
 [include]
 	path = ~/.gitconfig.local
+	path = config.local
 [credential]
 	helper = osxkeychain

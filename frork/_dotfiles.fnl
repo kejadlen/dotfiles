@@ -1,11 +1,10 @@
-(local {: ok :utils {: dirname}} (require :flork))
+(local {: ok : no :utils {: dirname}} (require :flork))
 
 (ok :git "~/.dotfiles" "https://git.kejadlen.dev/alpha/dotfiles.git")
 
 (let [dotfiles [:.config
                 :.digrc
                 :.gemrc
-                :.gitconfig
                 :.git_templates
                 :.hammerspoon
                 :.inputrc
@@ -28,6 +27,9 @@
 
 (ok :symlink "~/.dotfiles/ai/claude" "~/.claude")
 (ok :symlink "~/.dotfiles/ai/AI.md" "~/.claude/CLAUDE.md")
+
+;; moved to .config/git/config
+(no :symlink :$HOME/.gitconfig :$HOME/.dotfiles/.gitconfig)
 
 ;; for per-system configuration
 (ok :directory :$HOME/.config/jj/conf.d)
