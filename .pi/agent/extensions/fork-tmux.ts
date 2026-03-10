@@ -5,11 +5,11 @@
  * in a new tmux target, leaving the current session untouched.
  *
  * Usage:
- *   /fork-tmux              Horizontal split (right)
+ *   /fork-tmux              Popup (tmux 3.3+)
+ *   /fork-tmux 80%x80%     Popup with size
+ *   /fork-tmux -h           Horizontal split (right)
  *   /fork-tmux -v           Vertical split (below)
  *   /fork-tmux -w           New window
- *   /fork-tmux -p           Popup (tmux 3.3+)
- *   /fork-tmux -p 80%x80%  Popup with size
  */
 
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
@@ -18,13 +18,13 @@ type Mode = "split-h" | "split-v" | "window" | "popup";
 
 function parseArgs(raw: string): { mode: Mode; extra: string[] } {
 	const parts = raw.trim().split(/\s+/).filter(Boolean);
-	let mode: Mode = "split-h";
+	let mode: Mode = "popup";
 	const extra: string[] = [];
 
 	for (const p of parts) {
-		if (p === "-v") mode = "split-v";
+		if (p === "-h") mode = "split-h";
+		else if (p === "-v") mode = "split-v";
 		else if (p === "-w") mode = "window";
-		else if (p === "-p") mode = "popup";
 		else extra.push(p);
 	}
 
@@ -69,7 +69,7 @@ function buildShellCommand(mode: Mode, extra: string[], sessionFile: string): st
 
 export default function (pi: ExtensionAPI) {
 	pi.registerCommand("fork-tmux", {
-		description: "Fork session into a new tmux pane/window/popup (-v, -w, -p [size])",
+		description: "Fork session into a tmux popup (default), pane (-h, -v), or window (-w)",
 		handler: async (args, ctx) => {
 			if (!ctx.hasUI) {
 				ctx.ui.notify("fork-tmux requires interactive mode", "error");
