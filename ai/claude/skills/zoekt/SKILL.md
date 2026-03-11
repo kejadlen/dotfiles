@@ -15,6 +15,18 @@ skill starts sparse and grows through use — follow the
 self-improving-skills guidelines when you learn something worth
 capturing.
 
+## Indexing
+
+```bash
+# Git repo — -index is required or shards go nowhere useful
+zoekt-git-index -index ~/.zoekt /path/to/repo
+
+# Non-git directory
+zoekt-index -index ~/.zoekt /path/to/dir
+```
+
+Index shards land in `~/.zoekt/` — the same default `zoekt` searches.
+
 ## Keeping the index fresh
 
 Before searching, check whether the current repo has a usable index.
@@ -25,9 +37,7 @@ doesn't block the current task.
 2. If the index is missing or older than the most recent change,
    reindex in the background. Use `zoekt-git-index` in a git repo or
    `zoekt-index` for non-git directories.
-3. Run `--help` on whichever indexer you need to find the right
-   invocation.
-4. While the index builds, fall back to grep/ripgrep for the immediate
+3. While the index builds, fall back to grep/ripgrep for the immediate
    search. Switch to zoekt once the background task completes.
 
 Don't wait on indexing. The point is to have the index ready for

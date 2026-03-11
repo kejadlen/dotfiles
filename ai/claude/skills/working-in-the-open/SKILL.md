@@ -15,16 +15,22 @@ Document the reasoning behind code changes as you work. The diff shows *what* ch
 
 ## Default: Don't Comment
 
-**Most work does not need a comment.** The commit message is the record. Only comment when you have context the commit cannot capture — a decision between alternatives, a blocker that changed scope, or a summary the user explicitly asked for.
+**The overwhelming default is silence.** Do not comment. Do not even consider commenting. The commit message is the record.
 
-Before even considering a comment, ask: "Does this say something the commit doesn't?" If no, skip it entirely — don't draft it, don't propose it, don't ask the user about it.
+The only justification for a comment is context the commit *cannot* capture — a decision between alternatives, a blocker that changed scope, or a summary the user explicitly asked for. That's it. Three cases. Everything else is noise.
+
+**Never narrate your own process.** "Starting work", "reviewing the schema", "planning the approach" — these are not useful to anyone reading the issue later. They are filler. Do not post them.
+
+Before writing a comment, pass this test: "Would a teammate reading this issue six months from now learn something they couldn't get from the commits or PR?" If the answer isn't a clear yes, don't comment.
 
 ### Specifically, Do NOT Comment When
 
+- **You're announcing you're starting work.** The state change (→ in_progress) already signals that. Never narrate "picking up this task" or "beginning investigation."
+- **You're describing what you're about to do.** Plans belong in your head, not in issue comments. The work itself is the record.
 - **Work is complete and a PR is being opened.** The PR links to the issue and serves as the summary.
 - **The comment would restate the commit message.** Even partially. "Switched X to Y, updated CI" after a commit that says exactly that is pure noise — regardless of whether it's phrased differently.
-- **You're announcing you're starting work.** The state change (→ in_progress) already signals that.
 - **The work was straightforward.** If there were no surprises, no alternatives considered, no scope changes — there's nothing to document beyond the commit.
+- **You feel like you should say *something*.** That impulse is wrong. Resist it.
 
 ## The Three Milestones
 

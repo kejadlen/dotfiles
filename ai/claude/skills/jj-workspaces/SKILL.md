@@ -14,6 +14,8 @@ Create isolated jj workspaces for experimentation, parallel development, and sub
 
 **Important:** Run `jj` (or `jj status`) periodically in each workspace. jj only snapshots the working copy when you run a command—it doesn't watch for file changes. Running `jj` ensures it sees your edits.
 
+**Note (v0.39+):** `jj workspace add` now links with relative paths by default, enabling workspaces to work inside containers or when moved together. Existing workspaces with absolute paths continue to work.
+
 ## When to Use
 
 **Triggers:**
@@ -64,6 +66,9 @@ cd work/<name>
 **If successful:** Merge back:
 ```bash
 jj rebase -s <name>@ -d @
+jj workspace forget <name>
+jj abandon 'empty() & description(exact:"") & @-'
+rm -rf work/<name>
 ```
 
 **If unsuccessful:** Forget and clean up:
@@ -169,6 +174,7 @@ jj workspace update-stale
 | Skipping `jj workspace update-stale` | Run in main workspace after workspace operations |
 | Creating workspaces during dispatch | Create ALL workspaces BEFORE dispatch |
 | Agent touching other workspaces | Agents work ONLY in assigned path |
+| Empty WC commits after rebase | After rebase + forget, run `jj abandon 'empty() & description(exact:"") & @-'` to drop the workspace's leftover empty WC |
 | Forgetting cleanup | Remove directories after forgetting workspace |
 | jj not seeing file changes | Run `jj` or `jj status` periodically—jj only snapshots on command execution |
 

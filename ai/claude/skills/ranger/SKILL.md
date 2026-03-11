@@ -1,0 +1,52 @@
+---
+name: ranger
+description: Use when managing tasks with the ranger CLI — creating backlogs, tracking work, picking up tasks, prioritizing, or following the ranger PM workflow in any project
+---
+
+# Ranger — Task Management
+
+Use the `ranger` CLI to manage project tasks. Run `ranger --help` for commands and syntax.
+
+All work must correspond to a task in the backlog. If the user asks for something that isn't tracked, create a task first, then pick it up. When the user says "let's keep working" without specifying a task, pick up the next queued task (top of the queue).
+
+## Quick Reference
+
+Commands use `ranger <noun> <verb>` structure. Top-level nouns: `backlog` (alias `b`), `task` (alias `t`), `comment` (alias `c`), `tag`, `blocker`.
+
+```bash
+# Backlogs
+ranger backlog list                  # List all backlogs
+
+# Tasks
+ranger task create --backlog <name> "Title"   # Create a task
+ranger task create --backlog <name> --state queued --description "..." "Title"
+ranger task list --backlog <name>             # List tasks
+ranger task show <key>                        # Show task details
+ranger task edit <key> --state <state>        # Change task state
+ranger task move <key> -B <other>             # Reorder: place before another task
+ranger task move <key> -A <other>             # Reorder: place after another task
+ranger task delete <key>                      # Delete a task
+```
+
+Task states for `--state`: `icebox`, `queued`, `in_progress`, `done`.
+
+The `RANGER_DEFAULT_BACKLOG` env var sets the default `--backlog` value so you can omit it.
+
+Task keys are short prefixes (e.g. `tl`) of longer IDs — use just enough to be unique. There is no `--top` or `--bottom` flag; to move to the top, use `-B` with the first task's key.
+
+## Conventions
+
+- **Icebox**: ideas, not committed to
+- **Queued**: committed, ordered by priority (top = most important)
+- **In Progress**: actively being worked on
+- **Done**: finished
+
+Top of the queue = most important. Bias toward quick wins — small easy tasks should be prioritized higher by default.
+
+## Workflow
+
+- Don't mark a task **done** until the changes are committed. Commit first, then transition.
+
+---
+
+*This is a self-improving skill — see the `self-improving-skills` skill.*
