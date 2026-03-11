@@ -17,14 +17,31 @@ glide.keymaps.set("normal", "zz", setZoom(() => 1));
 
 /* new pages */
 
+function isUrl(text: string): boolean {
+  try {
+    const url = new URL(text);
+    return ["http:", "https:", "file:"].includes(url.protocol);
+  } catch {
+    return false;
+  }
+}
+
 glide.keymaps.set("normal", "p", async ({ tab_id }) => {
-  const url = await navigator.clipboard.readText();
-  await browser.tabs.update(tab_id, { url });
+  const text = (await navigator.clipboard.readText()).trim();
+  if (isUrl(text)) {
+    await browser.tabs.update(tab_id, { url: text });
+  } else {
+    await browser.search.search({ query: text, tabId: tab_id });
+  }
 });
 
 glide.keymaps.set("normal", "P", async () => {
-  const url = await navigator.clipboard.readText();
-  await browser.tabs.create({ url });
+  const text = (await navigator.clipboard.readText()).trim();
+  if (isUrl(text)) {
+    await browser.tabs.create({ url: text });
+  } else {
+    await browser.search.search({ query: text, disposition: "NEW_TAB" });
+  }
 });
 
 glide.keymaps.set("normal", "H", "back");
