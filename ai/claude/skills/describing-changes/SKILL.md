@@ -1,6 +1,7 @@
 ---
 name: describing-changes
 description: Use when drafting any explanation of changes (commit messages, PRs, code reviews, docs)
+user-invocable: false
 ---
 
 # Describing Changes

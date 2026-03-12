@@ -2,6 +2,7 @@
 name: warm-handoff
 description: Use when the user asks to "warm handoff", "/warm-handoff", "hand off this thread", or "redirect this to". Reads a Slack thread and proposes a warm handoff message for the target channel.
 argument-hint: <slack-thread-url> <#target-channel>
+disable-model-invocation: true
 ---
 
 # Warm Handoff

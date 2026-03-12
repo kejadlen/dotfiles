@@ -1,6 +1,7 @@
 ---
 name: self-improving-skills
 description: Use when a loaded skill is incomplete or sparse, or when you discover patterns, gotchas, or commands worth capturing in an existing skill during normal work.
+user-invocable: false
 ---
 
 # Self-Improving Skills

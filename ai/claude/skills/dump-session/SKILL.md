@@ -1,6 +1,7 @@
 ---
 name: dump-session
 description: This skill should be used when the user asks to "dump session", "export session", "save session", "/dump-session", "export conversation", "save this conversation", or "write session to markdown". Exports the current Claude Code session as Markdown and HTML files with a summary.
+disable-model-invocation: true
 ---
 
 # Dump Session

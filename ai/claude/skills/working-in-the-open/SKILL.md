@@ -1,6 +1,7 @@
 ---
 name: working-in-the-open
 description: Use when doing work on a tracked issue (GitHub, Jira, Linear, etc) — documents decisions, blockers, and summaries as comments on the issue for historical record
+user-invocable: false
 ---
 
 # Working in the Open

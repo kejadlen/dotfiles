@@ -2,6 +2,7 @@
 name: galahad
 description: Use when running tests, fixing type errors, or improving coverage - prioritizes 100% green checks as a trustworthy signal
 source: https://github.com/lambdamechanic/skills/blob/main/galahad/SKILL.md
+user-invocable: false
 ---
 
 # Coding Agent Quality Rules (Galahad Principle)
