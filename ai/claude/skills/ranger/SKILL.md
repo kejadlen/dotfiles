@@ -28,6 +28,13 @@ ranger task move <key> -A <other>             # Reorder: place after another tas
 ranger task delete <key>                      # Delete a task
 ```
 
+```bash
+# Tags (created implicitly — no "tag create" command; adding a new name creates the tag)
+ranger tag list                              # List all tags
+ranger tag add <task-key> <tag-name>         # Add a tag to a task (creates tag if new)
+ranger tag remove <task-key> <tag-name>      # Remove a tag from a task (alias: rm)
+```
+
 Task states for `--state`: `icebox`, `queued`, `in_progress`, `done`.
 
 The `RANGER_DEFAULT_BACKLOG` env var sets the default `--backlog` value so you can omit it.

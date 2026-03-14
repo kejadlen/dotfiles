@@ -23,11 +23,15 @@ Once you've figured it out, that's exactly the kind of thing to capture in the s
 
 ## When to Improve
 
+- **You had to check `--help`.** If the skill didn't have the command you needed and you had to fall back to `--help` or docs, that's the clearest signal the skill is missing something. After the task, add what you learned.
+- **You tried a command that doesn't exist.** If you assumed a subcommand or flag existed and it failed, capture the correct approach so the mistake isn't repeated.
 - Skill is sparse or missing sections you'd expect
 - You discover a command, pattern, or gotcha not yet documented
 - You hit an error and figure out the fix
 - An existing section is wrong or outdated
 - You find a workflow that works well and isn't captured
+
+**Do it immediately after the task — don't wait to be asked.** If the user has to say "update the skill," you've already missed the cue.
 
 ## How to Improve
 
