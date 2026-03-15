@@ -1,4 +1,5 @@
 agent/*
 !agent/extensions/
 !agent/keybindings.json
+!agent/pinch.json
 !agent/settings.json

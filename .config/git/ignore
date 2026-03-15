@@ -34,3 +34,6 @@ Session.vim
 # Claude
 CLAUDE.local.md
 **/.claude/settings.local.json
+
+# pinch
+.pi/pinch/

@@ -1,0 +1,7 @@
+{
+  "learning-opportunities": {
+    "repo": "https://github.com/DrCatHicks/learning-opportunities",
+    "ref": "main",
+    "plugins": ["learning-opportunities"]
+  }
+}

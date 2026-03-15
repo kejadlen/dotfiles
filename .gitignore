@@ -21,7 +21,6 @@ private
 !.config/jj
 !.config/nvim
 !.config/neovide
-!.config/pinch
 !.config/pip
 !.config/ripgrep
 !.config/sketchybar
@@ -36,16 +35,6 @@ private
 
 .docker/*
 !.docker/config.json
-
-# yes, this is ridiculous, but since we have *.local
-# ignored above and git doesn't look inside ignored
-# dirs, we have some hoops to jump through here
-!.local/
-.local/*
-!.local/share
-.local/share/*
-!.local/share/pinch
-.local/share/pinch/plugins
 
 .ssh/*
 !.ssh/config
