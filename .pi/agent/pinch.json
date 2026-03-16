@@ -3,5 +3,10 @@
     "repo": "https://github.com/DrCatHicks/learning-opportunities",
     "ref": "main",
     "plugins": ["learning-opportunities"]
+  },
+  "claude-plugins-official": {
+    "repo": "https://github.com/anthropics/claude-plugins-official",
+    "ref": "main",
+    "plugins": ["playground"]
   }
 }

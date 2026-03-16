@@ -43,6 +43,18 @@ tea comment -r alpha/dotfiles -l git.kejadlen.dev <index> "Comment body"
 - **No secrets in repo**: API keys are managed via 1Password / `op` CLI, not committed. `.envrc` is a local-only file (not tracked) and should never be committed.
 - **Submodules**: Use shallow clones with `--depth 1` when adding submodules.
 
+## Pinch (Plugin Manager)
+
+Pinch is a pi extension (`.pi/agent/extensions/pinch.ts`) that manages plugins from git repos. It caches repo clones in `$XDG_CACHE_HOME/pinch/` and copies only the selected plugins into `.pi/pinch/`, registering their skills automatically.
+
+- **Global manifest**: `~/.pi/agent/pinch.json` — applies everywhere
+- **Project manifest**: `.pi/pinch.json` — per-project, overrides global by name
+- **Lock file**: `.pi/pinch-lock.json` — exact commits, auto-generated
+- **Commands**: `/pinch:install`, `/pinch:update`, `/pinch:status`
+- **Skill**: `/skill:pinch` for full usage docs
+
+To add a plugin, add an entry to `pinch.json` and run `/pinch:install`. See the pinch skill for manifest format and troubleshooting.
+
 ## Open Issues
 
 Track work at: https://git.kejadlen.dev/alpha/dotfiles/issues
