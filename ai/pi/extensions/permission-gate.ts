@@ -316,7 +316,16 @@ function isAllowed(toolName: string, input: Record<string, unknown>, ctx: Extens
 // Extension entry point
 // ---------------------------------------------------------------------------
 
+function isContainer(): boolean {
+  try { fs.accessSync("/.dockerenv"); return true; } catch {}
+  try { fs.accessSync("/run/.containerenv"); return true; } catch {}
+  if (process.env.container || process.env.CONTAINER) return true;
+  return false;
+}
+
 export default function(pi: ExtensionAPI) {
+  if (isContainer()) return;
+
   pi.on("session_start", async (_event, ctx) => {
     // Reset state each session
     allowedCommands = BASE_COMMANDS;
