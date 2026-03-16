@@ -1,28 +1,13 @@
 ---
-name: mcporter-slack
+name: slack
 description: Use when searching Slack, finding messages, sending messages, checking channel history, getting thread replies, listing channels, or getting user profiles via mcporter CLI.
 ---
 
-# Slack via mcporter
+# Slack
 
-Use the mcporter CLI to interact with Slack. Run commands via Bash.
+Slack tools via mcporter. Prefix all calls with `slack.`.
 
 *This is a self-improving skill — see the `self-improving-skills` skill.*
-
-## Syntax
-
-```bash
-mcporter call slack.<tool> key=value key2=value2
-```
-
-Timestamp parameters (`thread_ts`, `oldest`, `latest`, `ts`,
-`timestamp`) are typed as strings in the schema, but `key=value` syntax
-coerces them to numbers. Use `--args` JSON for any call that includes
-timestamps:
-
-```bash
-mcporter call slack.get_thread_messages --args '{"channel":"C0ABC123","thread_ts":"1772034831.268949"}'
-```
 
 ## Available tools
 
@@ -44,6 +29,9 @@ mcporter call slack.get_thread_messages --args '{"channel":"C0ABC123","thread_ts
 | `get_reactions` | Get emoji reactions on a message |
 | `add_reaction` | Add an emoji reaction to a message |
 
+Run `mcporter list slack --schema` if a tool's parameters aren't
+listed here.
+
 ## Channels
 
 Most tools accept a `channel` parameter that takes either a channel
@@ -51,17 +39,6 @@ name (`general`, `#general`) or a channel ID (`C1234567890`). Channel
 names are resolved automatically.
 
 For private channels, the Slack MCP app must be invited to the channel.
-
-## Common mistakes
-
-- The `@` prefix on `from:` and `to:` modifiers doesn't work reliably.
-  Use bare names: `from:me to:martin.emde`, not `from:@me to:@Martin Emde`.
-- Parentheses in OR queries silently fail. Write `from:me OR to:me`,
-  not `(from:me OR to:me)`.
-- Passing timestamps as `key=value` coerces them to numbers and fails
-  schema validation. Use `--args` JSON instead.
-- Using `message` instead of `text` in `send_message`. The parameter
-  is `text`.
 
 ## Search queries
 
@@ -82,10 +59,7 @@ or `timestamp`), `sort_dir` (`asc` or `desc`).
 ### Find and read a conversation
 
 ```bash
-# Search for messages.
 mcporter call slack.search query="keyword in:#channel"
-
-# Read a thread (use --args for timestamps).
 mcporter call slack.get_thread_messages --args '{"channel":"C0ABC123","thread_ts":"1234567890.123456"}'
 ```
 
@@ -107,7 +81,7 @@ mcporter call slack.fetch --args '{"channel":"general","ts":"1234567890.123456"}
 # New message.
 mcporter call slack.send_message channel=general text="Hello"
 
-# Thread reply (use --args for timestamps).
+# Thread reply.
 mcporter call slack.send_message --args '{"channel":"C0ABC123","text":"Reply","thread_ts":"1234567890.123456"}'
 
 # Broadcast reply (also posts to channel).
@@ -124,4 +98,14 @@ mcporter call slack.add_reaction --args '{"channel":"general","timestamp":"12345
 
 Slack timestamps look like `1234567890.123456` (Unix seconds with
 microseconds). They appear as `ts`, `thread_ts`, or `message_ts` in
-message objects. Always pass them as strings via `--args` JSON.
+message objects. Always pass them via `--args` JSON (see the `mcporter`
+skill for why).
+
+## Common mistakes
+
+- The `@` prefix on `from:` and `to:` modifiers doesn't work reliably.
+  Use bare names: `from:me to:martin.emde`, not `from:@me to:@Martin Emde`.
+- Parentheses in OR queries silently fail. Write `from:me OR to:me`,
+  not `(from:me OR to:me)`.
+- Using `message` instead of `text` in `send_message`. The parameter
+  is `text`.
