@@ -26,7 +26,7 @@
       (ok :symlink dest src))))
 
 (ok :symlink "~/.dotfiles/ai/claude" "~/.claude")
-(ok :symlink "~/.dotfiles/ai/AI.md" "~/.claude/CLAUDE.md")
+(ok :symlink "~/.dotfiles/ai/_AGENTS.md" "~/.claude/CLAUDE.md")
 
 (ok :directory "~/.pi")
 (ok :symlink "~/.dotfiles/ai/pi" "~/.pi/agent")
