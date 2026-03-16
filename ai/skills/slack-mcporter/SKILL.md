@@ -5,36 +5,56 @@ description: Use when searching Slack, finding messages, sending messages, check
 
 # Slack
 
-Slack tools via mcporter. Prefix all calls with `slack.`. Run
-`mcporter list slack --schema` for the full tool list and parameters.
+Official Slack MCP via mcporter. Prefix all calls with `slack.`. Run
+`mcporter list slack --schema` for full tool details.
 
 *This is a self-improving skill — see the `self-improving-skills` skill.*
 
-## Channels
+## Tools
 
-Most tools accept `channel` as a name (`general`) or ID (`C1234567890`).
-Private channels require the Slack MCP app to be invited.
+| Tool | Purpose |
+|------|---------|
+| `slack_send_message` | Send to a channel or DM (use user_id as channel_id for DMs) |
+| `slack_send_message_draft` | Create a draft for user review before sending |
+| `slack_schedule_message` | Schedule a message (`post_at` is a Unix timestamp) |
+| `slack_search_public` | Search public channels only |
+| `slack_search_public_and_private` | Search public and private channels |
+| `slack_search_channels` | Find channels by name |
+| `slack_search_users` | Find users by name or email |
+| `slack_read_channel` | Read channel history |
+| `slack_read_thread` | Read thread replies (requires `channel_id` + `message_ts`) |
+| `slack_read_user_profile` | Look up a user profile (defaults to current user) |
+| `slack_create_canvas` | Create a canvas |
+| `slack_update_canvas` | Append, prepend, or replace canvas content |
+| `slack_read_canvas` | Read a canvas |
 
 ## Search
 
-```bash
-mcporter call slack.search query="from:user OR to:user after:2025-01-01 before:2025-01-07"
+Two search tools: `slack_search_public` for public channels only,
+`slack_search_public_and_private` for both. Query syntax:
+
+```
+from:<@User> in:#channel important topic
 ```
 
-Modifiers: `from:`, `to:`, `mentions:`, `in:#channel`, `before:`,
-`after:`, `on:` (YYYY-MM-DD or `today`), `is:thread`, `has:pin`.
+The `after` and `before` params take **Unix timestamps**, not date
+strings. Use `sort` (`score`/`timestamp`) and `sort_dir` (`asc`/`desc`)
+to control ordering. Max 20 results per call; paginate with `cursor`.
 
-Optional: `count` (default 20, max 100), `sort` (`score`/`timestamp`),
-`sort_dir` (`asc`/`desc`).
+## IDs
+
+Most tools require channel and user IDs, not names. Look them up first
+with `slack_search_channels` and `slack_search_users`.
+
+## Sending messages
+
+Use `slack_send_message_draft` when the user hasn't reviewed the
+message content. The `message` param takes standard markdown. Thread
+replies need `thread_ts`; set `reply_broadcast=true` to also post to
+the channel. Cannot post to Slack Connect channels.
 
 ## Timestamps
 
-Slack timestamps (`1234567890.123456`) appear as `ts`, `thread_ts`, or
-`message_ts`. Always pass via `--args` JSON (see the `mcporter` skill).
-
-## Common mistakes
-
-- Bare names in search modifiers: `from:me`, not `from:@me`.
-- No parentheses in OR queries: `from:me OR to:me`, not
-  `(from:me OR to:me)` (silently returns zero results).
-- `send_message` uses `text`, not `message`.
+Slack message timestamps (`1234567890.123456`) appear as `ts`,
+`thread_ts`, or `message_ts`. Always pass via `--args` JSON (see the
+`mcporter` skill).
