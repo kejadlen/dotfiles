@@ -28,6 +28,9 @@
 (ok :symlink "~/.dotfiles/ai/claude" "~/.claude")
 (ok :symlink "~/.dotfiles/ai/AI.md" "~/.claude/CLAUDE.md")
 
+(ok :directory "~/.pi")
+(ok :symlink "~/.dotfiles/ai/pi" "~/.pi/agent")
+
 ;; moved to .config/git/config
 (no :symlink :$HOME/.gitconfig :$HOME/.dotfiles/.gitconfig)
 
