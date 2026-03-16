@@ -43,5 +43,14 @@
 
 (ok :dock)
 
+;; Hammerspoon uses Lua 5.4, but brew's lua formula tracks the latest
+;; version. Configure luarocks to find lua@5.4 and install fennel there
+;; so Hammerspoon can require it.
+(sh! :luarocks :--lua-version=5.4 :--local :config :variables.LUA
+     :/opt/homebrew/opt/lua@5.4/bin/lua)
+(sh! :luarocks :--lua-version=5.4 :--local :config :variables.LUA_DIR
+     :/opt/homebrew/opt/lua@5.4)
+(sh! :luarocks :--lua-version=5.4 :--local :install :fennel)
+
 ;; TODO
 ;; - install numderline fonts

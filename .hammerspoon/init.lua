@@ -1,4 +1,5 @@
--- Handle mismatch between homebrew's version of Lua and hammerspoon's version
+-- Hammerspoon embeds Lua 5.4 but brew's lua tracks the latest version.
+-- Use luarocks to find packages installed for the right Lua version.
 local lVer = _VERSION:match("Lua (.+)$")
 local luarocks = "/opt/homebrew/bin/luarocks"
 package.path = package.path .. ";" .. hs.execute(
