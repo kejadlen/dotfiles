@@ -1,6 +1,7 @@
 #!/bin/sh
 
 CALENDAR=alpha.chen@gusto.com
+PIN_FILE="${TMPDIR}meetingbar_pin"
 
 if [ "$BUTTON" = "right" ]; then
     # Toggle popup off if already open
@@ -11,6 +12,11 @@ if [ "$BUTTON" = "right" ]; then
     fi
 
     JSON=$("$CONFIG_DIR/meetingbar.swift" "$CALENDAR")
+
+    PINNED_ID=""
+    if [ -f "$PIN_FILE" ]; then
+        PINNED_ID=$(cat "$PIN_FILE")
+    fi
 
     # Remove old popup items
     sketchybar --remove '/meetingbar\.popup\./' 2>/dev/null
@@ -27,32 +33,28 @@ if [ "$BUTTON" = "right" ]; then
         while IFS= read -r EVENT; do
             TIME=$(echo "$EVENT" | jq -r '.time')
             TITLE=$(echo "$EVENT" | jq -r '.title')
-            URL=$(echo "$EVENT" | jq -r '.url // empty')
+            EVENT_ID=$(echo "$EVENT" | jq -r '.id')
             CURRENT=$(echo "$EVENT" | jq -r '.current')
             ITEM_NAME="meetingbar.popup.$INDEX"
 
             LABEL="$TIME  $TITLE"
             ICON=""
-            if [ "$CURRENT" = "true" ]; then
+            if [ "$EVENT_ID" = "$PINNED_ID" ]; then
+                ICON="📌 "
+            elif [ "$CURRENT" = "true" ]; then
                 ICON="▶ "
             fi
 
-            if [ -n "$URL" ]; then
-                sketchybar --add item "$ITEM_NAME" popup.meetingbar \
-                           --set "$ITEM_NAME" \
-                                 icon="$ICON" \
-                                 icon.padding_left=6 \
-                                 label="$LABEL" \
-                                 label.padding_right=6 \
-                                 click_script="open '$URL'; sketchybar --set meetingbar popup.drawing=off"
-            else
-                sketchybar --add item "$ITEM_NAME" popup.meetingbar \
-                           --set "$ITEM_NAME" \
-                                 icon="$ICON" \
-                                 icon.padding_left=6 \
-                                 label="$LABEL" \
-                                 label.padding_right=6
-            fi
+            # Toggle pin: unpin if already pinned, pin otherwise.
+            CLICK="PIN=\${TMPDIR}meetingbar_pin; if [ -f \"\$PIN\" ] && [ \"\$(cat \"\$PIN\")\" = '${EVENT_ID}' ]; then rm \"\$PIN\"; else printf '%s' '${EVENT_ID}' > \"\$PIN\"; fi; sketchybar --set meetingbar popup.drawing=off; sketchybar --update"
+
+            sketchybar --add item "$ITEM_NAME" popup.meetingbar \
+                       --set "$ITEM_NAME" \
+                             icon="$ICON" \
+                             icon.padding_left=6 \
+                             label="$LABEL" \
+                             label.padding_right=6 \
+                             click_script="$CLICK"
 
             INDEX=$((INDEX + 1))
         done <<< "$(echo "$JSON" | jq -c '.events[]')"
@@ -60,7 +62,7 @@ if [ "$BUTTON" = "right" ]; then
 
     sketchybar --set meetingbar popup.drawing=on
 else
-    # Left click: open the primary event's meeting URL
+    # Left click: open the displayed event's meeting URL.
     JSON=$("$CONFIG_DIR/meetingbar.swift" "$CALENDAR")
     URL=$(echo "$JSON" | jq -r '.primary.url // empty')
 

@@ -7,8 +7,8 @@ Output format:
 {
   "primary": { "display": "Standup ends in 5 minutes", "url": "https://..." },
   "events": [
-    { "time": "9:00 - 9:30 AM", "title": "Standup", "url": "https://..." },
-    { "time": "10:00 - 11:00 AM", "title": "Design Review", "url": null }
+    { "time": "9:00 - 9:30 AM", "title": "Standup", "display": "Standup ends in 5 minutes", "url": "https://...", "current": true, "id": "ABC123" },
+    { "time": "10:00 - 11:00 AM", "title": "Design Review", "display": "Design Review in 35 minutes", "url": null, "current": false, "id": "DEF456" }
   ]
 }
 
@@ -231,8 +231,21 @@ let calendarTitle = CommandLine.arguments[1]
 do {
     let manager = try MeetingBar(calendarTitle: calendarTitle)
     let events = try manager.remainingEventsToday()
-    let primary = manager.primaryEvent(from: events)
+    var primary = manager.primaryEvent(from: events)
     let currentDate = Date()
+
+    // Check for pinned event override.
+    let tmpDir = ProcessInfo.processInfo.environment["TMPDIR"] ?? NSTemporaryDirectory()
+    let pinPath = tmpDir + "meetingbar_pin"
+
+    if let pinnedID = try? String(contentsOfFile: pinPath, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines),
+       !pinnedID.isEmpty {
+        if let pinnedEvent = events.first(where: { $0.eventIdentifier == pinnedID }) {
+            primary = pinnedEvent
+        } else {
+            try? FileManager.default.removeItem(atPath: pinPath)
+        }
+    }
 
     let timeFormatter = DateFormatter()
     timeFormatter.dateFormat = "h:mm a"
@@ -264,7 +277,13 @@ do {
         let title = event.title ?? "Untitled Event"
         let url = extractMeetingURL(from: event)
         let isCurrent = currentDate >= event.startDate && currentDate <= event.endDate
-        eventJSONs.append("{ \"time\": \(jsonString(time)), \"title\": \(jsonString(title)), \"url\": \(jsonStringOrNull(url)), \"current\": \(isCurrent) }")
+        let display: String
+        if isCurrent {
+            display = "\(title) ends \(formatTimeUntil(event.endDate, from: currentDate))"
+        } else {
+            display = "\(title) \(formatTimeUntil(event.startDate, from: currentDate))"
+        }
+        eventJSONs.append("{ \"time\": \(jsonString(time)), \"title\": \(jsonString(title)), \"display\": \(jsonString(display)), \"url\": \(jsonStringOrNull(url)), \"current\": \(isCurrent), \"id\": \(jsonString(event.eventIdentifier)) }")
     }
 
     let eventsJSON = "[\(eventJSONs.joined(separator: ", "))]"
