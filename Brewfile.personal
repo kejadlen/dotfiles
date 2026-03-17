@@ -5,10 +5,10 @@ cask "arq"
 cask "autodesk-fusion"
 cask "calibre"
 cask "daisydisk"
-# cask "discord"
+cask "discord"
 cask "fantastical"
 cask "kicad"
-cask "mailmate"
+cask "mailmate@beta"
 cask "prusaslicer"
 # cask "qlmarkdown"
 # cask "qlstephen"
@@ -25,8 +25,8 @@ cask "vlc"
 cask "zed"
 cask "zotero"
 
-mas "GoodNotes", id: 1444383602
+# mas "GoodNotes", id: 1444383602
 mas "Little Snitch Mini", id: 1629008763
-mas "PDF Viewer", id: 1120099014
+# mas "PDF Viewer", id: 1120099014
 mas "Shareful", id: 1522267256
 mas "Xcode", id: 497799835

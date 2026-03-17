@@ -1,4 +1,6 @@
 tap "kejadlen/tap", "https://git.kejadlen.dev/alpha/homebrew-tap.git"
+tap "felixkratz/formulae"
+tap "nikitabobko/tap"
 
 brew "ansible"
 brew "chruby"
@@ -9,7 +11,6 @@ brew "entr"
 brew "eza"
 brew "ffmpeg"
 brew "git"
-brew "jj"
 brew "lua@5.4"
 brew "luarocks"
 brew "mas"
@@ -35,11 +36,11 @@ brew "yamllint"
 
 brew "tree-sitter", args: ["HEAD"] # install this before neovim
 brew "neovim", args: ["HEAD"]
-brew "universal-ctags", args: ["HEAD"]
+brew "universal-ctags", args: ["HEAD"] # don't remember why this is installing from head
 
 # install from taps
 
-brew "fabianishere/personal/pam_reattach"
+# brew "fabianishere/personal/pam_reattach" # doesn't exist anymore - don't think I need this?
 brew "felixkratz/formulae/sketchybar"
 brew "kejadlen/tap/fennel-ls", args: ["HEAD"]
 
@@ -51,11 +52,13 @@ cask "1password"
 cask "1password-cli"
 cask "alfred"
 cask "cleanshot"
+cask "dash"
 cask "firefox@developer-edition"
 cask "ghostty"
+cask "glide-browser"
 cask "hammerspoon"
 cask "keyboardcleantool"
-cask "neovide"
+cask "neovim-app"
 cask "obsidian"
 cask "orbstack"
 cask "sf-symbols"
