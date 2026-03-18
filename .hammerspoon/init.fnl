@@ -120,12 +120,9 @@
                             "/?"))
       url-patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
                     [safari-patterns handlers.safari]]
-      url-redir-decoders [[:reddit
-                           "://www%.reddit%.com"
-                           "://old.reddit.com"
-                           true]
-                          [:xcancel "://x%.com" "://xcancel.com" true]
-                          [:trurl-sanitize #(sanitize-url $4) nil true]]]
+      url-redir-decoders [[:trurl-sanitize #(sanitize-url $4) nil true]
+                          [:reddit "://www%.reddit%.com" "://old.reddit.com" true]
+                          [:xcancel "://x%.com" "://xcancel.com" true]]]
   (Install:andUse :URLDispatcher {:config {:url_patterns url-patterns
                                            :url_redir_decoders url-redir-decoders
                                            :default_handler little-ff.open
