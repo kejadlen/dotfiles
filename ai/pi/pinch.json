@@ -8,5 +8,10 @@
     "repo": "https://github.com/anthropics/claude-plugins-official",
     "ref": "main",
     "plugins": ["playground"]
+  },
+  "superpowers": {
+    "repo": "https://github.com/obra/superpowers",
+    "ref": "main",
+    "plugins": ["superpowers"]
   }
 }

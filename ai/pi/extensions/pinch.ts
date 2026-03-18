@@ -1,50 +1,39 @@
 /**
- * Pinch — per-project plugin manager for pi
+ * Pinch — scoped plugin manager for pi
  *
- * Manages Claude plugins from git repos declared in pinch.json manifests.
- * Global manifest: ~/.pi/agent/pinch.json
- * Project manifest: .pi/pinch.json (overrides global by name)
+ * Manages plugins from git repos declared in pinch.json manifests.
+ * Two manifest locations define two scopes:
  *
- * Repos are cloned into $XDG_CACHE_HOME/pinch/<source>/ as a shared cache.
- * Only the requested plugins are copied into the project at
- * .pi/pinch/<source>/<plugin>/. This keeps projects lightweight and works
- * in bind-mounted containers (no symlinks pointing outside the mount).
+ *   ~/.pi/agent/pinch.json   → user scope (applies everywhere)
+ *   .pi/pinch.json           → project scope (per-repo)
+ *
+ * Scope determines where plugins are installed:
+ *
+ *   User scope    → ~/.pi/pinch/<source>/<plugin>/
+ *   Project scope → .pi/pinch/<source>/<plugin>/
+ *
+ * A source belongs to project scope when it appears in the project
+ * manifest (either as a new definition or referencing a global source).
+ * Sources defined only in the global manifest stay in user scope,
+ * keeping project directories free of user-specific plugins.
+ *
+ * Repos are cloned into $XDG_CACHE_HOME/pinch/<source>/ as a shared
+ * cache. Only the requested plugins are copied into the scope directory.
  *
  * Plugin location within a repo is resolved by:
  * 1. Explicit `path` field in pinch.json (e.g. "plugins")
  * 2. marketplace.json `source` field (e.g. "./plugins/playground")
  * 3. Repo root fallback (<repo>/<plugin>/)
  *
- * Manifest format (pinch.json):
+ * Lock files track exact commits per source, one per scope:
  *
- *   {
- *     "anthropic": {
- *       "repo": "https://github.com/anthropics/claude-plugins-official",
- *       "ref": "main",
- *       "plugins": ["playground", "skill-creator"]
- *     },
- *     "my-plugins": {
- *       "repo": "git@github.com:me/plugins.git",
- *       "ref": "v1.2.0",
- *       "path": "plugins",
- *       "plugins": ["my-plugin"]
- *     }
- *   }
- *
- * Plugin structure (Claude plugin convention):
- *
- *   <plugin>/
- *     .claude-plugin/plugin.json
- *     skills/<skill-name>/SKILL.md
+ *   ~/.pi/agent/pinch-lock.json   → user scope
+ *   .pi/pinch-lock.json           → project scope
  *
  * Commands:
  *   /pinch:install  — clone/fetch all sources, copy plugins, register skills
  *   /pinch:update   — pull latest for unpinned sources, re-copy plugins
  *   /pinch:status   — show installed plugins and their skills
- *
- * Lock file (.pi/pinch-lock.json) tracks exact commits per source.
- * The `ref` field in lock entries is informational only — checkout uses
- * the commit hash directly for reproducibility.
  */
 
 import * as fs from "node:fs";
@@ -55,6 +44,8 @@ import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-age
 
 // ── Types ──────────────────────────────────────────────────────────────
 
+type Scope = "user" | "project";
+
 interface PinchSource {
   repo: string;
   ref?: string;
@@ -64,6 +55,13 @@ interface PinchSource {
 
 interface PinchConfig {
   [name: string]: PinchSource;
+}
+
+/** Config split by scope — user (global-only) vs project (referenced in project manifest). */
+interface ScopedConfig {
+  user: PinchConfig;
+  project: PinchConfig;
+  errors: string[];
 }
 
 interface PinchLockEntry {
@@ -94,14 +92,24 @@ function cachedRepoDir(name: string): string {
   return path.join(cacheDir(), name);
 }
 
+/** User-scoped plugin install dir (~/.pi/pinch/) */
+function userPinchDir(): string {
+  return path.join(os.homedir(), ".pi", "pinch");
+}
+
 /** Project-local plugin install dir */
 function projectPinchDir(cwd: string): string {
   return path.join(cwd, ".pi", "pinch");
 }
 
-/** Installed plugin dir within the project */
-function installedPluginDir(cwd: string, sourceName: string, pluginName: string): string {
-  return path.join(projectPinchDir(cwd), sourceName, pluginName);
+/** Root install dir for a given scope */
+function pinchDir(scope: Scope, cwd: string): string {
+  return scope === "user" ? userPinchDir() : projectPinchDir(cwd);
+}
+
+/** Installed plugin dir */
+function installedPluginDir(scope: Scope, cwd: string, sourceName: string, pluginName: string): string {
+  return path.join(pinchDir(scope, cwd), sourceName, pluginName);
 }
 
 function globalManifestPath(): string {
@@ -112,8 +120,16 @@ function projectManifestPath(cwd: string): string {
   return path.join(cwd, ".pi", "pinch.json");
 }
 
-function lockPath(cwd: string): string {
+function userLockPath(): string {
+  return path.join(os.homedir(), ".pi", "agent", "pinch-lock.json");
+}
+
+function projectLockPath(cwd: string): string {
   return path.join(cwd, ".pi", "pinch-lock.json");
+}
+
+function lockPath(scope: Scope, cwd: string): string {
+  return scope === "user" ? userLockPath() : projectLockPath(cwd);
 }
 
 // ── Manifest / Lock ───────────────────────────────────────────────────
@@ -130,68 +146,91 @@ function readJsonFile(filePath: string): Record<string, any> | null {
 }
 
 /**
- * Merge global (~/.pi/agent/pinch.json) and project (.pi/pinch.json)
- * manifests.
+ * Read and scope-split global (~/.pi/agent/pinch.json) and project
+ * (.pi/pinch.json) manifests.
  *
- * - Global entries must have `repo` and `plugins`.
- * - Project entries referencing a global key can only set `plugins` —
- *   `repo`, `ref`, and `path` are disallowed (the global definition owns those).
- * - Project entries with a new key are full source definitions (must have `repo`).
+ * Scope rules:
+ * - A source that appears only in the global manifest → user scope.
+ * - A source that appears in the project manifest (new or referencing
+ *   a global source) → project scope.
+ *
+ * Global entries must have `repo` and `plugins`.
+ * Project entries referencing a global key can only set `plugins` —
+ * `repo`, `ref`, and `path` are disallowed (the global definition owns those).
+ * Project entries with a new key are full source definitions (must have `repo`).
  *
  * Returns null if no valid config is found.
  */
-interface ConfigResult {
-  config: PinchConfig;
-  errors: string[];
-}
-
-function readConfig(cwd: string): ConfigResult | null {
+function readConfig(cwd: string): ScopedConfig | null {
   const globalRaw = readJsonFile(globalManifestPath());
   const projectRaw = readJsonFile(projectManifestPath(cwd));
   if (!globalRaw && !projectRaw) return null;
 
-  const config: PinchConfig = {};
+  const globalSources: PinchConfig = {};
   const errors: string[] = [];
 
-  // Load global entries (must have repo)
+  // Parse global entries (must have repo)
   if (globalRaw) {
     for (const [name, entry] of Object.entries(globalRaw)) {
       if (typeof entry !== "object" || entry === null) continue;
       if (!("repo" in entry) || !("plugins" in entry)) continue;
-      config[name] = entry as PinchSource;
+      globalSources[name] = entry as PinchSource;
     }
   }
 
-  // Merge project entries
+  const user: PinchConfig = {};
+  const project: PinchConfig = {};
+  const projectNames = new Set<string>();
+
+  // Parse project entries, tracking which names the project claims
   if (projectRaw) {
     for (const [name, entry] of Object.entries(projectRaw)) {
       if (typeof entry !== "object" || entry === null) continue;
       if (!("plugins" in entry)) continue;
+      projectNames.add(name);
 
-      if (name in config) {
+      if (name in globalSources) {
         // Referencing a global source — only plugins allowed
         if ("repo" in entry || "ref" in entry || "path" in entry) {
           errors.push(`${name}: project manifest cannot override repo/ref/path of global source — only plugins allowed`);
           continue;
         }
-        config[name] = { ...config[name], plugins: (entry as PinchSource).plugins };
+        project[name] = { ...globalSources[name], plugins: (entry as PinchSource).plugins };
       } else {
         // New project-only source — full definition required
         if (!("repo" in entry)) {
           errors.push(`${name}: source must have repo`);
           continue;
         }
-        config[name] = entry as PinchSource;
+        project[name] = entry as PinchSource;
       }
     }
   }
 
-  if (Object.keys(config).length === 0 && errors.length === 0) return null;
-  return { config, errors };
+  // Global sources not referenced by the project stay in user scope
+  for (const [name, source] of Object.entries(globalSources)) {
+    if (!projectNames.has(name)) {
+      user[name] = source;
+    }
+  }
+
+  const total = Object.keys(user).length + Object.keys(project).length;
+  if (total === 0 && errors.length === 0) return null;
+  return { user, project, errors };
 }
 
-function readLock(cwd: string): PinchLock {
-  const p = lockPath(cwd);
+/** Flat view of all sources across both scopes. */
+function allSources(sc: ScopedConfig): PinchConfig {
+  return { ...sc.user, ...sc.project };
+}
+
+/** Determine which scope a source belongs to. */
+function sourceScope(sc: ScopedConfig, name: string): Scope {
+  return name in sc.project ? "project" : "user";
+}
+
+function readLock(scope: Scope, cwd: string): PinchLock {
+  const p = lockPath(scope, cwd);
   if (!fs.existsSync(p)) return {};
   try {
     return JSON.parse(fs.readFileSync(p, "utf-8")) as PinchLock;
@@ -200,9 +239,10 @@ function readLock(cwd: string): PinchLock {
   }
 }
 
-function writeLock(cwd: string, lock: PinchLock): void {
-  fs.mkdirSync(path.dirname(lockPath(cwd)), { recursive: true });
-  fs.writeFileSync(lockPath(cwd), JSON.stringify(lock, null, 2) + "\n", "utf-8");
+function writeLock(scope: Scope, cwd: string, lock: PinchLock): void {
+  const p = lockPath(scope, cwd);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, JSON.stringify(lock, null, 2) + "\n", "utf-8");
 }
 
 // ── Git operations ─────────────────────────────────────────────────────
@@ -361,16 +401,16 @@ function copyDir(src: string, dest: string): void {
 }
 
 /**
- * Copy a plugin from the cache into the project.
+ * Copy a plugin from the cache into the appropriate scope directory.
  * Removes the old copy first to ensure a clean state.
  */
-function installPlugin(cwd: string, sourceName: string, source: PinchSource, plugin: string): { ok: boolean; error?: string } {
+function installPlugin(scope: Scope, cwd: string, sourceName: string, source: PinchSource, plugin: string): { ok: boolean; error?: string } {
   const src = cachedPluginDir(sourceName, source, plugin);
   if (!fs.existsSync(src)) {
     return { ok: false, error: `plugin "${plugin}" not found in repo` };
   }
 
-  const dest = installedPluginDir(cwd, sourceName, plugin);
+  const dest = installedPluginDir(scope, cwd, sourceName, plugin);
   fs.rmSync(dest, { recursive: true, force: true });
   copyDir(src, dest);
   return { ok: true };
@@ -379,11 +419,10 @@ function installPlugin(cwd: string, sourceName: string, source: PinchSource, plu
 // ── Cleanup ────────────────────────────────────────────────────────────
 
 /**
- * Remove source/plugin dirs under .pi/pinch/ that are no longer in the config.
+ * Remove source/plugin dirs that are no longer in the config for a given scope.
  * Cleans up empty source directories after pruning individual plugins.
  */
-function pruneStale(config: PinchConfig, cwd: string): string[] {
-  const dir = projectPinchDir(cwd);
+function pruneScopeDir(scopeConfig: PinchConfig, dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
 
   const pruned: string[] = [];
@@ -396,13 +435,13 @@ function pruneStale(config: PinchConfig, cwd: string): string[] {
       continue;
     }
 
-    if (!config[entry]) {
-      // Entire source removed
+    if (!scopeConfig[entry]) {
+      // Entire source removed from this scope
       fs.rmSync(full, { recursive: true, force: true });
       pruned.push(entry);
     } else {
       // Prune plugins no longer in the list
-      const wantedPlugins = new Set(config[entry].plugins);
+      const wantedPlugins = new Set(scopeConfig[entry].plugins);
       for (const pluginEntry of fs.readdirSync(full)) {
         const pluginFull = path.join(full, pluginEntry);
         try {
@@ -429,6 +468,14 @@ function pruneStale(config: PinchConfig, cwd: string): string[] {
   return pruned;
 }
 
+/** Prune stale entries from both user and project scope directories. */
+function pruneStale(sc: ScopedConfig, cwd: string): string[] {
+  const pruned: string[] = [];
+  pruned.push(...pruneScopeDir(sc.user, userPinchDir()));
+  pruned.push(...pruneScopeDir(sc.project, projectPinchDir(cwd)));
+  return pruned;
+}
+
 // ── Skill discovery ────────────────────────────────────────────────────
 
 /**
@@ -450,16 +497,19 @@ function findPluginSkills(dir: string): string[] {
 }
 
 /**
- * Collect all skill paths from installed plugins (project copies).
+ * Collect all skill paths from installed plugins across both scopes.
  */
-function resolveSkillPaths(config: PinchConfig, cwd: string): string[] {
+function resolveSkillPaths(sc: ScopedConfig, cwd: string): string[] {
   const paths: string[] = [];
 
-  for (const [name, source] of Object.entries(config)) {
-    for (const plugin of source.plugins) {
-      const dir = installedPluginDir(cwd, name, plugin);
-      if (fs.existsSync(dir)) {
-        paths.push(...findPluginSkills(dir));
+  for (const scope of ["user", "project"] as Scope[]) {
+    const config = scope === "user" ? sc.user : sc.project;
+    for (const [name, source] of Object.entries(config)) {
+      for (const plugin of source.plugins) {
+        const dir = installedPluginDir(scope, cwd, name, plugin);
+        if (fs.existsSync(dir)) {
+          paths.push(...findPluginSkills(dir));
+        }
       }
     }
   }
@@ -481,87 +531,95 @@ interface SyncResult {
 type Log = (msg: string) => void;
 
 function installAll(cwd: string, update: boolean, log: Log): SyncResult {
-  const cr = readConfig(cwd);
-  if (!cr) return { installed: [], updated: [], copied: [], pruned: [], errors: ['No pinch.json manifest found'], skills: [] };
+  const sc = readConfig(cwd);
+  if (!sc) return { installed: [], updated: [], copied: [], pruned: [], errors: ['No pinch.json manifest found'], skills: [] };
 
-  const { config, errors: configErrors } = cr;
-  const lock = readLock(cwd);
-  const newLock: PinchLock = {};
-  const result: SyncResult = { installed: [], updated: [], copied: [], pruned: [], errors: [...configErrors], skills: [] };
+  const result: SyncResult = { installed: [], updated: [], copied: [], pruned: [], errors: [...sc.errors], skills: [] };
 
-  for (const [name, source] of Object.entries(config)) {
-    const repoExists = fs.existsSync(path.join(cachedRepoDir(name), ".git"));
-    const lockedCommit = lock[name]?.commit;
-    const ref = source.ref ?? "HEAD";
-    const isPinned = !!source.ref;
+  // Process each scope independently (separate lock files)
+  for (const scope of ["user", "project"] as Scope[]) {
+    const config = scope === "user" ? sc.user : sc.project;
+    if (Object.keys(config).length === 0) continue;
 
-    // Clone or fetch into cache
-    if (!repoExists) {
-      log(`cloning ${name} from ${source.repo}...`);
-      const clone = cloneOrFetch(name, source.repo);
-      if (!clone.ok) {
-        result.errors.push(`${name}: ${clone.error}`);
-        continue;
-      }
-      result.installed.push(name);
-    } else if (update) {
-      log(`fetching ${name}...`);
-      const fetch = cloneOrFetch(name, source.repo);
-      if (!fetch.ok) {
-        result.errors.push(`${name}: ${fetch.error}`);
-        if (lockedCommit) {
-          newLock[name] = { commit: lockedCommit, ...(source.ref ? { ref: source.ref } : {}) };
+    const lock = readLock(scope, cwd);
+    const newLock: PinchLock = {};
+
+    for (const [name, source] of Object.entries(config)) {
+      const repoExists = fs.existsSync(path.join(cachedRepoDir(name), ".git"));
+      const lockedCommit = lock[name]?.commit;
+      const ref = source.ref ?? "HEAD";
+      const isPinned = !!source.ref;
+
+      // Clone or fetch into cache
+      if (!repoExists) {
+        log(`cloning ${name} from ${source.repo}...`);
+        const clone = cloneOrFetch(name, source.repo);
+        if (!clone.ok) {
+          result.errors.push(`${name}: ${clone.error}`);
+          continue;
         }
+        result.installed.push(name);
+      } else if (update) {
+        log(`fetching ${name}...`);
+        const fetch = cloneOrFetch(name, source.repo);
+        if (!fetch.ok) {
+          result.errors.push(`${name}: ${fetch.error}`);
+          if (lockedCommit) {
+            newLock[name] = { commit: lockedCommit, ...(source.ref ? { ref: source.ref } : {}) };
+          }
+          continue;
+        }
+      }
+
+      // Determine which ref to checkout
+      let targetRef = ref;
+      if (!update && lockedCommit && repoExists) {
+        targetRef = lockedCommit;
+      } else if (update && isPinned) {
+        targetRef = ref;
+      } else if (update) {
+        targetRef = "HEAD";
+      }
+
+      log(`checking out ${name} at ${targetRef === ref ? ref : targetRef.slice(0, 8)}...`);
+      clearMarketplaceCache();
+      const co = checkout(name, targetRef);
+      if (!co.ok) {
+        result.errors.push(`${name}: ${co.error}`);
         continue;
+      }
+
+      const commit = co.commit ?? getCurrentCommit(name) ?? "unknown";
+
+      if (update && lockedCommit && lockedCommit !== commit) {
+        result.updated.push(name);
+      }
+
+      newLock[name] = { commit, ...(source.ref ? { ref: source.ref } : {}) };
+
+      // Copy plugins into the scope-appropriate directory
+      for (const plugin of source.plugins) {
+        log(`copying ${name}/${plugin} (${scope})...`);
+        const install = installPlugin(scope, cwd, name, source, plugin);
+        if (!install.ok) {
+          result.errors.push(`${name}: ${install.error}`);
+          continue;
+        }
+        result.copied.push(`${name}/${plugin}`);
+        const dest = installedPluginDir(scope, cwd, name, plugin);
+        const skills = findPluginSkills(dest);
+        result.skills.push(...skills.map((s) => {
+          const base = pinchDir(scope, cwd);
+          const rel = path.relative(base, s);
+          return rel.replace(/\/SKILL\.md$/, "");
+        }));
       }
     }
 
-    // Determine which ref to checkout
-    let targetRef = ref;
-    if (!update && lockedCommit && repoExists) {
-      targetRef = lockedCommit;
-    } else if (update && isPinned) {
-      targetRef = ref;
-    } else if (update) {
-      targetRef = "HEAD";
-    }
-
-    log(`checking out ${name} at ${targetRef === ref ? ref : targetRef.slice(0, 8)}...`);
-    clearMarketplaceCache();
-    const co = checkout(name, targetRef);
-    if (!co.ok) {
-      result.errors.push(`${name}: ${co.error}`);
-      continue;
-    }
-
-    const commit = co.commit ?? getCurrentCommit(name) ?? "unknown";
-
-    if (update && lockedCommit && lockedCommit !== commit) {
-      result.updated.push(name);
-    }
-
-    newLock[name] = { commit, ...(source.ref ? { ref: source.ref } : {}) };
-
-    // Copy plugins from cache into project
-    for (const plugin of source.plugins) {
-      log(`copying ${name}/${plugin}...`);
-      const install = installPlugin(cwd, name, source, plugin);
-      if (!install.ok) {
-        result.errors.push(`${name}: ${install.error}`);
-        continue;
-      }
-      result.copied.push(`${name}/${plugin}`);
-      const dest = installedPluginDir(cwd, name, plugin);
-      const skills = findPluginSkills(dest);
-      result.skills.push(...skills.map((s) => {
-        const rel = path.relative(projectPinchDir(cwd), s);
-        return rel.replace(/\/SKILL\.md$/, "");
-      }));
-    }
+    writeLock(scope, cwd, newLock);
   }
 
-  writeLock(cwd, newLock);
-  result.pruned = pruneStale(config, cwd);
+  result.pruned = pruneStale(sc, cwd);
 
   return result;
 }
@@ -573,28 +631,29 @@ export default function pinch(pi: ExtensionAPI) {
 
   pi.on("resources_discover", (event) => {
     cwd = event.cwd;
-    const cr = readConfig(cwd);
-    if (!cr) return;
+    const sc = readConfig(cwd);
+    if (!sc) return;
 
-    const skillPaths = resolveSkillPaths(cr.config, cwd);
+    const skillPaths = resolveSkillPaths(sc, cwd);
     if (skillPaths.length > 0) {
       return { skillPaths };
     }
   });
 
   pi.on("session_start", async (_event, ctx) => {
-    const cr = readConfig(cwd);
-    if (!cr) return;
+    const sc = readConfig(cwd);
+    if (!sc) return;
 
-    for (const err of cr.errors) {
+    for (const err of sc.errors) {
       ctx.ui.notify(`pinch: ${err}`, "error");
     }
 
-    const { config } = cr;
-    const skillPaths = resolveSkillPaths(config, cwd);
+    const config = allSources(sc);
+    const skillPaths = resolveSkillPaths(sc, cwd);
     const totalPlugins = Object.values(config).reduce((n, s) => n + s.plugins.length, 0);
     const installedPlugins = Object.entries(config).reduce((n, [name, source]) => {
-      return n + source.plugins.filter((p) => fs.existsSync(installedPluginDir(cwd, name, p))).length;
+      const scope = sourceScope(sc, name);
+      return n + source.plugins.filter((p) => fs.existsSync(installedPluginDir(scope, cwd, name, p))).length;
     }, 0);
     const missing = totalPlugins - installedPlugins;
 
@@ -645,40 +704,47 @@ export default function pinch(pi: ExtensionAPI) {
   pi.registerCommand("pinch:status", {
     description: "Show installed plugins and their skills",
     handler: async (_args, ctx) => {
-      const cr = readConfig(cwd);
-      if (!cr) {
+      const sc = readConfig(cwd);
+      if (!sc) {
         ctx.ui.notify('No pinch.json manifest found', "error");
         return;
       }
 
-      for (const err of cr.errors) {
+      for (const err of sc.errors) {
         ctx.ui.notify(`pinch: ${err}`, "error");
       }
 
-      const lock = readLock(cwd);
       const lines: string[] = [];
 
-      for (const [name, source] of Object.entries(cr.config)) {
-        const lockEntry = lock[name];
-        const cached = fs.existsSync(path.join(cachedRepoDir(name), ".git"));
-        const status = cached ? "✓" : "✗";
-        const commit = lockEntry?.commit?.slice(0, 8) ?? "—";
-        const ref = source.ref ?? "HEAD";
+      for (const scope of ["user", "project"] as Scope[]) {
+        const config = scope === "user" ? sc.user : sc.project;
+        if (Object.keys(config).length === 0) continue;
 
-        lines.push(`${status} ${name} (${ref} @ ${commit})`);
+        const lock = readLock(scope, cwd);
+        lines.push(`── ${scope} ──`);
 
-        for (const plugin of source.plugins) {
-          const pDir = installedPluginDir(cwd, name, plugin);
-          const exists = fs.existsSync(pDir);
-          const skills = exists ? findPluginSkills(pDir) : [];
-          const skillNames = skills.map((s) => path.basename(path.dirname(s)));
+        for (const [name, source] of Object.entries(config)) {
+          const lockEntry = lock[name];
+          const cached = fs.existsSync(path.join(cachedRepoDir(name), ".git"));
+          const status = cached ? "✓" : "✗";
+          const commit = lockEntry?.commit?.slice(0, 8) ?? "—";
+          const ref = source.ref ?? "HEAD";
 
-          if (skills.length > 0) {
-            lines.push(`  • ${plugin} (${skillNames.join(", ")})`);
-          } else if (exists) {
-            lines.push(`  • ${plugin}`);
-          } else {
-            lines.push(`  ✗ ${plugin} (not installed)`);
+          lines.push(`${status} ${name} (${ref} @ ${commit})`);
+
+          for (const plugin of source.plugins) {
+            const pDir = installedPluginDir(scope, cwd, name, plugin);
+            const exists = fs.existsSync(pDir);
+            const skills = exists ? findPluginSkills(pDir) : [];
+            const skillNames = skills.map((s) => path.basename(path.dirname(s)));
+
+            if (skills.length > 0) {
+              lines.push(`  • ${plugin} (${skillNames.join(", ")})`);
+            } else if (exists) {
+              lines.push(`  • ${plugin}`);
+            } else {
+              lines.push(`  ✗ ${plugin} (not installed)`);
+            }
           }
         }
       }

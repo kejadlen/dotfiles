@@ -45,13 +45,14 @@ tea comment -r alpha/dotfiles -l git.kejadlen.dev <index> "Comment body"
 
 ## Pinch (Plugin Manager)
 
-Pinch is a pi extension (`.pi/agent/extensions/pinch.ts`) that manages plugins from git repos. It caches repo clones in `$XDG_CACHE_HOME/pinch/` and copies only the selected plugins into `.pi/pinch/`, registering their skills automatically.
+Pinch is a pi extension (`.pi/agent/extensions/pinch.ts`) that manages plugins from git repos. It caches repo clones in `$XDG_CACHE_HOME/pinch/` and copies selected plugins into scope-appropriate directories, registering their skills automatically.
 
-- **Global manifest**: `~/.pi/agent/pinch.json` — applies everywhere
-- **Project manifest**: `.pi/pinch.json` — per-project, overrides global by name
-- **Lock file**: `.pi/pinch-lock.json` — exact commits, auto-generated
-- **Commands**: `/pinch:install`, `/pinch:update`, `/pinch:status`
-- **Skill**: `/skill:pinch` for full usage docs
+Plugins are scoped by which manifest defines them. Sources in the global manifest only install to `~/.pi/pinch/` (user scope). Sources referenced in a project manifest install to `.pi/pinch/` (project scope). This keeps user-specific plugins out of project repositories.
+
+- Global manifest: `~/.pi/agent/pinch.json` — user-wide sources
+- Project manifest: `.pi/pinch.json` — per-project, can reference global sources or define new ones
+- Lock files: `~/.pi/agent/pinch-lock.json` (user) and `.pi/pinch-lock.json` (project)
+- Commands: `/pinch:install`, `/pinch:update`, `/pinch:status`
 
 To add a plugin, add an entry to `pinch.json` and run `/pinch:install`. See the pinch skill for manifest format and troubleshooting.
 
