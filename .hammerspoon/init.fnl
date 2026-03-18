@@ -2,6 +2,7 @@
 ;; unwrap `hs` here to localize it to just one place
 (local {: eventtap
         : execute
+        :fnutils {: map}
         : fs
         : hotkey
         : loadSpoon
@@ -94,6 +95,13 @@
 (Install:andUse :SleepCorners {:config {:feedbackSize 25 :neverSleepCorner "*"}
                                :start true})
 
+(fn sanitize-url [url]
+  (let [tracking-params [:utm_* :uta_* :fbclid :gclid]
+        trurl-cmd (.. :/opt/homebrew/bin/trurl " "
+                      (table.concat (map tracking-params #(.. "--qtrim " $1))
+                                    " "))]
+    (chomp (execute (.. trurl-cmd " --url \"" url "\"")))))
+
 (let [handlers {:firefox-dev :org.mozilla.firefoxdeveloperedition
                 :firefox :org.mozilla.firefox
                 :glide :app.glide-browser.glide
@@ -112,8 +120,12 @@
                             "/?"))
       url-patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
                     [safari-patterns handlers.safari]]
-      ; url-redir-decoders [[:clean-url #(execute (.. "/Users/alpha/.dotfiles/bin/,clean-url" $4))]]
-      ]
+      url-redir-decoders [[:reddit
+                           "://www%.reddit%.com"
+                           "://old.reddit.com"
+                           true]
+                          [:xcancel "://x%.com" "://xcancel.com" true]
+                          [:trurl-sanitize #(sanitize-url $4) nil true]]]
   (Install:andUse :URLDispatcher {:config {:url_patterns url-patterns
                                            :url_redir_decoders url-redir-decoders
                                            :default_handler little-ff.open
