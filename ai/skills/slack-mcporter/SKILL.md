@@ -48,10 +48,14 @@ with `slack_search_channels` and `slack_search_users`.
 
 ## Sending messages
 
-Use `slack_send_message_draft` when the user hasn't reviewed the
-message content. The `message` param takes standard markdown. Thread
-replies need `thread_ts`; set `reply_broadcast=true` to also post to
-the channel. Cannot post to Slack Connect channels.
+**Always use `slack_send_message_draft` instead of `slack_send_message`.**
+Drafts let the user review and edit before posting, and Slack treats
+drafts as normal messages once sent — so they remain editable afterward.
+Messages posted directly via MCP cannot be edited in Slack.
+
+The `message` param takes standard markdown. Thread replies need
+`thread_ts`; set `reply_broadcast=true` to also post to the channel.
+Cannot post to Slack Connect channels.
 
 ## Timestamps
 
