@@ -1,11 +1,18 @@
 #!/bin/bash
+# Usage: statusline.sh [--short-model]
+#   --short-model  Show abbreviated model name (e.g., "sonnet-4.5")
+#   Default shows the full model ID
 
 # Read JSON input from stdin
 input=$(cat)
 
-# Extract and format model name (e.g., "claude-sonnet-4-5-..." -> "sonnet-4.5")
+# Extract model name
 model_id=$(echo "$input" | jq -r '.model.id')
-model=$(echo "$model_id" | sed -E 's/^.*claude-//; s/-[0-9]{8,}.*$//; s/^([a-z]+)-([0-9]+)-([0-9]+)$/\1-\2.\3/')
+if [[ "$1" == "--short-model" ]]; then
+    model=$(echo "$model_id" | sed -E 's/^.*claude-//; s/-[0-9]{8,}.*$//; s/^([a-z]+)-([0-9]+)-([0-9]+)$/\1-\2.\3/')
+else
+    model="$model_id"
+fi
 
 # Get the default model from settings and format it the same way
 default_model=$(jq -r '.model // "sonnet"' ~/.claude/settings.json)
