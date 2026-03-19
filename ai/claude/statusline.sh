@@ -48,14 +48,35 @@ fi
 # Get git branch
 branch=$(git -C "$cwd" branch --show-current 2>/dev/null || echo '')
 
-# Calculate context window usage percentage
+# Calculate context window usage
 ctx=''
 usage=$(echo "$input" | jq '.context_window.current_usage')
 if [ "$usage" != 'null' ]; then
     cur=$(($(echo "$usage" | jq '.input_tokens + .cache_creation_input_tokens + .cache_read_input_tokens')))
     sz=$(echo "$input" | jq '.context_window.context_window_size')
     pct=$((cur * 100 / sz))
-    ctx=$(printf " \033[2m•\033[0m \033[33m%s%%\033[0m" "$pct")
+
+    # Format token counts as "125k" or "1.0M"
+    fmt_tokens() {
+        if [ "$1" -ge 1000000 ]; then
+            printf '%s.%sM' $(($1 / 1000000)) $(($1 % 1000000 / 100000))
+        else
+            printf '%sk' $(($1 / 1000))
+        fi
+    }
+    cur_fmt=$(fmt_tokens "$cur")
+    sz_fmt=$(fmt_tokens "$sz")
+
+    # Color shifts with usage: green < 50%, yellow 50-80%, red > 80%
+    if [ "$pct" -gt 80 ]; then
+        color='31' # red
+    elif [ "$pct" -gt 50 ]; then
+        color='33' # yellow
+    else
+        color='32' # green
+    fi
+
+    ctx=$(printf " \033[2m•\033[0m \033[%sm%s/%s %s%%\033[0m" "$color" "$cur_fmt" "$sz_fmt" "$pct")
 fi
 
 # Format output style
