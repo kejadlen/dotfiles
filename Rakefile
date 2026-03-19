@@ -92,13 +92,8 @@ namespace :dotslash do
       update_dotslash_release(name: "just", repo: "casey/just") { |tag| "just-#{tag}-aarch64-apple-darwin.tar.gz" }
   end
 
-  desc "Update nvim (nightly)"
-  task(:nvim) do
-    update_dotslash_release(name: "nvim", repo: "neovim/neovim", tag: "nightly", path: "nvim-macos-arm64/bin/nvim") { "nvim-macos-arm64.tar.gz" }
-  end
-
   desc "Update all dotslash files"
-  task all: [:pinch, :jq, :jj, :just, :nvim]
+  task all: [:pinch, :jq, :jj, :just]
 end
 
 desc "Upgrade neovim"
