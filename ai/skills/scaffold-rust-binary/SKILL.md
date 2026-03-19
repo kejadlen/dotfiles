@@ -1,13 +1,21 @@
 ---
-name: scaffolding-rust-binary
+name: scaffold-rust-binary
 description: Use when creating a new Rust binary project from scratch — scaffolding the crate, justfile, CI, coverage, release pipeline, and test harness
+disable-model-invocation: true
 ---
 
 # Creating a Rust Binary Project
 
-Scaffold a single-crate Rust binary with library code, a justfile, 100% coverage enforcement, GitHub Actions CI, and CalVer releases.
+Scaffold a single-crate Rust binary with library code, a justfile, 100% coverage enforcement, property testing, mutation testing, GitHub Actions CI, and CalVer releases.
 
 *This is a self-improving skill — see the `self-improving-skills` skill.*
+
+Read these companion files when working on their specific concerns:
+
+- `property-testing.md` — proptest strategies, roundtrip patterns, regression files
+- `mutation-testing.md` — cargo-mutants, `.cargo/mutants.toml`, exclusion workflow
+- `versioning.md` — build.rs, CalVer, `<NAME>_VERSION` env var
+- `release.md` — release workflow, DotSlash
 
 ## Project Structure
 
@@ -16,9 +24,12 @@ Single crate with both library and binary targets. All domain logic lives in the
 ```
 project/
 ├── Cargo.toml
+├── build.rs                # Sets <NAME>_VERSION for --version
 ├── Cargo.lock              # committed — it's a binary
 ├── justfile
 ├── .gitignore              # /target
+├── .cargo/
+│   └── mutants.toml        # Excludes equivalent/unreachable mutations
 ├── .github/workflows/
 │   ├── ci.yml
 │   └── release.yml
@@ -32,7 +43,8 @@ project/
 │       └── commands/        # One module per subcommand group
 │           └── mod.rs
 ├── tests/
-│   └── cli.rs              # Integration tests via assert_cmd
+│   ├── cli.rs              # Integration tests via assert_cmd
+│   └── property.rs         # Proptest roundtrip / invariant tests
 └── migrations/             # If using a database
 ```
 
@@ -58,15 +70,17 @@ tracing-subscriber = { version = "*", features = ["env-filter"] }
 [dev-dependencies]
 assert_cmd = "*"
 predicates = "*"
+proptest = "*"
 tempfile = "*"
 ```
 
 Key choices:
-- **`edition = "2024"`** — latest stable edition.
-- **Unpinned dependencies (`"*"`)** — `Cargo.lock` is committed (it's a binary), so builds are reproducible. Unpinned versions mean `cargo update` gets the latest compatible releases without editing `Cargo.toml`.
-- **`clap` with `derive` + `env`** — declarative CLI with env var fallbacks.
-- **`color-eyre`** — pretty error reports in the binary.
-- **`thiserror`** — structured errors in the library.
+
+- `edition = "2024"` — latest stable edition.
+- Unpinned dependencies (`"*"`) — `Cargo.lock` is committed (it's a binary), so builds are reproducible. Unpinned versions mean `cargo update` gets the latest compatible releases without editing `Cargo.toml`.
+- `clap` with `derive` + `env` — declarative CLI with env var fallbacks.
+- `color-eyre` — pretty error reports in the binary.
+- `thiserror` — structured errors in the library.
 
 ## Entrypoint Pattern
 
@@ -159,7 +173,7 @@ coverage:
         --ignore-not-existing \
         --keep-only 'src/**' \
         --ignore 'src/bin/**' \
-        --excl-line 'cov-excl-line' \
+        --excl-line 'cov-excl-line|unreachable!' \
         --excl-start 'cov-excl-start' \
         --excl-stop 'cov-excl-stop')
     echo "$REPORT" | jq -r '
@@ -178,6 +192,17 @@ coverage:
         exit 1
     fi
 
+mutants:
+    #!/usr/bin/env bash
+    set -uo pipefail
+    cargo mutants --timeout-multiplier 3 -j4
+    rc=$?
+    # 0 = all caught, 3 = timeouts (infinite loops from mutants, still caught)
+    if [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ]; then
+        exit 0
+    fi
+    exit "$rc"
+
 all: fmt clippy coverage
 
 install:
@@ -185,10 +210,12 @@ install:
 ```
 
 Key design:
-- **`coverage` uses a separate `CARGO_TARGET_DIR`** — prevents instrumented and non-instrumented artifacts from mixing, which causes phantom uncovered lines with grcov.
-- **100% coverage on library code only** — `--keep-only 'src/**' --ignore 'src/bin/**'`. Binary code is tested via integration tests but not measured.
-- **`covdir` output** — machine-readable JSON, parsed with `jq` for a clean summary.
-- **Exclusion markers** — `cov-excl-line`, `cov-excl-start`/`cov-excl-stop` for structurally unreachable code.
+
+- `coverage` uses a separate `CARGO_TARGET_DIR` — prevents instrumented and non-instrumented artifacts from mixing, which causes phantom uncovered lines with grcov.
+- 100% coverage on library code only — `--keep-only 'src/**' --ignore 'src/bin/**'`. Binary code is tested via integration tests but not measured.
+- `covdir` output — machine-readable JSON, parsed with `jq` for a clean summary.
+- Exclusion markers — `cov-excl-line`, `cov-excl-start`/`cov-excl-stop` for structurally unreachable code. The `unreachable!` macro is also excluded by default.
+- `mutants` tolerates exit code 3 — `cargo mutants` returns 3 for timeouts (infinite loops caused by mutations). These count as caught because the mutant broke the program.
 
 ## CI Workflow
 
@@ -207,75 +234,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: rustup component add clippy rustfmt llvm-tools
-      - run: cargo install grcov
-      - run: cargo install just
+      - run: cargo install grcov cargo-mutants just
       - run: cargo fmt --check
       - run: just clippy coverage
+      - run: just mutants
 ```
 
 `cargo fmt --check` instead of `just fmt` — CI should fail on unformatted code, not silently fix it.
 
-## Release Workflow
-
-CalVer (`YYYY-MM-DD+SHORT_SHA`) with automatic releases on green main builds.
-
-```yaml
-# .github/workflows/release.yml
-name: Release
-
-on:
-  workflow_dispatch:
-  workflow_run:
-    workflows: [CI]
-    types: [completed]
-    branches: [main]
-
-permissions:
-  contents: write
-
-jobs:
-  build:
-    if: >-
-      github.event_name == 'workflow_dispatch'
-      || github.event.workflow_run.conclusion == 'success'
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Calculate version
-        id: version
-        run: |
-          CALVER=$(date -u +"%Y-%m-%d")
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          echo "version=${CALVER}+${SHORT_SHA}" >> $GITHUB_OUTPUT
-
-      - name: Build
-        run: |
-          cargo build --release
-          tar -czf <name>-aarch64-apple-darwin.tar.gz -C target/release <name>
-
-      - name: Publish
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          git tag "v${VERSION}"
-          git push origin "v${VERSION}"
-          gh release create "v${VERSION}" \
-            --title "v${VERSION}" \
-            --generate-notes \
-            <name>-aarch64-apple-darwin.tar.gz
-        env:
-          GH_TOKEN: ${{ github.token }}
-```
-
-Adjust `runs-on` and archive name for target platform. Add matrix builds for cross-platform.
-
 ## Testing
 
-**Library tests**: Unit tests in each module, using `tempfile` for isolation when state is involved.
+Unit tests live in each module, using `tempfile` for isolation when state is involved.
 
-**Integration tests**: `tests/cli.rs` exercises the compiled binary end-to-end via `assert_cmd`.
+Integration tests in `tests/cli.rs` exercise the compiled binary end-to-end via `assert_cmd`:
 
 ```rust
 // tests/cli.rs
@@ -293,11 +264,15 @@ fn shows_help() {
 }
 ```
 
+Property tests in `tests/property.rs` use proptest for roundtrip and invariant checks. See `property-testing.md`.
+
+Mutation testing via `just mutants` catches code that tests execute but don't verify. See `mutation-testing.md`.
+
 ## Prerequisites
 
 ```bash
 rustup component add clippy rustfmt llvm-tools
-cargo install grcov just
+cargo install grcov cargo-mutants just
 ```
 
 ## Quick Reference
@@ -307,6 +282,7 @@ cargo install grcov just
 | Format | `just fmt` |
 | Lint | `just clippy` |
 | Coverage | `just coverage` |
+| Mutation testing | `just mutants` |
 | All checks | `just all` |
 | Install from source | `just install` |
 | Find uncovered lines | Change `-t covdir` to `-t markdown` in justfile |
