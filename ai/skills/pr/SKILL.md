@@ -84,7 +84,9 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
     for later.
 10. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
     a HEREDOC to pass the body.
-    - If `web` was specified: add `--web` flag to open prepopulated PR in browser for manual editing, then stop (skip remaining steps)
+    - If `web` was specified: add `--web` flag (without `--draft` — they're
+      incompatible) to open prepopulated PR in browser for manual editing,
+      then stop (skip remaining steps)
     - If `ready` was specified: create directly without `--draft`
     - Otherwise: add `--draft` flag
 11. **If a Jira card is detected**, transition it to "In Review":
