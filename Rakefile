@@ -44,41 +44,61 @@ namespace :sync do
   end
 end
 
-require "json"
-require "open3"
+namespace :dotslash do
+  def update_dotslash_release(name:, repo:, path: name, tag: nil, &asset)
+    require "json"
 
-def update_dotslash_release(name:, repo:, path: name, &asset)
-  release_json, = Open3.capture2("gh", "release", "view", "--repo", repo, "--json", "tagName")
-  tag = JSON.parse(release_json)["tagName"]
-  asset_name = asset.call(tag)
+    unless tag
+      tag = JSON.parse(`gh release view --repo #{repo} --json tagName`)["tagName"]
+    end
+    asset_name = asset.call(tag)
 
-  url = "https://github.com/#{repo}/releases/download/#{tag}/#{asset_name}"
-  entry_json, = Open3.capture2("dotslash", "--", "create-url-entry", url)
-  entry = JSON.parse(entry_json)
+    url = "https://github.com/#{repo}/releases/download/#{tag}/#{asset_name}"
+    entry = JSON.parse(`dotslash -- create-url-entry #{url}`)
 
-  platform = {
-    size: entry["size"],
-    hash: "blake3",
-    digest: entry["digest"],
-    path: path,
-    providers: [
-      { url: url },
-      { type: "github-release", repo: "https://github.com/#{repo}", tag: tag, name: asset_name },
-    ],
-  }
-  platform[:format] = entry["format"] if entry["format"] && !entry["format"].start_with?("TODO")
+    platform = {
+      size: entry["size"],
+      hash: "blake3",
+      digest: entry["digest"],
+      path: path,
+      providers: [
+        { url: url },
+        { type: "github-release", repo: "https://github.com/#{repo}", tag: tag, name: asset_name },
+      ],
+    }
+    platform[:format] = entry["format"] if entry["format"] && !entry["format"].start_with?("TODO")
 
-  dotslash = { name: name, platforms: { "macos-aarch64" => platform } }
-  File.write("bin/#{name}", "#!/usr/bin/env dotslash\n\n#{JSON.pretty_generate(dotslash)}\n")
-end
+    dotslash = { name: name, platforms: { "macos-aarch64" => platform } }
+    File.write("bin/#{name}", "#!/usr/bin/env dotslash\n\n#{JSON.pretty_generate(dotslash)}\n")
+  end
 
-desc "Update dotslash files from their GitHub releases"
-task :update_dotslash do
-  sh "gh release download --repo kejadlen/pinch --pattern pinch --output bin/pinch --clobber"
+  desc "Update pinch"
+  task :pinch do
+    sh "gh release download --repo kejadlen/pinch --pattern pinch --output bin/pinch --clobber"
+  end
 
-  update_dotslash_release(name: "jq", repo: "jqlang/jq") { "jq-macos-arm64" }
-  update_dotslash_release(name: "jj", repo: "jj-vcs/jj") { |tag| "jj-#{tag}-aarch64-apple-darwin.tar.gz" }
-  update_dotslash_release(name: "just", repo: "casey/just") { |tag| "just-#{tag}-aarch64-apple-darwin.tar.gz" }
+  desc "Update jq"
+  task(:jq) do
+    update_dotslash_release(name: "jq", repo: "jqlang/jq") { "jq-macos-arm64" }
+  end
+
+  desc "Update jj"
+  task(:jj) do
+    update_dotslash_release(name: "jj", repo: "jj-vcs/jj") { |tag| "jj-#{tag}-aarch64-apple-darwin.tar.gz" }
+  end
+
+  desc "Update just"
+  task(:just) do
+      update_dotslash_release(name: "just", repo: "casey/just") { |tag| "just-#{tag}-aarch64-apple-darwin.tar.gz" }
+  end
+
+  desc "Update nvim (nightly)"
+  task(:nvim) do
+    update_dotslash_release(name: "nvim", repo: "neovim/neovim", tag: "nightly", path: "nvim-macos-arm64/bin/nvim") { "nvim-macos-arm64.tar.gz" }
+  end
+
+  desc "Update all dotslash files"
+  task all: [:pinch, :jq, :jj, :just, :nvim]
 end
 
 desc "Upgrade neovim"
