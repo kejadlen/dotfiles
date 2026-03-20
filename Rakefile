@@ -92,8 +92,13 @@ namespace :dotslash do
       update_dotslash_release(name: "just", repo: "casey/just") { |tag| "just-#{tag}-aarch64-apple-darwin.tar.gz" }
   end
 
+  desc "Update fzf"
+  task(:fzf) do
+    update_dotslash_release(name: "fzf", repo: "junegunn/fzf") { |tag| "fzf-#{tag.delete_prefix("v")}-darwin_arm64.tar.gz" }
+  end
+
   desc "Update all dotslash files"
-  task all: [:pinch, :jq, :jj, :just]
+  task all: [:pinch, :jq, :jj, :just, :fzf]
 end
 
 desc "Upgrade neovim"
