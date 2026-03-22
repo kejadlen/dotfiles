@@ -1,0 +1,14 @@
+# ignore everything by default
+*
+
+!.gitignore
+!settings.json
+!skills
+!statusline.sh
+
+# Git won't look inside an ignored directory, so un-ignoring the
+# directory and its contents are both required.
+!hooks/
+!hooks/**
+!rules/
+!rules/**

@@ -22,6 +22,8 @@ private
 !.config/nvim
 !.config/neovide
 !.config/pip
+!.config/ramekin
+.config/ramekin/agent
 !.config/ripgrep
 !.config/sketchybar
 !.config/starship
@@ -43,12 +45,7 @@ private
 !.hammerspoon/Spoons/SpoonInstall
 
 /ai/claude/*
-!/ai/claude/commands
-!/ai/claude/marketplace
-!/ai/claude/rules
-!/ai/claude/settings.json
-!/ai/claude/skills
-!/ai/claude/statusline.sh
+!/ai/claude/.gitignore
 
 # hack for now since I don't want to commit Alfred secrets
 macos/Alfred.alfredpreferences/workflows/*/prefs.plist
