@@ -129,3 +129,7 @@ patterns = ["'**/*.py'"]
 [fix.tools.ruff-check]
 command = ["ruff", "check", "--fix", "--stdin-filename", "$path", "-"]
 patterns = ["'**/*.py'"]
+
+[fix.tools.cargo-fmt]
+command = ["rustfmt"]
+patterns = ["'**/*.rs'"]
