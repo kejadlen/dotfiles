@@ -126,3 +126,16 @@ Commit quality:
 - Each commit should be one logical unit of change
 - Every commit must build and pass checks (bisect-able history)
 - Separate formatting and refactoring from feature changes
+
+## Anti-rationalization
+
+These conventions exist because LLMs skip steps when unsupervised.
+If you catch yourself thinking any of these, stop — you're
+rationalizing a shortcut:
+
+- "This is simple enough to skip"
+- "I already tested manually"
+- "The spirit, not the letter"
+- "This case is different"
+
+Follow the process.
