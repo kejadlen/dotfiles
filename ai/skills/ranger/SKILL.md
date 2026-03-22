@@ -19,7 +19,7 @@ ranger backlog list                  # List all backlogs
 
 # Tasks
 ranger task create --backlog <name> "Title"   # Create a task
-ranger task create --backlog <name> --state queued --description "..." "Title"
+ranger task create --backlog <name> --state ready --description "..." "Title"
 ranger task list --backlog <name>             # List tasks
 ranger task show <key>                        # Show task details
 ranger task edit <key> --state <state>        # Change task state
@@ -35,7 +35,7 @@ ranger tag add <task-key> <tag-name>         # Add a tag to a task (creates tag 
 ranger tag remove <task-key> <tag-name>      # Remove a tag from a task (alias: rm)
 ```
 
-Task states for `--state`: `icebox`, `queued`, `in_progress`, `done`.
+Task states for `--state`: `icebox`, `ready`, `in_progress`, `done`.
 
 The `RANGER_DEFAULT_BACKLOG` env var sets the default `--backlog` value so you can omit it.
 
@@ -44,7 +44,7 @@ Task keys are short prefixes (e.g. `tl`) of longer IDs — use just enough to be
 ## Conventions
 
 - **Icebox**: ideas, not committed to
-- **Queued**: committed, ordered by priority (top = most important)
+- **Ready**: committed, ordered by priority (top = most important)
 - **In Progress**: actively being worked on
 - **Done**: finished
 

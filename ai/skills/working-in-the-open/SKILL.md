@@ -1,76 +1,102 @@
 ---
 name: working-in-the-open
-description: Use when doing work on a tracked issue (GitHub, Jira, Linear, etc) — documents decisions, blockers, and summaries as comments on the issue for historical record
+description: Use when making design decisions during implementation — routes rationale to the right venue (commits, task comments, code comments, or documentation) based on how durable the context needs to be
 user-invocable: false
 ---
 
-# Working in the Open
+# Working in the open
 
-Document the reasoning behind code changes as you work. The diff shows *what* changed; issue comments capture *why*.
+Capture design decisions as you work. The diff shows *what* changed; written documentation captures *why*.
 
-## When to Use
+## When to use
 
 - User mentions an issue URL, number (`#123`), or identifier (`ENG-456`, `PROJ-789`)
 - User says "I'm working on the X issue in [tracker]"
-- Continuing work on a previously-linked issue
+- Continuing work on a previously linked issue
+- Making a non-obvious design choice during implementation
 
-## Default: Don't Comment
+## Core principle
 
-**The overwhelming default is silence.** Do not comment. Do not even consider commenting. The commit message is the record.
+Every non-trivial design decision deserves a written record. The question isn't whether to document it — it's where.
 
-The only justification for a comment is context the commit *cannot* capture — a decision between alternatives, a blocker that changed scope, or a summary the user explicitly asked for. That's it. Three cases. Everything else is noise.
+## Where decisions belong
 
-**Never narrate your own process.** "Starting work", "reviewing the schema", "planning the approach" — these are not useful to anyone reading the issue later. They are filler. Do not post them.
+Route each decision to the venue that matches how long the context needs to last. These four venues form a durability scale — from the most ephemeral to the most lasting:
 
-Before writing a comment, pass this test: "Would a teammate reading this issue six months from now learn something they couldn't get from the commits or PR?" If the answer isn't a clear yes, don't comment.
+### Commits
 
-### Specifically, Do NOT Comment When
+The default home for design rationale. A commit message explains why *this change* was made — the problem it solves, the alternative it chose over, the constraint it works around. Most decisions need nothing more than a good commit message. See the `describing-changes` skill for how to write them.
 
-- **You're announcing you're starting work.** The state change (→ in_progress) already signals that. Never narrate "picking up this task" or "beginning investigation."
-- **You're describing what you're about to do.** Plans belong in your head, not in issue comments. The work itself is the record.
-- **Work is complete and a PR is being opened.** The PR links to the issue and serves as the summary.
-- **The comment would restate the commit message.** Even partially. "Switched X to Y, updated CI" after a commit that says exactly that is pure noise — regardless of whether it's phrased differently.
-- **The work was straightforward.** If there were no surprises, no alternatives considered, no scope changes — there's nothing to document beyond the commit.
-- **You feel like you should say *something*.** That impulse is wrong. Resist it.
+Use commits when the decision is meaningful in the context of this specific change and a reader of the commit history would benefit from understanding the reasoning.
 
-## The Three Milestones
+### Task and issue comments
 
-| Milestone | Trigger | Content |
-|-----------|---------|---------|
-| **Decision** | Non-obvious choice between alternatives | What was decided, what alternatives existed, why this approach won |
-| **Blocker/Scope Change** | Unexpected impediment or deviation from plan | What happened, how the approach adjusted |
-| **Summary** | User requests, or natural breakpoint in work | Synthesis of work done, key decisions, scope adjustments, PR links |
+Use for decisions that shaped the work but aren't tied to a single commit. Choosing between alternatives early in the process, adjusting scope after hitting a constraint, or discovering a blocker that changed the approach — these are the decisions that disappear if nobody writes them down.
 
-## Workflow
+Task comments capture the *journey* of a piece of work: what was considered, what was rejected, and why the final approach won. They outlive individual commits and give context that spans multiple changes.
 
-1. **Detect** — Note issue context when referenced
-2. **Filter** — After committing, ask: "Does this need a comment, or does the commit say it all?" Default answer is no. Only proceed if there's genuinely new context (a decision rationale, a blocker, a scope change).
-3. **Draft** — Write update in appropriate format
-4. **Present** — Show draft to user: "I'd like to document this on the issue. Here's the draft: [content]. Post this?"
-5. **Confirm** — Wait for user approval before posting
+### Code comments
 
-Never post without explicit confirmation. But more importantly, don't even propose comments that restate commits.
+Use for decisions tied to a specific implementation that will matter as long as the code exists. Constraints baked into the code, tradeoffs that explain why the code looks the way it does, or non-obvious behavior a future reader would question.
 
-## Posting
+A code comment answers "why does this work this way?" at the point where the question arises. Unlike commits, code comments travel with the code through rebases, cherry-picks, and repository migrations. If removing the comment would leave a reader confused about the intent, it belongs there.
+
+### Documentation
+
+Use for decisions that outlive any single change, task, or block of code. Architectural patterns, conventions, API design rationale, or anything a new contributor would need to understand the system. These belong in READMEs, ADRs, design docs, or wherever the project keeps its lasting documentation.
+
+If a decision will matter to someone who never sees the issue, the diff, or the specific code, it belongs in documentation.
+
+## What isn't a design decision
+
+Process narration is noise, not documentation. Don't write any of these:
+
+- "Starting work on this issue"
+- "Reviewing the schema now"
+- "Planning the approach"
+- "Updated the tests and CI config" (restating the diff)
+- "Work is complete, opening a PR" (the PR itself signals this)
+
+The test: would a teammate reading this six months from now learn something they couldn't get from the commits or the PR? If not, don't write it.
+
+## Milestones worth documenting
+
+| Milestone | Where it usually belongs | Content |
+|-----------|--------------------------|---------|
+| Why this change, not another | Commit message | The problem, the chosen approach, the rejected alternative |
+| Choice between approaches | Task comment or commit | What was decided, what was rejected, why |
+| Blocker or scope change | Task comment | What happened, how the approach adjusted |
+| Non-obvious implementation | Code comment | The constraint or tradeoff that explains the code |
+| Architectural pattern | Documentation | The pattern, when to use it, why it was chosen |
+| Summary of a body of work | Task comment | Synthesis of decisions, scope adjustments, PR links |
+
+## Workflow for task comments
+
+1. **Detect** — note issue context when referenced.
+2. **Filter** — after committing, ask: "Were there decisions invisible in the diff?" If yes, determine whether they belong in a task comment, code comment, or documentation.
+3. **Draft** — write the update in clear prose. Focus on reasoning.
+4. **Present** — show the draft to the user: "I'd like to document this on the issue. Here's the draft: [content]. Post this?"
+5. **Confirm** — wait for user approval before posting.
+
+Never post a task comment without explicit confirmation. Code comments and documentation changes go through normal code review.
+
+## Posting task comments
 
 Check available tools in order:
+
 - GitHub: `gh issue comment <number> --body "..."`
-- Linear/Jira: Use available MCP tools
-- Fallback: Present formatted comment for manual posting
+- Linear/Jira: use available MCP tools
+- Gitea: `tea comment` (see the `gitea` skill for syntax)
+- Fallback: present the formatted comment for manual posting
 
 ## Attribution
 
-Always attribute comments to yourself. Begin each comment with:
+Always attribute AI-written task comments. Begin each comment with:
 
 > *Posted by `<program> (<model>)`*
 
-Use your actual program and model identity as shown in the system prompt. This makes it clear to anyone reading the issue history which AI and program wrote the comment.
+Use your actual program and model identity. This makes clear to anyone reading the issue history that an AI wrote the comment.
 
-## Format Guidance
+## Writing quality
 
-Write clear prose, not templates. Focus on:
-- **Decisions**: The alternatives considered and reasoning — invisible in the diff
-- **Blockers**: What changed and why — explains gaps between ask and delivery
-- **Summaries**: Coherent narrative — easier than piecing together commits
-
-Keep updates concise. One clear paragraph beats three hedging ones.
+Design decisions are prose for humans. Write clear, concrete sentences. One paragraph that explains the reasoning well beats three that hedge. Omit needless words — but don't omit needful context.
