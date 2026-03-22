@@ -92,6 +92,29 @@ glide.keymaps.set(
 
 glide.keymaps.set(
   "normal",
+  "<C-w>f",
+  async ({ tab_id }) => {
+    await glide.hints.show({
+      action: async ({ content }) => {
+        const href = await content.execute((target) => {
+          const anchor = target.closest("a");
+          return anchor?.href ?? null;
+        });
+        if (!href) return;
+        const new_tab = await browser.tabs.create({ url: href, active: false });
+        if (new_tab.id) {
+          glide.unstable.split_views.create([tab_id, new_tab.id]);
+        }
+      },
+    });
+  },
+  {
+    description: "Follow a hint in a split view",
+  },
+);
+
+glide.keymaps.set(
+  "normal",
   "<C-w>q",
   async ({ tab_id }) => {
     glide.unstable.split_views.separate(tab_id);
