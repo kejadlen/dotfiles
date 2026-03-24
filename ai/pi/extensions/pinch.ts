@@ -21,9 +21,10 @@
  * cache. Only the requested plugins are copied into the scope directory.
  *
  * Plugin location within a repo is resolved by:
- * 1. Explicit `path` field in pinch.json (e.g. "plugins")
- * 2. marketplace.json `source` field (e.g. "./plugins/playground")
- * 3. Repo root fallback (<repo>/<plugin>/)
+ * 1. Per-plugin `path` override in pinch.json (e.g. { "name": "foo", "path": "." })
+ * 2. Source-level `path` field in pinch.json (e.g. "plugins")
+ * 3. marketplace.json `source` field (e.g. "./plugins/playground")
+ * 4. Repo root fallback (<repo>/<plugin>/)
  *
  * Lock files track exact commits per source, one per scope:
  *
@@ -46,11 +47,14 @@ import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-age
 
 type Scope = "user" | "project";
 
+/** A plugin entry: either a name string or an object with name and path override. */
+type PluginSpec = string | { name: string; path: string };
+
 interface PinchSource {
   repo: string;
   ref?: string;
   path?: string; // subdirectory containing plugins (e.g. "plugins")
-  plugins: string[];
+  plugins: PluginSpec[];
 }
 
 interface PinchConfig {
@@ -71,6 +75,16 @@ interface PinchLockEntry {
 
 interface PinchLock {
   [name: string]: PinchLockEntry;
+}
+
+// ── Plugin spec helpers ─────────────────────────────────────────────────
+
+function pluginName(spec: PluginSpec): string {
+  return typeof spec === "string" ? spec : spec.name;
+}
+
+function pluginPathOverride(spec: PluginSpec): string | undefined {
+  return typeof spec === "string" ? undefined : spec.path;
 }
 
 // ── Container detection ────────────────────────────────────────────────
@@ -364,12 +378,15 @@ function clearMarketplaceCache(): void {
  * Resolve the source directory of a plugin within the cached repo.
  *
  * Resolution order:
- * 1. Explicit `path` in pinch.json → <cache>/<path>/<plugin>/
- * 2. marketplace.json `source` field → <cache>/<source>/
- * 3. Repo root fallback → <cache>/<plugin>/
+ * 1. Per-plugin `path` override from pinch.json plugin spec
+ * 2. Source-level `path` in pinch.json → <cache>/<path>/<plugin>/
+ * 3. marketplace.json `source` field → <cache>/<source>/
+ * 4. Repo root fallback → <cache>/<plugin>/
  */
-function cachedPluginDir(name: string, source: PinchSource, plugin: string): string {
+function cachedPluginDir(name: string, source: PinchSource, plugin: string, pathOverride?: string): string {
   const dir = cachedRepoDir(name);
+
+  if (pathOverride) return path.join(dir, pathOverride);
 
   if (source.path) return path.join(dir, source.path, plugin);
 
@@ -404,8 +421,8 @@ function copyDir(src: string, dest: string): void {
  * Copy a plugin from the cache into the appropriate scope directory.
  * Removes the old copy first to ensure a clean state.
  */
-function installPlugin(scope: Scope, cwd: string, sourceName: string, source: PinchSource, plugin: string): { ok: boolean; error?: string } {
-  const src = cachedPluginDir(sourceName, source, plugin);
+function installPlugin(scope: Scope, cwd: string, sourceName: string, source: PinchSource, plugin: string, pathOverride?: string): { ok: boolean; error?: string } {
+  const src = cachedPluginDir(sourceName, source, plugin, pathOverride);
   if (!fs.existsSync(src)) {
     return { ok: false, error: `plugin "${plugin}" not found in repo` };
   }
@@ -441,7 +458,7 @@ function pruneScopeDir(scopeConfig: PinchConfig, dir: string): string[] {
       pruned.push(entry);
     } else {
       // Prune plugins no longer in the list
-      const wantedPlugins = new Set(scopeConfig[entry].plugins);
+      const wantedPlugins = new Set(scopeConfig[entry].plugins.map(pluginName));
       for (const pluginEntry of fs.readdirSync(full)) {
         const pluginFull = path.join(full, pluginEntry);
         try {
@@ -505,8 +522,8 @@ function resolveSkillPaths(sc: ScopedConfig, cwd: string): string[] {
   for (const scope of ["user", "project"] as Scope[]) {
     const config = scope === "user" ? sc.user : sc.project;
     for (const [name, source] of Object.entries(config)) {
-      for (const plugin of source.plugins) {
-        const dir = installedPluginDir(scope, cwd, name, plugin);
+      for (const spec of source.plugins) {
+        const dir = installedPluginDir(scope, cwd, name, pluginName(spec));
         if (fs.existsSync(dir)) {
           paths.push(...findPluginSkills(dir));
         }
@@ -598,9 +615,11 @@ function installAll(cwd: string, update: boolean, log: Log): SyncResult {
       newLock[name] = { commit, ...(source.ref ? { ref: source.ref } : {}) };
 
       // Copy plugins into the scope-appropriate directory
-      for (const plugin of source.plugins) {
+      for (const spec of source.plugins) {
+        const plugin = pluginName(spec);
+        const override = pluginPathOverride(spec);
         log(`copying ${name}/${plugin} (${scope})...`);
-        const install = installPlugin(scope, cwd, name, source, plugin);
+        const install = installPlugin(scope, cwd, name, source, plugin, override);
         if (!install.ok) {
           result.errors.push(`${name}: ${install.error}`);
           continue;
@@ -653,7 +672,7 @@ export default function pinch(pi: ExtensionAPI) {
     const totalPlugins = Object.values(config).reduce((n, s) => n + s.plugins.length, 0);
     const installedPlugins = Object.entries(config).reduce((n, [name, source]) => {
       const scope = sourceScope(sc, name);
-      return n + source.plugins.filter((p) => fs.existsSync(installedPluginDir(scope, cwd, name, p))).length;
+      return n + source.plugins.filter((spec) => fs.existsSync(installedPluginDir(scope, cwd, name, pluginName(spec)))).length;
     }, 0);
     const missing = totalPlugins - installedPlugins;
 
@@ -732,7 +751,8 @@ export default function pinch(pi: ExtensionAPI) {
 
           lines.push(`${status} ${name} (${ref} @ ${commit})`);
 
-          for (const plugin of source.plugins) {
+          for (const spec of source.plugins) {
+            const plugin = pluginName(spec);
             const pDir = installedPluginDir(scope, cwd, name, plugin);
             const exists = fs.existsSync(pDir);
             const skills = exists ? findPluginSkills(pDir) : [];
