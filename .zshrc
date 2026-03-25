@@ -202,6 +202,14 @@ if (( $+commands[jj] )); then
   source <(jj util completion zsh)
 fi
 
+if (( $+commands[ranger] )); then
+  source <(COMPLETE=zsh ranger)
+fi
+
+if (( $+commands[ramekin] )); then
+  source <(ramekin completions zsh)
+fi
+
 # Define named directories: ~w <=> Windows home directory on WSL.
 # [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
 
