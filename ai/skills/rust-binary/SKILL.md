@@ -1,23 +1,23 @@
 ---
-name: scaffold-rust-binary
-description: Use when creating a new Rust binary project from scratch — scaffolding the crate, justfile, CI, coverage, release pipeline, and test harness
+name: rust-binary
+description: Use when creating or updating a Rust binary project — covers preferred crate layout, dependencies, justfile, CI, coverage, release pipeline, and test harness
 disable-model-invocation: true
 ---
 
-# Creating a Rust Binary Project
+# Rust binary preferences
 
-Scaffold a single-crate Rust binary with library code, a justfile, 100% coverage enforcement, property testing, mutation testing, GitHub Actions CI, and CalVer releases.
+Standards and preferences for Rust binary projects. Use this when scaffolding a new binary or bringing an existing one up to current standards.
 
 *This is a self-improving skill — see the `self-improving-skills` skill.*
 
 Read these companion files when working on their specific concerns:
 
-- `property-testing.md` — proptest strategies, roundtrip patterns, regression files
+- `property-testing.md` — hegeltest generators, composite generators, roundtrip patterns
 - `mutation-testing.md` — cargo-mutants, `.cargo/mutants.toml`, exclusion workflow
 - `versioning.md` — build.rs, CalVer, `<NAME>_VERSION` env var
 - `release.md` — release workflow, DotSlash
 
-## Project Structure
+## Project structure
 
 Single crate with both library and binary targets. All domain logic lives in the library; the binary is a thin CLI shell.
 
@@ -25,27 +25,27 @@ Single crate with both library and binary targets. All domain logic lives in the
 project/
 ├── Cargo.toml
 ├── build.rs                # Sets <NAME>_VERSION for --version
-├── Cargo.lock              # committed — it's a binary
+├── Cargo.lock              # Committed — it's a binary.
 ├── justfile
 ├── .gitignore              # /target
 ├── .cargo/
-│   └── mutants.toml        # Excludes equivalent/unreachable mutations
+│   └── mutants.toml        # Excludes equivalent/unreachable mutations.
 ├── .github/workflows/
 │   ├── ci.yml
 │   └── release.yml
 ├── src/
-│   ├── lib.rs              # Library root — re-exports modules
-│   ├── error.rs            # thiserror enum
+│   ├── lib.rs              # Library root — re-exports modules.
+│   ├── error.rs            # thiserror enum.
 │   ├── (domain modules)
 │   └── bin/<name>/
-│       ├── main.rs          # Entrypoint, clap, thin dispatch
-│       ├── output.rs        # Human/JSON output helpers
-│       └── commands/        # One module per subcommand group
+│       ├── main.rs          # Entrypoint, clap, thin dispatch.
+│       ├── output.rs        # Human/JSON output helpers.
+│       └── commands/        # One module per subcommand group.
 │           └── mod.rs
 ├── tests/
-│   ├── cli.rs              # Integration tests via assert_cmd
-│   └── property.rs         # Proptest roundtrip / invariant tests
-└── migrations/             # If using a database
+│   ├── cli.rs              # Integration tests via assert_cmd.
+│   └── property.rs         # Hegeltest property tests.
+└── migrations/             # If using a database.
 ```
 
 ## Cargo.toml
@@ -62,6 +62,7 @@ path = "src/bin/<name>/main.rs"
 
 [dependencies]
 clap = { version = "*", features = ["derive", "env"] }
+clap_complete = "*"
 color-eyre = "*"
 thiserror = "*"
 tokio = { version = "*", features = ["full"] }
@@ -69,8 +70,8 @@ tracing-subscriber = { version = "*", features = ["env-filter"] }
 
 [dev-dependencies]
 assert_cmd = "*"
+hegeltest = "*"
 predicates = "*"
-proptest = "*"
 tempfile = "*"
 ```
 
@@ -79,17 +80,20 @@ Key choices:
 - `edition = "2024"` — latest stable edition.
 - Unpinned dependencies (`"*"`) — `Cargo.lock` is committed (it's a binary), so builds are reproducible. Unpinned versions mean `cargo update` gets the latest compatible releases without editing `Cargo.toml`.
 - `clap` with `derive` + `env` — declarative CLI with env var fallbacks.
+- `clap_complete` — shell completion generation for bash, zsh, fish, etc.
 - `color-eyre` — pretty error reports in the binary.
 - `thiserror` — structured errors in the library.
+- `hegeltest` — property-based testing built on the Hypothesis engine, with built-in shrinking.
 
-## Entrypoint Pattern
+## Entrypoint pattern
 
 ```rust
 // src/bin/<name>/main.rs
 mod commands;
 mod output;
 
-use clap::{Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand};
+use clap_complete::Shell;
 use tracing_subscriber::{EnvFilter, fmt, prelude::*};
 
 #[derive(Parser)]
@@ -98,8 +102,12 @@ struct Cli {
     #[arg(long, global = true)]
     json: bool,
 
+    /// Generate shell completions and exit.
+    #[arg(long, value_enum)]
+    completions: Option<Shell>,
+
     #[command(subcommand)]
-    command: Commands,
+    command: Option<Commands>,
 }
 
 #[derive(Subcommand)]
@@ -120,7 +128,23 @@ async fn main() -> color_eyre::Result<()> {
         .init();
 
     let cli = Cli::parse();
-    match cli.command {
+
+    if let Some(shell) = cli.completions {
+        clap_complete::generate(
+            shell,
+            &mut Cli::command(),
+            "<name>",
+            &mut std::io::stdout(),
+        );
+        return Ok(());
+    }
+
+    let Some(command) = cli.command else {
+        Cli::command().print_help()?;
+        return Ok(());
+    };
+
+    match command {
         Commands::Example { command } => {
             commands::example::run(command, cli.json).await?;
         }
@@ -129,7 +153,15 @@ async fn main() -> color_eyre::Result<()> {
 }
 ```
 
-## Error Pattern
+The `--completions` flag generates shell completions to stdout:
+
+```bash
+<name> --completions zsh > _<name>
+<name> --completions bash > <name>.bash
+<name> --completions fish > <name>.fish
+```
+
+## Error pattern
 
 Library errors use `thiserror`. The binary uses `color_eyre::Result`.
 
@@ -197,7 +229,7 @@ mutants:
     set -uo pipefail
     cargo mutants --timeout-multiplier 3 -j4
     rc=$?
-    # 0 = all caught, 3 = timeouts (infinite loops from mutants, still caught)
+    # 0 = all caught, 3 = timeouts (infinite loops from mutants, still caught).
     if [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ]; then
         exit 0
     fi
@@ -217,7 +249,7 @@ Key design:
 - Exclusion markers — `cov-excl-line`, `cov-excl-start`/`cov-excl-stop` for structurally unreachable code. The `unreachable!` macro is also excluded by default.
 - `mutants` tolerates exit code 3 — `cargo mutants` returns 3 for timeouts (infinite loops caused by mutations). These count as caught because the mutant broke the program.
 
-## CI Workflow
+## CI workflow
 
 ```yaml
 # .github/workflows/ci.yml
@@ -235,12 +267,15 @@ jobs:
       - uses: actions/checkout@v4
       - run: rustup component add clippy rustfmt llvm-tools
       - run: cargo install grcov cargo-mutants just
+      - uses: astral-sh/setup-uv@v6
       - run: cargo fmt --check
       - run: just clippy coverage
       - run: just mutants
 ```
 
 `cargo fmt --check` instead of `just fmt` — CI should fail on unformatted code, not silently fix it.
+
+The `setup-uv` step is required because hegeltest uses `uv` to manage its Hypothesis backend.
 
 ## Testing
 
@@ -264,7 +299,7 @@ fn shows_help() {
 }
 ```
 
-Property tests in `tests/property.rs` use proptest for roundtrip and invariant checks. See `property-testing.md`.
+Property tests in `tests/property.rs` use hegeltest. See `property-testing.md`.
 
 Mutation testing via `just mutants` catches code that tests execute but don't verify. See `mutation-testing.md`.
 
@@ -275,7 +310,9 @@ rustup component add clippy rustfmt llvm-tools
 cargo install grcov cargo-mutants just
 ```
 
-## Quick Reference
+hegeltest also requires [`uv`](https://docs.astral.sh/uv/) on `PATH` — it manages the Hypothesis engine automatically.
+
+## Quick reference
 
 | Task | Command |
 |------|---------|
