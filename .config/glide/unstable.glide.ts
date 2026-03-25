@@ -94,16 +94,26 @@ glide.keymaps.set(
   "normal",
   "<C-w>f",
   async ({ tab_id }) => {
-    await glide.hints.show({
+    glide.hints.show({
       action: async ({ content }) => {
         const href = await content.execute((target) => {
           const anchor = target.closest("a");
           return anchor?.href ?? null;
         });
         if (!href) return;
-        const new_tab = await browser.tabs.create({ url: href, active: false });
-        if (new_tab.id) {
-          glide.unstable.split_views.create([tab_id, new_tab.id]);
+
+        const existing = glide.unstable.split_views.get(tab_id);
+        if (existing) {
+          // Navigate the other pane instead of creating a new split.
+          const other = existing.tabs.find((t) => t.id !== tab_id);
+          if (other?.id) {
+            await browser.tabs.update(other.id, { url: href });
+          }
+        } else {
+          const new_tab = await browser.tabs.create({ url: href, active: false });
+          if (new_tab.id) {
+            glide.unstable.split_views.create([tab_id, new_tab.id]);
+          }
         }
       },
     });
