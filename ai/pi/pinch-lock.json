@@ -4,11 +4,11 @@
     "ref": "main"
   },
   "claude-plugins-official": {
-    "commit": "d5c15b861cd23e3102215c26020368ad5134dc47",
+    "commit": "79caa0d824acb760fd9c023acb39c6c7da5ee7fc",
     "ref": "main"
   },
   "superpowers": {
-    "commit": "363923f74aa9cd7b470c0aaa73dee629a8bfdc90",
+    "commit": "8ea39819eed74fe2a0338e71789f06b30e953041",
     "ref": "main"
   }
 }
