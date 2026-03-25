@@ -1,0 +1,15 @@
+mounts {
+  - source="~/.config/git"
+  - source="~/.config/jj"
+  - source="~/.local/share/ranger" writable=#true
+}
+
+pi {
+  - source="~/.dotfiles/ai/_AGENTS.md" target="AGENTS.md"
+  - source="~/.dotfiles/ai/skills"
+  - source="~/.pi/agent/settings.json"
+  - source="~/.pi/agent/keybindings.json"
+  - source="~/.pi/agent/extensions"
+  - source="~/.pi/agent/pinch.json"
+  - source="~/.pi/agent/pinch-lock.json"
+}
