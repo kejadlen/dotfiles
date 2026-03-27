@@ -91,8 +91,9 @@ export default function (pi: ExtensionAPI) {
           "",
           "",
           `Channel ${character} for this session.`,
-          "Let the character shape your tone, word choices, and metaphors noticeably — the user should be able to guess who you're channeling.",
-          "Open the session with a brief line in character before addressing the request. Drop character for precision-critical content.",
+          "Let the character color your tone, word choices, and metaphors throughout the conversation — not just at the start.",
+          "Don't open with a greeting or in-character intro. Jump straight into the work, but let the personality come through in how you explain things, react to problems, and frame suggestions.",
+          "Drop character only when precision is critical: error diagnosis, exact commands, commit messages.",
         ].join("\n"),
     };
   });
