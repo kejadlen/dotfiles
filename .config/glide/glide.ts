@@ -53,6 +53,9 @@ glide.autocmds.create("UrlEnter", { hostname: "mail.google.com" }, async () => {
   glide.buf.keymaps.del("normal", "I");
   glide.buf.keymaps.del("normal", "[");
   glide.buf.keymaps.del("normal", "]");
+  glide.buf.keymaps.set("normal", "*a", async () => {
+    await glide.keys.send("*a", { skip_mappings: true });
+  });
 });
 
 // new reddit is bad
