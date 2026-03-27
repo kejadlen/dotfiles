@@ -23,8 +23,8 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
 
 1. Gather context for the PR:
    - Run `jj log -r '<revision>' --no-graph` to check for existing bookmarks
-   - Run `jj log -r 'trunk()..<revision>'` to list commits between trunk and the revision
-   - Run `jj diff --from trunk() --to <revision> --stat` to review all changes
+   - Run `jj log -r 'main@origin..<revision>'` to list commits between trunk and the revision
+   - Run `jj diff --from main@origin --to <revision> --stat` to review all changes
 2. Push revision and get bookmark name:
    - If revision has a remote-tracked bookmark: `jj git push --bookmark <name>`
    - If revision has a local-only bookmark (no `@origin`): push with
@@ -77,7 +77,7 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
    - Follow repository conventions
 9. **Code review**: Dispatch the `superpowers:code-reviewer` subagent to review
     the changes. Tell the reviewer to run
-    `jj diff --from trunk() --to <revision>` to get the actual commit diff—do
+    `jj diff --from main@origin --to <revision>` to get the actual commit diff—do
     not let it grep or read the working directory, which may be on a different
     revision. Provide a brief description of what was implemented. Address
     Critical and Important issues before proceeding; Minor issues can be noted

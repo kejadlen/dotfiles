@@ -72,13 +72,18 @@ jj restore --from kn --into kn FILE        # restore file in a specific revision
 
 ## Common Pitfalls
 
-**Quote revsets containing parentheses.** Bash interprets `()` as subshell
-syntax:
+**Avoid revset functions with parentheses.** Claude Code's shell
+command parser treats `()` as subshell syntax even when quoted, which
+triggers permission prompts. Use the underlying value directly:
 
 ```bash
-jj log -r 'trunk()'                  # correct
-jj log -r trunk()                    # WRONG — bash syntax error
+jj log -r main@origin                # correct — no parens
+jj log -r 'trunk()'                  # WRONG — triggers permission prompt
 ```
+
+`trunk()` usually resolves to `main@origin` but depends on the repo's
+config. Check `jj config get revset-aliases."trunk()"` if unsure.
+Prefer the resolved value (e.g., `main@origin`) everywhere.
 
 **`jj show` does not accept path arguments.** It takes an optional revision
 but cannot be scoped to a path. Use `jj diff` instead:
