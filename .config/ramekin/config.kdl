@@ -1,7 +1,9 @@
 mounts {
   - source="~/.config/git"
   - source="~/.config/jj"
+  - source="~/.config/jj/repos" writable=#true
   - source="~/.local/share/ranger" writable=#true
+  - source="~/.pi/pinch"
 }
 
 pi {
