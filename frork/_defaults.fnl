@@ -28,7 +28,9 @@
                         ; only show scrollbars when scrolling
                         [:AppleShowScrollBars :string :WhenScrolling]
                         ; move windows by holding ctrl+cmd and dragging any part of the window
-                        [:NSWindowShouldDragOnGesture :bool true]]
+                        [:NSWindowShouldDragOnGesture :bool true]
+                        ; disable action images in menus (Liquid Glass)
+                        [:NSMenuEnableActionImages :bool false]]
         :com.apple.dock [; automatically hide and show the dock
                          [:autohide :bool true]
                          ; minimize windows using the scale effect
