@@ -53,6 +53,7 @@ Top of the queue = most important. Bias toward quick wins — small easy tasks s
 ## Workflow
 
 - Don't mark a task **done** until the changes are committed. Commit first, then transition.
+- When you encounter a bug in ranger during other work, file it in the ranger backlog (`--backlog ranger`) and tag it `bug`. Include what you observed, the expected behavior, and how to reproduce it in the description. Don't fix it inline — continue with the original task unless the bug blocks it.
 
 ---
 
