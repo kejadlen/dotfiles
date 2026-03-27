@@ -18,10 +18,10 @@ glide.keymaps.set(
   async ({ tab_id }) => {
     const split = glide.unstable.split_views.get(tab_id);
     if (!split) return;
-    const index = split.tabs.indexOf(tab_id);
+    const index = split.tabs.findIndex((t) => t.id === tab_id);
     const target = split.tabs.at((index - 1) % split.tabs.length);
-    if (target == null) return;
-    await browser.tabs.update(target, { active: true });
+    if (target?.id == null) return;
+    await browser.tabs.update(target.id, { active: true });
   },
   {
     description: "Focus the split to the left",
@@ -34,10 +34,10 @@ glide.keymaps.set(
   async ({ tab_id }) => {
     const split = glide.unstable.split_views.get(tab_id);
     if (!split) return;
-    const index = split.tabs.indexOf(tab_id);
+    const index = split.tabs.findIndex((t) => t.id === tab_id);
     const target = split.tabs.at((index + 1) % split.tabs.length);
-    if (target == null) return;
-    await browser.tabs.update(target, { active: true });
+    if (target?.id == null) return;
+    await browser.tabs.update(target.id, { active: true });
   },
   {
     description: "Focus the split to the right",
@@ -53,7 +53,7 @@ glide.keymaps.set(
       await glide.excmds.execute("tab_next");
       return;
     }
-    const splitIds = new Set(split.tabs);
+    const splitIds = new Set(split.tabs.map((t) => t.id));
     const all_tabs = await glide.tabs.query({});
     const currentIndex = all_tabs.findIndex((t) => t.id === tab_id);
     for (let i = 1; i < all_tabs.length; i++) {
@@ -76,7 +76,7 @@ glide.keymaps.set(
       await glide.excmds.execute("tab_prev");
       return;
     }
-    const splitIds = new Set(split.tabs);
+    const splitIds = new Set(split.tabs.map((t) => t.id));
     const all_tabs = await glide.tabs.query({});
     const currentIndex = all_tabs.findIndex((t) => t.id === tab_id);
     for (let i = 1; i < all_tabs.length; i++) {
