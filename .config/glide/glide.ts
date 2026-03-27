@@ -26,6 +26,9 @@ glide.fs.exists("local.glide.ts").then(exists => {
 glide.g.mapleader = "," // too used to using space for scrolling
 glide.buf.keymaps.del("normal", "s"); // use `s` for searching
 
+glide.keymaps.set("command", "<C-n>", "commandline_focus_next");
+glide.keymaps.set("command", "<C-p>", "commandline_focus_back");
+
 glide.search_engines.add({
   name: "Kagi",
   keyword: "kagi",
