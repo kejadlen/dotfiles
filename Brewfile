@@ -19,6 +19,7 @@ brew "ruby-install"
 brew "syncthing", restart_service: :changed
 brew "terraform"
 brew "tmux"
+brew "trurl"
 brew "ykman"
 brew "z3"
 brew "zsh"
