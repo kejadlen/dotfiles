@@ -56,10 +56,11 @@ What's the impact?
 
 ### 5. Write the Description
 
-**Start with title only.** Type prefix + concise reasoning:
+**Start with title only.** Write a plain English sentence — no
+conventional commit prefixes (`fix:`, `feat:`, `refactor:`, etc.):
 
 ```
-refactor: Reduce visual noise in error construction
+Reduce visual noise in error construction
 ```
 
 **STOP: Is the title sufficient?** If yes, you're done. No body needed.
@@ -72,14 +73,14 @@ refactor: Reduce visual noise in error construction
 When body is necessary:
 
 ```
-fix: Normalize TTL unit mismatch
+Normalize TTL unit mismatch
 
 TTL (seconds) and timestamp (milliseconds) compared directly.
 Normalizing both to milliseconds avoids migration.
 ```
 
 **Format:**
-- Title: Under 60 characters, concrete problem or fix
+- Title: Under 60 characters, plain English, capitalized first word
 - Body: 1-2 sentences maximum, under 20 words total
 - Problem → Solution (omit needless words)
 
@@ -107,16 +108,36 @@ Each sentence must explain reasoning not visible in the code change itself.
 | "This is obvious from the code" | Obvious to you ≠ obvious to reviewers | Obvious what changed. Not obvious why. |
 | "Need to explain the approach" | Title may be sufficient | STOP: Is title sufficient? Most commits need no body. |
 
-## Footer Requirements
+## Git Trailers
 
-If AI assisted in crafting the message, include Assisted-by footer:
+Use [git trailers](https://alchemists.io/articles/git_trailers) for
+all commit metadata. Trailers are `Key: value` pairs placed after a
+blank line at the bottom of the commit message. Never encode metadata
+in the subject line — that's what trailers are for.
 
 ```
-Assisted-by: Claude Haiku 4.5 via pi
+Normalize TTL unit mismatch
+
+TTL (seconds) and timestamp (milliseconds) compared directly.
+Normalizing both to milliseconds avoids migration.
+
+Assisted-by: Claude Opus 4.6 via pi
 ```
 
-Format: `Assisted-by: [Model name] via [tool name]`
+### Required trailers
 
-Use the actual tool you are running inside (e.g., pi, Claude Code). Do NOT copy the example blindly.
+`Assisted-by` is mandatory when AI drafts or substantially edits the
+message. Format: `Assisted-by: [Model name] via [tool name]`. Use the
+actual model and tool you are running inside — do not copy examples
+blindly.
 
-This is MANDATORY when using this skill. Do NOT omit it.
+### Optional trailers
+
+Add other trailers when they provide useful context for post-processing
+or traceability:
+
+- `Issue: <id>` — links the commit to a tracked issue
+- `Co-authored-by: Name <email>` — credits collaborators
+
+Capitalize the first letter of each trailer key. Keep trailers
+alphabetically sorted when there are three or more.

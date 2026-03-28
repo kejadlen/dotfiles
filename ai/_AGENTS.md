@@ -127,6 +127,16 @@ Commit quality:
 - Every commit must build and pass checks (bisect-able history)
 - Separate formatting and refactoring from feature changes
 
+Commit message format:
+- No conventional commit prefixes (`fix:`, `feat:`, `refactor:`, etc.)
+- Subjects are plain English sentences — capitalize the first word,
+  keep it under 60 characters
+- Use [git trailers](https://alchemists.io/articles/git_trailers)
+  for metadata, placed after a blank line at the bottom of the message
+- Trailer format is `Key: value` (capitalized key, colon, space, value)
+- `Assisted-by` is mandatory when AI drafts the message (the
+  `describing-changes` skill enforces this)
+
 ## Anti-rationalization
 
 These conventions exist because LLMs skip steps when unsupervised.
