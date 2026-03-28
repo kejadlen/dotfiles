@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.61.1",
+  "lastChangelogVersion": "0.62.0",
   "defaultProvider": "anthropic",
   "defaultModel": "claude-opus-4-6",
   "skills": [

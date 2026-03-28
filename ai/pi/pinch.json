@@ -13,5 +13,10 @@
     "repo": "https://github.com/obra/superpowers",
     "ref": "main",
     "plugins": ["superpowers"]
+  },
+  "ranger": {
+    "repo": "https://git.kejadlen.dev/alpha/ranger",
+    "ref": "main",
+    "plugins": [{ "name": "ranger", "path": "." }]
   }
 }

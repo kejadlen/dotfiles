@@ -4,11 +4,15 @@
     "ref": "main"
   },
   "claude-plugins-official": {
-    "commit": "79caa0d824acb760fd9c023acb39c6c7da5ee7fc",
+    "commit": "548bfa83750f4191adcb46ffa51b44f02e1ceaa7",
     "ref": "main"
   },
   "superpowers": {
-    "commit": "8ea39819eed74fe2a0338e71789f06b30e953041",
+    "commit": "eafe962b18f6c5dc70fb7c8cc7e83e61f4cdde06",
+    "ref": "main"
+  },
+  "ranger": {
+    "commit": "ba57b49a476cd265e5426d1d0ff18aee2fb234ed",
     "ref": "main"
   }
 }
