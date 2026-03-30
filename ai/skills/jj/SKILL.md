@@ -16,6 +16,11 @@ Use `jj --help` for authoritative command reference and current flags.
 Use `jj describe` to rewrite a commit message, `jj new <rev>` to start
 working on top of a revision.
 
+**Prefer `jj commit` over `jj squash`.** Create new commits by default —
+even for refactors, cleanups, or small follow-ups. Only squash when the
+prior commit specifically needs fixing up (e.g., correcting a bug it
+introduced, fixing a typo in code it added).
+
 ## Key Differences from Git
 
 No staging area: working copy changes map directly to commits. Operations
