@@ -25,7 +25,7 @@ When describing how code works (separate from why changes were made).
 
 ## Implementation
 
-**REQUIRED SUB-SKILL:** Use the elements-of-style:writing-clearly-and-concisely skill. Change descriptions are prose for humans; apply the writing skill to ensure clarity and conciseness.
+**REQUIRED SUB-SKILL:** Use the technical-writing skill. Change descriptions are prose for humans; apply the writing skill to ensure clarity and conciseness.
 
 ### 1. Identify What Changed
 

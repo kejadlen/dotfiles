@@ -19,7 +19,7 @@ are meaningless to humans.
 
 ## Writing
 
-Invoke the elements-of-style writing skill whenever drafting prose for
+Invoke the technical-writing skill whenever drafting prose for
 humans — documentation, commit messages, PR descriptions, user-facing
 text, error messages, and comments. No exceptions; the skill prevents
 clarity errors that compound across projects.

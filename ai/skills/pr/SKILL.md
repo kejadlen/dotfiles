@@ -49,8 +49,8 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
    proceeding.
 4. Check for .github PR templates and follow them. For checklist items that do
    not apply, use strikethrough: `- ~~Irrelevant item~~`
-5. **Invoke the `elements-of-style:writing-clearly-and-concisely` skill** before
-   drafting any prose. This is mandatory.
+5. **Invoke the `technical-writing` skill** before drafting any prose. This is
+   mandatory.
 6. **Search episodic memory for design decisions**: Use `episodic-memory:search`
    to find conversations related to the files changed in this PR. Look for:
    - Design decisions and their rationale
