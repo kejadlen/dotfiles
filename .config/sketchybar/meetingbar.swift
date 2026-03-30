@@ -257,10 +257,12 @@ do {
         let displayText: String
         if isCurrentMeeting {
             let timeStr = formatTimeUntil(event.endDate, from: currentDate)
-            displayText = "\(event.title ?? "Untitled Event") ends \(timeStr)"
+            let title = (event.title ?? "Untitled Event").trimmingCharacters(in: .whitespaces)
+            displayText = "\(title) ends \(timeStr)"
         } else {
             let timeStr = formatTimeUntil(event.startDate, from: currentDate)
-            displayText = "\(event.title ?? "Untitled Event") \(timeStr)"
+            let title = (event.title ?? "Untitled Event").trimmingCharacters(in: .whitespaces)
+            displayText = "\(title) \(timeStr)"
         }
         let url = extractMeetingURL(from: event)
         primaryJSON = "{ \"display\": \(jsonString(displayText)), \"url\": \(jsonStringOrNull(url)) }"
@@ -274,7 +276,7 @@ do {
         let start = timeFormatter.string(from: event.startDate)
         let end = timeFormatter.string(from: event.endDate)
         let time = "\(start) - \(end)"
-        let title = event.title ?? "Untitled Event"
+        let title = (event.title ?? "Untitled Event").trimmingCharacters(in: .whitespaces)
         let url = extractMeetingURL(from: event)
         let isCurrent = currentDate >= event.startDate && currentDate <= event.endDate
         let display: String
