@@ -106,7 +106,12 @@ tug = ["util", "exec", "--", "bash", "-c", """
   ref=${1:-@}
   jj bookmark move --from "closest_bookmark($ref)" --to "closest_pushable($ref)"
 """, ""]
-stack = ["rebase", "-A", "trunk()", "-B", "closest_merge(@)", "-r"]
+stack = [
+  "rebase",
+  "--insert-after", "trunk()",
+  "--insert-before", "heads(closest_merge(@) | mm)",
+  "--revisions"
+]
 pr = ["util", "exec", "--", "bash", "-c", """
   gh pr create --head \
     $(jj log -r 'closest_bookmark(@)' -T 'bookmarks' --no-graph | cut -d ' ' -f 1)
