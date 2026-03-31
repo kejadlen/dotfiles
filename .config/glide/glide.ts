@@ -58,9 +58,13 @@ glide.autocmds.create("UrlEnter", { hostname: "mail.google.com" }, async () => {
   });
 });
 
-// new reddit is bad
+// new reddit is bad (but old.reddit.com doesn't serve media paths)
 glide.autocmds.create("UrlEnter", { hostname: "www.reddit.com" }, async () => {
   const url = new URL(glide.ctx.url);
+
+  // old reddit doesn't serve these
+  if (url.pathname.startsWith("/media")) return;
+
   url.hostname = "old.reddit.com";
   await browser.tabs.update({ url: url.toString() });
 });
