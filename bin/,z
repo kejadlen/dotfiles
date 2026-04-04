@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+main() {
+    local dir
+    dir=$(zoxide query -l "$@" | fzf --no-multi --no-margin --no-padding \
+        --tmux 80%,60% \
+        --highlight-line --info inline-right \
+        --border-label ' zoxide ' \
+        --preview 'eza --tree --color=always {}' \
+        --bind 'ctrl-/:change-preview-window(down|hidden|)') || exit 0
+
+    local name
+    name=$(basename "$dir")
+
+    tmux new-window -n "$name" -c "$dir"
+}
+
+main "$@"
