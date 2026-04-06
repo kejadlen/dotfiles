@@ -14,6 +14,11 @@
     "ref": "main",
     "plugins": ["superpowers"]
   },
+  "ramekin": {
+    "repo": "https://git.kejadlen.dev/alpha/ramekin",
+    "ref": "main",
+    "plugins": [{ "name": "ramekin", "path": "." }]
+  },
   "ranger": {
     "repo": "https://git.kejadlen.dev/alpha/ranger",
     "ref": "main",
