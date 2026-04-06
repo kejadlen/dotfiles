@@ -126,6 +126,9 @@ Commit quality:
 - Each commit should be one logical unit of change
 - Every commit must build and pass checks (bisect-able history)
 - Separate formatting and refactoring from feature changes
+- Prefer `jj commit` over `jj squash` — new commits over squashing.
+  Only squash when the prior commit specifically needs fixing up
+  (correcting a bug it introduced, fixing a typo in code it added).
 
 Commit message format:
 - No conventional commit prefixes (`fix:`, `feat:`, `refactor:`, etc.)
