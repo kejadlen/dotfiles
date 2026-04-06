@@ -34,6 +34,7 @@
  * Commands:
  *   /pinch:install  — clone/fetch all sources, copy plugins, register skills
  *   /pinch:update   — pull latest for unpinned sources, re-copy plugins
+ *   /pinch:reset    — remove all cached repo clones
  *   /pinch:status   — show installed plugins and their skills
  */
 
@@ -289,7 +290,7 @@ function cloneOrFetch(name: string, repo: string): { ok: boolean; error?: string
   }
 
   fs.mkdirSync(path.dirname(dir), { recursive: true });
-  const result = git(["clone", repo, dir]);
+  const result = git(["clone", "--template=", repo, dir]);
   if (!result.ok) return { ok: false, error: `clone failed: ${result.stderr}` };
   return { ok: true };
 }
@@ -716,6 +717,24 @@ export default function pinch(pi: ExtensionAPI) {
 
       if (result.updated.length > 0 || result.installed.length > 0 || result.pruned.length > 0) {
         await ctx.reload();
+      }
+    },
+  });
+
+  pi.registerCommand("pinch:reset", {
+    description: "Remove all cached repo clones",
+    handler: async (_args, ctx) => {
+      if (inContainer()) {
+        ctx.ui.notify("pinch: cannot reset inside a container — run on the host", "error");
+        return;
+      }
+
+      const cache = cacheDir();
+      if (fs.existsSync(cache)) {
+        fs.rmSync(cache, { recursive: true, force: true });
+        ctx.ui.notify("pinch: cleared cache", "info");
+      } else {
+        ctx.ui.notify("pinch: nothing to reset", "info");
       }
     },
   });
