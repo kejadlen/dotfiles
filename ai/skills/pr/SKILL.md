@@ -74,6 +74,9 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
      (e.g., "Depends on #123", "Closes #456", or a Slack permalink)
    - Never wrap commit SHAs or PR/issue numbers in backticks—GitHub
      auto-links raw `a1b2c3d` and `#123` but backticks prevent it
+   - Do not insert manual newlines to wrap prose; GitHub renders Markdown
+     and hard-wraps automatically, so added line breaks show up as awkward
+     breaks in the rendered description
    - Follow repository conventions
 9. **Code review**: Dispatch the `superpowers:code-reviewer` subagent to review
     the changes. Tell the reviewer to run
