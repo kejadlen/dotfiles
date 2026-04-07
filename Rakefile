@@ -97,8 +97,13 @@ namespace :dotslash do
     update_dotslash_release(name: "fzf", repo: "junegunn/fzf") { |tag| "fzf-#{tag.delete_prefix("v")}-darwin_arm64.tar.gz" }
   end
 
+  desc "Update zizmor"
+  task(:zizmor) do
+    update_dotslash_release(name: "zizmor", repo: "zizmorcore/zizmor") { |tag| "zizmor-aarch64-apple-darwin.tar.gz" }
+  end
+
   desc "Update all dotslash files"
-  task all: [:pinch, :jq, :jj, :just, :fzf]
+  task all: [:pinch, :jq, :jj, :just, :fzf, :zizmor]
 end
 
 desc "Upgrade neovim"
