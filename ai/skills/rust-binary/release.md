@@ -23,8 +23,9 @@ jobs:
       || github.event.workflow_run.conclusion == 'success'
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@SHA # v4
         with:
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Calculate version
@@ -83,10 +84,12 @@ Add a `dotslash` job to `release.yml` after the build job:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@SHA # v4
+        with:
+          persist-credentials: false
 
       - name: Generate DotSlash file
-        uses: facebook/dotslash-publish-release@v1
+        uses: facebook/dotslash-publish-release@SHA # v1
         with:
           config: .github/dotslash-config.json
           tag: v${{ needs.build.outputs.version }}

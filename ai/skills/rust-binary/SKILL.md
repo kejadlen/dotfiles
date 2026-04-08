@@ -264,13 +264,21 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@SHA # v4
+        with:
+          persist-credentials: false
       - run: rustup component add clippy rustfmt llvm-tools
       - run: cargo install grcov cargo-mutants just
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@SHA # v6
       - run: cargo fmt --check
       - run: just clippy coverage
       - run: just mutants
+```
+
+Pin all actions to commit SHAs with a version comment (`@<sha> # v4`). Resolve the SHA for each tag at generation time:
+
+```bash
+git ls-remote https://github.com/<owner>/<repo> <tag> | cut -f1
 ```
 
 `cargo fmt --check` instead of `just fmt` — CI should fail on unformatted code, not silently fix it.
