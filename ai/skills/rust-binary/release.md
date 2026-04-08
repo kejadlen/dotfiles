@@ -13,8 +13,7 @@ on:
     types: [completed]
     branches: [main]
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   build:
@@ -22,35 +21,38 @@ jobs:
       github.event_name == 'workflow_dispatch'
       || github.event.workflow_run.conclusion == 'success'
     runs-on: macos-latest
+    permissions:
+      contents: write # create GitHub release
     steps:
       - uses: actions/checkout@SHA # v4
         with:
           persist-credentials: false
-          fetch-depth: 0
 
       - name: Calculate version
         id: version
         run: |
           CALVER=$(date -u +"%Y-%m-%d")
-          SHORT_SHA=$(git rev-parse --short HEAD)
+          SHORT_SHA="${GITHUB_SHA::7}"
           echo "version=${CALVER}+${SHORT_SHA}" >> $GITHUB_OUTPUT
 
       - name: Build
         run: |
-          cargo build --release
+          RAMEKIN_VERSION="${STEPS_VERSION_OUTPUTS_VERSION}" cargo build --release
           tar -czf <name>-aarch64-apple-darwin.tar.gz -C target/release <name>
+        env:
+          STEPS_VERSION_OUTPUTS_VERSION: ${{ steps.version.outputs.version }}
 
       - name: Publish
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          git tag "v${VERSION}"
-          git push origin "v${VERSION}"
+          VERSION="${STEPS_VERSION_OUTPUTS_VERSION}"
           gh release create "v${VERSION}" \
             --title "v${VERSION}" \
             --generate-notes \
+            --target "${GITHUB_SHA}" \
             <name>-aarch64-apple-darwin.tar.gz
         env:
           GH_TOKEN: ${{ github.token }}
+          STEPS_VERSION_OUTPUTS_VERSION: ${{ steps.version.outputs.version }}
 ```
 
 Adjust `runs-on` and archive name for target platform. Add matrix builds for cross-platform.
@@ -83,6 +85,8 @@ Add a `dotslash` job to `release.yml` after the build job:
   dotslash:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # upload release assets
     steps:
       - uses: actions/checkout@SHA # v4
         with:

@@ -39,6 +39,11 @@ leaking to later steps:
     persist-credentials: false
 ```
 
+This breaks `git push` — you can't push tags or commits from a step
+that checked out without credentials. Use `gh release create --target
+"${GITHUB_SHA}"` to create both the tag and release via the API
+instead of `git tag` + `git push`.
+
 **Indirect environment variable expansion.** Never interpolate
 expressions directly in `run:` scripts — an attacker-controlled value
 (branch name, PR title) can inject shell commands. Assign expressions to
