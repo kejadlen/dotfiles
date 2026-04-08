@@ -114,6 +114,7 @@ task :upgrade_neovim do
       # exception if a tag doesn't exist
     end
   end
+  sh "brew upgrade tree-sitter --fetch-HEAD"
   sh "brew upgrade neovim --fetch-HEAD"
 end
 
