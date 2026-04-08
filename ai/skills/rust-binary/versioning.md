@@ -1,6 +1,6 @@
 # Versioning
 
-A `build.rs` sets a single `<NAME>_VERSION` env var. CI sets it to CalVer; local builds default to `dev+<commit>`.
+A `build.rs` sets a single `<NAME>_VERSION` env var. CI sets it to CalVer (`YYYY-MM-DD+SHORT_SHA`); local builds use the same shape but substitute the jj change ID for the git SHA and append `-dev` so they're distinguishable from release builds.
 
 ```rust
 // build.rs
@@ -8,8 +8,9 @@ use std::process::Command;
 
 fn main() {
     let version = std::env::var("<NAME>_VERSION").unwrap_or_else(|_| {
-        let commit = cmd("git", &["rev-parse", "--short", "HEAD"]);
-        format!("dev+{commit}")
+        let date = cmd("date", &["-u", "+%Y-%m-%d"]);
+        let change = cmd("jj", &["log", "-r", "@", "--no-graph", "-T", "change_id.short()"]);
+        format!("{date}+{change}-dev")
     });
     println!("cargo:rustc-env=<NAME>_VERSION={version}");
 }
