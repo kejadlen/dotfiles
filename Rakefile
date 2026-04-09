@@ -102,8 +102,33 @@ namespace :dotslash do
     update_dotslash_release(name: "zizmor", repo: "zizmorcore/zizmor") { |tag| "zizmor-aarch64-apple-darwin.tar.gz" }
   end
 
+  desc "Update sops"
+  task(:sops) do
+    update_dotslash_release(name: "sops", repo: "getsops/sops") { |tag| "sops-#{tag}.darwin.arm64" }
+  end
+
+  desc "Update age"
+  task(:age) do
+    update_dotslash_release(name: "age", repo: "FiloSottile/age", path: "age/age") { |tag| "age-#{tag}-darwin-arm64.tar.gz" }
+  end
+
+  desc "Update age-keygen"
+  task("age-keygen") do
+    update_dotslash_release(name: "age-keygen", repo: "FiloSottile/age", path: "age/age-keygen") { |tag| "age-#{tag}-darwin-arm64.tar.gz" }
+  end
+
   desc "Update all dotslash files"
-  task all: [:pinch, :jq, :jj, :just, :fzf, :zizmor]
+  task all: %i[
+    age
+    age-keygen
+    fzf
+    jj
+    jq
+    just
+    pinch
+    sops
+    zizmor
+  ]
 end
 
 desc "Upgrade neovim"

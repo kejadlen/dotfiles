@@ -1,0 +1,24 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "sops",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 48979010,
+      "hash": "blake3",
+      "digest": "9c84497d9d052788d9519ae48b5256efb61955d54a8173978dde83eba90a6499",
+      "path": "sops",
+      "providers": [
+        {
+          "url": "https://github.com/getsops/sops/releases/download/v3.12.2/sops-v3.12.2.darwin.arm64"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/getsops/sops",
+          "tag": "v3.12.2",
+          "name": "sops-v3.12.2.darwin.arm64"
+        }
+      ]
+    }
+  }
+}
