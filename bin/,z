@@ -7,7 +7,7 @@ fi
 
 main() {
     local dir
-    dir=$(zoxide query -l "$@" | fzf --no-multi --no-margin --no-padding \
+    dir=$(zoxide query -l "$@" | fzf --no-multi --select-1 --no-margin --no-padding \
         --tmux 80%,60% \
         --highlight-line --info inline-right \
         --border-label ' zoxide ' \
