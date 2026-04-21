@@ -76,6 +76,28 @@ glide.autocmds.create("UrlEnter", { hostname: "x.com" }, async () => {
   await browser.tabs.update({ url: url.toString() });
 });
 
+// strip tracking params (rewrites the request before it fires, no reload)
+// forEach avoids Symbol.iterator, which Xray vision denies on cross-compartment values.
+const trackingParams = ["utm_*", "uta_*", "fbclid", "gclid"];
+browser.webRequest.onBeforeRequest.addListener(
+  (details) => {
+    const url = new URL(details.url);
+    const toDelete: string[] = [];
+    url.searchParams.forEach((_value, key) => {
+      if (trackingParams.some((pattern) =>
+        pattern.endsWith("*") ? key.startsWith(pattern.slice(0, -1)) : key === pattern
+      )) {
+        toDelete.push(key);
+      }
+    });
+    if (toDelete.length === 0) return;
+    for (const key of toDelete) url.searchParams.delete(key);
+    return { redirectUrl: url.toString() };
+  },
+  { urls: ["<all_urls>"], types: ["main_frame"] },
+  ["blocking"]
+);
+
 // doi -> sci-hub
 glide.autocmds.create("UrlEnter", { hostname: "doi.org" }, async () => {
   await browser.tabs.update({ url: `https://sci-hub.st/${glide.ctx.url}` });
