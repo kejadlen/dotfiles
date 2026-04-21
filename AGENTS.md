@@ -43,6 +43,10 @@ tea comment -r alpha/dotfiles -l git.kejadlen.dev <index> "Comment body"
 - **No secrets in repo**: API keys are managed via 1Password / `op` CLI, not committed. `.envrc` is a local-only file (not tracked) and should never be committed.
 - **Submodules**: Use shallow clones with `--depth 1` when adding submodules.
 
+## Skills
+
+Skills live in `ai/skills/<name>/SKILL.md`. See the `skill-notes` skill for authoring conventions.
+
 ## Pinch (Plugin Manager)
 
 Pinch is a pi extension (`.pi/agent/extensions/pinch.ts`) that manages plugins from git repos. It caches repo clones in `$XDG_CACHE_HOME/pinch/` and copies selected plugins into scope-appropriate directories, registering their skills automatically.
