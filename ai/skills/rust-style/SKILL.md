@@ -30,7 +30,7 @@ src/
   lib.rs
 ```
 
-Automation: `clippy.self_named_module_files = "warn"`
+Automation: no Clippy lint exists for this convention — enforce in code review.
 
 ### Directory roots only re-export (P-DIR-MOD)
 
@@ -283,8 +283,6 @@ The Clippy configuration below enforces this — `std::fs` functions and `std::f
 Collect these in `.clippy.toml` at the crate root:
 
 ```toml
-self-named-module-files = "warn"
-
 disallowed-methods = [
     { path = "std::iter::Iterator::for_each", reason = "prefer `for` for side-effects" },
     { path = "std::iter::Iterator::try_for_each", reason = "prefer `for` for side-effects" },
