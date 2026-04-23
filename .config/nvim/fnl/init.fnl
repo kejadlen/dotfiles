@@ -18,7 +18,7 @@
 
 ;; ui things
 (set vim.o.diffopt "inline:char")
-(set vim.o.foldlevelstart 3)
+(set vim.o.foldlevelstart 4)
 (set vim.o.foldminlines 2)
 (set vim.o.linebreak true)
 (set vim.o.list true)
@@ -127,11 +127,10 @@
                "https://github.com/j-hui/fidget.nvim.git"
                "https://github.com/junegunn/fzf.git"
                "https://github.com/junegunn/fzf.vim.git"
-               "https://github.com/justinmk/vim-dirvish.git"
                {:src "https://github.com/lukas-reineke/indent-blankline.nvim.git"
                 :version :v3.9.1}
                {:src "https://github.com/neovim/nvim-lspconfig.git"
-                :version :v2.5.0}
+                :version (vim.version.range :v2.8.0)}
                "https://github.com/nvim-treesitter/nvim-treesitter.git"
                "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
                "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
@@ -296,9 +295,6 @@
 
 ;;; fidget
 (let [{: setup} (require :fidget)] (setup))
-
-;; dirvish
-(set vim.g.dirvish_mode ":sort ,^.*[\\/],")
 
 ;; indent-blankline
 (let [{: setup} (require :ibl)] (setup))

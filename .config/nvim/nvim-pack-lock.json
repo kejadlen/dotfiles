@@ -30,16 +30,16 @@
       "src": "https://github.com/itchyny/lightline.vim.git"
     },
     "nvim-lspconfig": {
-      "rev": "5bfcc89",
+      "rev": "9bafffaeaae363c5211080e06e04ed5b422fd5ad",
       "src": "https://github.com/neovim/nvim-lspconfig.git",
-      "version": "'v2.5.0'"
+      "version": "2.8.0 - 2.8.0"
     },
     "nvim-treesitter": {
-      "rev": "42fc28ba",
+      "rev": "cf12346a3414fa1b06af75c79faebe7f76df080a",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
-      "rev": "41847d3",
+      "rev": "b0c45cefe2c8f7b55fc46f34e563bc428ef99636",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "nvim-treesitter-textobjects": {
@@ -57,10 +57,6 @@
     "vim-context-commentstring": {
       "rev": "edcf56c",
       "src": "https://github.com/suy/vim-context-commentstring.git"
-    },
-    "vim-dirvish": {
-      "rev": "5d1d1ef",
-      "src": "https://github.com/justinmk/vim-dirvish.git"
     },
     "vim-dispatch": {
       "rev": "a2ff28a",
