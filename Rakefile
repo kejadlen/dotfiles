@@ -117,6 +117,11 @@ namespace :dotslash do
     update_dotslash_release(name: "age-keygen", repo: "FiloSottile/age", path: "age/age-keygen") { |tag| "age-#{tag}-darwin-arm64.tar.gz" }
   end
 
+  desc "Update tree-sitter"
+  task(:tree_sitter) do
+    update_dotslash_release(name: "tree-sitter", repo: "tree-sitter/tree-sitter") { "tree-sitter-macos-arm64.gz" }
+  end
+
   desc "Update all dotslash files"
   task all: %i[
     age
@@ -127,6 +132,7 @@ namespace :dotslash do
     just
     pinch
     sops
+    tree_sitter
     zizmor
   ]
 end
