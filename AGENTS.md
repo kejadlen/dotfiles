@@ -47,7 +47,7 @@ tea comment -r alpha/dotfiles -l git.kejadlen.dev <index> "Comment body"
 
 Skills live in `ai/skills/<name>/SKILL.md`. See the `skill-notes` skill for authoring conventions.
 
-Pi loads these via `ai/pi/settings.json`, which points to `~/.dotfiles/ai/skills`. Ramekin containers have their own copy at `.config/ramekin/agent/skills/` — when updating a skill, apply the change to both locations so they stay in sync.
+Pi loads these via `ai/pi/settings.json`, which points to `~/.dotfiles/ai/skills`. Ramekin containers have their own copy at `.config/ramekin/agent/skills/` — it's fine for these to drift; only update `ai/skills/`.
 
 ## Pinch (Plugin Manager)
 
