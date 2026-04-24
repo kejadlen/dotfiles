@@ -131,9 +131,11 @@
                 :version :v3.9.1}
                {:src "https://github.com/neovim/nvim-lspconfig.git"
                 :version (vim.version.range :v2.8.0)}
-               "https://github.com/nvim-treesitter/nvim-treesitter.git"
+               {:src "https://github.com/nvim-treesitter/nvim-treesitter.git"
+                :version :main}
                "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
-               "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
+               {:src "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
+                :version :main}
                ;; here for completeness, but actually added in init.lua for bootstrapping purposes
                ; "https://github.com/rktjmp/hotpot.nvim.git"
                "https://github.com/suy/vim-context-commentstring.git"
@@ -197,72 +199,7 @@
 (set vim.g.netrw_home "~/.nvim_tmp")
 
 ;;; treesitter
-(let [{: treesitter} vim
-      {: setup} (require :nvim-treesitter.configs)]
-  (setup {:ensure_installed [:fennel
-                             :hcl
-                             :lua
-                             :python
-                             :query
-                             :ruby
-                             :rust
-                             :terraform
-                             :typescript
-                             :yaml]
-          :sync_install false
-          :highlight {:enable true :additional_vim_regex_highlighting false}
-          ;; disabling since this is super annoying in Ruby
-          ; :indent {:enable true}
-          :incremental_selection {:enable true
-                                  :keymaps {:init_selection :gnn
-                                            :node_incremental :grn
-                                            :scope_incremental :grc
-                                            :node_decremental :grm}}
-          :textobjects {:move {:enable true
-                               :set_jumps true
-                               :goto_next_start {"]a" "@parameter.inner"
-                                                 "]b" "@block.outer"
-                                                 "]c" "@class.inner"
-                                                 "]f" "@function.outer"}
-                               :goto_next_end {"]A" "@parameter.inner"
-                                               "]B" "@block.outer"
-                                               "]C" "@class.outer"
-                                               "]F" "@function.outer"}
-                               :goto_previous_start {"[a" "@parameter.inner"
-                                                     "[b" "@block.outer"
-                                                     "[c" "@class.outer"
-                                                     "[f" "@function.outer"}
-                               :goto_previous_end {"[A" "@parameter.inner"
-                                                   "[B" "@block.outer"
-                                                   "[C" "@class.outer"
-                                                   "[F" "@function.outer"}}
-                        :select {:enable true
-                                 :lookahead true
-                                 :keymaps {:af "@function.outer"
-                                           :if "@function.inner"
-                                           :ac "@class.outer"
-                                           :ic "@class.inner"
-                                           :ab "@block.outer"
-                                           :ib "@block.inner"
-                                           :aa "@parameter.outer"
-                                           :ia "@parameter.inner
-                                           "}}
-                        :swap {:enable true
-                               :swap_next {:<leader>a "@parameter.inner"}
-                               :swap_previous {:<leader>A "@parameter.inner"}}}})
-  (treesitter.language.register :yaml :yaml.ansible)
-  (treesitter.query.set :python :folds "[
-  (function_definition)
-  (class_definition)
-  (block)
-] @fold
-[
-  (import_statement)
-  (import_from_statement)
-]+ @fold"))
-
-(let [{: setup} (require :treesitter-context)]
-  (setup))
+(require :treesitter)
 
 ;; https://neovim.io/doc/user/lsp.html#vim.lsp.foldexpr()
 (set vim.o.foldmethod :expr)
