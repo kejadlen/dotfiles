@@ -133,7 +133,8 @@
                 :version (vim.version.range :v2.8.0)}
                {:src "https://github.com/nvim-treesitter/nvim-treesitter.git"
                 :version :main}
-               "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
+               {:src "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
+                :version :main}
                {:src "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
                 :version :main}
                ;; here for completeness, but actually added in init.lua for bootstrapping purposes
