@@ -1,9 +1,4 @@
----
-name: rust-coverage
-description: Use when measuring code coverage in Rust projects, debugging uncovered lines, generating coverage reports, or setting up LLVM source-based coverage with cargo-llvm-cov or grcov
----
-
-# Rust Source-Based Code Coverage
+# Rust source-based code coverage
 
 LLVM source-based coverage via `cargo-llvm-cov`, which wraps rustc's `-C instrument-coverage` flag.
 
