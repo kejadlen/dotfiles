@@ -102,6 +102,7 @@ edit = true
 [aliases]
 accuse = ["file", "annotate"]
 jj = []
+sweep = ["abandon", "--revisions", 'trunk():: & empty() & ~bookmarks(exact:"mm")']
 tug = ["util", "exec", "--", "bash", "-c", """
   ref=${1:-@}
   jj bookmark move --from "closest_bookmark($ref)" --to "closest_pushable($ref)"
