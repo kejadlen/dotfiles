@@ -275,6 +275,41 @@ use fs_err::tokio as fs;
 
 The Clippy configuration below enforces this — `std::fs` functions and `std::fs::File` are disallowed so bare uses get caught at lint time rather than at 3 AM in production.
 
+### Use `jiff` instead of `chrono`
+
+[`jiff`](https://docs.rs/jiff) is a modern date/time crate by the
+author of `regex` and `ripgrep`. Prefer it over `chrono` for new
+code.
+
+Why:
+
+- Time-zone aware by default. `Zoned`, `Timestamp`, and `civil::DateTime`
+  are distinct types, so DST and offset bugs are caught at the type
+  level instead of by reading docs.
+- Bundles the IANA tz database — no separate `chrono-tz` dependency.
+- Strict arithmetic with `Span` (calendar-aware) and `SignedDuration`
+  (absolute) keeps "add 1 month" and "add 30 days" explicit.
+- Smaller dependency footprint and faster compile times.
+
+```toml
+[dependencies]
+jiff = "*"
+```
+
+```rust
+use jiff::{Timestamp, Zoned};
+
+let now = Timestamp::now();
+let local = now.in_tz("America/Los_Angeles")?;
+```
+
+`chrono` is still appropriate when an existing dependency forces it
+(e.g., `sqlx` row decoding); convert at the boundary rather than
+spreading it through new code.
+
+The Clippy configuration below disallows `chrono` types so the
+distinction is enforced at lint time.
+
 ## Clippy configuration summary
 
 Collect these in `.clippy.toml` at the crate root:
@@ -307,5 +342,10 @@ disallowed-methods = [
 disallowed-types = [
     { path = "std::fs::File", reason = "use fs_err::File for better error messages" },
     { path = "std::fs::OpenOptions", reason = "use fs_err::OpenOptions" },
+    { path = "chrono::DateTime", reason = "use jiff::Zoned or jiff::Timestamp" },
+    { path = "chrono::NaiveDateTime", reason = "use jiff::civil::DateTime" },
+    { path = "chrono::NaiveDate", reason = "use jiff::civil::Date" },
+    { path = "chrono::NaiveTime", reason = "use jiff::civil::Time" },
+    { path = "chrono::Duration", reason = "use jiff::Span or jiff::SignedDuration" },
 ]
 ```
