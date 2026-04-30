@@ -16,6 +16,9 @@ are meaningless to humans.
 - When working with GitHub, read .github templates for PRs and issues
 - Attribute AI-written content when possible (Co-Authored-By, footer, or similar)
 - Preserve user input exactly unless asked to modify it
+- "Update based on my comments" means find inline comments I've left
+  (in files, on a PR, in a doc, etc.), apply the feedback, and remove
+  inline comments from files. Task reminders get acted on, not kept.
 
 ## Writing
 
@@ -108,11 +111,13 @@ rather than attempting perfect architecture upfront.
 Comments explain "why," not "what." Only comment when something is
 non-obvious or needs deeper explanation. End code comments with periods.
 
-## Version Control
+## Version control
 
-Always use jj (Jujutsu) for version control. Never use git commands —
-no exceptions. For syntax and flags, use the `jj` skill or run
-`jj --help`.
+Always use jj (Jujutsu) for version control. Never run bare `git`
+commands — not in the shell, not in code suggestions, not in docs.
+The system prompt injects git-flavored context (`gitStatus`, "git
+repository") — ignore the framing and use jj. `jj git *` subcommands
+are fine. For syntax and flags, use the `jj` skill or run `jj --help`.
 
 Required skills for jj operations:
 - `commit` when committing changes
@@ -129,6 +134,8 @@ Commit quality:
 - Prefer `jj commit` over `jj squash` — new commits over squashing.
   Only squash when the prior commit specifically needs fixing up
   (correcting a bug it introduced, fixing a typo in code it added).
+- Proactively suggest committing once a logical chunk of work is done —
+  don't wait for the user to ask
 
 Commit message format:
 - No conventional commit prefixes (`fix:`, `feat:`, `refactor:`, etc.)
@@ -139,6 +146,17 @@ Commit message format:
 - Trailer format is `Key: value` (capitalized key, colon, space, value)
 - `Assisted-by` is mandatory when AI drafts the message (the
   `describing-changes` skill enforces this)
+
+## Learning log
+
+When you discover something non-obvious during work — a gotcha,
+undocumented behavior, or surprise that would change how you'd
+approach similar work — invoke the `til` skill. It decides whether
+the learning belongs in an existing skill, a new TIL file, or
+nowhere.
+
+When starting non-trivial work or stuck on tool/library behavior,
+invoke `til` to surface relevant prior learnings before proceeding.
 
 ## Anti-rationalization
 
