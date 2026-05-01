@@ -1,5 +1,8 @@
 # Versioning
 
+CLI binaries only. Server versions live on Docker image tags — see
+`dockerfile.md` and `server.md` (Deploy).
+
 A `build.rs` sets a single `<NAME>_VERSION` env var. CI sets it to CalVer (`YYYY-MM-DD+SHORT_SHA`); local builds use the same shape but substitute the jj change ID for the git SHA and append `-dev` so they're distinguishable from release builds.
 
 ```rust
