@@ -58,6 +58,13 @@ tracing-subscriber = { version = "*", features = ["env-filter"] }
 [dev-dependencies]
 hegeltest = "*"
 tempfile = "*"
+
+[lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"
+panic = "warn"
+indexing_slicing = "warn"
+arithmetic_side_effects = "warn"
 ```
 
 Project-type-specific deps (`clap` for CLIs, `axum` for servers) go in
@@ -70,6 +77,11 @@ Notes on this template:
   detail survives through tests and library consumers.
 - `hegeltest` — property-based testing built on the Hypothesis engine,
   with built-in shrinking.
+- `[lints.clippy]` panic-discipline lints — `unwrap`, `expect`, raw
+  `panic!`, slice indexing, and unchecked arithmetic are denial-of-service
+  bugs waiting for untrusted input. See `style.md` "Panic discipline" for
+  rationale and how to opt out at a single call site when an invariant is
+  genuinely local.
 
 Cross-cutting choices (edition, lock file, fs-err, tracing, tokio
 features) are explained in `SKILL.md`.

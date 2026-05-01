@@ -310,6 +310,57 @@ spreading it through new code.
 The Clippy configuration below disallows `chrono` types so the
 distinction is enforced at lint time.
 
+## OS boundaries
+
+Rust types only protect what they model. Crossing the OS↔Rust boundary
+means picking the type that matches what the OS actually returns —
+which is usually bytes, not text.
+
+- Filesystem paths: `Path` / `PathBuf` / `OsStr` / `OsString`. Don't
+  round-trip through `String`. Paths are arbitrary bytes on Unix and
+  UTF-16 on Windows; `String` is neither.
+- Process arguments and environment: `OsString`. Reach for
+  `std::env::args_os()` and `std::env::var_os()`, not `args()` /
+  `var()`.
+- File or stream content of unknown encoding: `Vec<u8>` / `&[u8]`. Use
+  `std::io::Write::write_all` rather than `print!` / `println!` for
+  bytes that came in as bytes — the formatting macros assume UTF-8 and
+  will round-trip through `&str`.
+- `String::from_utf8_lossy` silently replaces invalid bytes with
+  U+FFFD. That's a corruption hazard for filenames, stream content, or
+  anything that came from another process. Reach for it only when
+  you've already decided the input *is* text.
+
+The corollary in the disallowed-methods list flags
+`String::from_utf8_lossy` so the choice surfaces at lint time rather
+than in a postmortem.
+
+## Panic discipline
+
+Code that processes external input must not panic on it. `unwrap`,
+`expect`, raw indexing (`xs[i]`), and unchecked arithmetic (`a + b`)
+all abort the process — fine for invariants the program controls,
+but a denial-of-service vector when the input came from a user, a
+file, or another process.
+
+Replace them with their fallible counterparts:
+
+| Panicking | Fallible alternative |
+|---|---|
+| `xs[i]` | `xs.get(i).ok_or(...)?` |
+| `s.parse::<u32>().unwrap()` | `s.parse::<u32>()?` |
+| `a + b` (where overflow is possible) | `a.checked_add(b).ok_or(...)?` |
+| `usize::try_from(n).unwrap()` | `usize::try_from(n)?` |
+| `slice[start..end]` | `slice.get(start..end).ok_or(...)?` |
+
+The `[lints.clippy]` block in the `Cargo.toml` template (see
+`scaffolding.md`) makes the relevant lints — `unwrap_used`,
+`expect_used`, `panic`, `indexing_slicing`, `arithmetic_side_effects`
+— warnings. Opt out per-call-site with
+`#[allow(clippy::unwrap_used)]` and a comment explaining why the
+invariant holds. Don't disable a lint crate-wide to silence a noisy
+test module; gate tests with `#![cfg_attr(test, allow(...))]` instead.
+
 ## Clippy configuration summary
 
 Collect these in `.clippy.toml` at the crate root:
@@ -337,6 +388,7 @@ disallowed-methods = [
     { path = "std::fs::read_dir", reason = "use fs_err::read_dir" },
     { path = "std::fs::read_link", reason = "use fs_err::read_link" },
     { path = "std::fs::set_permissions", reason = "use fs_err::set_permissions" },
+    { path = "std::string::String::from_utf8_lossy", reason = "lossy at OS boundaries — consider OsStr/Path or stay in &[u8]; if input really is text, suppress with an #[allow] and a comment" },
 ]
 
 disallowed-types = [
@@ -349,3 +401,8 @@ disallowed-types = [
     { path = "chrono::Duration", reason = "use jiff::Span or jiff::SignedDuration" },
 ]
 ```
+
+Panic-discipline lints (`unwrap_used`, `expect_used`, `panic`,
+`indexing_slicing`, `arithmetic_side_effects`) live in `Cargo.toml`
+under `[lints.clippy]`, not here — they're lints, not config keys, so
+`.clippy.toml` won't pick them up. The template is in `scaffolding.md`.
