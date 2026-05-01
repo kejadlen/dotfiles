@@ -63,25 +63,20 @@ tempfile = "*"
 Project-type-specific deps (`clap` for CLIs, `axum` for servers) go in
 `binary.md` / `server.md` and are added on top of this baseline.
 
-Key choices:
+Notes on this template:
 
-- `edition = "2024"` — latest stable edition.
-- Unpinned dependencies (`"*"`) — `Cargo.lock` is committed (it's a
-  binary), so builds are reproducible. Unpinned versions mean
-  `cargo update` gets the latest compatible releases without editing
-  `Cargo.toml`.
 - `miette` with the `fancy` feature — pretty diagnostic rendering for
-  binaries; the library still derives `miette::Diagnostic` even when
-  the consumer is not the binary (e.g., when running tests).
-- `thiserror` — structured errors in the library.
-- `fs-err` — `std::fs` with paths in error messages (→ `style.md`).
+  binaries; the library still derives `miette::Diagnostic` so error
+  detail survives through tests and library consumers.
 - `hegeltest` — property-based testing built on the Hypothesis engine,
   with built-in shrinking.
 
+Cross-cutting choices (edition, lock file, fs-err, tracing, tokio
+features) are explained in `SKILL.md`.
+
 ## Error pattern
 
-Library errors derive both `thiserror::Error` and `miette::Diagnostic`.
-The binary returns `miette::Result<()>`.
+Template (rationale in `SKILL.md`):
 
 ```rust
 // src/error.rs
@@ -101,10 +96,6 @@ pub enum MyError {
     Io(#[from] std::io::Error),
 }
 ```
-
-The diagnostic codes and help text live on the variant itself, so
-errors carry their own labels and source spans through tests, other
-binaries, and HTTP handlers.
 
 ## justfile
 
@@ -180,10 +171,8 @@ Key design:
   --ignore 'src/bin/**'`. Binary code is tested via integration tests
   but not measured.
 - `covdir` output — machine-readable JSON, parsed with `jq` for a
-  clean summary.
-- Exclusion markers — `cov-excl-line`, `cov-excl-start`/
-  `cov-excl-stop` for structurally unreachable code. The
-  `unreachable!` macro is also excluded by default.
+  clean summary. Exclusion markers (`cov-excl-line`, etc.) are
+  documented in `coverage.md`.
 - `mutants` tolerates exit code 3 — `cargo mutants` returns 3 for
   timeouts (infinite loops caused by mutations). These count as
   caught because the mutant broke the program.
@@ -250,15 +239,3 @@ cargo install grcov cargo-mutants just
 
 hegeltest also requires [`uv`](https://docs.astral.sh/uv/) on `PATH`
 — it manages the Hypothesis engine automatically.
-
-## Quick reference
-
-| Task | Command |
-|------|---------|
-| Format | `just fmt` |
-| Lint | `just clippy` |
-| Coverage | `just coverage` |
-| Mutation testing | `just mutants` |
-| All checks | `just all` |
-| Install from source | `just install` |
-| Find uncovered lines | Change `-t covdir` to `-t markdown` in justfile |

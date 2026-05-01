@@ -2,7 +2,7 @@
 
 LLVM source-based coverage via `cargo-llvm-cov`, which wraps rustc's `-C instrument-coverage` flag.
 
-## How It Works
+## How it works
 
 1. **Compile** with `-C instrument-coverage` — rustc inserts counters at coverage-relevant spans.
 2. **Run** the instrumented binary — writes `.profraw` files.
@@ -18,7 +18,7 @@ rustup component add llvm-tools       # ships llvm-profdata + llvm-cov
 cargo install cargo-llvm-cov          # convenience wrapper
 ```
 
-## Quick Reference
+## Quick reference
 
 | Goal | Command |
 |------|---------|
@@ -59,7 +59,7 @@ cargo llvm-cov --workspace --exclude some-crate
 cargo llvm-cov --workspace --exclude-from-report some-crate
 ```
 
-## Reading the Text Report
+## Reading the text report
 
 ```bash
 cargo llvm-cov --text
@@ -75,7 +75,7 @@ Output shows each source line with execution count:
 
 Lines with `0` count are uncovered. Lines with no count are non-executable (declarations, imports, comments).
 
-## Show Missing Lines
+## Show missing lines
 
 ```bash
 cargo llvm-cov --show-missing-lines
@@ -188,7 +188,7 @@ grcov . --binary-path ./target/debug/ -s . -t lcov \
 | Mixed language project (Rust + C) | `grcov` — handles `.gcda` + `.profraw` together |
 | Doctests coverage | `cargo-llvm-cov` — `--doctests` flag (nightly) |
 
-## Manual Workflow (Without cargo-llvm-cov or grcov)
+## Manual workflow (without cargo-llvm-cov or grcov)
 
 For environments where neither wrapper is available:
 
@@ -221,7 +221,7 @@ llvm-cov export "$BINARY" \
 
 Use `rustfilt` as demangler for readable Rust symbol names (`cargo install rustfilt`).
 
-## Common Pitfalls
+## Common pitfalls
 
 **Multiple binaries**: `llvm-cov` needs all instrumented binaries passed via `-object`. `cargo-llvm-cov` handles this automatically. Manually, you must pass each binary:
 

@@ -262,11 +262,11 @@ use fs_err as fs;
 let contents = fs::read_to_string("config.toml")?;
 ```
 
-For async code, use `fs-err`'s tokio feature:
+For async code, enable the tokio feature:
 
 ```toml
 [dependencies]
-fs-err = { version = "3", features = ["tokio"] }
+fs-err = { version = "*", features = ["tokio"] }
 ```
 
 ```rust
