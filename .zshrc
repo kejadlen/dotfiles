@@ -76,8 +76,8 @@ z4h init || return
 
 # Extend PATH.
 path=(
-  ~/.dotfiles/bin
   .git/safe/../../bin
+  ~/.dotfiles/bin
   ~/.volta/bin
   $path
 )
