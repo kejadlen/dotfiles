@@ -3,6 +3,30 @@
 {
   "name": "shellcheck",
   "platforms": {
+    "linux-aarch64": {
+      "size": 6811484,
+      "hash": "blake3",
+      "digest": "2387ca3885afdc055769f6d93a9693021d275293419fffce968d0324e441e8d6",
+      "format": "tar.xz",
+      "path": "shellcheck-v0.11.0/shellcheck",
+      "providers": [
+        {
+          "url": "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.aarch64.tar.xz"
+        }
+      ]
+    },
+    "linux-x86_64": {
+      "size": 2559196,
+      "hash": "blake3",
+      "digest": "0ad9524f3f16ad030f8350e7b970c62c24aeff3d813f2565665aecc5a8b79644",
+      "format": "tar.xz",
+      "path": "shellcheck-v0.11.0/shellcheck",
+      "providers": [
+        {
+          "url": "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz"
+        }
+      ]
+    },
     "macos-aarch64": {
       "size": 7245972,
       "hash": "blake3",
