@@ -1,10 +1,28 @@
 {
-  "lastChangelogVersion": "0.65.2",
-  "defaultProvider": "anthropic",
-  "defaultModel": "claude-opus-4-6",
+  "lastChangelogVersion": "0.72.1",
+  "defaultProvider": "zai",
   "skills": [
     "~/.dotfiles/ai/skills"
   ],
   "enableSkillCommands": true,
-  "defaultThinkingLevel": "high"
+  "defaultThinkingLevel": "high",
+  "defaultModel": "glm-5.1",
+  "packages": [
+    {
+      "source": "git:github.com/DrCatHicks/learning-opportunities",
+      "skills": [
+        "learning-opportunities/skills/**"
+      ]
+    },
+    "git:git.kejadlen.dev/alpha/ranger",
+    {
+      "source": "git:github.com/anthropics/claude-plugins-official",
+      "skills": [
+        "plugins/playground/skills/**"
+      ]
+    },
+    "git:git.kejadlen.dev/alpha/ramekin",
+    "git:github.com/obra/superpowers",
+    "git:github.com/hegeldev/hegel-skill"
+  ]
 }

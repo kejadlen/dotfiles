@@ -49,18 +49,11 @@ Skills live in `ai/skills/<name>/SKILL.md`. See the `skill-notes` skill for auth
 
 Pi loads these via `ai/pi/settings.json`, which points to `~/.dotfiles/ai/skills`. Ramekin containers have their own copy at `.config/ramekin/agent/skills/` — it's fine for these to drift; only update `ai/skills/`.
 
-## Pinch (Plugin Manager)
+## Pi Packages
 
-Pinch is a pi extension (`.pi/agent/extensions/pinch.ts`) that manages plugins from git repos. It caches repo clones in `$XDG_CACHE_HOME/pinch/` and copies selected plugins into scope-appropriate directories, registering their skills automatically.
+Pi manages plugins natively via `pi install` / `pi remove` / `pi update` / `pi list`. Global packages are declared in `~/.pi/agent/settings.json` under `packages`. Project-scoped packages use `.pi/settings.json` with the `-l` flag.
 
-Plugins are scoped by which manifest defines them. Sources in the global manifest only install to `~/.pi/pinch/` (user scope). Sources referenced in a project manifest install to `.pi/pinch/` (project scope). This keeps user-specific plugins out of project repositories.
-
-- Global manifest: `~/.pi/agent/pinch.json` — user-wide sources
-- Project manifest: `.pi/pinch.json` — per-project, can reference global sources or define new ones
-- Lock files: `~/.pi/agent/pinch-lock.json` (user) and `.pi/pinch-lock.json` (project)
-- Commands: `/pinch:install`, `/pinch:update`, `/pinch:status`
-
-To add a plugin, add an entry to `pinch.json` and run `/pinch:install`. See the pinch skill for manifest format and troubleshooting.
+Use the object form with `skills` filters to load specific plugins from multi-plugin repos.
 
 ## Open Issues
 
