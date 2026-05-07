@@ -4,6 +4,11 @@
 name = "Alpha Chen"
 email = "alpha@kejadlen.dev"
 
+[merge-tools.difft]
+program = "difft"
+diff-args = ["--color=always", "$left", "$right"]
+diff-invocation-mode = "file-by-file"
+
 # https://discord.com/channels/968932220549103686/968932220549103689/1324858422910255155
 [merge-tools.gitpatch]
 program = "sh"
@@ -32,6 +37,10 @@ program = "git-pkgs"
 diff-args = ["diff-file", "--color=always", "$left", "$right"]
 diff-invocation-mode = "file-by-file"
 edit-args = []
+
+[merge-tools.zed]
+program = "zed"
+diff-args = ["--diff", "$left", "$right"]
 
 [diff.color-words]
 max-inline-alternation = 0
@@ -76,7 +85,7 @@ log_node = '''
 default-command = "st"
 diff-editor = "gitpatch"
 # diff-editor = ",jj-nvimdiff"
-diff-formatter = ["difft", "--color=always", "$left", "$right"]
+diff-formatter = "difft"
 pager = ":builtin"
 
 # default will be `glob:` in the future, so switch to it proactively
