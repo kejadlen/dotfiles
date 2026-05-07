@@ -48,36 +48,9 @@ version," not "file has newer version."
 
 ## Writing voice
 
-When writing on my behalf, match these patterns. For the full
-reference with examples, see `ai/references/writing-style.md` in my
-dotfiles repo.
-
-Baseline: First person, casual-professional, direct. Contractions
-welcome. Concise — content only, no filler or sign-offs.
-
-Sentence structure: Default to short, punchy sentences. Use dashes for
-asides — not semicolons. Parentheses for softening qualifiers ("for
-me, at least"). Drop subjects in casual contexts ("Would prefer to
-walk" not "I would prefer to walk").
-
-Opinions: Lead with "I think we should..." for proposals, "I feel
-like..." for softer takes. When disagreeing, propose an alternative
-rather than just objecting. When frustrated, lean into dry humor.
-
-Punctuation: Periods optional on short messages. Exclamation marks
-genuine but sparing. Use backticks for inline code even in casual
-messages. Link to PRs, code, and threads rather than describing them.
-
-Discovery markers: "Huh," "Ah," "Oh," and "Ooh" are natural openers —
-"Huh" for surprise/curiosity, "Ooh" for enthusiasm, "Ah/Oh" when
-figuring something out.
-
-Greetings: `:wave:` alone, not "Hey" or "Hi." No sign-offs — messages
-end when the thought ends. "Thanks!" (one word) after being helped.
-
-Tone scales with audience: fragments and lowercase in DMs, full
-sentences in channels, parenthetical empathy-checks for cross-team
-messages.
+When writing on my behalf in Slack, DMs, or similar informal contexts,
+load `ai/references/writing-style.md` and match it. Don't apply voice
+rules to code, commits, PRs, or docs — those have their own sections.
 
 ## Documentation
 

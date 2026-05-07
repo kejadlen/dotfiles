@@ -18,3 +18,19 @@ instructions are clear and the task is bounded.
 
 Commit messages, simple lookups, formatting, mechanical edits, generating
 boilerplate. Anywhere speed matters more than depth.
+
+## When to question the default
+
+Opus is wrong when:
+- The task is bounded and well-specified — Sonnet finishes faster at
+  near-identical quality. Long Opus sessions on mechanical work waste
+  latency and cost.
+- You're iterating in a tight loop (manual edits, repeated small
+  prompts). Sonnet's speed compounds.
+- You're using Fast mode out of habit but the work is exploratory —
+  the speed bias is hiding under-thought design.
+
+Signals to drop a level mid-session:
+- You're correcting Claude on simple facts more than once.
+- The remaining work is mechanical follow-through on a decided plan.
+- You're paying for a 1M context window on a 20k-token task.
