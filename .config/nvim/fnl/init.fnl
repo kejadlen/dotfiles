@@ -219,8 +219,11 @@
 ;; FocusLost/FocusGained fire when the terminal pane loses/gains focus.
 (let [group (nvim-create-augroup :focus-dim {})
       {: colors} (require :alphabaster.palette)
-      dim-bg #(nvim-set-hl 0 :Normal {:fg colors.fg :bg colors.dim-bg})
-      restore-bg #(nvim-set-hl 0 :Normal {:fg colors.fg :bg colors.bg})]
+      set-bg (fn [bg]
+               (nvim-set-hl 0 :Normal {:fg colors.fg : bg})
+               (nvim-set-hl 0 :NormalNC {:fg colors.fg : bg}))
+      dim-bg #(set-bg colors.dim-bg)
+      restore-bg #(set-bg colors.bg)]
   (nvim-create-autocmd :FocusLost {:callback dim-bg : group})
   (nvim-create-autocmd :FocusGained {:callback restore-bg : group}))
 

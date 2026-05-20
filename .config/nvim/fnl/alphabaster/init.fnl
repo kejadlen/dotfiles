@@ -30,7 +30,10 @@
 
   ;;; Base
   (hi :Normal {:fg colors.fg :bg colors.bg})
-  (hi :NormalNC {:fg colors.fg :bg colors.dim-bg})  ;; inactive splits dimmed
+  ;; NormalNC matches Normal so inactive splits don't dim on their own;
+  ;; the FocusLost autocmd in init.fnl dims both together when the whole
+  ;; terminal pane loses focus.
+  (hi :NormalNC {:fg colors.fg :bg colors.bg})
   (hi :NormalFloat {:fg colors.fg :bg colors.black})
   (hi :FloatBorder {:fg colors.bright-black})
 
@@ -79,7 +82,8 @@
   (hi :CursorLine {:bg colors.black})
   (hi :CursorLineNr {:fg semantic.definition :bg colors.black})
   (hi :LineNr {:fg colors.bright-black})
-  (hi :SignColumn {:bg colors.bg})
+  ;; No explicit bg — inherits from Normal/NormalNC so it dims with the window.
+  (hi :SignColumn {})
   (hi :VertSplit {:fg colors.bright-black})
   (hi :WinSeparator {:fg colors.bright-black})
   (hi :StatusLine {:bg colors.black})
