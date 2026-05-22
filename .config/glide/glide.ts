@@ -98,10 +98,14 @@ browser.webRequest.onBeforeRequest.addListener(
   ["blocking"]
 );
 
-// doi -> sci-hub
-glide.autocmds.create("UrlEnter", { hostname: "doi.org" }, async () => {
-  await browser.tabs.update({ url: `https://sci-hub.st/${glide.ctx.url}` });
-});
+// doi -> sci-hub — intercept at network level before the redirect fires
+browser.webRequest.onBeforeRequest.addListener(
+  (details) => {
+    return { redirectUrl: `https://sci-hub.st/${details.url}` };
+  },
+  { urls: ["*://doi.org/*"], types: ["main_frame"] },
+  ["blocking"]
+);
 
 glide.styles.add(`
   .yank-notification {
