@@ -4,19 +4,19 @@
   "name": "fzf",
   "platforms": {
     "macos-aarch64": {
-      "size": 1782586,
+      "size": 1861771,
       "hash": "blake3",
-      "digest": "4c30b2c734738933629fcda5aa62a6a48ff12afca32004775d7bdd9ff53ed1f1",
+      "digest": "2c0a2c86f930942092934bc3ec44f5c7b621d4ca8909d6a0b66f522660ac4cea",
       "path": "fzf",
       "providers": [
         {
-          "url": "https://github.com/junegunn/fzf/releases/download/v0.71.0/fzf-0.71.0-darwin_arm64.tar.gz"
+          "url": "https://github.com/junegunn/fzf/releases/download/v0.73.1/fzf-0.73.1-darwin_arm64.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/junegunn/fzf",
-          "tag": "v0.71.0",
-          "name": "fzf-0.71.0-darwin_arm64.tar.gz"
+          "tag": "v0.73.1",
+          "name": "fzf-0.73.1-darwin_arm64.tar.gz"
         }
       ],
       "format": "tar.gz"
