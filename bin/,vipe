@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+cleanup() {
+    if [[ -n "${tmp:-}" ]]; then
+        rm -f "$tmp"
+    fi
+}
+trap cleanup EXIT
+
+main() {
+    tmp=$(mktemp -t vipe.XXXXXX)
+
+    if [[ ! -t 0 ]]; then
+        cat > "$tmp"
+    fi
+
+    local editor=${VISUAL:-${EDITOR:-vi}}
+    # shellcheck disable=SC2086
+    $editor "$tmp" </dev/tty >/dev/tty
+
+    cat "$tmp"
+}
+
+main "$@"
