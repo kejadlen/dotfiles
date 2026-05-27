@@ -1,12 +1,12 @@
 {
-  "lastChangelogVersion": "0.72.1",
-  "defaultProvider": "zai",
+  "lastChangelogVersion": "0.73.1",
+  "defaultProvider": "openrouter",
   "skills": [
     "~/.dotfiles/ai/skills"
   ],
   "enableSkillCommands": true,
   "defaultThinkingLevel": "high",
-  "defaultModel": "glm-5.1",
+  "defaultModel": "openrouter/owl-alpha",
   "packages": [
     {
       "source": "git:github.com/DrCatHicks/learning-opportunities",

@@ -1,0 +1,20 @@
+{
+  "providers": {
+    "openrouter": {
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "apiKey": "OPENROUTER_API_KEY",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "openrouter/owl-alpha",
+          "name": "Owl Alpha",
+          "reasoning": false,
+          "input": ["text"],
+          "contextWindow": 1048756,
+          "maxTokens": 262144,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        }
+      ]
+    }
+  }
+}
