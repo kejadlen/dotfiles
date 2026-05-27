@@ -17,15 +17,16 @@
                       :Miniflux
                       :Phanpy
                       :Obsidian
-                      "Raspberry Pi Imager"
                       :Safari]
                :timeouts {:Fusion [:minute 30]
                           :Music [:hour 1]
                           :Raindrop [:minute 15]
-                          "UniFi Protect" [:minute 30]
-                          :Steam [:hour 1]
-                          "Steam Helper" [:hour 1]
+                          "Raspberry Pi Imager" [:hour 1]
                           "Slay the Spire 2" [:hour 2]
+                          :Steam [:hour 2]
+                          "Steam Helper" [:hour 2]
+                          "System Settings" [:hour 1]
+                          "UniFi Protect" [:minute 30]
                           :Xcode [:hour 1]
                           :zoom.us [:hour 1]}
                :default [:minute 5]})

@@ -108,8 +108,7 @@
                 :safari :com.apple.Safari
                 :zoom :us.zoom.xos}
       ;; domains to be opened in Safari, most for Apple Pay
-      safari-domains [:adafruit.com
-                      :apps.apple.com
+      safari-domains [:apps.apple.com
                       :account.apple.com
                       :goodluckbread.com
                       :patagonia.com
