@@ -57,10 +57,10 @@
 ;;; reload sketchybar on screen changes
 
 (set _G.screen-watcher
-     (screen.watcher.new #(debounce 1.0
-                                    (fn []
-                                      (log:i "Screen configuration changed, reloading sketchybar")
-                                      (execute "/opt/homebrew/bin/sketchybar --reload")))))
+     (screen.watcher.new (debounce 1.0
+                                   (fn []
+                                     (log:i "Screen configuration changed, reloading sketchybar")
+                                     (execute "/opt/homebrew/bin/sketchybar --reload")))))
 
 (_G.screen-watcher:start)
 
