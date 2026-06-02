@@ -5,7 +5,9 @@ description: Use when searching Slack, finding messages, sending messages, check
 
 # Slack
 
-Official Slack MCP via mcporter. Prefix all calls with `slack.`. Run
+Official Slack MCP via mcporter. Tool names join to the server with a
+dot: `mcporter call slack.<tool>` (e.g.
+`mcporter call slack.slack_search_users query=alpha`). Run
 `mcporter list slack --schema` for full tool details.
 
 *This is a self-improving skill — see the `self-improving-skills` skill.*
@@ -56,6 +58,16 @@ Messages posted directly via MCP cannot be edited in Slack.
 The `message` param takes standard markdown. Thread replies need
 `thread_ts`; set `reply_broadcast=true` to also post to the channel.
 Cannot post to Slack Connect channels.
+
+### Drafting in Alpha's voice
+
+When drafting on Alpha's behalf, match the "Writing voice" section in
+the global CLAUDE.md, with fuller examples in
+`ai/references/writing-style.md` in the dotfiles repo. Short, direct,
+first person. Dashes for asides — not semicolons. Lowercase fragments
+fine in DMs; full sentences in channels. No sign-offs. Backticks for
+inline code. Link to threads, PRs, or messages rather than describing
+them.
 
 ## Timestamps
 
