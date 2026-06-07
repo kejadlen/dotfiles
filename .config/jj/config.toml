@@ -59,6 +59,7 @@ sign-on-push = true
 private-commits = "private() | wip()"
 write-change-id-header = true
 track-default-bookmark-on-clone = false
+fetch = "glob:*"
 
 [templates]
 # show diff when committing
