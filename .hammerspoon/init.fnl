@@ -96,11 +96,14 @@
                                :start true})
 
 (fn sanitize-url [url]
-  (let [tracking-params [:utm_* :uta_* :fbclid :gclid]
-        trurl-cmd (.. :/opt/homebrew/bin/trurl " "
-                      (table.concat (map tracking-params #(.. "--qtrim " $1))
-                                    " "))]
-    (chomp (execute (.. trurl-cmd " --url \"" url "\"")))))
+  ;; Skip AWS SSO URLs — trurl encodes slashes in hash-routed fragments.
+  (if (string.match url "%.awsapps%.com/start/#/")
+      url
+      (let [tracking-params [:utm_* :uta_* :fbclid :gclid]
+            trurl-cmd (.. :/opt/homebrew/bin/trurl " "
+                          (table.concat (map tracking-params #(.. "--qtrim " $1))
+                                        " "))]
+        (chomp (execute (.. trurl-cmd " --url \"" url "\""))))))
 
 (let [handlers {:firefox-dev :org.mozilla.firefoxdeveloperedition
                 :firefox :org.mozilla.firefox
@@ -119,7 +122,7 @@
                             "/?"))
       url-patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
                     [safari-patterns handlers.safari]]
-      url-redir-decoders [[:trurl-sanitize #(sanitize-url $4) nil]
+      url-redir-decoders [[:trurl-sanitize #(sanitize-url $4) nil true]
                           [:reddit "://www%.reddit%.com" "://old.reddit.com"]
                           [:xcancel "://x%.com" "://xcancel.com"]]]
   (Install:andUse :URLDispatcher {:config {:url_patterns url-patterns
