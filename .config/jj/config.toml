@@ -111,7 +111,7 @@ edit = true
 [aliases]
 accuse = ["file", "annotate"]
 jj = []
-sweep = ["abandon", "--revisions", 'trunk():: & empty() & ~bookmarks(exact:"mm")']
+sweep = ["abandon", 'trunk():: & empty() & ~bookmarks(exact:"mm") & mine()']
 tug = ["util", "exec", "--", "bash", "-c", """
   ref=${1:-@}
   jj bookmark move --from "closest_bookmark($ref)" --to "closest_pushable($ref)"
@@ -130,6 +130,7 @@ pull = ["util", "exec", "--", "bash", "-c", """
   jj git fetch
   jj rebase --branch "visible_heads() & mutable()" --destination "trunk()"
   jj simplify-parents
+  jj sweep
 """]
 
 # https://github.com/jj-vcs/jj/discussions/3549
