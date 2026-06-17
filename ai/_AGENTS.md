@@ -100,6 +100,13 @@ Required skills for jj operations:
 
 Use `jj commit` to commit the current change, not `jj describe`.
 
+Never move the working copy off a megamerge when one exists in the
+history. A megamerge is a single working commit that integrates several
+parallel branches at once; moving off it (via `jj new` or `jj edit` onto
+another commit) discards that combined view, and rebuilding it means
+re-running the merge by hand. If a megamerge is present, stay on it
+unless I explicitly ask you to move.
+
 Commit quality:
 - Each commit should be one logical unit of change
 - Every commit must build and pass checks (bisect-able history)
