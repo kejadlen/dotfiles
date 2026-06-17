@@ -65,7 +65,7 @@ items.each do |item|
   log(item)
 end
 
-File.open(path) do |f|
+Pathname.new(path).open do |f|
   f.write(data)
 end
 
@@ -75,6 +75,28 @@ items.each { |item| process(item) }
 # bad — value-returning with do...end
 names = items.map do |item| item.name end
 ```
+
+## File and path operations
+
+Prefer `Pathname` over `File` for path manipulation. `Pathname` is
+object-oriented, composable, and works well with the rest of the
+stdlib.
+
+```ruby
+# good
+path = Pathname.new("/app/config/database.yml")
+path.dirname
+path.extname
+path / ".." / "secrets.yml"
+
+# bad — procedural and harder to chain
+File.dirname("/app/config/database.yml")
+File.extname("/app/config/database.yml")
+File.expand_path("../secrets.yml", "/app/config/database.yml")
+```
+
+Use `File` only for the operations that don't have a `Pathname`
+equivalent (`File.read`, `File.write`, `File.open` with a block).
 
 ## Building hashes
 
