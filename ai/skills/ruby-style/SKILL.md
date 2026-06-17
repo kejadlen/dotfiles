@@ -112,6 +112,32 @@ users.each_with_object({}) { |user, hash| hash[user.id] = user.name }
 Hash[users.map { |user| [user.id, user.name] }]
 ```
 
+## Frozen string literals
+
+Prefer enabling frozen string literals process-wide with
+`RUBYOPT=--enable-frozen-string-literal` (set it in your shell profile,
+`.env`, or CI) over adding a `# frozen_string_literal: true` magic
+comment to every file. One environment setting covers the whole project
+instead of a comment that has to be added to — and kept on — each new
+file.
+
+```bash
+# good — one setting for the whole project
+export RUBYOPT=--enable-frozen-string-literal
+
+# bad — per-file ceremony repeated in every file
+# frozen_string_literal: true
+```
+
+The flag applies to every file that lacks its own magic comment, so a
+file can still opt out with an explicit `# frozen_string_literal: false`
+when it genuinely needs mutable string literals.
+
+Don't fight an existing convention. If a project already relies on the
+magic comment — RuboCop's `Style/FrozenStringLiteralComment` is enabled,
+or the files already carry it — keep adding the comment so the codebase
+stays consistent.
+
 ## Binstubs
 
 Prefer binstubs over `bundle exec`. Run `bundle binstubs --all` to
