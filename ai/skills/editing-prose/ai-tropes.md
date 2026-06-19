@@ -1,7 +1,9 @@
 # AI Writing Tropes to Avoid
 
 Add this file to your AI assistant's system prompt or context to help it avoid
-common AI writing patterns. Source: [tropes.fyi](https://tropes.fyi) by [ossama.is](https://ossama.is)
+common AI writing patterns. Sources: [tropes.fyi](https://tropes.fyi) by
+[ossama.is](https://ossama.is), and [Modeltell](https://github.com/thirdshiftlab/modeltell)
+(`patterns/definitions.json`) — see [Additional patterns](#additional-patterns-modeltell).
 
 ---
 
@@ -319,6 +321,128 @@ The rigid formula where AI acknowledges problems only to immediately dismiss the
 - "Despite these challenges, the initiative continues to thrive."
 - "Despite its industrial and residential prosperity, Korattur faces challenges typical of urban areas."
 - "Despite their promising applications, pyroelectric materials face several challenges that must be addressed for broader adoption."
+
+---
+
+## Additional patterns (Modeltell)
+
+These come from [Modeltell](https://github.com/thirdshiftlab/modeltell)'s
+`patterns/definitions.json`, a catalog of LLM linguistic fingerprints. They
+extend the categories above. Patterns that duplicate tropes.fyi entries
+(tricolon, em-dash pivots, "not just X but Y", "Imagine a world", "Let's
+dive") are omitted here. Modeltell tags each with a severity — `critical`
+patterns are the strongest tells.
+
+A note on the watchlists at the end: Modeltell tracks how *often* these words
+appear and how distinctive they are across models, not whether they show up at
+all. Read them like everything else here. A single instance means nothing; a
+cluster is the giveaway.
+
+### "Whether You're X or Y" Pseudo-Inclusivity (critical)
+
+Opening with "Whether you're X or Y" to fake audience inclusivity. Almost
+exclusively an LLM construction; extremely rare in human-written copy.
+
+**Avoid patterns like:**
+- "Whether you're a seasoned professional or just starting out..."
+- "Whether you're a small business or a large enterprise..."
+- "Whether you're looking to scale or optimize..."
+
+### "In Today's Landscape" Openers (critical)
+
+Opening with "In today's [adjective] landscape/world/era". Distinct from the
+"landscape" word-choice trope above: this is the whole sentence frame. Near-zero
+in quality human copy.
+
+**Avoid patterns like:**
+- "In today's fast-paced digital landscape..."
+- "In today's rapidly evolving world..."
+- "In an era of unprecedented change..."
+
+### "By [Verb]ing" Authority Openers
+
+Starting sentences with "By [gerund]" to sound authoritative. Humans use it
+too, but LLMs reach for it three to five times as often.
+
+**Avoid patterns like:**
+- "By leveraging cutting-edge technology..."
+- "By streamlining your workflow..."
+- "By combining innovation with expertise..."
+
+### Future-Forward Closings
+
+Ending on vague, future-facing filler that commits to nothing. Especially
+common at the close of business writing.
+
+**Avoid patterns like:**
+- "The future of X is here."
+- "As we move forward..." / "Looking ahead..."
+- "...poised to transform the industry."
+
+### "At Its Core" Pretension
+
+Pseudo-depth constructions that announce essence without delivering it. The
+model uses these to signal insight rather than provide it.
+
+**Avoid patterns like:**
+- "At its core, the platform is about people."
+- "At the heart of everything we do..."
+- "When you strip it all away..."
+
+### Rhetorical Question Hooks
+
+Questions used as engagement bait, clustered at section starts. Distinct from
+the self-answered "The X? A Y." pattern above. These are open hooks aimed at
+the reader, and the model bunches them at the top where a human writer would
+scatter them through the piece.
+
+**Avoid patterns like:**
+- "What if there was a better way?"
+- "Sound familiar?"
+- "Tired of fighting your tools?"
+
+### Power-Verb Stacking
+
+Clustering action verbs for artificial energy. Density is what gives it away:
+a human spreads these verbs across paragraphs, while the model packs three or
+four into one sentence.
+
+**Avoid patterns like:**
+- "drive growth, boost engagement, and accelerate revenue"
+- "streamline, optimize, and transform"
+- "empower teams to innovate and deliver"
+
+### Colon-Introduced Lists
+
+Setting up bullets with a stock colon clause. A structural tic; watch the
+ratio of colon-into-list intros to varied lead-ins.
+
+**Avoid patterns like:**
+- "Here's what sets us apart:"
+- "Key benefits include:"
+- "Our approach is built on three pillars:"
+
+### Watchlists
+
+Words and phrases worth tracking the *frequency* of. None is wrong on its
+own; clustering is the tell.
+
+Power words: seamless, leverage, robust, cutting-edge, state-of-the-art,
+game-changer, groundbreaking, revolutionary, transformative, innovative,
+disruptive, empower, unlock, elevate, supercharge, streamline, optimize,
+maximize, harness, spearhead, foster, cultivate, navigate, delve, synergy,
+holistic, comprehensive, unparalleled, unprecedented.
+
+Filler phrases: "at the end of the day", "it's important to note", "moving
+forward", "in terms of", "when it comes to", "the bottom line is", "that
+being said", "needless to say", "last but not least".
+
+Hedge words: arguably, perhaps, essentially, effectively, virtually,
+relatively, generally, typically, potentially, certainly, definitely,
+absolutely.
+
+Overused connectors: moreover, furthermore, additionally, consequently,
+nevertheless, nonetheless, accordingly, subsequently, henceforth.
 
 ---
 

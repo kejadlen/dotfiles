@@ -5,8 +5,9 @@ description: Use when writing or editing prose longer than a paragraph to catch 
 
 # Editing Prose
 
-Catches AI writing tropes that other writing skills miss. Source:
-[tropes.fyi](https://tropes.fyi).
+Catches AI writing tropes that other writing skills miss. Sources:
+[tropes.fyi](https://tropes.fyi) and
+[Modeltell](https://github.com/thirdshiftlab/modeltell).
 
 Complements `technical-writing` (structure, terminology),
 `elements-of-style` (sentence-level clarity), and `diataxis` (document
@@ -60,6 +61,8 @@ These are the strongest tells. If you see them, edit them:
 - Tricolon stacking (rule of three repeated three times in a row)
 - "Here's the kicker"/"Here's the thing" false suspense
 - Unicode arrows (`→`) and smart quotes in plain text contexts
+- "Whether you're X or Y" pseudo-inclusive openers
+- "In today's [adjective] landscape/world/era" openers
 
 ## Full reference
 
