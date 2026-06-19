@@ -80,8 +80,8 @@ Use tab bars for top-level navigation between app areas. Toolbars act on content
 
 ### System Fonts
 
-- **SF Pro**: system sans-serif for iOS
-- **New York (NY)**: serif alternative
+- SF Pro, the system sans-serif for iOS.
+- New York (NY), a serif alternative.
 - Both support variable font format with dynamic optical sizing.
 
 ### Default and Minimum Sizes

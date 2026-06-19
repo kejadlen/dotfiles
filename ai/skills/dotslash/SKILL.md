@@ -112,8 +112,8 @@ dotslash -- cache-dir              # Print cache directory path
 
 ## Key details
 
-- **Hash**: Use `blake3` (preferred) or `sha256`. The `create-url-entry` helper defaults to blake3.
-- **Providers are tried in order**. Put the direct HTTP URL first (faster for public repos), GitHub Release provider second (works when authenticated).
-- **`format` must be a recognized value**: `tar.gz`, `tar.zst`, `tar.xz`, `tar.bz2`, `tar`, `zip`, `gz`, `zst`, `xz`, `bz2`, or omitted for uncompressed binaries. Note: `tgz` is not valid — use `tar.gz`.
-- **`path` must be a normalized relative UNIX path**. No leading `./`, no `..`, no trailing `/`, no backslashes.
-- **Cache location**: `~/Library/Caches/dotslash` on macOS.
+- Use `blake3` (preferred) or `sha256` for the hash. The `create-url-entry` helper defaults to blake3.
+- Providers are tried in order. Put the direct HTTP URL first (faster for public repos), then the GitHub Release provider (works when authenticated).
+- The `format` field must be a recognized value: `tar.gz`, `tar.zst`, `tar.xz`, `tar.bz2`, `tar`, `zip`, `gz`, `zst`, `xz`, `bz2`, or omitted for uncompressed binaries. `tgz` is not valid; use `tar.gz`.
+- The `path` must be a normalized relative UNIX path: no leading `./`, no `..`, no trailing `/`, no backslashes.
+- The cache lives at `~/Library/Caches/dotslash` on macOS.

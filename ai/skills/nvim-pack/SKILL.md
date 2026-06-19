@@ -52,7 +52,7 @@ Located at `$XDG_CONFIG_HOME/nvim/nvim-pack-lock.json`. Tracks `rev`, `src`, and
 
 **Revert after update:** Restore lockfile from VCS (`git checkout HEAD -- nvim-pack-lock.json` or `jj restore`), then `:restart` and `:lua vim.pack.update(nil, {offline = true, target = "lockfile"})`.
 
-**Cross-machine sync:** Commit lockfile → pull on other machine → `:restart` → `:lua vim.pack.update(nil, {target = "lockfile"})`.
+**Cross-machine sync:** Commit the lockfile, pull on the other machine, `:restart`, then run `:lua vim.pack.update(nil, {target = "lockfile"})`.
 
 ## PackChanged Events
 

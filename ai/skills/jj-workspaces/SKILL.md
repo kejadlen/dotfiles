@@ -8,7 +8,7 @@ description: Use when needing isolated workspace for experiments, parallel devel
 
 ## Overview
 
-Create isolated jj workspaces for experimentation, parallel development, and subagent coordination. All workspaces share repository history, enabling seamless switching and comparison.
+Create isolated jj workspaces for experimentation, parallel development, and subagent coordination. All workspaces share repository history, so switching between them and comparing their changes needs no extra setup.
 
 **Core principle:** Isolation by design. Each workspace operates independently with zero risk of interference.
 

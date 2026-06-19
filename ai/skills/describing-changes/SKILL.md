@@ -63,7 +63,17 @@ conventional commit prefixes (`fix:`, `feat:`, `refactor:`, etc.):
 Reduce visual noise in error construction
 ```
 
-**STOP: Is the title sufficient?** If yes, you're done. No body needed.
+**HARD STOP before adding body text.** Ask yourself:
+
+1. Can a reader reconstruct the *reasoning* from the diff alone?
+   If yes, **stop here. Title only.**
+2. Does the diff show *what* changed but not *why*?
+   If no, **stop here. Title only.**
+3. Would a sentence in the body just paraphrase the diff?
+   If yes, **delete it. Title only.**
+
+**Default to title-only.** Most commits need no body. Adding body
+text is the exception, not the rule.
 
 **Add body ONLY if:**
 - Reasoning is truly non-obvious from diff
@@ -82,12 +92,12 @@ Normalizing both to milliseconds avoids migration.
 **Format:**
 - Title: Under 60 characters, plain English, capitalized first word
 - Body: 1-2 sentences maximum, under 20 words total
-- Problem → Solution (omit needless words)
+- Problem, then solution (omit needless words)
 
 **Before adding ANY body text, audit:**
-- Is this sentence invisible in the diff? (No → delete it)
-- Does this describe implementation visible in the code? (Yes → delete it)
-- Does this just restate what a careful diff reader would see? (Yes → delete it)
+- Is this sentence invisible in the diff? (If no, delete it.)
+- Does this describe implementation visible in the code? (If yes, delete it.)
+- Does this just restate what a careful diff reader would see? (If yes, delete it.)
 
 Each sentence must explain reasoning not visible in the code change itself.
 
