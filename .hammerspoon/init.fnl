@@ -96,8 +96,13 @@
                                :start true})
 
 (fn sanitize-url [url]
-  ;; Skip AWS SSO URLs — trurl encodes slashes in hash-routed fragments.
-  (if (string.match url "%.awsapps%.com/start/#/")
+  ;; Skip trurl when it would do harm without benefit:
+  ;; - AWS SSO URLs — trurl encodes slashes in hash-routed fragments.
+  ;; - Query-less URLs — tracking params only live in the query, so there
+  ;;   is nothing to trim, and trurl percent-encodes path colons
+  ;;   (e.g. bsky's `did:plc:…` becomes `did%3aplc%3a…`).
+  (if (or (string.match url "%.awsapps%.com/start/#/")
+          (not (string.find url "?" 1 true)))
       url
       (let [tracking-params [:utm_* :uta_* :fbclid :gclid]
             trurl-cmd (.. :/opt/homebrew/bin/trurl " "
