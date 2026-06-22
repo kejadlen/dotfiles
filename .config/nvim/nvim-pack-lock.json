@@ -5,8 +5,9 @@
       "src": "https://github.com/direnv/direnv.vim.git"
     },
     "fidget.nvim": {
-      "rev": "3f54759",
-      "src": "https://github.com/j-hui/fidget.nvim.git"
+      "rev": "e1a07a5e46fb65a45a0c76870140bd2d16a73ebf",
+      "src": "https://github.com/j-hui/fidget.nvim.git",
+      "version": "'v2.0.0'"
     },
     "fzf": {
       "rev": "90c4269d4e5d88ec3a04697a8714ee86a43b2474",
@@ -32,7 +33,7 @@
     "nvim-lspconfig": {
       "rev": "229b79051b380377664edc4cbd534930154921a1",
       "src": "https://github.com/neovim/nvim-lspconfig.git",
-      "version": "2.10.0 - 2.10.0"
+      "version": "'v2.10.0'"
     },
     "nvim-treesitter": {
       "rev": "4916d6592ede8c07973490d9322f187e07dfefac",

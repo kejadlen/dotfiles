@@ -124,13 +124,14 @@
                "https://github.com/direnv/direnv.vim.git"
                "https://github.com/hashivim/vim-terraform.git"
                "https://github.com/itchyny/lightline.vim.git"
-               "https://github.com/j-hui/fidget.nvim.git"
+               {:src "https://github.com/j-hui/fidget.nvim.git"
+                :version :v2.0.0}
                "https://github.com/junegunn/fzf.git"
                "https://github.com/junegunn/fzf.vim.git"
                {:src "https://github.com/lukas-reineke/indent-blankline.nvim.git"
                 :version :v3.9.1}
                {:src "https://github.com/neovim/nvim-lspconfig.git"
-                :version (vim.version.range :v2.10.0)}
+                :version :v2.10.0}
                {:src "https://github.com/nvim-treesitter/nvim-treesitter.git"
                 :version :main}
                {:src "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
