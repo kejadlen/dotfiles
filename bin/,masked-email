@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+# Create a Fastmail masked email for the given URL, with an optional
+# description, and print the generated address. The API token and account id
+# both live in a single 1Password item; one `op item get` fetches them in one
+# unlock.
+
+readonly JMAP_ENDPOINT="https://api.fastmail.com/jmap/api"
+readonly JMAP_MASKEDEMAIL="https://www.fastmail.com/dev/maskedemail"
+readonly OP_VAULT="Private"
+readonly OP_ITEM="zntuk5jqyagoijvg2xnnetocs4"
+
+main() {
+    local prog="${0##*/}"
+    local url="${1:?usage: $prog <url> [description]}"
+    local description="${2-}"
+
+    local creds
+    creds="$(op item get "$OP_ITEM" --vault "$OP_VAULT" \
+        --fields "label=credential,label=account id" --format json)"
+    local api_token account_id
+    api_token="$(jq --raw-output '.[] | select(.label == "credential") | .value' <<<"$creds")"
+    account_id="$(jq --raw-output '.[] | select(.label == "account id") | .value' <<<"$creds")"
+    if [[ -z "$api_token" || -z "$account_id" ]]; then
+        echo "$prog: could not read credential/account id from 1Password" >&2
+        return 1
+    fi
+
+    # Send `description` only when given, rather than an empty string.
+    local body
+    body="$(jq --null-input \
+        --arg account "$account_id" \
+        --arg url "$url" \
+        --arg description "$description" \
+        --arg cap "$JMAP_MASKEDEMAIL" \
+        '{
+            using: ["urn:ietf:params:jmap:core", $cap],
+            methodCalls: [
+                ["MaskedEmail/set", {
+                    accountId: $account,
+                    create: { new: (
+                        { url: $url, state: "enabled" }
+                        + (if $description == "" then {} else { description: $description } end)
+                    ) }
+                }, "0"]
+            ]
+        }')"
+
+    local response
+    response="$(curl --fail --silent --show-error --request POST "$JMAP_ENDPOINT" \
+        --header "Authorization: Bearer $api_token" \
+        --header "Content-Type: application/json" \
+        --data "$body")"
+
+    # JMAP returns HTTP 200 even when a create is rejected, so check the body
+    # rather than trusting curl's exit status alone.
+    local email
+    email="$(jq --raw-output '.methodResponses[0][1].created.new.email // empty' <<<"$response")"
+    if [[ -z "$email" ]]; then
+        echo "$prog: failed to create masked email" >&2
+        echo "$response" >&2
+        return 1
+    fi
+
+    echo "$email"
+}
+
+main "$@"
