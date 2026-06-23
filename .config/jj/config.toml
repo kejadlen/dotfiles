@@ -129,12 +129,15 @@ pr = ["util", "exec", "--", "bash", "-c", """
 """]
 pull = ["util", "exec", "--", "bash", "-c", """
   jj git fetch
-  # Only rebase branches that are fully mutable. A megamerge that pulls in
-  # someone else's branch contains immutable commits, and --branch tries to
-  # rewrite the whole component, so the rebase fails. Excluding heads that
-  # descend from a non-trunk immutable commit leaves those branches alone and
-  # rebases just the stacks we own end to end.
-  jj rebase --branch "(visible_heads() & mutable()) ~ (immutable() ~ ::trunk())::" --destination "trunk()"
+  # Rebase the stacks we own onto the new trunk by moving the roots of our
+  # mutable commits, not their branch heads. A megamerge is the only visible
+  # head, so a head-based --branch either fails on the immutable commits it
+  # merges or, once those are excluded, drops the whole merge and rebases
+  # nothing. Rebasing the roots moves each stack and carries its descendants,
+  # so the megamerge keeps merging a colleague's immutable branch. Excluding
+  # the direct children of non-trunk immutable commits leaves work we have
+  # stacked on someone else's branch in place.
+  jj rebase --source "roots(mutable()) ~ (immutable() ~ ::trunk())+" --destination "trunk()"
   jj simplify-parents
   jj sweep
 """]
