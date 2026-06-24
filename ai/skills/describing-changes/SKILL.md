@@ -57,11 +57,13 @@ What's the impact?
 ### 5. Write the Description
 
 **Start with title only.** Write a plain English sentence — no
-conventional commit prefixes (`fix:`, `feat:`, `refactor:`, etc.):
+conventional commit prefixes ([`fix:`, `feat:`, `refactor:`, etc.][no-cc]):
 
 ```
 Reduce visual noise in error construction
 ```
+
+[no-cc]: https://sumnerevans.com/posts/software-engineering/stop-using-conventional-commits/
 
 **HARD STOP before adding body text.** Ask yourself:
 
