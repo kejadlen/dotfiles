@@ -31,6 +31,17 @@ Wrapping logic in `main()` and calling `main "$@"` at the bottom
 prevents partial execution if the script is truncated during
 download or write.
 
+## Command flags
+
+Prefer long flags over short ones in scripts. `grep --invert-match
+--line-number` reads more clearly than `grep -vn`, and a reviewer
+doesn't have to recall what each letter means. Short flags optimize
+for interactive typing; scripts are read far more often than they're
+written, so favor legibility.
+
+Use short flags only when no long form exists, or when long flags
+would harm clarity (for example, repeated `-v` to raise verbosity).
+
 ## Executable permissions
 
 Scripts meant to be run directly need the executable bit (`chmod +x`).
