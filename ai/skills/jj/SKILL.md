@@ -13,8 +13,21 @@ Use `jj --help` for authoritative command reference and current flags.
 2. `jj commit -m 'message'` (snapshot current changes, start new empty working copy)
 3. Repeat
 
-Use `jj describe` to rewrite a commit message, `jj new <rev>` to start
-working on top of a revision.
+### commit vs. describe vs. new
+
+The working copy `@` is always a real commit; edits stream into it live.
+These three verbs differ only in whether they set a message and whether
+they move `@`:
+
+| Command | Sets message? | Moves `@`? | Use for |
+|---|---|---|---|
+| `jj describe [-m]` | yes, on target (default `@`) | no | name or rewrite a commit's message in place |
+| `jj new <rev>` | no | yes, to a new empty commit | start fresh work on top of `<rev>` |
+| `jj commit -m` | yes, on `@` | yes, to a new empty commit | finish `@` and move on — `describe @` + `new` in one step |
+
+So `jj commit` is just `jj describe` followed by `jj new`. Reach for
+`describe` when you only want to fix the current message without moving
+on; `new` when you want a fresh commit without touching messages.
 
 **Prefer `jj commit` over `jj squash`.** Create new commits by default —
 even for refactors, cleanups, or small follow-ups. Only squash when the
@@ -26,6 +39,11 @@ introduced, fixing a typo in code it added).
 No staging area: working copy changes map directly to commits. Operations
 are immutable: `jj new`, `jj squash`, `jj rebase` create new commits rather
 than modify existing ones. The operation log (`jj op log`) enables undo/recovery.
+
+Tracking is automatic for *every* change, removals included. Deleting a
+file with `rm` (or moving/renaming it) is already snapshotted into `@` on
+the next jj command — there is no `git rm`, no `git add -A`, and no
+"untrack" step. Just delete the file and commit.
 
 ## Bookmarks and Pushing
 
