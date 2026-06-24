@@ -22,10 +22,6 @@
 	url = https://github.com/kejadlen/fzf-git.sh.git
 	branch = main
 	shallow = true
-[submodule "masked-email.alfredworkflow"]
-	path = src/masked-email.alfredworkflow
-	url = https://github.com/kejadlen/masked-email.alfredworkflow
-	branch = main
 [submodule "tpm"]
 	path = .config/tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
