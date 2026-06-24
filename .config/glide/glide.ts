@@ -242,7 +242,7 @@ glide.excmds.create(
 
     await glide.commandline.show({
       title: "unstash",
-      options: stashes.map((stash) => ({
+      options: stashes.toReversed().map((stash) => ({
         label: stash.title,
         async execute() {
           await unstashTabs(stash.id);
