@@ -366,8 +366,6 @@ test module; gate tests with `#![cfg_attr(test, allow(...))]` instead.
 Collect these in `.clippy.toml` at the crate root:
 
 ```toml
-self-named-module-files = "warn"
-
 disallowed-methods = [
     { path = "std::iter::Iterator::for_each", reason = "prefer `for` for side-effects" },
     { path = "std::iter::Iterator::try_for_each", reason = "prefer `for` for side-effects" },
@@ -402,7 +400,12 @@ disallowed-types = [
 ]
 ```
 
-Panic-discipline lints (`unwrap_used`, `expect_used`, `panic`,
-`indexing_slicing`, `arithmetic_side_effects`) live in `Cargo.toml`
-under `[lints.clippy]`, not here — they're lints, not config keys, so
-`.clippy.toml` won't pick them up. The template is in `scaffolding.md`.
+Lint *levels* live in `Cargo.toml` under `[lints.clippy]`, not here —
+`.clippy.toml` configures lint behavior (thresholds, disallowed paths)
+and rejects anything that isn't a known config key. This trips up
+`self_named_module_files`: it's a lint with no configurable behavior, so
+setting `self-named-module-files = "warn"` in `.clippy.toml` errors with
+an unknown-field message. It belongs in `[lints.clippy]` alongside the
+panic-discipline lints (`unwrap_used`, `expect_used`, `panic`,
+`indexing_slicing`, `arithmetic_side_effects`). The template is in
+`scaffolding.md`.
