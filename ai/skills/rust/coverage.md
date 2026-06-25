@@ -188,6 +188,14 @@ grcov . --binary-path ./target/debug/ -s . -t lcov \
 | Mixed language project (Rust + C) | `grcov` — handles `.gcda` + `.profraw` together |
 | Doctests coverage | `cargo-llvm-cov` — `--doctests` flag (nightly) |
 
+## Why not cargo-tarpaulin
+
+[cargo-tarpaulin](https://github.com/xd009642/tarpaulin) is a popular third coverage tool, but it does not earn a place in this workflow. Its distinguishing feature is a **ptrace** backend that reads coverage by tracing the normal test binary, so no instrumented rebuild is needed — but ptrace only works on Linux x86_64. On macOS and Windows tarpaulin falls back to the same LLVM source-based engine `cargo-llvm-cov` already drives, so it offers no accuracy or capability gain on those platforms.
+
+Tarpaulin is also weaker on two axes this skill cares about: it has no branch coverage at all, and its LLVM engine silently drops a test's coverage data when that test exits non-zero and clobbers `.profraw` files across forked processes. The output formats it adds (Cobertura, Coveralls) are already covered by grcov.
+
+The one scenario worth a look is Linux CI on x86_64 where a separate instrumented build is expensive: ptrace attaches to the existing test binary and can finish faster in a cold cache. For local macOS work — the common case here — reach for `cargo-llvm-cov` instead.
+
 ## Manual workflow (without cargo-llvm-cov or grcov)
 
 For environments where neither wrapper is available:
