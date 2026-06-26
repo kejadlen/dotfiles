@@ -65,6 +65,20 @@ Reduce visual noise in error construction
 
 [no-cc]: https://sumnerevans.com/posts/software-engineering/stop-using-conventional-commits/
 
+**Prefix the title with a scope when the change has one clear home.** A
+scope names the feature, topic, or place the change belongs to,
+followed by a colon and a lowercase description:
+
+```
+bin: add vipe script
+```
+
+A scope is not a conventional commit prefix. The banned prefixes name a
+change *type* (`fix:`, `feat:`, `refactor:`); a scope names a *subject*
+(`jj:`, `ruby-style:`, `glide:`). Drop the scope when a change spans
+several subjects or has no natural home — an unscoped sentence stays the
+default.
+
 **HARD STOP before adding body text.** Ask yourself:
 
 1. Can a reader reconstruct the *reasoning* from the diff alone?
@@ -92,7 +106,7 @@ Normalizing both to milliseconds avoids migration.
 ```
 
 **Format:**
-- Title: Under 60 characters, plain English, capitalized first word
+- Title: under 60 characters (scope prefix included), plain English — capitalize the first word, or lowercase the scope and description when scoped
 - Body: 1-2 sentences maximum, under 20 words total
 - Problem, then solution (omit needless words)
 
