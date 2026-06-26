@@ -116,6 +116,15 @@ jj diff -r @-                        # all changes in parent revision
 jj diff -r @- path/to/file           # specific file in parent revision
 ```
 
+**`--no-patch` can't combine with `--summary`/`--stat`/`--name-only`.**
+Those flags already suppress the full patch, so adding `--no-patch`
+errors out ("cannot be used with"). To see just the changed files, use
+`--summary` alone:
+
+```bash
+jj show -r @- --summary              # description + file list, no patch
+```
+
 **Fileset expressions with special characters need quoting.** Use
 `glob:"pattern"` with the pattern in double quotes:
 
