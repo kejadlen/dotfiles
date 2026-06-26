@@ -1,4 +1,4 @@
-(local {: run : with-ax-hotfix} (require :utils))
+(local {: with-ax-hotfix} (require :utils))
 
 (local log (hs.logger.new :little-ff :info))
 
@@ -41,28 +41,4 @@
     (hs.execute cmd)
     (wait-for-little-ff resize-little-ff)))
 
-(λ rehome []
-  (let [win (is-ff-focused)
-        num-windows (-?> win
-                         (: :application)
-                         (: :allWindows)
-                         (length))]
-    (when (and num-windows (< 1 num-windows))
-      (hs.eventtap.keyStroke [] :escape)
-      (hs.eventtap.keyStrokes :yy)
-      (hs.pasteboard.callbackWhenChanged #(do
-                                            (win:close)
-                                            (run (table.concat [:open
-                                                                :-a
-                                                                (.. "\""
-                                                                    browser.name
-                                                                    "\"")
-                                                                (hs.pasteboard.readString)]
-                                                               " "))
-                                            ;; TODO figure out how to focus the main
-                                            ;; ff window - aerospace doesn't seem to
-                                            ;; handle the programmatic closing of the
-                                            ;; little ff window all that well
-                                            )))))
-
-{: open : rehome : is-ff-focused}
+{: open : is-ff-focused}

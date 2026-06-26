@@ -248,6 +248,31 @@ glide.excmds.create(
   },
 );
 
+// mash+o (cmd+ctrl+alt+o): send the current tab to the "main" window — the
+// normal window with the most tabs — and drop it at the end of that strip.
+glide.keymaps.set("normal", "<C-A-D-o>", async ({ tab_id }) => {
+  const windows = await browser.windows.getAll({
+    populate: true,
+    windowTypes: ["normal"],
+  });
+  const mainWindow = windows.reduce((best, win) =>
+    (win.tabs?.length ?? 0) > (best.tabs?.length ?? 0) ? win : best
+  );
+  if (mainWindow.id == null) return;
+
+  // Glide's cross-window mutation promises never settle, so we can't await
+  // tabs.move. Fire it and wait for the tab to attach to the main window —
+  // Glide brings that window to the front as it lands, making it the current
+  // window, so activating the tab there (a same-window update) works.
+  const onAttached = (attachedId: number, info: { newWindowId: number }) => {
+    if (attachedId !== tab_id || info.newWindowId !== mainWindow.id) return;
+    browser.tabs.onAttached.removeListener(onAttached);
+    browser.tabs.update(tab_id, { active: true });
+  };
+  browser.tabs.onAttached.addListener(onAttached);
+  browser.tabs.move(tab_id, { windowId: mainWindow.id, index: -1 });
+});
+
 glide.keymaps.set("normal", "ZZ", async () => {
   await stashTabs();
   await glide.excmds.execute("quit");
