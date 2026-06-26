@@ -21,6 +21,8 @@ project/
 ├── .github/workflows/
 │   ├── ci.yml
 │   └── release.yml         # Binaries only — see binary.md.
+├── bin/
+│   └── coverage            # Coverage gate script (→ coverage.md).
 ├── src/
 │   ├── lib.rs              # Library root — re-exports modules.
 │   ├── error.rs            # thiserror + miette::Diagnostic enum.
@@ -127,38 +129,7 @@ clippy:
     cargo clippy --workspace -- -D warnings
 
 coverage:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    export RUSTFLAGS="-Cinstrument-coverage"
-    export CARGO_TARGET_DIR="target/coverage"
-    export LLVM_PROFILE_FILE="target/coverage/profraw/%p-%m.profraw"
-    rm -rf target/coverage
-    cargo test --workspace -q
-    REPORT=$(grcov target/coverage/profraw \
-        --binary-path ./target/coverage/debug/ \
-        -s . \
-        -t covdir \
-        --ignore-not-existing \
-        --keep-only 'src/**' \
-        --ignore 'src/bin/**' \
-        --excl-line 'cov-excl-line|unreachable!' \
-        --excl-start 'cov-excl-start' \
-        --excl-stop 'cov-excl-stop')
-    echo "$REPORT" | jq -r '
-        def files:
-            to_entries[] | .value |
-            if .children then .children | files
-            else "\(.name): \(.coveragePercent)% (\(.linesCovered)/\(.linesTotal))"
-            end;
-        .children | files
-    '
-    COVERAGE=$(echo "$REPORT" | jq '.coveragePercent')
-    echo ""
-    echo "Total: ${COVERAGE}%"
-    if [ "$(echo "$COVERAGE < 100" | bc -l)" -eq 1 ]; then
-        echo "ERROR: Coverage is below 100%"
-        exit 1
-    fi
+    ./bin/coverage
 
 mutants:
     #!/usr/bin/env bash
@@ -177,14 +148,19 @@ install:
     cargo install --locked --path .
 ```
 
-Key design:
+The `coverage` recipe delegates to `bin/coverage` so the logic stays
+shellcheck-clean and editable outside the justfile. Copy this skill's
+`coverage.sh` reference file to `bin/coverage` in the new project and
+give it the executable bit (`chmod +x bin/coverage`). Read
+`coverage.sh` for the full source. Key design:
 
-- `coverage` uses a separate `CARGO_TARGET_DIR` — prevents instrumented
-  and non-instrumented artifacts from mixing, which causes phantom
-  uncovered lines with grcov.
+- `bin/coverage` uses a separate `CARGO_TARGET_DIR` — prevents
+  instrumented and non-instrumented artifacts from mixing, which causes
+  phantom uncovered lines with grcov.
 - 100% coverage on library code only — `--keep-only 'src/**'
   --ignore 'src/bin/**'`. Binary code is tested via integration tests
-  but not measured.
+  but not measured. Lower the gate for a project with
+  `COVERAGE_THRESHOLD=90 just coverage`.
 - `covdir` output — machine-readable JSON, parsed with `jq` for a
   clean summary. Exclusion markers (`cov-excl-line`, etc.) are
   documented in `coverage.md`.
