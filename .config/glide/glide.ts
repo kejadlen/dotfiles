@@ -204,8 +204,11 @@ async function unstashTabs(stashId: string) {
 
   for (const child of children) {
     if (child.url) {
-      // Top-level bookmark (ungrouped tab)
-      await browser.tabs.create({ url: child.url });
+      // Top-level bookmark (ungrouped tab). With browser.tabs.insertAfterCurrent
+      // enabled, a tab created while a grouped tab is active is added to that
+      // group, so ungroup it to keep loose tabs loose.
+      const tab = await browser.tabs.create({ url: child.url });
+      if (tab.id) await browser.tabs.ungroup(tab.id);
     } else {
       // Folder = tab group
       const groupBookmarks = await browser.bookmarks.getChildren(child.id);
