@@ -1,6 +1,6 @@
 ---
 name: jj
-description: Use when needing jj command reference, syntax, or behavior - directs to jj --help for authoritative documentation and flags
+description: Use when running any jj (Jujutsu) version control command — committing, describing, bookmarks, rebase, squash, restore, push/pull, resolving conflicts, or inspecting log/diff/status — and when looking up jj syntax, flags, or behavior. Invoke before free-handing jj commands from memory.
 ---
 
 # Jujutsu (jj) Version Control
