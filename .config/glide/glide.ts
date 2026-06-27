@@ -23,6 +23,10 @@ glide.fs.exists("local.glide.ts").then(exists => {
   if (exists) glide.include("local.glide.ts");
 });
 
+// Open new tabs immediately after the current one, rather than at the
+// end of the tab strip. Native Gecko pref; must be set at top level.
+glide.prefs.set("browser.tabs.insertAfterCurrent", true);
+
 glide.g.mapleader = "," // too used to using space for scrolling
 glide.buf.keymaps.del("normal", "s"); // use `s` for searching
 
