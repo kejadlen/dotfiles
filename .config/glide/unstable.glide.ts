@@ -14,6 +14,21 @@ glide.keymaps.set(
 
 glide.keymaps.set(
   "normal",
+  "<C-w>j",
+  async ({ tab_id }) => {
+    const allTabs = await glide.tabs.query({});
+    const currentIndex = allTabs.findIndex((t) => t.id === tab_id);
+    const next = allTabs[currentIndex + 1];
+    if (next?.id == null) return;
+    glide.unstable.split_views.create([tab_id, next.id]);
+  },
+  {
+    description: "Split view with the next tab",
+  },
+);
+
+glide.keymaps.set(
+  "normal",
   "<C-h>",
   async ({ tab_id }) => {
     const split = glide.unstable.split_views.get(tab_id);
