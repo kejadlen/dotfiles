@@ -145,6 +145,24 @@ nowhere.
 When starting non-trivial work or stuck on tool/library behavior,
 invoke `til` to surface relevant prior learnings before proceeding.
 
+## Continuous improvement
+
+When something slows you down mid-task, name it in a line or two at the
+end of your turn. Report only friction you actually hit this turn, not
+hypotheticals, and list at most one or two. If nothing got in your way,
+say nothing — don't invent friction, and don't report its absence.
+
+Friction worth naming:
+- documentation that was wrong and cost extra debugging steps
+- poor errors or diagnostics that don't give enough information to
+  diagnose the problem
+- noisy messages that fill the context window
+- a workaround for a bad API that makes the code worse
+- a step with no shortcuts, done by hand several times
+
+Just name it — don't fix or file it unless asked. Don't pad the reply
+or restate points already made; surface only what hasn't come up.
+
 ## Anti-rationalization
 
 These conventions exist because LLMs skip steps when unsupervised.
