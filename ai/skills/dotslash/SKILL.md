@@ -10,43 +10,42 @@ This repo uses [DotSlash](https://dotslash-cli.com) to manage binaries in `bin/`
 ## Existing binaries
 
 - `bin/jq` — tracks latest jqlang/jq release (bare binary, no archive)
-- `bin/nvim` — tracks neovim/neovim nightly (tar.gz archive)
+- `bin/jj` — tracks latest jj-vcs/jj release (tar.gz archive)
 - `bin/pinch` — downloaded directly via `gh release download` (not a dotslash file)
 
 ## Adding a new DotSlash binary
 
-### 1. Find the release artifact URL
+The `update_dotslash_release` helper in `Rakefile` generates the file for you — you rarely hand-write the JSON.
 
-Use `gh` to find the right asset name:
+### 1. Add a Rake task
 
-```bash
-gh release view --repo owner/repo --json tagName,assets
+In the `dotslash` namespace, add a task that calls the helper, then list `<name>` in the `all` task. The helper resolves the latest tag with `gh release view`, runs `create-url-entry`, and writes `bin/<name>`:
+
+```ruby
+desc "Update ramekin"
+task(:ramekin) do
+  update_dotslash_release(name: "ramekin", repo: "kejadlen/ramekin") { "ramekin-aarch64-apple-darwin.tar.gz" }
+end
 ```
 
-Pick the `macos-arm64` / `macos-aarch64` / `darwin-arm64` asset.
+The block receives the resolved tag and returns the asset filename. Ignore the tag when the name is fixed (as above), or interpolate it (e.g. `{ |tag| "jj-#{tag}-aarch64-apple-darwin.tar.gz" }`). Pass `path:` when the executable sits inside an archive subdirectory; it defaults to `name`, which is correct when the archive holds a single file at its root.
 
-### 2. Generate the platform entry
-
-```bash
-dotslash -- create-url-entry URL
-```
-
-This downloads the artifact, computes its size and blake3 hash, infers the format from the URL suffix, and prints a JSON entry. Review the output — you must fill in `path` yourself and verify `format` is correct.
-
-### 3. Determine the `path` value
-
-- **Bare binary** (no archive): `path` is the filename the binary should be saved as in the cache directory (e.g., `"jq"`). Omit `format`.
-- **Archive** (tar.gz, zip, etc.): list the archive contents to find the executable path:
+### 2. Generate and verify
 
 ```bash
-curl -sL URL | tar tzf - | grep bin/
+rake dotslash:<name>
+chmod +x bin/<name>
+bin/<name> --help   # or whatever smoke test is appropriate
 ```
 
-Set `path` to the relative path within the archive (e.g., `"nvim-macos-arm64/bin/nvim"`).
+### Hand-writing the file (fallback)
 
-### 4. Write the DotSlash file
+When the helper doesn't fit — a non-GitHub host or an unusual URL scheme — build the entry by hand:
 
-Create `bin/<name>` with this structure:
+1. Find the asset with `gh release view --repo owner/repo --json tagName,assets` and pick the `macos-arm64` / `macos-aarch64` / `darwin-arm64` one.
+2. Run `dotslash -- create-url-entry URL`. It computes size and blake3 hash and infers `format` from the URL suffix; you fill in `path`.
+3. Determine `path`: for a bare binary, the filename to save as (e.g. `"jq"`, omit `format`); for an archive, the executable's relative path inside it (list contents with `curl -sL URL | tar tzf -`).
+4. Write `bin/<name>` with the structure below, then `chmod +x`:
 
 ```
 #!/usr/bin/env dotslash
@@ -76,27 +75,18 @@ Create `bin/<name>` with this structure:
 }
 ```
 
-Include both an HTTP provider (direct URL) and a GitHub Release provider (uses `gh` CLI, works with private repos). Mark the file executable with `chmod +x`.
-
-### 5. Add to the Rakefile
-
-Add an update block to the `update_dotslash` task in `Rakefile` so `rake update_dotslash` regenerates the file with fresh size/hash. Follow the existing pattern — use backticks with `dotslash -- create-url-entry` and `gh release view`, then `File.write` the result. See the jq and nvim blocks for examples.
-
-### 6. Verify
-
-```bash
-bin/<name> --version   # or whatever smoke test is appropriate
-```
+Include both an HTTP provider (direct URL, tried first) and a GitHub Release provider (uses `gh` CLI, works with private repos).
 
 ## Updating existing binaries
 
 Run:
 
 ```bash
-rake update_dotslash
+rake dotslash:all       # every binary
+rake dotslash:<name>    # a single binary
 ```
 
-This regenerates all DotSlash files in `bin/` with current release artifacts. For tools tracking `latest` or a fixed tag, the Rakefile fetches the tag dynamically via `gh release view`. For tools tracking `nightly` (like nvim), the URL is stable but the size/hash change with each build.
+This regenerates the DotSlash files in `bin/` with current release artifacts, fetching each tool's latest tag dynamically via `gh release view`.
 
 ## DotSlash CLI reference
 
@@ -116,4 +106,5 @@ dotslash -- cache-dir              # Print cache directory path
 - Providers are tried in order. Put the direct HTTP URL first (faster for public repos), then the GitHub Release provider (works when authenticated).
 - The `format` field must be a recognized value: `tar.gz`, `tar.zst`, `tar.xz`, `tar.bz2`, `tar`, `zip`, `gz`, `zst`, `xz`, `bz2`, or omitted for uncompressed binaries. `tgz` is not valid; use `tar.gz`.
 - The `path` must be a normalized relative UNIX path: no leading `./`, no `..`, no trailing `/`, no backslashes.
+- Release tags containing `+` (e.g. `v2026-07-01+564c15b`) work unescaped in the provider URL, which is what the helper interpolates. `+` only means "space" in a query string, not in a path, so GitHub's download endpoint accepts it raw.
 - The cache lives at `~/Library/Caches/dotslash` on macOS.
