@@ -122,6 +122,11 @@ namespace :dotslash do
     update_dotslash_release(name: "tree-sitter", repo: "tree-sitter/tree-sitter") { "tree-sitter-macos-arm64.gz" }
   end
 
+  desc "Update ramekin"
+  task(:ramekin) do
+    update_dotslash_release(name: "ramekin", repo: "kejadlen/ramekin") { "ramekin-aarch64-apple-darwin.tar.gz" }
+  end
+
   desc "Update all dotslash files"
   task all: %i[
     age
@@ -131,6 +136,7 @@ namespace :dotslash do
     jq
     just
     pinch
+    ramekin
     sops
     tree_sitter
     zizmor
