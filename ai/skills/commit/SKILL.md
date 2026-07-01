@@ -9,7 +9,7 @@ allowed-tools: [Bash(jj diff *), Bash(jj show *), Bash(jj log *)]
 
 ## Mode Detection
 
-`$ARGUMENTS`
+Argument (empty if none was passed): `$ARGUMENTS`
 
 Determine which mode to use:
 
@@ -45,7 +45,7 @@ typo in code it added). If in doubt, make a new commit.
 
 ### Fileset (optional)
 
-`$ARGUMENTS`
+Fileset (empty means commit all pending changes): `$ARGUMENTS`
 
 ### Process
 
