@@ -133,8 +133,7 @@ if (( $+commands[fzf] )); then
 
   skip_dirs=.direnv,.git,.jj,node_modules,target
 
-  export FZF_DEFAULT_OPTS="--height=40% --layout=reverse"
-  export FZF_TMUX_OPTS="--popup=80%,60%"
+  export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --tmux center,80%,60%"
   export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
 
   # not sure why FZF_DEFAULT_COMMAND isn't being used here?
