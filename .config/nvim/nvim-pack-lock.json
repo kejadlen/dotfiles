@@ -10,8 +10,9 @@
       "version": "'v2.0.0'"
     },
     "fzf": {
-      "rev": "90c4269d4e5d88ec3a04697a8714ee86a43b2474",
-      "src": "https://github.com/junegunn/fzf.git"
+      "rev": "6765f464a60e39afc20775f54f7ba40896bf1b81",
+      "src": "https://github.com/junegunn/fzf.git",
+      "version": "'v0.74.0'"
     },
     "fzf.vim": {
       "rev": "879db51",

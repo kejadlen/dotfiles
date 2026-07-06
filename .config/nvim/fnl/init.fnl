@@ -126,7 +126,7 @@
                "https://github.com/itchyny/lightline.vim.git"
                {:src "https://github.com/j-hui/fidget.nvim.git"
                 :version :v2.0.0}
-               "https://github.com/junegunn/fzf.git"
+               {:src "https://github.com/junegunn/fzf.git" :version :v0.74.0}
                "https://github.com/junegunn/fzf.vim.git"
                {:src "https://github.com/lukas-reineke/indent-blankline.nvim.git"
                 :version :v3.9.1}
