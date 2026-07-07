@@ -6,9 +6,15 @@ if [[ "${TRACE-0}" == "1" ]]; then
 fi
 
 main() {
+    # Float via fzf's own tmux popup, unless the caller already gave us a
+    # floating container (e.g. a tmux binding running this in a floating pane),
+    # where --tmux would open a redundant popup on top.
+    local tmux_opts=(--tmux "80%,60%")
+    [[ -n "${IN_TMUX_FLOAT:-}" ]] && tmux_opts=()
+
     local dir
     dir=$(zoxide query -l "$@" | fzf --no-multi --select-1 --no-margin --no-padding \
-        --tmux 80%,60% \
+        "${tmux_opts[@]}" \
         --highlight-line --info inline-right \
         --border-label ' zoxide ' \
         --preview 'eza --tree --color=always {}' \
