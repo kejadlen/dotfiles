@@ -265,7 +265,7 @@ glide.keymaps.set("normal", "<D-A-t>", async () => {
 
 // mash+o (cmd+ctrl+alt+o): send the current tab to the "main" window — the
 // normal window with the most tabs — and drop it at the end of that strip.
-glide.keymaps.set("normal", "<C-A-D-o>", async ({ tab_id }) => {
+glide.keymaps.set(["normal", "insert"], "<C-A-D-o>", async ({ tab_id }) => {
   const windows = await browser.windows.getAll({
     populate: true,
     windowTypes: ["normal"],
