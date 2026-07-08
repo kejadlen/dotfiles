@@ -147,15 +147,21 @@ Normalize TTL unit mismatch
 TTL (seconds) and timestamp (milliseconds) compared directly.
 Normalizing both to milliseconds avoids migration.
 
-Assisted-by: Claude Opus 4.6 via pi
+Assisted-by: Claude Opus 4.8 via Claude Code
 ```
 
 ### Required trailers
 
 `Assisted-by` is mandatory when AI drafts or substantially edits the
-message. Format: `Assisted-by: [Model name] via [tool name]`. Use the
-actual model and tool you are running inside — do not copy examples
+message. The format is `Assisted-by: [Model name] via [tool name]`
+— the human-readable model name, then `via`, then the tool. Use the
+actual model and tool you are running inside; do not copy examples
 blindly.
+
+Correct: `Assisted-by: Claude Opus 4.8 via Claude Code`. Do not append
+the raw model ID in parentheses (`Claude Opus 4.8 (claude-opus-4-8)`),
+drop the `via [tool name]` half, or substitute the model ID for the
+name.
 
 ### Optional trailers
 
