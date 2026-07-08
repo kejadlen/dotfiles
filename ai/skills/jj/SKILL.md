@@ -125,8 +125,17 @@ errors out ("cannot be used with"). To see just the changed files, use
 jj show -r @- --summary              # description + file list, no patch
 ```
 
-**Fileset expressions with special characters need quoting.** Use
-`glob:"pattern"` with the pattern in double quotes:
+**Fileset expressions with special characters need quoting.** Fileset
+operators (`,` `~` `|` `&` `()`) in a bare path are parsed as syntax, not
+literal characters, so a path like `bin/,z` fails with "Failed to parse
+fileset: Syntax error". Wrap the path in a double-quoted string literal —
+the shell needs single quotes around it so jj sees the double quotes:
+
+```bash
+jj commit -m '...' '".config/foo"' '"bin/,z"'   # literal path with a comma
+```
+
+For glob patterns, use `glob:"pattern"` the same way:
 
 ```bash
 jj diff -- 'glob:"bin/*" ~ glob:"bin/,special"'
