@@ -15,6 +15,7 @@ main() {
     local dir
     dir=$(zoxide query -l "$@" | fzf --no-multi --select-1 --no-margin --no-padding \
         "${tmux_opts[@]}" \
+        --height 100% \
         --highlight-line --info inline-right \
         --border-label ' zoxide ' \
         --preview 'eza --tree --color=always {}' \
