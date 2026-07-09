@@ -164,7 +164,7 @@ func extractMeetingURL(from event: EKEvent) -> String? {
         return url
     }
     if let url = event.url?.absoluteString {
-        if url.contains("zoom.us") || url.contains("vimeo.com") {
+        if url.contains("zoom.us") || url.contains("vimeo.com") || url.contains("meet.google.com") {
             return url
         }
     }
@@ -174,7 +174,8 @@ func extractMeetingURL(from event: EKEvent) -> String? {
 func extractMeetingURL(from text: String) -> String? {
     let patterns = [
         "https://[a-zA-Z0-9.-]*\\.?zoom\\.us/[^\\s]+",
-        "https://(?:www\\.)?vimeo\\.com/[^\\s]+"
+        "https://(?:www\\.)?vimeo\\.com/[^\\s]+",
+        "https://meet\\.google\\.com/[^\\s]+"
     ]
 
     for pattern in patterns {
