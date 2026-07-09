@@ -8,6 +8,10 @@ description: Use when searching Datadog logs, metrics, traces, spans, dashboards
 Observability and monitoring via mcporter. Prefix all calls with
 `datadog.`. Run `mcporter list datadog --schema` for full tool details.
 
+These tools are **read-only** for most resources — dashboards and monitors can
+only be searched and read, not changed. To create, update, or delete a Datadog
+resource (e.g. add a widget to a dashboard), use the `pup` skill instead.
+
 *This is a self-improving skill — see the `self-improving-skills` skill.*
 
 ## Tools

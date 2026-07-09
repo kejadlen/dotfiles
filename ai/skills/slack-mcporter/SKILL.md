@@ -59,6 +59,14 @@ The `message` param takes standard markdown. Thread replies need
 `thread_ts`; set `reply_broadcast=true` to also post to the channel.
 Cannot post to Slack Connect channels.
 
+**Links in drafts:** the draft composer renders everything as
+plaintext — markdown `[text](url)`, Slack mrkdwn `<url|text>`, and even
+bare URLs all show as plain text in the draft preview. Links resolve
+only when the message is actually sent. Don't try to fix this by
+changing link syntax; it's a draft-preview limitation. Use markdown
+`[text](url)` (the documented format) for the best *sent* output, and
+tell the user the preview won't show links but the sent message will.
+
 ### Drafting in Alpha's voice
 
 When drafting on Alpha's behalf, match the "Writing voice" section in
@@ -68,6 +76,28 @@ first person. Dashes for asides — not semicolons. Lowercase fragments
 fine in DMs; full sentences in channels. No sign-offs. Backticks for
 inline code. Link to threads, PRs, or messages rather than describing
 them.
+
+### Posting Claude's own findings to a thread
+
+When Alpha asks to "update a thread" with *your* findings (research,
+debugging, an investigation result) — as opposed to ghost-writing in his
+voice — always:
+
+1. Create it as a **draft** (`slack_send_message_draft`), never send directly.
+2. **Attribute it to Claude** — lead with a `From Claude:` line.
+3. Put the substance in a **quote or code block**, set off from the
+   attribution line.
+
+Shape:
+
+```
+From Claude:
+> ...findings...
+```
+
+This is the opposite default from "Drafting in Alpha's voice": don't
+ventriloquize his voice for these — mark them clearly as AI-authored so the
+thread can tell the two apart, and so he can review/edit before sending.
 
 ## Timestamps
 
