@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+main() {
+    # tmux doesn't expand #{pane_id} in a new-pane shell-command argument, so
+    # the triggering pane is looked up here instead: {last} is the pane that
+    # was active in this window right before the new floating pane took over.
+    local pane_id
+    pane_id=$(tmux display-message -p -t '{last}' '#{pane_id}')
+
+    # tac reverses line order so the most recent scrollback surfaces first in
+    # the fzf list, while keeping left-to-right token order within each line.
+    local pane_text
+    pane_text=$(tmux capture-pane -p -S - -t "$pane_id" | tac)
+    [[ -n "$pane_text" ]] || exit 0
+
+    # Two passes: whitespace-delimited tokens first (so "foo/bar:baz" is a
+    # candidate), then punctuation-split sub-tokens (so "foo", "bar", "baz"
+    # are too). Dedup preserves first-seen order, so exact repeats collapse.
+    local tokens
+    tokens=$(
+        {
+            printf '%s\n' "$pane_text" | grep --only-matching --extended-regexp '\S+' || true
+            printf '%s\n' "$pane_text" | grep --only-matching --extended-regexp '[[:alnum:]_]+' || true
+        } | awk '!seen[$0]++'
+    )
+    [[ -n "$tokens" ]] || exit 0
+
+    # Float via fzf's own tmux popup, unless the caller already gave us a
+    # floating container (e.g. a tmux binding running this in a floating
+    # pane), where --tmux would open a redundant, conflicting nested popup.
+    # FZF_DEFAULT_OPTS (.zshrc) carries its own --tmux default too, so it's
+    # cleared here — otherwise it fires regardless of our own --tmux flag.
+    local tmux_opts=(--tmux "80%,60%")
+    [[ -n "${IN_TMUX_FLOAT:-}" ]] && tmux_opts=()
+
+    local selection
+    selection=$(printf '%s\n' "$tokens" | FZF_DEFAULT_OPTS='' fzf --no-multi --select-1 --no-margin --no-padding \
+        "${tmux_opts[@]}" \
+        --layout reverse \
+        --height 100% \
+        --highlight-line --info inline-right \
+        --border-label ' grab ') || exit 0
+    [[ -n "$selection" ]] || exit 0
+
+    tmux send-keys -l -t "$pane_id" -- "$selection"
+}
+
+main "$@"
