@@ -179,17 +179,6 @@ watchers, `serve` tasks — not even in the background. I run those
 myself so I know where they live. Build what's needed, then give me the
 command to run.
 
-## Learning log
-
-When you discover something non-obvious during work — a gotcha,
-undocumented behavior, or surprise that would change how you'd
-approach similar work — invoke the `til` skill. It decides whether
-the learning belongs in an existing skill, a new TIL file, or
-nowhere.
-
-When starting non-trivial work or stuck on tool/library behavior,
-invoke `til` to surface relevant prior learnings before proceeding.
-
 ## Continuous improvement
 
 When something slows you down mid-task, name it in a line or two at the
