@@ -136,9 +136,6 @@
                                            :set_system_handler true}
                                   :start true}))
 
-; Reopen what's in Little Firefox in the main window
-(hotkey.bind mash :o little-ff.rehome)
-
 (Install:andUse :ReloadConfiguration {:start true})
 
 ;; Local overrides
