@@ -57,6 +57,11 @@ zstyle ':zle:down-line-or-beginning-search' leave-cursor true
 # The default completion color is an obnoxiously loud pink, so make it whiter
 zstyle ':z4h:*' fzf-flags --color=hl:7,hl+:7
 
+# z4h vendors its own ancient fzf (0.25.1) for its widgets (Tab-complete,
+# Ctrl+R, Alt+R), which chokes on the --tmux flag in FZF_DEFAULT_OPTS. Use
+# the PATH fzf instead, which is new enough to support it.
+zstyle ':z4h:*' fzf-command fzf
+
 # Send these files over to the remote host when connecting over SSH to the
 # enabled hosts.
 # zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh'
