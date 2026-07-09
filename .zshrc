@@ -136,6 +136,9 @@ if (( $+commands[fzf] )); then
   export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --tmux center,80%,60%"
   export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
 
+  # temporarily here since I have sessions started with FZF_TMUX_OPTS - can be removed once I've restarted my tmux sessions
+  unset FZF_TMUX_OPTS
+
   # not sure why FZF_DEFAULT_COMMAND isn't being used here?
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_CTRL_T_OPTS="--walker-skip $skip_dirs \
