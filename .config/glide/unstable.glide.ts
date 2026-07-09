@@ -140,11 +140,11 @@ glide.keymaps.set(
 
 glide.keymaps.set(
   "normal",
-  "<C-w>q",
+  "<C-w>u",
   async ({ tab_id }) => {
     glide.unstable.split_views.separate(tab_id);
   },
   {
-    description: "Close the split view for the current tab",
+    description: "Unsplit: revert the current tab out of its split view",
   },
 );
