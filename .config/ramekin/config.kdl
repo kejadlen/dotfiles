@@ -1,17 +1,39 @@
-mounts {
-  - source="~/.config/git"
-  - source="~/.config/jj"
-  - source="~/.config/jj/repos" writable=#true
-  - source="~/.local/share/ranger" writable=#true
-  - source="~/.pi/pinch"
+// Machine default profile. Selects the builtin trivial `claude`; agent
+// config (CLAUDE.md, settings.json, skills, commands) rides in through the
+// binary allowlist off ~/.claude, so nothing needs restating here.
+profile "claude"
+
+// Pi against Amazon Bedrock. Pi selects the provider by flag (no env
+// equivalent); the model is left to pi at run time. AWS creds come from an
+// SSO profile — fill in the placeholders and `aws sso login` on the host.
+// ~/.aws mounts read-only, so an expired SSO token means re-logging in on
+// the host rather than a silent in-container refresh.
+profile "pi-bedrock" {
+  agent "pi"
+  args "--provider" "amazon-bedrock"
+  env {
+    AWS_PROFILE "bedrock-users"
+  }
+  mounts { "~/.aws" }
 }
 
-pi {
-  - source="~/.dotfiles/ai/_AGENTS.md" target="AGENTS.md"
-  - source="~/.dotfiles/ai/skills"
-  - source="~/.pi/agent/settings.json"
-  - source="~/.pi/agent/keybindings.json"
-  - source="~/.pi/agent/extensions"
-  - source="~/.pi/agent/pinch.json"
-  - source="~/.pi/agent/pinch-lock.json"
+mounts {
+  // Agent config that sits outside the binary allowlist but is still config,
+  // kept deliberately. Targets derive from the ~/ source.
+  "~/.pi/agent/keybindings.json"
+  "~/.pi/agent/extensions"
+  "~/.claude/statusline.sh"
+  "~/.claude/output-styles"
+
+  // Devlog entries are written from inside the container by the devlog skill,
+  // so this rides in writable and persists across sessions.
+  "~/.claude/devlog" writable=#true
+
+  // Machine-local mounts. The jj repo registry is writable so jj can record
+  // repos; the git and jj config staples come from the binary.
+  "~/.config/jj/repos" writable=#true
+
+  // ranger state and pi's pinch dir don't exist on this machine yet, so both
+  // stay inert (skip-if-missing) until something creates them.
+  "~/.local/share/ranger" writable=#true
 }
