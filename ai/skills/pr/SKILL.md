@@ -80,11 +80,14 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
    - Follow repository conventions
 9. **Code review**: Dispatch the `superpowers:code-reviewer` subagent to review
     the changes. Tell the reviewer to run
-    `jj diff --from main@origin --to <revision>` to get the actual commit diff—do
-    not let it grep or read the working directory, which may be on a different
-    revision. Provide a brief description of what was implemented. Address
-    Critical and Important issues before proceeding; Minor issues can be noted
-    for later.
+    `jj diff --git --from main@origin --to <revision>` to get the actual commit
+    diff—do not let it grep or read the working directory, which may be on a
+    different revision. Pass `--git` so the reviewer gets a standard unified diff
+    with `@@` hunk headers; the default color-words format prints two
+    line-number columns (old, then new) and shows `..` in the old column for
+    added lines, which subagents misread when anchoring `file:line`. Provide a
+    brief description of what was implemented. Address Critical and Important
+    issues before proceeding; Minor issues can be noted for later.
 10. Create the PR: `gh pr create --head <bookmark-name> --title "<title>"` using
     a HEREDOC to pass the body.
     - If `web` was specified: add `--web` flag (without `--draft` — they're

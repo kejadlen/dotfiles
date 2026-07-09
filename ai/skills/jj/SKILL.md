@@ -147,6 +147,21 @@ jj diff -- 'glob:"bin/*" ~ glob:"bin/,special"'
 **Put `-m` before `--` or fileset args.** jj parses everything after `--` as
 fileset, so `-m` placed after `--` becomes a parse error.
 
+**`jj squash` opens `$EDITOR` to merge descriptions and hangs in
+non-interactive shells.** When source and destination both have
+descriptions, jj launches the editor to combine them — Claude Code's
+Bash tool has no TTY, so the command appears to hang silently and
+nothing changes. Always pass one of:
+
+```bash
+jj squash --use-destination-message   # discard source description
+jj squash -u                          # short form
+jj squash -m 'new message'            # inline replacement
+```
+
+The same applies to `jj squash --from X --into Y`. If you actually want
+to merge the two descriptions, do it from a real terminal.
+
 ## When to Use jj --help
 
 Never rely on this skill as authoritative. Always run `jj <command> --help`
