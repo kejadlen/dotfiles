@@ -10,7 +10,7 @@ user-invocable: false
 
 A change description should explain *why* a decision was made, not *what* the code does. The diff already shows what. Your explanation adds reasoning the code alone cannot convey.
 
-**Core principle:** Most commits need only a title. Add body text only when reasoning is truly non-obvious from the diff. Omit needless words.
+**Core principle:** Judge from the diff and context whether a body is warranted. When it is, cover what changed and why, with file or function references where useful. Never restate the title in more technical language; every body sentence must add information the title didn't already give.
 
 ## When NOT to Use
 
@@ -30,6 +30,10 @@ When describing how code works (separate from why changes were made).
 ### 1. Identify What Changed
 
 Read the diff. List concrete technical changes (modified function, added parameter, removed check, updated constant).
+
+Re-read the diff immediately before writing the description, even if
+you read it earlier in the conversation — files may have changed
+since then.
 
 ### 2. Answer: Why Now?
 
@@ -79,43 +83,34 @@ change *type* (`fix:`, `feat:`, `refactor:`); a scope names a *subject*
 several subjects or has no natural home — an unscoped sentence stays the
 default.
 
-**HARD STOP before adding body text.** Ask yourself:
+**Judge the diff, then decide on a body.** Skip it when:
+- The diff is genuinely trivial: a typo fix, a formatting pass, a dependency bump with no behavioral change.
+- A reader can already reconstruct the reasoning from the diff alone.
+- The body would only paraphrase what the diff already shows.
 
-1. Can a reader reconstruct the *reasoning* from the diff alone?
-   If yes, **stop here. Title only.**
-2. Does the diff show *what* changed but not *why*?
-   If no, **stop here. Title only.**
-3. Would a sentence in the body just paraphrase the diff?
-   If yes, **delete it. Title only.**
-
-**Default to title-only.** Most commits need no body. Adding body
-text is the exception, not the rule.
-
-**Add body ONLY if:**
-- Reasoning is truly non-obvious from diff
-- Multiple approaches existed and you chose this one for specific reasons
-- Impact is invisible without explanation
-
-When body is necessary:
+Otherwise, write one — cover what changed, naming the file or
+function when it orients the reader, and why.
 
 ```
 Normalize TTL unit mismatch
 
-TTL (seconds) and timestamp (milliseconds) compared directly.
-Normalizing both to milliseconds avoids migration.
+lib/cache.rb's expire? compared TTL (seconds) against timestamp
+(milliseconds) directly. Normalizing both to milliseconds avoids
+a migration of stored values.
 ```
 
 **Format:**
 - Title: under 60 characters (scope prefix included), plain English — capitalize the first word, or lowercase the scope and description when scoped
-- Body: 1-2 sentences maximum, under 20 words total
-- Problem, then solution (omit needless words)
+- Body: sized to the change — a sentence is often enough, but let genuinely complex reasoning run longer
+- State what changed, then why (omit needless words)
 
-**Before adding ANY body text, audit:**
-- Is this sentence invisible in the diff? (If no, delete it.)
-- Does this describe implementation visible in the code? (If yes, delete it.)
-- Does this just restate what a careful diff reader would see? (If yes, delete it.)
+**Before adding a body sentence, check it earns its place:**
+- Does it restate the title in more technical words? If yes, delete it — that's not new information.
+- Does it name a file, function, or constraint the title doesn't cover? Keep it.
+- Does it explain why this approach, not just what changed? Keep it.
 
-Each sentence must explain reasoning not visible in the code change itself.
+Every sentence must add information the reader didn't already get
+from the title or a careful read of the diff.
 
 ## Common Mistakes
 
@@ -132,7 +127,8 @@ Each sentence must explain reasoning not visible in the code change itself.
 | "I'll remember why I did this" | You won't. Lost context in weeks. | Write it down now. Future-you needs this. |
 | "It's just cleanup/refactor" | Doesn't explain business motivation | Why now? Why this code? What problem does it solve? |
 | "This is obvious from the code" | Obvious to you ≠ obvious to reviewers | Obvious what changed. Not obvious why. |
-| "Need to explain the approach" | Title may be sufficient | STOP: Is title sufficient? Most commits need no body. |
+| "The diff is small, no body needed" | Size isn't the test — reconstructability is | Can a reader get the reasoning from the diff alone? If not, write the body. |
+| "I'll just restate the title with more jargon" | That's not new information | Delete it unless it names a file/function or explains why |
 
 ## Git Trailers
 
