@@ -63,10 +63,6 @@
       "rev": "edcf56c",
       "src": "https://github.com/suy/vim-context-commentstring.git"
     },
-    "vim-dirvish": {
-      "rev": "5d1d1ef45c6161af14c7d3d3097057e8fb5ac257",
-      "src": "git@github.com:justinmk/vim-dirvish.git"
-    },
     "vim-dispatch": {
       "rev": "a2ff28a",
       "src": "https://github.com/tpope/vim-dispatch.git"
