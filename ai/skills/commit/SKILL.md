@@ -50,12 +50,20 @@ Fileset (empty means commit all pending changes): `$ARGUMENTS`
 ### Process
 
 1. Run `jj diff $ARGUMENTS` to view changes being committed
-2. When a fileset is given, run `jj diff` (no args) to see all pending
-   changes. Review the remaining files and mention any that look related
-   to the fileset — e.g., a lockfile updated alongside a manifest, or a
-   config change paired with the code that uses it. Ask the user whether
-   to include them. Skip this step when no fileset is provided (all
-   changes are already included).
+2. Confirm the commit's scope before writing it.
+   - When a fileset is given, run `jj diff` (no args) to see all pending
+     changes. Review the remaining files and mention any that look
+     related to the fileset — e.g., a lockfile updated alongside a
+     manifest, or a config change paired with the code that uses it. Ask
+     the user whether to include them.
+   - When no fileset is given, `jj commit` sweeps in *every* pending
+     change with no further prompt. Before committing, check that each
+     changed file belongs to the work you intend to commit. Watch for
+     files you didn't touch this session (edited by the user, a linter,
+     or a hook between turns) and for changes that are a separate logical
+     unit. Split those out — commit the intended files by passing them as
+     a fileset, or `jj split` after the fact — rather than letting an
+     unrelated edit ride along.
 3. **Adversarial review.** Before writing the commit message, re-read the
    diff as a skeptical reviewer trying to find reasons NOT to commit.
    Check for:
