@@ -1,6 +1,6 @@
 ---
 name: self-improving-skills
-description: Use when a loaded skill is incomplete or sparse, or when you discover patterns, gotchas, or commands worth capturing in an existing skill during normal work.
+description: Use right after finishing a task where a skill you relied on fell short — you had to run `--help` or read docs it should have covered, you tried a command or flag that turned out not to exist, you hit an error and worked out the fix, or the skill was sparse, outdated, or missing a workflow. Load it and follow it to fold what you learned back into that skill before wrapping up, rather than moving on. Applies during normal work, not only when asked.
 user-invocable: false
 ---
 
@@ -50,11 +50,11 @@ Once you've figured it out, that's exactly the kind of thing to capture in the s
 
 ## Mark Self-Improving Skills
 
-When creating a self-improving skill, note it in the skill itself so future sessions know to apply this workflow. Add a line like:
+When creating a self-improving skill, add a marker so a future session knows to apply this workflow. Make the marker an **instruction that names the action**, not a passive pointer. A line like "see the `self-improving-skills` skill" reads as a vague label — agents acknowledge it and move on without loading anything. Write an imperative tied to the trigger condition instead:
 
-> *This is a self-improving skill — see the `self-improving-skills` skill.*
+> *This is a self-improving skill. If you used it and it came up short — a missing command, flag, gotcha, or workflow — invoke the `self-improving-skills` skill and follow it before you finish.*
 
-This closes the loop: the skill gets loaded, the agent sees the note, loads this skill, and knows to update after use.
+This closes the loop: the agent loads the marked skill, hits the marker mid-task, and the imperative ("invoke … and follow it before you finish") is concrete enough to actually trigger the load and the update — instead of just noticing the gap and carrying on.
 
 ## New Skills Should Start Lean
 
