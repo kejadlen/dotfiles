@@ -38,16 +38,31 @@ main() {
     local tmux_opts=(--tmux "80%,60%")
     [[ -n "${IN_TMUX_FLOAT:-}" ]] && tmux_opts=()
 
-    local selection
-    selection=$(printf '%s\n' "$tokens" | FZF_DEFAULT_OPTS='' fzf --no-multi --select-1 --no-margin --no-padding \
+    # --expect ctrl-y reports which key completed the selection: it's the
+    # first line of output, empty unless ctrl-y was the trigger, with the
+    # selected token on the following line.
+    local result
+    result=$(printf '%s\n' "$tokens" | FZF_DEFAULT_OPTS='' fzf --no-multi --select-1 --no-margin --no-padding \
         "${tmux_opts[@]}" \
         --layout reverse \
         --height 100% \
         --highlight-line --info inline-right \
+        --header 'enter: insert  ctrl-y: copy' --header-first \
+        --expect ctrl-y \
         --border-label ' grab ') || exit 0
+    [[ -n "$result" ]] || exit 0
+
+    local key selection
+    key=$(head -n1 <<<"$result")
+    selection=$(tail -n +2 <<<"$result")
     [[ -n "$selection" ]] || exit 0
 
-    tmux send-keys -l -t "$pane_id" -- "$selection"
+    if [[ "$key" == "ctrl-y" ]]; then
+        printf '%s' "$selection" | pbcopy
+        tmux display-message 'Copied to clipboard'
+    else
+        tmux send-keys -l -t "$pane_id" -- "$selection"
+    fi
 }
 
 main "$@"
