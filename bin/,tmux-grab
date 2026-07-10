@@ -15,7 +15,7 @@ main() {
     # tac reverses line order so the most recent scrollback surfaces first in
     # the fzf list, while keeping left-to-right token order within each line.
     local pane_text
-    pane_text=$(tmux capture-pane -p -S - -t "$pane_id" | tac)
+    pane_text=$(tmux capture-pane -p -S - -t "$pane_id" | tail -r)
     [[ -n "$pane_text" ]] || exit 0
 
     # Two passes: whitespace-delimited tokens first (so "foo/bar:baz" is a
@@ -42,8 +42,11 @@ main() {
     # line of output, empty unless ctrl-y/ctrl-o was the trigger, with the
     # selected token on the following line.
     local result
+    # macOS ships bash 3.2 (last GPLv2 release); under set -u, "${arr[@]}"
+    # on an empty array throws "unbound variable" there (fixed in bash 4.4).
+    # The +"${arr[@]}" form works around it for both empty and populated arrays.
     result=$(printf '%s\n' "$tokens" | FZF_DEFAULT_OPTS='' fzf --no-multi --select-1 --no-margin --no-padding \
-        "${tmux_opts[@]}" \
+        "${tmux_opts[@]+"${tmux_opts[@]}"}" \
         --layout reverse \
         --height 100% \
         --highlight-line --info inline-right \
