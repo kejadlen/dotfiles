@@ -72,11 +72,6 @@ namespace :dotslash do
     File.write("bin/#{name}", "#!/usr/bin/env dotslash\n\n#{JSON.pretty_generate(dotslash)}\n")
   end
 
-  desc "Update pinch"
-  task :pinch do
-    sh "gh release download --repo kejadlen/pinch --pattern pinch --output bin/pinch --clobber"
-  end
-
   desc "Update jq"
   task(:jq) do
     update_dotslash_release(name: "jq", repo: "jqlang/jq") { "jq-macos-arm64" }
@@ -135,7 +130,6 @@ namespace :dotslash do
     jj
     jq
     just
-    pinch
     ramekin
     sops
     tree_sitter

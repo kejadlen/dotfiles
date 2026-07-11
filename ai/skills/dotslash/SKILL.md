@@ -11,7 +11,6 @@ This repo uses [DotSlash](https://dotslash-cli.com) to manage binaries in `bin/`
 
 - `bin/jq` — tracks latest jqlang/jq release (bare binary, no archive)
 - `bin/jj` — tracks latest jj-vcs/jj release (tar.gz archive)
-- `bin/pinch` — downloaded directly via `gh release download` (not a dotslash file)
 
 ## Adding a new DotSlash binary
 
