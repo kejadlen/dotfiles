@@ -106,7 +106,8 @@
       url
       (let [tracking-params [:utm_* :uta_* :fbclid :gclid]
             trurl-cmd (.. :/opt/homebrew/bin/trurl " "
-                          (table.concat (map tracking-params #(.. "--qtrim " $1))
+                          (table.concat (map tracking-params
+                                             #(.. "--qtrim " $1))
                                         " "))]
         (chomp (execute (.. trurl-cmd " --url \"" url "\""))))))
 
