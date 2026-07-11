@@ -88,6 +88,11 @@ default.
 - A reader can already reconstruct the reasoning from the diff alone.
 - The body would only paraphrase what the diff already shows.
 
+A rationale you *can* construct isn't automatically one worth writing —
+if the diff already makes it obvious, a constructed sentence is
+decoration, not information. Default to no body; add one only when it
+earns its place.
+
 Otherwise, write one — cover what changed, naming the file or
 function when it orients the reader, and why.
 
