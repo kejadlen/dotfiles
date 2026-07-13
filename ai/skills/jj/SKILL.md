@@ -141,6 +141,15 @@ For glob patterns, use `glob:"pattern"` the same way:
 jj diff -- 'glob:"bin/*" ~ glob:"bin/,special"'
 ```
 
+**There is no `--cwd` flag.** To target a repo without `cd`ing into it,
+use `-R <path>` (short for `--repository`):
+
+```bash
+jj log -R /path/to/repo -r main    # correct
+jj log --cwd /path/to/repo         # WRONG — no such flag; fails silently
+                                    # if stderr is redirected (e.g. `2>/dev/null`)
+```
+
 **`jj op undo` has been removed (v0.39+).** Use `jj op revert` or
 `jj undo`/`jj redo`.
 
