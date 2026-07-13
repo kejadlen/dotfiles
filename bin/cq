@@ -1,0 +1,25 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "cq",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 12682402,
+      "hash": "blake3",
+      "digest": "37a605fd779eed6f7c78b08bb98e2cbb185e332998f3f02e47fa50974b9f0711",
+      "path": "cq-0.2.1-aarch64-apple-darwin/cq",
+      "providers": [
+        {
+          "url": "https://github.com/technicalpickles/cq/releases/download/v0.2.1/cq-0.2.1-aarch64-apple-darwin.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/technicalpickles/cq",
+          "tag": "v0.2.1",
+          "name": "cq-0.2.1-aarch64-apple-darwin.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    }
+  }
+}

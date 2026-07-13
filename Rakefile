@@ -52,6 +52,7 @@ namespace :dotslash do
       tag = JSON.parse(`gh release view --repo #{repo} --json tagName`)["tagName"]
     end
     asset_name = asset.call(tag)
+    resolved_path = path.respond_to?(:call) ? path.call(tag) : path
 
     url = "https://github.com/#{repo}/releases/download/#{tag}/#{asset_name}"
     entry = JSON.parse(`dotslash -- create-url-entry #{url}`)
@@ -60,7 +61,7 @@ namespace :dotslash do
       size: entry["size"],
       hash: "blake3",
       digest: entry["digest"],
-      path: path,
+      path: resolved_path,
       providers: [
         { url: url },
         { type: "github-release", repo: "https://github.com/#{repo}", tag: tag, name: asset_name },
@@ -122,10 +123,16 @@ namespace :dotslash do
     update_dotslash_release(name: "ramekin", repo: "kejadlen/ramekin") { "ramekin-aarch64-apple-darwin.tar.gz" }
   end
 
+  desc "Update cq"
+  task(:cq) do
+    update_dotslash_release(name: "cq", repo: "technicalpickles/cq", path: ->(tag) { "cq-#{tag.delete_prefix("v")}-aarch64-apple-darwin/cq" }) { |tag| "cq-#{tag.delete_prefix("v")}-aarch64-apple-darwin.tar.gz" }
+  end
+
   desc "Update all dotslash files"
   task all: %i[
     age
     age-keygen
+    cq
     fzf
     jj
     jq
