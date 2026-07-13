@@ -12,11 +12,26 @@ main() {
     local pane_id
     pane_id=$(tmux display-message -p -t '{last}' '#{pane_id}')
 
-    # tac reverses line order so the most recent scrollback surfaces first in
-    # the fzf list, while keeping left-to-right token order within each line.
+    # Captured once in natural (oldest-to-newest) order; reused both as the
+    # preview's context source and, reversed below, for token extraction.
     local pane_text
-    pane_text=$(tmux capture-pane -p -S - -t "$pane_id" | tail -r)
+    pane_text=$(tmux capture-pane -p -S - -t "$pane_id")
     [[ -n "$pane_text" ]] || exit 0
+
+    # Saved to a file so the preview subprocess -- a separate invocation of
+    # this script, spawned by fzf once per highlighted item -- can look up
+    # context for that item without re-capturing the pane itself.
+    local pane_file
+    pane_file=$(mktemp)
+    trap 'rm -f "$pane_file"' EXIT
+    printf '%s\n' "$pane_text" >"$pane_file"
+    export PANE_GRAB_FILE="$pane_file"
+
+    # tail -r reverses line order so the most recent scrollback surfaces
+    # first in the fzf list, while keeping left-to-right token order within
+    # each line.
+    local pane_text_reversed
+    pane_text_reversed=$(tail -r <<<"$pane_text")
 
     # Two passes: whitespace-delimited tokens first (so "foo/bar:baz" is a
     # candidate), then punctuation-split sub-tokens (so "foo", "bar", "baz"
@@ -24,8 +39,8 @@ main() {
     local tokens
     tokens=$(
         {
-            printf '%s\n' "$pane_text" | grep --only-matching --extended-regexp '\S+' || true
-            printf '%s\n' "$pane_text" | grep --only-matching --extended-regexp '[[:alnum:]_]+' || true
+            printf '%s\n' "$pane_text_reversed" | grep --only-matching --extended-regexp '\S+' || true
+            printf '%s\n' "$pane_text_reversed" | grep --only-matching --extended-regexp '[[:alnum:]_]+' || true
         } | awk '!seen[$0]++'
     )
     [[ -n "$tokens" ]] || exit 0
@@ -52,6 +67,7 @@ main() {
         --highlight-line --info inline-right \
         --header 'enter: insert  ctrl-y: copy  ctrl-o: open' --header-first \
         --expect ctrl-y,ctrl-o \
+        --preview "\"$0\" __preview__ {}" \
         --border-label ' grab ') || exit 0
     [[ -n "$result" ]] || exit 0
 
@@ -73,5 +89,42 @@ main() {
             ;;
     esac
 }
+
+# Renders the preview pane for the item currently highlighted in fzf: the
+# 2 lines of scrollback on either side of that item's most recent occurrence,
+# with the matching line itself bolded. Invoked as a fresh instance of this
+# script (via the --preview flag above), so it reads the captured pane text
+# from the file path the main invocation exported, rather than recapturing.
+preview_mode() {
+    local token=${1:-}
+    local file=${PANE_GRAB_FILE:-}
+    if [[ -z "$token" || -z "$file" || ! -f "$file" ]]; then
+        echo '(no preview available)'
+        return
+    fi
+
+    # grep preserves the file's natural top-to-bottom order, so the last
+    # match is the occurrence closest to "now" in the scrollback.
+    local line
+    line=$(grep -Fn -- "$token" "$file" | tail -n1 | cut -d: -f1) || true
+    if [[ -z "$line" ]]; then
+        echo '(not found in scrollback)'
+        return
+    fi
+
+    local start=$(( line > 2 ? line - 2 : 1 ))
+    local end=$(( line + 2 ))
+    awk -v start="$start" -v end="$end" -v hl="$line" '
+        NR >= start && NR <= end {
+            if (NR == hl) printf "\033[1m%s\033[0m\n", $0
+            else print
+        }
+    ' "$file"
+}
+
+if [[ "${1:-}" == "__preview__" ]]; then
+    preview_mode "${2:-}"
+    exit 0
+fi
 
 main "$@"
