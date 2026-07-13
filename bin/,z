@@ -13,8 +13,11 @@ main() {
     [[ -n "${IN_TMUX_FLOAT:-}" ]] && tmux_opts=()
 
     local dir
+    # ${arr[@]+"${arr[@]}"} splices the array only when it has elements. A bare
+    # "${tmux_opts[@]}" would abort under `set -u` on the empty (IN_TMUX_FLOAT)
+    # path, because macOS bash 3.2 counts an empty array as an unbound variable.
     dir=$(zoxide query -l "$@" | fzf --no-multi --select-1 --no-margin --no-padding \
-        "${tmux_opts[@]}" \
+        ${tmux_opts[@]+"${tmux_opts[@]}"} \
         --height 100% \
         --highlight-line --info inline-right \
         --border-label ' zoxide ' \
