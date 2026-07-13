@@ -5,6 +5,84 @@ if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
 fi
 
+# Shared awk source, concatenated ahead of a caller-supplied emit()/END.
+# joinable() encodes the wrap heuristic: two physical lines belong to the
+# same logical string only when neither side shows a deliberate break --
+# the left line must not end in whitespace and the right must not begin
+# with it (a padded or indented boundary means the newline was intentional,
+# not a hard terminal wrap). Empty lines fail both tests, so a blank line --
+# two newlines, not "only a newline in between" -- always breaks a run.
+# walk_runs() reports each maximal chain of 2+ such lines via emit(start,end).
+# shellcheck disable=SC2016  # $0 et al. are awk fields, not shell expansions.
+RUNS_AWK='
+function joinable(a, b) {
+    return (a != "" && b != "" && a !~ /[[:space:]]$/ && b !~ /^[[:space:]]/)
+}
+function walk_runs(   i, j) {
+    i = 1
+    while (i <= NR) {
+        j = i
+        while (j < NR && joinable(lines[j], lines[j+1])) j++
+        if (j > i) emit(i, j)
+        i = (j > i) ? j + 1 : i + 1
+    }
+}
+{ lines[NR] = $0 }
+'
+
+# Emits one candidate per wrap-joined run, newest (bottom-most) run first to
+# match the reversed token passes below. Each run yields its no-separator
+# concatenation plus every member line individually, so both the
+# reconstructed string and its pieces stay grabbable.
+combined_candidates() {
+    awk "$RUNS_AWK"'
+    function emit(s, e) { runs_start[++runs_n] = s; runs_end[runs_n] = e }
+    END {
+        walk_runs()
+        for (r = runs_n; r >= 1; r--) {
+            joined = ""
+            for (k = runs_start[r]; k <= runs_end[r]; k++) joined = joined lines[k]
+            print joined
+            for (k = runs_start[r]; k <= runs_end[r]; k++) print lines[k]
+        }
+    }
+    ' <<<"$1"
+}
+
+# Locates the run whose concatenation equals a combined candidate, so the
+# preview can bold its span. Prints "start end" (1-based line numbers) of the
+# last such run -- the one closest to now -- or nothing. TOKEN rides in via
+# the environment to dodge awk -v backslash processing on URLs and paths.
+find_run_range() {
+    local token=$1 file=$2
+    TOKEN="$token" awk "$RUNS_AWK"'
+    function emit(s, e,   k, joined) {
+        joined = ""
+        for (k = s; k <= e; k++) joined = joined lines[k]
+        if (joined == ENVIRON["TOKEN"]) { best_start = s; best_end = e }
+    }
+    END {
+        walk_runs()
+        if (best_start > 0) print best_start, best_end
+    }
+    ' "$file"
+}
+
+# Prints a file window spanning 2 lines on either side of [hlstart, hlend],
+# with that inclusive range bolded (a single line for plain tokens, a span
+# for combined candidates).
+render_preview() {
+    local file=$1 hlstart=$2 hlend=$3
+    local start=$(( hlstart > 2 ? hlstart - 2 : 1 ))
+    local end=$(( hlend + 2 ))
+    awk -v start="$start" -v end="$end" -v hlstart="$hlstart" -v hlend="$hlend" '
+        NR >= start && NR <= end {
+            if (NR >= hlstart && NR <= hlend) printf "\033[1m%s\033[0m\n", $0
+            else print
+        }
+    ' "$file"
+}
+
 main() {
     # tmux doesn't expand #{pane_id} in a new-pane shell-command argument, so
     # the triggering pane is looked up here instead: {last} is the pane that
@@ -33,12 +111,15 @@ main() {
     local pane_text_reversed
     pane_text_reversed=$(tail -r <<<"$pane_text")
 
-    # Two passes: whitespace-delimited tokens first (so "foo/bar:baz" is a
-    # candidate), then punctuation-split sub-tokens (so "foo", "bar", "baz"
-    # are too). Dedup preserves first-seen order, so exact repeats collapse.
+    # Three passes, feeding a first-seen dedup so exact repeats collapse.
+    # Wrap-joined runs come first (natural order, so it reads the unreversed
+    # capture) to surface reconstructed strings at the top; then
+    # whitespace-delimited tokens (so "foo/bar:baz" is a candidate); then
+    # punctuation-split sub-tokens (so "foo", "bar", "baz" are too).
     local tokens
     tokens=$(
         {
+            combined_candidates "$pane_text"
             printf '%s\n' "$pane_text_reversed" | grep --only-matching --extended-regexp '\S+' || true
             printf '%s\n' "$pane_text_reversed" | grep --only-matching --extended-regexp '[[:alnum:]_]+' || true
         } | awk '!seen[$0]++'
@@ -92,9 +173,9 @@ main() {
 
 # Renders the preview pane for the item currently highlighted in fzf: the
 # 2 lines of scrollback on either side of that item's most recent occurrence,
-# with the matching line itself bolded. Invoked as a fresh instance of this
-# script (via the --preview flag above), so it reads the captured pane text
-# from the file path the main invocation exported, rather than recapturing.
+# with the match itself bolded. Invoked as a fresh instance of this script
+# (via the --preview flag above), so it reads the captured pane text from the
+# file path the main invocation exported, rather than recapturing.
 preview_mode() {
     local token=${1:-}
     local file=${PANE_GRAB_FILE:-}
@@ -103,23 +184,27 @@ preview_mode() {
         return
     fi
 
-    # grep preserves the file's natural top-to-bottom order, so the last
-    # match is the occurrence closest to "now" in the scrollback.
+    # A plain token, a substring of a line, or an individual member line of a
+    # run all appear verbatim on some line; grep keeps natural top-to-bottom
+    # order, so the last match is the occurrence closest to "now".
     local line
     line=$(grep -Fn -- "$token" "$file" | tail -n1 | cut -d: -f1) || true
-    if [[ -z "$line" ]]; then
-        echo '(not found in scrollback)'
+    if [[ -n "$line" ]]; then
+        render_preview "$file" "$line" "$line"
         return
     fi
 
-    local start=$(( line > 2 ? line - 2 : 1 ))
-    local end=$(( line + 2 ))
-    awk -v start="$start" -v end="$end" -v hl="$line" '
-        NR >= start && NR <= end {
-            if (NR == hl) printf "\033[1m%s\033[0m\n", $0
-            else print
-        }
-    ' "$file"
+    # A combined candidate exists only as the concatenation of consecutive
+    # lines, never verbatim, so fall back to locating its run and bolding the
+    # whole span.
+    local range
+    range=$(find_run_range "$token" "$file") || true
+    if [[ -n "$range" ]]; then
+        render_preview "$file" "${range% *}" "${range#* }"
+        return
+    fi
+
+    echo '(not found in scrollback)'
 }
 
 if [[ "${1:-}" == "__preview__" ]]; then
