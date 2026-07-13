@@ -13,18 +13,15 @@ Argument (empty if none was passed): `$ARGUMENTS`
 
 Determine which mode to use:
 
-- **Describe mode** — argument names an existing revision (e.g., `@-`,
-  `abc123`, a bookmark name). Use when the user says "describe",
-  "rewrite commit message", or "update revision description".
-- **Commit mode** — argument is empty, a fileset, or the user says
-  "commit". This is the default.
+- **Describe mode** — argument names an existing revision (`@-`,
+  `abc123`, a bookmark name).
+- **Commit mode** — argument is empty or a fileset. This is the default.
 
 When ambiguous, ask.
 
 ## Describe Mode
 
-Rewrite the description of an existing revision from scratch. Completely
-discard the existing description.
+Rewrite the revision's description from scratch, discarding the existing one.
 
 1. Run `jj show -r $ARGUMENTS` to view the changes
 2. Invoke the `describing-changes` skill to draft a new description
@@ -37,15 +34,17 @@ Execute directly without exploring the codebase first. When asked to
 commit and create a PR, use this skill followed by the `/pr` skill
 unless told otherwise.
 
-**Prefer new commits over squashing.** Use `jj commit` to create a new
-commit by default — even for refactors, cleanups, or small follow-ups.
-Only squash (`jj squash`) when the prior commit specifically needs
-fixing up (e.g., correcting a bug introduced in that commit, fixing a
-typo in code it added). If in doubt, make a new commit.
+**Prefer new commits over squashing.** Default to `jj commit`, even for
+refactors and small follow-ups. Only `jj squash` when the prior commit
+itself needs fixing (a bug or typo in code it introduced).
 
 ### Fileset (optional)
 
 Fileset (empty means commit all pending changes): `$ARGUMENTS`
+
+A path containing a fileset metacharacter (`,` `~` `|` `&` `()`) parses
+as syntax and fails; wrap it in a double-quoted string literal, e.g.
+`'"bin/,z"'`. See the `jj` skill for the full fileset quoting rules.
 
 ### Process
 
@@ -80,6 +79,6 @@ Fileset (empty means commit all pending changes): `$ARGUMENTS`
 5. Check if a changelog exists (CHANGELOG.md, CHANGELOG, CHANGES.md, or similar)
    - If found, add an entry under the appropriate section
    - Scope the entry to only the changes in the fileset, if provided
-6. Commit with `jj commit -m '...' $ARGUMENTS` (omit fileset args to commit all; include changelog in fileset if updated)
+6. Commit with `jj commit -m '...' $ARGUMENTS` (include changelog in the fileset if you updated it)
    - **Put `-m` before `--` or fileset args.** jj parses everything after `--` as fileset, so `-m` content placed after `--` becomes a parse error.
 7. Verify with `jj show`
