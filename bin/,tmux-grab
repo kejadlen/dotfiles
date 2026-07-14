@@ -111,16 +111,26 @@ main() {
     local pane_text_reversed
     pane_text_reversed=$(tail -r <<<"$pane_text")
 
-    # Three passes, feeding a first-seen dedup so exact repeats collapse.
+    # Four passes, feeding a first-seen dedup so exact repeats collapse.
     # Wrap-joined runs come first (natural order, so it reads the unreversed
     # capture) to surface reconstructed strings at the top; then
     # whitespace-delimited tokens (so "foo/bar:baz" is a candidate); then
+    # parenthesized spans with the parens stripped (so "(utils.rb:42)"
+    # yields "utils.rb:42", and a parenthetical phrase survives as one
+    # candidate instead of shattering at its inner spaces); then
     # punctuation-split sub-tokens (so "foo", "bar", "baz" are too).
     local tokens
     tokens=$(
         {
             combined_candidates "$pane_text"
             printf '%s\n' "$pane_text_reversed" | grep --only-matching --extended-regexp '\S+' || true
+            printf '%s\n' "$pane_text_reversed" | awk '{
+                line = $0
+                while (match(line, /\([^()]*\)/)) {
+                    if (RLENGTH > 2) print substr(line, RSTART + 1, RLENGTH - 2)
+                    line = substr(line, RSTART + RLENGTH)
+                }
+            }'
             printf '%s\n' "$pane_text_reversed" | grep --only-matching --extended-regexp '[[:alnum:]_]+' || true
         } | awk '!seen[$0]++'
     )
