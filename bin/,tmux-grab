@@ -118,7 +118,9 @@ main() {
     # parenthesized spans with the parens stripped (so "(utils.rb:42)"
     # yields "utils.rb:42", and a parenthetical phrase survives as one
     # candidate instead of shattering at its inner spaces); then
-    # punctuation-split sub-tokens (so "foo", "bar", "baz" are too).
+    # punctuation-split sub-tokens (so "foo", "bar", "baz" are too). A final
+    # filter drops any candidate carrying a raw control byte -- stray escape-
+    # sequence remnants, bells, and the like -- so only real text reaches fzf.
     local tokens
     tokens=$(
         {
@@ -132,7 +134,7 @@ main() {
                 }
             }'
             printf '%s\n' "$pane_text_reversed" | grep --only-matching --extended-regexp '[[:alnum:]_]+' || true
-        } | awk '!seen[$0]++'
+        } | awk '!seen[$0]++' | grep -Ev '[[:cntrl:]]' || true
     )
     [[ -n "$tokens" ]] || exit 0
 
