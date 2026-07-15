@@ -18,8 +18,8 @@ import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-age
 
 const MODEL_PROVIDER = "anthropic";
 const MODEL_ID = "claude-haiku-4-5";
-const MAX_WORDS = 6;
-const MAX_CHARS = 40;
+const MAX_WORDS = 4;
+const MAX_CHARS = 28;
 // Cap how much transcript we send to the summarizer. The tail carries the
 // most relevant "what's happening now" signal, so we keep the last N chars.
 const MAX_TRANSCRIPT_CHARS = 6000;
