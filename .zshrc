@@ -139,10 +139,12 @@ if (( $+commands[fzf] )); then
   skip_dirs=.direnv,.git,.jj,node_modules,target
 
   export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --tmux center,80%,60%"
-  export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
-
-  # temporarily here since I have sessions started with FZF_TMUX_OPTS - can be removed once I've restarted my tmux sessions
+  # Temporary: clears FZF_TMUX_OPTS inherited by shells started before --tmux
+  # above replaced the legacy fzf-tmux wrapper. Left set, __fzfcmd routes
+  # through fzf-tmux, which opens a split pane before the --tmux popup.
+  # Remove once all shells have been restarted.
   unset FZF_TMUX_OPTS
+  export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
 
   # not sure why FZF_DEFAULT_COMMAND isn't being used here?
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
