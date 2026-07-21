@@ -24,5 +24,6 @@
     "git:git.kejadlen.dev/alpha/ramekin",
     "git:github.com/obra/superpowers",
     "git:github.com/hegeldev/hegel-skill"
-  ]
-}
+   ],
+   "theme": "dark"
+ }

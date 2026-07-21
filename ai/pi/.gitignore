@@ -1,3 +1,4 @@
-sessions/
-auth.json
-approved-permissions.json
+/sessions/
+/auth.json
+/approved-permissions.json
+/trust.json
