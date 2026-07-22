@@ -46,6 +46,22 @@ main() {
         .children | files
     ' <<<"$report"
 
+    # A crate with no coverable library lines yet (fresh scaffold)
+    # reports 0.0% for an empty set; that's a vacuous pass, not a failure.
+    local lines_total
+    lines_total=$(jq '.linesTotal' <<<"$report")
+    # Guard the arithmetic below: [[ -eq ]] evaluates a non-numeric string
+    # as 0, so a missing field would silently skip the gate.
+    if ! [[ "$lines_total" =~ ^[0-9]+$ ]]; then
+        echo "ERROR: expected a numeric linesTotal in the grcov report, got '${lines_total}'" >&2
+        echo "The report may not be covdir format — check grcov's --output-types flag." >&2
+        exit 1
+    fi
+    if [[ "$lines_total" -eq 0 ]]; then
+        echo "coverage: no coverable lines yet, skipping gate"
+        return 0
+    fi
+
     local coverage
     coverage=$(jq '.coveragePercent' <<<"$report")
     echo ""
