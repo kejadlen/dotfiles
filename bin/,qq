@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+# One-shot, tool-free question to Haiku at low reasoning effort. For quick
+# lookups where a full Opus session is overkill.
+
+main() {
+    local prog="${0##*/}"
+    local prompt
+
+    if [[ $# -gt 0 ]]; then
+        prompt="$*"
+    elif [[ ! -t 0 ]]; then
+        prompt="$(cat)"
+    else
+        echo "usage: $prog <question>" >&2
+        echo "       echo <question> | $prog" >&2
+        exit 1
+    fi
+
+    claude --print \
+        --model haiku \
+        --effort low \
+        --tools "" \
+        --no-session-persistence \
+        "$prompt"
+}
+
+main "$@"
+
+# vim: ft=sh
