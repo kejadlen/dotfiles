@@ -131,7 +131,7 @@
                {:src "https://github.com/lukas-reineke/indent-blankline.nvim.git"
                 :version :v3.9.1}
                {:src "https://github.com/neovim/nvim-lspconfig.git"
-                :version :v2.10.0}
+                :version :v2.11.0}
                {:src "https://github.com/nvim-treesitter/nvim-treesitter.git"
                 :version :main}
                {:src "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
