@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Replaces two prior tools: the word-grab-and-insert flow from
+# https://github.com/laktak/extrakto, and the copy/open-URL flow from
+# https://github.com/junegunn/tmux-fzf-url (via this repo's retired
+# ,tmux-copy script, which credited it directly).
+
 set -euo pipefail
 if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
