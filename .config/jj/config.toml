@@ -137,8 +137,10 @@ pull = ["util", "exec", "--", "bash", "-c", """
   # so the megamerge keeps merging a colleague's immutable branch. Excluding
   # the direct children of non-trunk immutable commits leaves work we have
   # stacked on someone else's branch in place.
-  jj rebase --source "roots(mutable()) ~ (immutable() ~ ::trunk())+" --destination "trunk()"
-  jj simplify-parents
+  jj rebase \
+    --source "roots(trunk()..reachable(@, mutable()))" \
+    --onto "trunk()" \
+    --simplify-parents
   jj sweep
 """]
 
