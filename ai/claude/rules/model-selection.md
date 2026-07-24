@@ -34,3 +34,15 @@ Signals to drop a level mid-session:
 - You're correcting Claude on simple facts more than once.
 - The remaining work is mechanical follow-through on a decided plan.
 - You're paying for a 1M context window on a 20k-token task.
+
+## When spawning subagents
+
+The tiers above are defaults, not a lookup table to apply mechanically.
+Use judgment on the actual subtask rather than defaulting every subagent
+to Sonnet: a complex multi-file refactor delegated to a subagent may
+still warrant Opus, while a one-line lookup fits Haiku even run inline.
+
+Reserve the main loop's reasoning for judgment-heavy work — design,
+review, synthesis — once an approach is decided, delegate the
+implementation and let the choice of subagent tier follow from what the
+subtask actually needs.
