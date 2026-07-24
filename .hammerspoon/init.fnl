@@ -14,6 +14,9 @@
         : urlevent
         : window} hs)
 
+;; Enables the `hs` CLI, which drives this config from a shell.
+(require :hs.ipc)
+
 (local log (logger.new :init :info))
 ; (set logger.defaultLogLevel :info)
 
