@@ -57,10 +57,9 @@ main() {
     local pane_text_reversed
     pane_text_reversed=$(tail -r <<<"$pane_text")
 
-    # Three passes, feeding a first-seen dedup so exact repeats collapse.
-    # Whitespace-delimited tokens first (so "foo/bar:baz" is a candidate,
-    # and a hard-wrapped URL or path -- one line now, courtesy of -J --
-    # comes through whole); then parenthesized spans with the parens
+    # Three passes. Whitespace-delimited tokens first (so "foo/bar:baz" is a
+    # candidate, and a hard-wrapped URL or path -- one line now, courtesy of
+    # -J -- comes through whole); then parenthesized spans with the parens
     # stripped (so "(utils.rb:42)" yields "utils.rb:42", and a parenthetical
     # phrase survives as one candidate instead of shattering at its inner
     # spaces); then punctuation-split sub-tokens (so "foo", "bar", "baz" are
@@ -70,8 +69,8 @@ main() {
     # or box-drawing character, since those are never what you meant to
     # copy. LC_ALL=C makes the ASCII-range check byte-exact regardless of
     # the caller's locale.
-    local tokens
-    tokens=$(
+    local raw_candidates
+    raw_candidates=$(
         {
             printf '%s\n' "$pane_text_reversed" | grep --only-matching --extended-regexp '\S+' || true
             printf '%s\n' "$pane_text_reversed" | awk '{
@@ -82,8 +81,39 @@ main() {
                 }
             }'
             printf '%s\n' "$pane_text_reversed" | grep --only-matching --extended-regexp '[[:alnum:]_]+' || true
-        } | awk '!seen[$0]++' | grep -Ev '[[:cntrl:]]' | LC_ALL=C grep -E '[ -~]' || true
+        } | grep -Ev '[[:cntrl:]]' | LC_ALL=C grep -E '[ -~]' || true
     )
+
+    # A plain first-seen dedup would let a prompt word or repeated cwd
+    # component -- present on nearly every scrollback line -- crowd out the
+    # one-off candidate actually being hunted for. Sinking anything over a
+    # frequency threshold to the bottom (recency order still applies within
+    # each bucket) fixes that without losing those tokens outright. The
+    # threshold is a share of the total candidate count rather than a fixed
+    # number, since what counts as "frequent" scales with how much
+    # scrollback got captured -- a 50-line pane and a 50000-line one need
+    # different absolute cutoffs but the same relative one. It's set high on
+    # purpose: measured against real scrollback, a commit/change id
+    # referenced a handful of times in a normal session (log, show,
+    # describe, squash target, ...) lands nowhere near the share a prompt
+    # word or repeated path component racks up just by the prompt printing
+    # on every line.
+    local freq_threshold_pct="${TMUX_GRAB_FREQ_THRESHOLD_PCT:-0.5}"
+    local tokens
+    tokens=$(printf '%s\n' "$raw_candidates" | awk -v threshold="$freq_threshold_pct" '
+        {
+            count[$0]++
+            if (!seen[$0]++) order[++n] = $0
+            total++
+        }
+        END {
+            for (i = 1; i <= n; i++) {
+                t = order[i]
+                bucket = ((count[t] / total) * 100 > threshold) ? 1 : 0
+                printf "%d\t%d\t%s\n", bucket, i, t
+            }
+        }
+    ' | sort -t $'\t' -k1,1n -k2,2n | cut -f3-)
     [[ -n "$tokens" ]] || exit 0
 
     # Float via fzf's own tmux popup, unless the caller already gave us a
