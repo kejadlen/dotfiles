@@ -16,6 +16,7 @@ private
 !.config/git
 !.config/ghostty
 !.config/glide
+!.config/herdr
 !.config/irb
 .config/irb/irb_history
 !.config/jj
