@@ -42,6 +42,12 @@ edit-args = []
 program = "zed"
 diff-args = ["--diff", "$left", "$right"]
 
+[merge-tools.d3j]
+program = "d3j"
+merge-args = ["merge", "$base", "$left", "$right", "-o", "$output"]
+merge-conflict-exit-codes = [1]
+conflict-marker-style = "git"
+
 [diff.color-words]
 max-inline-alternation = 0
 
@@ -160,3 +166,6 @@ patterns = ["'**/*.py'"]
 [fix.tools.cargo-fmt]
 command = ["rustfmt"]
 patterns = ["'**/*.rs'"]
+
+[snapshot]
+auto-update-stale = true
