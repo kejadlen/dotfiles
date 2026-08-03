@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+# Picker for running Claude Code sessions, ranked so the ones blocked on a
+# human come first. Bound to prefix+A in tmux.conf, where it runs in the same
+# floating pane as ,z and ,tmux-grab. State comes from ,agent-state, which the
+# Claude hook writes to.
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+main() {
+    local state_script
+    state_script="$(dirname "${BASH_SOURCE[0]}")/,agent-state"
+
+    local rows
+    rows=$("$state_script" list)
+    if [[ -z $rows ]]; then
+        tmux display-message 'No Claude sessions tracked'
+        exit 0
+    fi
+
+    # Pad the display columns here rather than in ,agent-state, so that script
+    # stays a plain data source. Colour is applied after padding, since escape
+    # bytes would otherwise count toward the field width. The pane id is left
+    # visible as the trailing field: hiding it with --with-nth would make {2}
+    # in --preview ambiguous about whether it indexes the original line or the
+    # displayed one, and seeing the pane is mildly useful anyway.
+    local lines
+    lines=$(awk -F'\t' '
+        {
+            state = sprintf("%-7s", $1)
+            if      ($1 == "blocked") state = "\033[31m" state "\033[0m"
+            else if ($1 == "idle")    state = "\033[33m" state "\033[0m"
+            else                      state = "\033[2m"  state "\033[0m"
+            # Pane id leads so the delimiting tab lands at a fixed column; after
+            # the variable-length message it would leave a ragged edge.
+            printf "%s\t%s %-16s %-14s %5s  %s\n", $6, state, $2, $3, $4, $5
+        }
+    ' <<<"$rows")
+
+    # Float via fzf's own tmux popup, unless the caller already gave us a
+    # floating container, where --tmux would stack a redundant popup on top.
+    # FZF_DEFAULT_OPTS (.zshrc) carries its own --tmux default, so it's cleared
+    # here too — otherwise it fires regardless of our own flag.
+    local tmux_opts=(--tmux "80%,60%")
+    [[ -n "${IN_TMUX_FLOAT:-}" ]] && tmux_opts=()
+
+    local selection
+    # ${arr[@]+"${arr[@]}"} splices the array only when it has elements; a bare
+    # "${arr[@]}" aborts under `set -u` on macOS bash 3.2, which counts an
+    # empty array as unbound.
+    # No --select-1, unlike ,z and ,tmux-grab. The pane this runs from has a row
+    # too, so with a single session it would auto-jump to where the user already
+    # is: the float would blink and nothing would appear to happen.
+    selection=$(printf '%s\n' "$lines" | FZF_DEFAULT_OPTS='' fzf --no-multi \
+        --no-margin --no-padding \
+        ${tmux_opts[@]+"${tmux_opts[@]}"} \
+        --ansi --no-sort \
+        --layout reverse \
+        --height 100% \
+        --highlight-line --info inline-right \
+        --delimiter '\t' \
+        --border-label ' agents ' \
+        --header 'enter: jump to session' --header-first \
+        --preview 'tmux capture-pane -p -t {1} | tail -n 50' \
+        --bind 'ctrl-/:change-preview-window(down|hidden|)') || exit 0
+
+    local pane
+    pane=$(cut -f1 <<<"$selection")
+    [[ -n $pane ]] || exit 0
+
+    # A pane target resolves to its session, window and pane in one step. The
+    # three-step form races: switch-client returns before the client has moved,
+    # so a follow-up select-window can land on the destination session's
+    # last-active window instead.
+    if ! tmux switch-client -t "$pane" 2>/dev/null; then
+        tmux display-message "agents: pane $pane is gone"
+    fi
+}
+
+main "$@"

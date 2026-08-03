@@ -1,0 +1,187 @@
+#!/usr/bin/env bash
+
+# Tracks the state of Claude Code sessions, keyed by the tmux pane each one
+# runs in, so ,agents can rank them by who is waiting on a human.
+#
+# Written by ai/claude/hooks/agent-state.sh (the only writer), read by
+# ai/bin/,agents (the only reader).
+#
+# State lives in a SQLite database, one row per pane. Hooks fire concurrently
+# across sessions, so the database opens in WAL mode with a busy timeout:
+# writers don't block the reader, and a writer that collides with another
+# retries instead of failing. Every value is interpolated into SQL through
+# sql_quote, never pasted raw.
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+STATE_DB="${AGENT_STATE_DB:-${XDG_STATE_HOME:-$HOME/.local/state}/agent-state/state.db}"
+
+# Applied to every connection. WAL and busy_timeout are the two that matter for
+# concurrent hooks; synchronous=NORMAL is safe under WAL and keeps a hook from
+# waiting on an fsync inside Claude's tool loop. journal_mode is persistent in
+# the file, but busy_timeout is per-connection, so this runs every time.
+#
+# The .output fencing is load-bearing: an assigning PRAGMA *returns a row*, so
+# without it `journal_mode = WAL` prints "wal" onto stdout, which corrupts the
+# tab-separated rows `list` emits and makes the hook write to stdout inside
+# Claude's tool loop.
+# busy_timeout MUST come first. Switching journal_mode takes an exclusive lock,
+# and with the default zero timeout a writer that collides with another fails
+# instantly with "database is locked" rather than waiting — which showed up as
+# roughly 1 in 15 dropped writes under concurrent hooks.
+readonly PRAGMAS="
+.output /dev/null
+PRAGMA busy_timeout = 3000;
+PRAGMA journal_mode = WAL;
+PRAGMA synchronous = NORMAL;
+.output stdout
+"
+
+readonly SCHEMA="
+CREATE TABLE IF NOT EXISTS panes (
+  pane       TEXT PRIMARY KEY,
+  state      TEXT NOT NULL,
+  updated_at INTEGER NOT NULL,
+  cwd        TEXT NOT NULL DEFAULT '',
+  message    TEXT NOT NULL DEFAULT ''
+);
+"
+
+# Renders a value as a SQL string literal. SQLite escapes a single quote by
+# doubling it, and that is the only escape a single-quoted literal needs.
+sql_quote() {
+    printf "'%s'" "${1//\'/\'\'}"
+}
+
+db() {
+    mkdir -p "$(dirname "$STATE_DB")"
+    # -batch stops sqlite3 from ever prompting; -noheader keeps output parseable.
+    sqlite3 -batch -noheader "$STATE_DB"
+}
+
+cmd_record() {
+    local state=${1:-} cwd=${2:-$PWD} message=${3:-}
+
+    case $state in
+        blocked|idle|working) ;;
+        *)
+            echo "usage: ,agent-state record <blocked|idle|working> [cwd] [message]" >&2
+            return 2
+            ;;
+    esac
+
+    # The pane is the row identity, so outside tmux there is nothing to record.
+    [[ -n "${TMUX_PANE:-}" ]] || return 0
+
+    # Tab and newline are separators in this script's own output, so neither
+    # survives into a stored value.
+    cwd=$(printf '%s' "$cwd" | tr '\t\n' '  ')
+    message=$(printf '%s' "$message" | tr '\t\n' '  ')
+
+    db <<SQL >/dev/null
+$PRAGMAS
+$SCHEMA
+INSERT INTO panes (pane, state, updated_at, cwd, message)
+VALUES ($(sql_quote "$TMUX_PANE"), $(sql_quote "$state"), $(date +%s),
+        $(sql_quote "$cwd"), $(sql_quote "$message"))
+ON CONFLICT(pane) DO UPDATE SET
+  state      = excluded.state,
+  updated_at = excluded.updated_at,
+  cwd        = excluded.cwd,
+  message    = excluded.message;
+SQL
+}
+
+cmd_clear() {
+    [[ -n "${TMUX_PANE:-}" ]] || return 0
+    [[ -f $STATE_DB ]] || return 0
+
+    db <<SQL >/dev/null
+$PRAGMAS
+$SCHEMA
+DELETE FROM panes WHERE pane = $(sql_quote "$TMUX_PANE");
+SQL
+}
+
+# Emits one tab-separated row per live session:
+#   state  session:window  dir  age  message  pane
+#
+# Ordered by state (blocked, then idle, then working) and, within a state,
+# oldest first — the session sitting in it longest is the one most likely to
+# have been forgotten.
+cmd_list() {
+    [[ -f $STATE_DB ]] || return 0
+
+    local live
+    live=$(tmux list-panes -a -F '#{pane_id}	#{session_name}:#{window_index}' 2>/dev/null) || return 0
+    [[ -n $live ]] || return 0
+
+    # The live pane list goes into a temp table so the join, the prune and the
+    # ordering all happen in one statement. A row whose pane is gone belongs to
+    # a session that died without firing SessionEnd.
+    local values=""
+    local pane label
+    while IFS=$'\t' read -r pane label; do
+        # tmux pane ids are always %<digits>; anything else is not something to
+        # interpolate into SQL.
+        [[ $pane =~ ^%[0-9]+$ ]] || continue
+        values+="($(sql_quote "$pane"), $(sql_quote "$label")),"
+    done <<<"$live"
+    [[ -n $values ]] || return 0
+
+    db <<SQL | format_rows
+$PRAGMAS
+$SCHEMA
+CREATE TEMP TABLE live (pane TEXT PRIMARY KEY, label TEXT NOT NULL);
+INSERT OR IGNORE INTO live (pane, label) VALUES ${values%,};
+DELETE FROM panes WHERE pane NOT IN (SELECT pane FROM live);
+.mode list
+.separator "\t"
+SELECT p.state, l.label, p.cwd, p.updated_at, p.message, p.pane
+FROM panes p JOIN live l ON l.pane = p.pane
+ORDER BY CASE p.state WHEN 'blocked' THEN 0 WHEN 'idle' THEN 1 ELSE 2 END,
+         p.updated_at ASC;
+SQL
+}
+
+# Turns the raw SELECT into display columns: cwd to its basename, updated_at to
+# a relative age. Done in awk rather than SQL because both are string and clock
+# work that SQLite makes awkward, and awk -F'\t' keeps empty fields intact.
+format_rows() {
+    awk -F'\t' -v now="$(date +%s)" '
+        function age(secs) {
+            if (secs < 60)   return secs "s"
+            if (secs < 3600) return int(secs / 60) "m"
+            return int(secs / 3600) "h" int((secs % 3600) / 60) "m"
+        }
+        {
+            n = split($3, parts, "/")
+            printf "%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, parts[n], age(now - $4), $5, $6
+        }
+    '
+}
+
+main() {
+    local command=${1:-}
+    shift || true
+
+    command -v sqlite3 >/dev/null 2>&1 || {
+        echo ",agent-state: sqlite3 not found" >&2
+        return 1
+    }
+
+    case $command in
+        record) cmd_record "$@" ;;
+        clear)  cmd_clear ;;
+        list)   cmd_list ;;
+        *)
+            echo "usage: ,agent-state <record|clear|list>" >&2
+            return 2
+            ;;
+    esac
+}
+
+main "$@"
