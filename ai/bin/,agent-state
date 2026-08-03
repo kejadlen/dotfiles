@@ -4,7 +4,12 @@
 # runs in, so ,agents can rank them by who is waiting on a human.
 #
 # Written by ai/claude/hooks/agent-state.sh (the only writer), read by
-# ai/bin/,agents (the only reader).
+# ai/bin/,agents and by the sketchybar agents plugin.
+#
+# `list` is not read-only: it prunes rows whose pane is gone. The sketchybar
+# plugin runs it every time the hook reports a state change, so most pruning
+# happens there rather than when a human opens the picker. Nothing polls, so a
+# pane that dies without a SessionEnd stays listed until the next hook fires.
 #
 # State lives in a SQLite database, one row per pane. Hooks fire concurrently
 # across sessions, so the database opens in WAL mode with a busy timeout:

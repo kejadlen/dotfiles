@@ -40,11 +40,12 @@ fields=$(jq -r '
       (.hook_event_name | flat),
       (.agent_id        | flat),
       (.cwd             | flat),
-      (.message         | flat)
+      (.message         | flat),
+      (.tool_name       | flat)
     ] | join("\u001f")
 ' <<<"$payload" 2>/dev/null) || exit 0
 
-IFS=$'\x1f' read -r event agent_id cwd message <<<"$fields"
+IFS=$'\x1f' read -r event agent_id cwd message tool <<<"$fields"
 
 # A subagent's hooks carry an agent_id and share their parent's pane, so
 # letting them report would have background tool calls overwrite the state of
@@ -55,23 +56,59 @@ IFS=$'\x1f' read -r event agent_id cwd message <<<"$fields"
 # way. It is a completion event that recap and away-summary can fire *after*
 # the main turn has already stopped, which would flip a finished session back
 # to working and drop it to the bottom of the picker.
+changed=""
 case $event in
     Notification|PreToolUse)
         # Wired only for permission_prompt notifications and for
         # AskUserQuestion, which raises no notification of its own. Both mean
         # Claude has stopped and cannot continue without the user.
-        [[ -n $message ]] || message='waiting for input'
+        #
+        # What gets recorded is the *reason*, short enough to read in one
+        # column. A notification's own text is nearly all boilerplate —
+        # "Claude needs your permission to use Bash" — so the prefix comes off
+        # and whatever names the tool is what remains. PreToolUse doesn't set
+        # message at all, but it names the tool in a field.
+        if [[ -n $tool ]]; then
+            message=$tool
+        else
+            message=${message#Claude needs your permission to use }
+            message=${message#Claude needs your permission to }
+            message=${message#Claude needs your permission}
+            message=${message%.}
+            # Distinct from the 'waiting for input' a question gets: this
+            # session is stopped on a permission prompt, tool unknown.
+            [[ -n $message ]] || message='needs permission'
+        fi
         "$state_script" record blocked "$cwd" "$message" || true
+        changed=1
         ;;
     Stop)
         "$state_script" record idle "$cwd" 'turn finished' || true
+        changed=1
         ;;
     UserPromptSubmit|PostToolUse|PermissionDenied)
         "$state_script" record working "$cwd" '' || true
+        changed=1
         ;;
     SessionEnd)
         "$state_script" clear || true
+        changed=1
         ;;
 esac
+
+# Pushes the new state at sketchybar's agents item instead of leaving it to
+# poll. --trigger is a message to the running instance over its socket, so this
+# costs one short-lived process and never blocks on the bar redrawing.
+#
+# Absent in ramekin containers and on any non-macOS host, so a missing binary is
+# a silent skip, not an error. The opt path is the fallback because Claude's
+# hook environment does not always carry a Homebrew PATH.
+if [[ -n $changed ]]; then
+    sketchybar_bin=$(command -v sketchybar) ||
+        sketchybar_bin=/opt/homebrew/opt/sketchybar/bin/sketchybar
+    if [[ -x $sketchybar_bin ]]; then
+        "$sketchybar_bin" --trigger agent_state_change >/dev/null 2>&1 || true
+    fi
+fi
 
 exit 0

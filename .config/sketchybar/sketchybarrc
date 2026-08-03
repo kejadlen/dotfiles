@@ -109,7 +109,19 @@ sketchybar --add item datetime right \
                  update_freq=120 \
                  click_script="sketchybar -m --set \$NAME label.drawing=toggle" \
                  script="$PLUGIN_DIR/battery.sh" \
-           --subscribe battery system_woke power_source_change
+           --subscribe battery system_woke power_source_change \
+           --add event agent_state_change \
+           --add item agents right \
+           --subscribe agents agent_state_change \
+           --set agents \
+                 icon=󰚩 \
+                 icon.padding_right=8 \
+                 popup.background.color=0xff222222 \
+                 popup.background.corner_radius=6 \
+                 popup.background.border_color=0xff444444 \
+                 popup.background.border_width=1 \
+                 script="$PLUGIN_DIR/agents.sh" \
+                 click_script="$PLUGIN_DIR/agents.sh click"
            # --add item meetingbar right \
            # --set meetingbar \
            #       icon=􀉉 \
