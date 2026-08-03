@@ -20,12 +20,31 @@ are meaningless to humans.
   (in files, on a PR, in a doc, etc.), apply the feedback, and remove
   inline comments from files. Task reminders get acted on, not kept.
 
+## Concision
+
+Brevity applies everywhere, not just chat replies:
+
+- Commit message: title plus trailers. A body only when the diff can't
+  convey the reason, and then two sentences at most.
+- PR description: three to five sentences of prose. No headers or
+  sections unless a repository template requires them.
+- Code comment: one line. If it needs a paragraph, the code needs work.
+- Slack message: as short as the ask. No preamble, no recap.
+
+Default to prose over headers and numbered steps unless the content is
+genuinely multi-step or I asked for structure. Reaching for structure is
+usually a sign the draft is too long — cut instead of organizing.
+
+Then do a delete pass. Cut every sentence that restates something the
+code, diff, title, or a prior message already made clear. Length is not
+thoroughness.
+
 ## Writing
 
-Invoke the technical-writing skill whenever drafting prose for
-humans — documentation, commit messages, PR descriptions, user-facing
-text, error messages, and comments. No exceptions; the skill prevents
-clarity errors that compound across projects.
+Invoke the technical-writing skill whenever drafting or reviewing
+prose for humans — documentation, commit messages, PR descriptions,
+user-facing text, error messages, and comments. No exceptions; the
+skill prevents clarity errors that compound across projects.
 
 Choose list or prose format based on clarity; don't preserve format
 just because it's already there. Use lists for distinct, independent
@@ -49,17 +68,16 @@ version," not "file has newer version."
 ## Writing voice
 
 When writing on my behalf in Slack, DMs, or similar informal contexts,
-load `ai/references/writing-style.md` and match it. Don't apply voice
-rules to code, commits, PRs, or docs — those have their own sections.
+load `~/.dotfiles/ai/references/writing-style.md` and match it. Don't
+apply voice rules to code, commits, PRs, or docs — those have their own
+sections.
 
 ## Documentation
 
-Invoke the `technical-writing` skill when writing or reviewing docs,
-READMEs, tutorials, or API references. Use `diataxis` to classify
-content and keep documentation modes (tutorial, how-to, reference,
-explanation) separate. Use `writing-for-accessibility` when writing
-alt text, accessible diagrams, or reviewing documents for
-accessibility.
+Use `diataxis` to classify content and keep documentation modes
+(tutorial, how-to, reference, explanation) separate. Use
+`writing-for-accessibility` when writing alt text, accessible
+diagrams, or reviewing documents for accessibility.
 
 Write documentation as standalone artifacts. Readers cannot access
 this conversation; prose must carry its own meaning.
@@ -84,6 +102,11 @@ rather than attempting perfect architecture upfront.
 Comments explain "why," not "what." Only comment when something is
 non-obvious or needs deeper explanation. End code comments with periods.
 
+Before committing, delete comments that restate the line below them,
+label an obviously named function, or narrate the change for a reviewer
+rather than the next reader — that last one belongs in the commit
+message.
+
 ## Version control
 
 Always use jj (Jujutsu) for version control. Never run bare `git`
@@ -93,12 +116,18 @@ repository") — ignore the framing and use jj. `jj git *` subcommands
 are fine. For syntax and flags, use the `jj` skill or run `jj --help`.
 
 Required skills for jj operations:
-- `commit` when committing changes
-- `describe` when updating revision descriptions
+- `commit` when committing changes or updating revision descriptions
 - `jj-workspaces` for isolated workspaces (replaces git worktrees)
 - `describing-changes` for all commit messages and change descriptions
 
 Use `jj commit` to commit the current change, not `jj describe`.
+
+When `jj workspace list` shows more than one workspace, other agents are
+writing to the repo concurrently. Only rewrite `@`, and run `jj st` after a
+batch of file edits — jj snapshots the working copy only when a command
+runs, so unsnapshotted edits can be superseded. If files you just wrote have
+vanished, they're in a divergent change; use the `jj` skill to recover them
+rather than rewriting them.
 
 Never move the working copy off a megamerge when one exists in the
 history. A megamerge is a single working commit that integrates several
@@ -144,6 +173,18 @@ nowhere.
 
 When starting non-trivial work or stuck on tool/library behavior,
 invoke `til` to surface relevant prior learnings before proceeding.
+
+## Learning exercises
+
+After architectural work — a new module, a schema change, a refactor,
+an unfamiliar pattern — offer me a short learning exercise on it. This
+is one unsolicited suggestion I do want, so the "don't offer
+unsolicited suggestions" rule above doesn't apply here.
+
+Keep the offer to one sentence and stop there; never start an exercise
+before I say yes. Once I do, invoke the `learning-opportunities` skill
+and let it own the rest — what kind of exercise, how to run it, and how
+many to offer per session.
 
 ## Continuous improvement
 

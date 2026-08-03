@@ -36,7 +36,12 @@ unless told otherwise.
 
 **Prefer new commits over squashing.** Default to `jj commit`, even for
 refactors and small follow-ups. Only `jj squash` when the prior commit
-itself needs fixing (a bug or typo in code it introduced).
+itself needs fixing — a bug or typo in code it introduced, or a revision
+of prose or guidance it just wrote.
+
+When squashing, pass a fileset: `jj squash --into @- <paths>`. A bare
+`jj squash` moves *every* pending change into the parent, including
+files another agent or a hook left in the working copy.
 
 ### Fileset (optional)
 

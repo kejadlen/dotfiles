@@ -51,33 +51,28 @@ Revision must be provided (bookmark, change ID, revset, or commit hash). The rev
    not apply, use strikethrough: `- ~~Irrelevant item~~`
 5. **Invoke the `technical-writing` skill** before drafting any prose. This is
    mandatory.
-6. **Search episodic memory for design decisions**: Use `episodic-memory:search`
-   to find conversations related to the files changed in this PR. Look for:
-   - Design decisions and their rationale
-   - Alternative approaches that were considered and rejected
-   - Tradeoffs discussed during implementation
-   - Requirements or constraints that shaped the solution
-   Extract key decisions to include in the PR summary's "Design Decisions" section.
+6. **Search episodic memory** with `episodic-memory:search` for conversations
+   touching the changed files. Look for a rejected alternative or a constraint
+   that shaped the solution — something a reviewer would otherwise ask about.
+   Not a section to fill in; at most one more sentence in the summary, and
+   usually nothing.
 7. Generate a PR title summarizing all commits in the changeset (not just the
    most recent). The title reflects the overall change, not individual commits.
-8. Draft a PR summary explaining why the changes were made and their impact.
-   Focus on context and motivation, not implementation details. Include only
-   "Assisted-by" footer for attribution—no "Generated with Claude Code"
-   - Do not repeat information obvious from the diff
-   - Omit details like "added function X" or "modified file Y" unless
-     non-obvious reasoning justifies them
-   - Explain user-facing impact, architectural decisions, and tradeoffs
-   - If design decisions were found in episodic memory, include a "Design Decisions"
-     section highlighting key choices and their rationale
-   - If the session references a blocking PR, linked issue, Slack thread,
-     or other related context, include it in the description automatically
-     (e.g., "Depends on #123", "Closes #456", or a Slack permalink)
+8. Draft the PR summary: three to five sentences of prose covering why the
+   change was made and its impact. No headers or bullet lists unless a
+   repository template requires them. Include only an "Assisted-by" footer for
+   attribution, no "Generated with Claude Code".
+   - Lead with user-facing impact and the tradeoff a reviewer would question.
+   - Say nothing a reader gets from the diff or the file list. No "added
+     function X" or "modified file Y".
+   - Link related context found in the session — "Depends on #123", "Closes
+     #456", a Slack permalink.
    - Never wrap commit SHAs or PR/issue numbers in backticks—GitHub
      auto-links raw `a1b2c3d` and `#123` but backticks prevent it
-   - Do not insert manual newlines to wrap prose; GitHub renders Markdown
-     and hard-wraps automatically, so added line breaks show up as awkward
-     breaks in the rendered description
-   - Follow repository conventions
+   - Do not hard-wrap prose with manual newlines; GitHub wraps Markdown
+     itself, so they render as awkward mid-sentence breaks
+   - Delete pass before creating the PR: cut every sentence that summarizes
+     the diff, restates the title, or exists to look thorough.
 9. **Code review**: Dispatch the `superpowers:code-reviewer` subagent to review
     the changes. Tell the reviewer to run
     `jj diff --git --from main@origin --to <revision>` to get the actual commit
