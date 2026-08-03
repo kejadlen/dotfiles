@@ -124,6 +124,10 @@ Use Task tool to dispatch in parallel. **Start agents in the workspace directory
 - `jj workspace` commands
 - `jj git push`
 - `jj rebase`
+- Rewriting a commit another workspace has checked out (`describe`,
+  `squash`, `abandon`, `restore --into`). Check `jj log -r
+  'working_copies()'` before touching any revision other than `@`. Two
+  workspaces rewriting the same commit is what produces divergent changes.
 - Any work outside assigned workspace
 
 ### Phase 4: Review (Coordinator)
@@ -177,6 +181,7 @@ jj workspace update-stale
 | Empty WC commits after rebase | After rebase + forget, run `jj abandon 'empty() & description(exact:"") & @-'` to drop the workspace's leftover empty WC |
 | Forgetting cleanup | Remove directories after forgetting workspace |
 | jj not seeing file changes | Run `jj` or `jj status` periodically—jj only snapshots on command execution |
+| Files written in one workspace vanish | Concurrent rewrite left the change divergent. See the `jj` skill's Divergent Changes section—recover, don't rewrite |
 
 ## Red Flags
 

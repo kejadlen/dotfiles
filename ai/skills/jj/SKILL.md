@@ -5,7 +5,8 @@ description: Use when running any jj (Jujutsu) version control command — commi
 
 # Jujutsu (jj) Version Control
 
-Use `jj --help` for authoritative command reference and current flags.
+Never treat this skill as authoritative. Run `jj <command> --help` to verify
+behavior, flags, and current options.
 
 ## Core Workflow
 
@@ -24,10 +25,6 @@ they move `@`:
 | `jj describe [-m]` | yes, on target (default `@`) | no | name or rewrite a commit's message in place |
 | `jj new <rev>` | no | yes, to a new empty commit | start fresh work on top of `<rev>` |
 | `jj commit -m` | yes, on `@` | yes, to a new empty commit | finish `@` and move on — `describe @` + `new` in one step |
-
-So `jj commit` is just `jj describe` followed by `jj new`. Reach for
-`describe` when you only want to fix the current message without moving
-on; `new` when you want a fresh commit without touching messages.
 
 **Prefer `jj commit` over `jj squash`.** Create new commits by default —
 even for refactors, cleanups, or small follow-ups. Only squash when the
@@ -93,6 +90,34 @@ jj restore SOME_FILE                       # restore file from parent
 jj restore --from kn --into kn FILE        # restore file in a specific revision
 ```
 
+**`jj restore FILE` is not "undo my last edit."** It resets the whole
+file to the parent revision, wiping *every* uncommitted change in it —
+not just the one you meant to back out. Backing out a temporary sed
+this way also destroyed unrelated in-progress work in the same file.
+Before restoring, run `jj diff FILE` to see everything that would be
+lost; to back out one surgical experiment, revert it with the same
+tool that made it (another sed/edit) instead of `jj restore`.
+
+## Divergent Changes
+
+A change is divergent when it has more than one visible commit — most often
+because two workspaces rewrote it concurrently. jj labels these
+`(divergent)` in the log, and the edits from one side appear to have
+vanished. Don't rewrite the missing files; recover them:
+
+```bash
+jj log -r 'divergent()'              # find them
+jj diff -r <commit> --name-only      # see what each holds
+jj restore --from <commit> <paths>   # recover
+```
+
+A bare change ID errors once it's divergent, so use the change offsets jj
+suggests (`abcd/0`, `abcd/1`) to inspect them. Offsets are assigned by
+recency, with the most recent commit at `/0`, so re-read `jj log` rather
+than reusing an offset from earlier in a session — a concurrent rewrite in
+another workspace shifts them all down by one. For `jj abandon`, pass the
+short commit ID, as jj's own hint recommends.
+
 ## Common Pitfalls
 
 **Avoid revset functions with parentheses.** Claude Code's shell
@@ -156,6 +181,18 @@ jj log --cwd /path/to/repo         # WRONG — no such flag; fails silently
 **Put `-m` before `--` or fileset args.** jj parses everything after `--` as
 fileset, so `-m` placed after `--` becomes a parse error.
 
+**`jj squash` takes its source from `@` unless you pass `--from`.** Naming
+only `--into <rev>` and a fileset moves that fileset out of `@`, not out of
+the commit you were reading about. When `@` has moved since you last ran
+`jj log` — the human committing in another terminal is enough — the squash
+moves nothing, yet still prints "Rebased N descendant commits" and gives the
+destination a new commit ID, so a no-op looks like it worked. Name the source
+and re-check `jj st` immediately before any rewrite:
+
+```bash
+jj squash --from <rev> --into <rev> -u FILE   # explicit source
+```
+
 **`jj squash` opens `$EDITOR` to merge descriptions and hangs in
 non-interactive shells.** When source and destination both have
 descriptions, jj launches the editor to combine them — Claude Code's
@@ -170,8 +207,3 @@ jj squash -m 'new message'            # inline replacement
 
 The same applies to `jj squash --from X --into Y`. If you actually want
 to merge the two descriptions, do it from a real terminal.
-
-## When to Use jj --help
-
-Never rely on this skill as authoritative. Always run `jj <command> --help`
-to verify behavior, flags, and current options.
