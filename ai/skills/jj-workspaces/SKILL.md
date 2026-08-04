@@ -10,8 +10,6 @@ description: Use when needing isolated workspace for experiments, parallel devel
 
 Create isolated jj workspaces for experimentation, parallel development, and subagent coordination. All workspaces share repository history, so switching between them and comparing their changes needs no extra setup.
 
-**Core principle:** Isolation by design. Each workspace operates independently with zero risk of interference.
-
 **Important:** Run `jj` (or `jj status`) periodically in each workspace. jj only snapshots the working copy when you run a command—it doesn't watch for file changes. Running `jj` ensures it sees your edits.
 
 **Note (v0.39+):** `jj workspace add` now links with relative paths by default, enabling workspaces to work inside containers or when moved together. Existing workspaces with absolute paths continue to work.
@@ -52,6 +50,9 @@ jj workspace update-stale
 ```
 
 **Result (with mm):** `trunk() → workspace change → mm`
+
+`<name>@` names that workspace's working-copy commit and resolves from any
+workspace; `jj workspace list` shows them all.
 
 ## Solo Experiments
 
@@ -145,34 +146,11 @@ jj workspace forget <name>
 rm -rf work/<name>
 ```
 
-## Commands Reference
-
-```bash
-# Create workspace (ensure work/ exists first)
-mkdir -p work && jj workspace add --name=<name> work/<name>
-jj workspace add --name=<name> -r <rev> work/<name>
-
-# List workspaces
-jj workspace list
-
-# Forget workspace (keeps commits)
-jj workspace forget <name>
-
-# View workspace commits
-jj log -r 'working_copies()'
-
-# Reference workspace's current commit
-<name>@
-
-# Sync after external workspace changes
-jj workspace update-stale
-```
-
 ## Common Mistakes
 
 | Mistake | Fix |
 |---------|-----|
-| Working from wrong directory | Agent must `cd` into workspace directory first—all commands run FROM there |
+| Working from wrong directory | Agent must `cd` into workspace directory first—jj resolves its context from cwd, so all commands run FROM there |
 | Skipping DAG placement | Must run `jj rebase` to place in DAG (with `-B mm` if megamerge exists) |
 | Agent skipping split | Agent must run `jj split -m '<description>' .` to finalize changes |
 | Skipping `jj workspace update-stale` | Run in main workspace after workspace operations |
@@ -182,17 +160,7 @@ jj workspace update-stale
 | Forgetting cleanup | Remove directories after forgetting workspace |
 | jj not seeing file changes | Run `jj` or `jj status` periodically—jj only snapshots on command execution |
 | Files written in one workspace vanish | Concurrent rewrite left the change divergent. See the `jj` skill's Divergent Changes section—recover, don't rewrite |
-
-## Red Flags
-
-| Thought | Reality |
-|---------|---------|
-| "I can work from the main workspace" | Must `cd` into workspace directory—jj context depends on cwd |
-| "I'll skip DAG placement" | Must place in DAG for clean integration |
-| "Agent doesn't need to split" | Agent must run `jj split -m '<description>' .` to finalize changes |
-| "I'll create workspaces during dispatch" | Create ALL workspaces first |
-| "Custom directory is fine" | Always use `work/` directory |
-| "This is overkill for one agent" | Single-agent workflow maintains consistency |
+| "Overkill for one agent" | Use the same workflow for one agent as for many—consistency beats a special case |
 
 ## Failure Recovery
 
@@ -200,9 +168,8 @@ jj workspace update-stale
 
 **Verification fails:** Agent reports failure. Coordinator decides: retry, fix, or revert.
 
-**Conflicts after sync:** Expected. Coordinator resolves via `jj resolve`.
-
-All failures are contained and recoverable.
+**Conflicts after sync:** Expected. Coordinator resolves via the
+`resolve-conflicts` skill.
 
 ## References
 

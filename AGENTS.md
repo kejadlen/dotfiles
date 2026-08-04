@@ -8,8 +8,10 @@ Key directories:
 
 - `.config/` — app configs (aerospace, ghostty, nvim, jj, etc.)
 - `.hammerspoon/` — Hammerspoon config in Fennel (`.fnl` files compiled to Lua)
-- `.claude/` — Claude Code settings
-- `.pi/` — pi agent settings and extensions
+- `ai/claude/` — Claude Code settings and hooks (symlinked in as `~/.claude`)
+- `ai/pi/` — pi agent settings and extensions (symlinked in as `~/.pi/agent`)
+- `ai/skills/` — skills, shared by both agents
+- `ai/_AGENTS.md` — global agent conventions (symlinked in as `~/.claude/CLAUDE.md`)
 - `.ssh/` — SSH config
 - `.zsh/` — Zsh config
 - `src/` — git submodules (Alfred workflows, fzf-git, tpm)
@@ -17,18 +19,13 @@ Key directories:
 
 ## Version Control
 
-This repo uses **jj**, not git. Use `jj` commands for all VCS operations:
+Main bookmark: `main`. Don't commit directly to `main` — work on the `@` change or create new ones.
 
-- `jj status` / `jj diff` / `jj log` — inspect state
-- `jj describe -m "message"` — set change description
-- `jj new` — start a new change
-- `jj bookmark set <name>` — set a bookmark (jj's equivalent of branches)
-
-Main branch: `main`. Don't commit directly to `main` — work on the `@` change or create new ones.
+`ai/_AGENTS.md` owns the jj rules; reach for the `jj` skill before free-handing commands.
 
 ## Issue Tracker
 
-Issues are on Gitea at `git.kejadlen.dev`. Use the `tea` CLI:
+Issues are on Gitea at https://git.kejadlen.dev/alpha/dotfiles/issues. Use the `tea` CLI:
 
 ```bash
 tea issues list -r alpha/dotfiles -l git.kejadlen.dev
@@ -47,14 +44,10 @@ tea comment -r alpha/dotfiles -l git.kejadlen.dev <index> "Comment body"
 
 Skills live in `ai/skills/<name>/SKILL.md`. See the `skill-notes` skill for authoring conventions.
 
-Pi loads these via `ai/pi/settings.json`, which points to `~/.dotfiles/ai/skills`. Ramekin containers have their own copy at `.config/ramekin/agent/skills/` — it's fine for these to drift; only update `ai/skills/`.
+Pi loads these via `ai/pi/settings.json`, which points to `~/.dotfiles/ai/skills`. Claude reaches them through `ai/claude/skills` (a symlink to `../skills`), so both agents read the same files — only ever edit `ai/skills/`.
 
 ## Pi Packages
 
 Pi manages plugins natively via `pi install` / `pi remove` / `pi update` / `pi list`. Global packages are declared in `~/.pi/agent/settings.json` under `packages`. Project-scoped packages use `.pi/settings.json` with the `-l` flag.
 
 Use the object form with `skills` filters to load specific plugins from multi-plugin repos.
-
-## Open Issues
-
-Track work at: https://git.kejadlen.dev/alpha/dotfiles/issues

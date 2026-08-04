@@ -86,7 +86,7 @@ Check available tools in order:
 
 - GitHub: `gh issue comment <number> --body "..."`
 - Linear/Jira: use available MCP tools
-- Gitea: `tea comment` (see the `gitea` skill for syntax)
+- Gitea: `tea comment -r <owner>/<repo> <index> "..."`
 - Fallback: present the formatted comment for manual posting
 
 ## Attribution

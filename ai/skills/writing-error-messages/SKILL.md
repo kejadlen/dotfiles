@@ -8,8 +8,8 @@ description: Use when writing, reviewing, or improving error messages in code, C
 Actionable reference for writing helpful error messages, distilled from
 Google's Technical Writing course on error messages.
 
-Every error message should answer two questions: what went wrong, and
-how the user fixes it.
+Every error message should answer three questions: what went wrong,
+which requirement or constraint it violated, and how the user fixes it.
 
 ## General Rules
 
@@ -106,14 +106,3 @@ purpose.
 | Blaming | Neutral |
 |---|---|
 | You specified a printer that's offline. | The specified printer is offline. |
-
-## Quick Reference
-
-Every error message should include:
-
-1. What went wrong (specific cause, not a generic label)
-2. Why it went wrong (the constraint or requirement that was violated)
-3. How to fix it (concrete next steps or links to documentation)
-
-When writing, check: Is it specific? Is it actionable? Is the tone
-neutral and constructive?

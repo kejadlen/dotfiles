@@ -110,31 +110,6 @@ The user wants to understand *why*. They're reflecting, not executing.
 
 **Keep out:** step-by-step instructions, reference material, unbounded scope.
 
-## Decision Flowchart
-
-```dot
-digraph diataxis_classify {
-    rankdir=TB;
-    node [shape=diamond];
-    start [label="What does the reader\nneed right now?" shape=ellipse];
-    q1 [label="Action or\ncognition?"];
-    q2a [label="Learning or\nworking?"];
-    q2b [label="Learning or\nworking?"];
-    tutorial [label="Tutorial" shape=box];
-    howto [label="How-to guide" shape=box];
-    explanation [label="Explanation" shape=box];
-    reference [label="Reference" shape=box];
-
-    start -> q1;
-    q1 -> q2a [label="action"];
-    q1 -> q2b [label="cognition"];
-    q2a -> tutorial [label="learning"];
-    q2a -> howto [label="working"];
-    q2b -> explanation [label="learning"];
-    q2b -> reference [label="working"];
-}
-```
-
 ## Applying the Framework
 
 ### When reviewing existing documentation

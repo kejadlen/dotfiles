@@ -235,14 +235,7 @@ for item in list.map(transform) {
 }
 ```
 
-Automation — add to `.clippy.toml`:
-
-```toml
-disallowed-methods = [
-    { path = "std::iter::Iterator::for_each", reason = "prefer `for` for side-effects" },
-    { path = "std::iter::Iterator::try_for_each", reason = "prefer `for` for side-effects" },
-]
-```
+The Clippy configuration below disallows `for_each` and `try_for_each` so bare uses get caught at lint time.
 
 ## Dependencies
 

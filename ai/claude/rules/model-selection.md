@@ -11,8 +11,8 @@ involving judgment or conversation.
 
 ## Sonnet
 
-Subagents, background tasks, well-scoped autonomous work where the
-instructions are clear and the task is bounded.
+Background tasks and well-scoped autonomous work where the instructions
+are clear and the task is bounded.
 
 ## Haiku
 

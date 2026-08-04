@@ -8,9 +8,9 @@ description: Use when writing or reviewing technical documentation, API docs, tu
 Actionable reference for technical documentation, distilled from
 Google's Technical Writing courses.
 
-For sentence-level prose rules, use elements-of-style. For classifying
-documentation types, use diataxis. This skill covers the technical
-writing concerns those skills do not.
+For sentence-level prose rules, use `writing-clearly-and-concisely`
+(from the elements-of-style plugin). For classifying documentation
+types, use `diataxis`.
 
 ## Terminology
 
@@ -154,17 +154,11 @@ continue. Summarize key points early.
 **Relate new concepts to familiar ones.** Compare and contrast with
 technologies or ideas the audience already knows.
 
-**Organize around audience needs.** Identify who reads the document,
-what they know beforehand, and what they should know afterward.
-
 ## Organizing Large Documents
 
 **Outline before writing.** Explain *why* before asking readers to
 perform tasks. Limit each step to one concept. Share outlines with
 contributors.
-
-**Write introductions that orient.** State what the document covers,
-required prior knowledge, and what it excludes.
 
 **Provide navigation.** Include a table of contents, logical heading
 hierarchy, links to related resources, and "what to learn next"
@@ -220,19 +214,12 @@ usage first.
 **Show both correct and incorrect forms** when language conventions
 matter, so readers recognize the difference.
 
-## Self-Editing Checklist
+## Self-Editing
 
-When reviewing your own technical writing:
+Re-check the rules above against the draft, then use these techniques to
+see your own writing freshly:
 
 - Read aloud to catch awkward phrasing
-- Check every pronoun: is the referent obvious?
-- Verify terminology consistency across the document
-- Confirm each paragraph opens with its main point
-- Ensure lists are parallel in grammar and punctuation
-- Replace vague verbs and filler phrases
-- Test sample code
-- Write captions for every illustration
-- Reread from the audience's perspective for curse-of-knowledge gaps
 - Set it aside and return with fresh eyes
 - Change the visual context: different font, format, or medium
 - Ask a peer to review; they need style awareness, not domain expertise

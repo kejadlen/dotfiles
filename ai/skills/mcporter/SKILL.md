@@ -43,13 +43,5 @@ mcporter call slack.get_thread_messages --args '{"channel":"general","thread_ts"
 ```bash
 mcporter list                    # List configured servers
 mcporter list <server> --schema  # Show all tools with full parameter schemas
+mcporter call --help             # Full call syntax
 ```
-
-## Quick reference
-
-| Command | Purpose |
-|---------|---------|
-| `mcporter list` | List servers |
-| `mcporter list <server> --schema` | Tool docs and parameter schemas |
-| `mcporter call <server>.<tool> ...` | Call a tool |
-| `mcporter call --help` | Full call syntax |

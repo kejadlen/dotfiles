@@ -62,9 +62,6 @@ When creating a new self-improving skill, resist the urge to front-load it with 
 
 ## What NOT to Do
 
-- Don't rewrite the whole skill on first use — add incrementally
-- Don't add content you didn't verify during this session
 - Don't remove existing content that's still accurate
 - Don't bloat the skill with edge cases nobody's hit yet
 - Don't restructure or rewrite surrounding sections — add exactly the missing piece and leave the rest alone
-- Don't bulk-copy from `--help` output, READMEs, or other reference material — the skill is a journal of learned experience, not a mirror of existing docs

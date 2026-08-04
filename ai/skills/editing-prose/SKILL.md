@@ -10,10 +10,10 @@ Catches AI writing tropes that other writing skills miss. Sources:
 [Modeltell](https://github.com/thirdshiftlab/modeltell).
 
 Complements `technical-writing` (structure, terminology),
-`elements-of-style` (sentence-level clarity), and `diataxis` (document
-classification). Those skills cover good writing in general; this one
-covers the specific patterns LLMs reach for that flag text as
-AI-generated.
+`writing-clearly-and-concisely` (sentence-level clarity), and
+`diataxis` (document classification). Those skills cover good writing in
+general; this one covers the specific patterns LLMs reach for that flag
+text as AI-generated.
 
 ## When not to use
 
@@ -24,8 +24,9 @@ AI-generated.
 
 ## Workflow
 
-1. Read [`ai-tropes.md`](ai-tropes.md) to load the full trope catalog
-   into context.
+1. Read [`ai-tropes.md`](ai-tropes.md) for the full catalog, with
+   examples for each pattern, organized by word choice, sentence
+   structure, paragraph structure, tone, formatting, and composition.
 2. Scan the prose for each trope category, looking for repetition or
    stacking — one instance of a pattern is usually fine; multiple is
    the tell.
@@ -36,10 +37,6 @@ AI-generated.
    category-by-category scan missed.
 
 ## The core principle
-
-> Any of these patterns used once might be fine. The problem is when
-> multiple tropes appear together or when a single trope is used
-> repeatedly. Write like a human: varied, imperfect, specific.
 
 Don't mechanically eliminate every em dash or every "is" → "serves
 as" — that produces stilted, evasive writing in the other direction.
@@ -63,17 +60,3 @@ These are the strongest tells. If you see them, edit them:
 - Unicode arrows (`→`) and smart quotes in plain text contexts
 - "Whether you're X or Y" pseudo-inclusive openers
 - "In today's [adjective] landscape/world/era" openers
-
-## Full reference
-
-[`ai-tropes.md`](ai-tropes.md) contains the complete catalog with
-examples for each pattern, organized by:
-
-1. Word choice
-2. Sentence structure
-3. Paragraph structure
-4. Tone
-5. Formatting
-6. Composition
-
-Read it before editing any substantial prose.
