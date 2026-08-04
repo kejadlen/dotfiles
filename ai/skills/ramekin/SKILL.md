@@ -50,6 +50,31 @@ Check where the host path actually leads before applying. Paths under
 different repo than the one you are standing in, and its working copy
 may hold uncommitted work.
 
+## jj commits as the wrong identity
+
+Path-scoped jj config doesn't survive the container. Two reasons, both
+worth checking before assuming a third: entries in
+`~/.config/jj/conf.d/` often symlink into a repo that isn't mounted, so
+they dangle; and a `--when.repositories` scope keyed on host paths can't
+match anyway, because the workspace mounts at `/workspace/<slug>-<hash>`.
+jj silently falls back to whatever the base config says.
+
+Fix per repo, from the **host**:
+
+```bash
+jj config set --repo user.name "..."
+jj config set --repo user.email "..."
+```
+
+This reaches the container because `~/.config/jj/repos` is mounted
+read-write, and jj resolves repo config through `.jj/repo/config-id`
+rather than the `.jj/repo/config.toml` symlink — which holds a host
+absolute path and does dangle inside the container. Confirm the `repos`
+mount is present with `ramekin config`.
+
+Anything else in that same scope block is lost too. Check for
+`templates.git_push_bookmark` and `signing.key` before relying on them.
+
 ## Ephemeral filesystem
 
 Only the workspace bind mount survives the session. Everything else is
