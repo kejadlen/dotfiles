@@ -112,6 +112,10 @@ edit = true
 
 'user(x)' = 'author(x) | committer(x)'
 
+# Paren-free spelling of trunk(): Claude Code's shell parser reads () as a
+# subshell even when quoted. Respects per-repo overrides (not all are main@origin).
+'trunk' = 'trunk()'
+
 'wip()' = 'description("wip:*")'
 'private()' = 'description("private:*")'
 

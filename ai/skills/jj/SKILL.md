@@ -50,6 +50,39 @@ Splitting an ancestor rebases every descendant, `@` included — content is
 preserved but commit IDs change, so it isn't an option when a commit ID
 has to stay put.
 
+## Landing a Follow-up Change
+
+**Never rewrite an existing commit with `jj edit`.** `jj edit` moves `@`
+onto that commit and streams later edits straight into it, which is easy
+to forget and rewrites history in place. Make the fix in a new commit,
+then route it to where it belongs:
+
+- `jj absorb` splits the new change hunk by hunk and moves each to the
+  closest mutable ancestor that last touched those lines. It abandons the
+  source commit when every hunk lands and the source has no description;
+  hunks it can't place unambiguously stay put, so re-check `jj st` after.
+- `jj squash --into <rev> <fileset>` folds specific paths into one target
+  commit (see the squash pitfalls below for the `-u`/`-m` requirement).
+- `jj rebase` inserts the new commit as its own commit elsewhere.
+- Leaving it alone is fine when the change stands on its own.
+
+```bash
+jj absorb                            # distribute every hunk to its ancestor
+jj absorb <fileset>                  # only these paths
+jj absorb --into <rev>               # limit destinations to <rev> and ancestors
+```
+
+## Megamerges
+
+A megamerge is a single working commit that merges several parallel
+branches at once (often bookmarked `mm`), giving one working copy that
+integrates all of them. Moving `@` off it — `jj new` or `jj edit` onto
+another commit — discards that combined view, and rebuilding it means
+re-running the merge by hand. Stay on the megamerge unless explicitly
+told to move; land new work with `jj absorb` or `jj squash --into` so `@`
+stays put. The `jj-workspaces` skill uses `mm` when placing workspaces in
+the DAG.
+
 ## Key Differences from Git
 
 No staging area: working copy changes map directly to commits. Operations
@@ -99,6 +132,11 @@ jj git push --named <name>=<rev>           # create named bookmark and push
 bookmark"). Use `--named` to create, push, and auto-track in one step.
 `-c` generates a bookmark name from the change ID (`push-<short-change-id>`).
 
+`--named` is the whole step, not a follow-up to `jj bookmark create` —
+it errors with "Bookmark already exists" when the name is taken locally.
+Running `create` first therefore fails twice: `--named` rejects the
+existing name, and `-b` rejects it for being untracked.
+
 ## Restoring Files
 
 `jj restore` uses `--from` and `--into`/`--to`, not `-r`:
@@ -144,13 +182,15 @@ command parser treats `()` as subshell syntax even when quoted, which
 triggers permission prompts. Use the underlying value directly:
 
 ```bash
-jj log -r main@origin                # correct — no parens
+jj log -r trunk                      # correct — paren-free alias
 jj log -r 'trunk()'                  # WRONG — triggers permission prompt
 ```
 
-`trunk()` usually resolves to `main@origin` but depends on the repo's
-config. Check `jj config get revset-aliases."trunk()"` if unsure.
-Prefer the resolved value (e.g., `main@origin`) everywhere.
+`trunk` is a config alias for `trunk()`, so it stays correct per repo.
+Don't substitute a hardcoded bookmark: `trunk()` is itself an alias and
+resolves differently across repos — of the 20 that override it here, four
+point at something other than `main@origin` (`mm@origin`, `master@origin`).
+`jj config get revset-aliases."trunk()"` shows the current repo's value.
 
 **`jj show` does not accept path arguments.** It takes an optional revision
 but cannot be scoped to a path. Use `jj diff` instead:
@@ -210,6 +250,15 @@ and re-check `jj st` immediately before any rewrite:
 
 ```bash
 jj squash --from <rev> --into <rev> -u FILE   # explicit source
+```
+
+**`--from` is repeatable, so collapsing several commits is one rewrite.**
+Each `--from` takes a revset and the sources need not be adjacent —
+commits in between are rebased, not folded in. Pair it with `-m`, since
+abandoning several described sources otherwise opens the editor:
+
+```bash
+jj squash --from <rev> --from <rev> --into <rev> -m 'combined message'
 ```
 
 **`jj squash` opens `$EDITOR` to merge descriptions and hangs in

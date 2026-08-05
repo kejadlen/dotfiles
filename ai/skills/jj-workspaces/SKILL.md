@@ -40,16 +40,21 @@ jj workspace add --name=<name> work/<name>
 jj workspace add --name=<name> -r <rev> work/<name>
 
 # 2. Place in DAG - if megamerge (mm) exists, insert between trunk and mm
-jj rebase -r <name>@ -A 'trunk()' -B mm
+jj rebase -r <name>@ -A trunk -B mm
 
 # If no megamerge, just rebase onto trunk:
-# jj rebase -r <name>@ -d 'trunk()'
+# jj rebase -r <name>@ -d trunk
 
 # 3. Sync main workspace
 jj workspace update-stale
 ```
 
-**Result (with mm):** `trunk() → workspace change → mm`
+Use the paren-free `trunk` alias, not `trunk()` — Claude Code's shell
+parser treats the parentheses as a subshell even when quoted and triggers
+a permission prompt. Don't hardcode a bookmark instead; `trunk()` resolves
+differently per repo. See the `jj` skill's Common Pitfalls section.
+
+**Result (with mm):** `trunk → workspace change → mm`
 
 `<name>@` names that workspace's working-copy commit and resolves from any
 workspace; `jj workspace list` shows them all.
