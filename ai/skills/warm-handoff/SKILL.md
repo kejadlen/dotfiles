@@ -51,8 +51,11 @@ Source: https://luckymike.dev/posts/warm-handoffs/
 
 6. **Send on confirmation.** Once approved:
    ```bash
-   mcporter call slack.send_message channel="#target-channel" text="..."
+   mcporter call slack.slack_send_message --args '{"channel_id":"<target-channel-id>","message":"..."}'
    ```
+   The `slack-mcporter` skill defaults to `slack_send_message_draft` instead,
+   because messages posted straight through MCP can't be edited in Slack
+   afterward.
 
 7. **Link back to the original thread.** Reply in the original thread with a link to the handoff message so the person knows where the conversation moved:
    ```bash

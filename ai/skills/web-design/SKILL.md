@@ -9,10 +9,6 @@ These are personal defaults for building web interfaces. When a project
 has its own design system, component library, or established conventions,
 follow those instead.
 
-This skill grows over time. It currently covers semantic HTML, fluid
-layout (Utopia), and interactivity (Alpine.js); add sections as new
-preferences surface.
-
 ## Semantic HTML
 
 Lead with semantic HTML. Reach for meaningful elements — `main`,
