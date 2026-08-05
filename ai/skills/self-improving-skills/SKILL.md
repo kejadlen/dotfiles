@@ -42,10 +42,7 @@ Once you've figured it out, that's exactly the kind of thing to capture in the s
    - Workflows you followed
    - Gotchas and edge cases
 3. **Keep additions small.** Add exactly the missing piece — a command, a gotcha, a workflow step. Don't bulk-import documentation from `--help` or reference material. The skill captures what you *learned through use*, not what you *could look up*.
-4. **Keep the structure clean.** Follow the section pattern from existing content, or start with:
-   - Quick Reference (commands/syntax)
-   - Common Workflows
-   - Common Mistakes
+4. **Put it where it belongs.** Extend the section that already covers that ground; add a heading only when nothing fits. Don't open a summary section — Quick Reference, Checklist, Red Flags — that restates what the file already says. A command table earns its place when it *is* the content, not when it's a second copy of it.
 5. **Don't add speculative content.** Only document what you actually used and verified this session.
 
 ## Mark Self-Improving Skills
@@ -65,3 +62,15 @@ When creating a new self-improving skill, resist the urge to front-load it with 
 - Don't remove existing content that's still accurate
 - Don't bloat the skill with edge cases nobody's hit yet
 - Don't restructure or rewrite surrounding sections — add exactly the missing piece and leave the rest alone
+- Don't state a fact the skill already states elsewhere — give it one home and reference that from anywhere else needing it
+
+## Tightening is a separate job
+
+These rules cover incremental additions mid-task: add the missing piece, leave
+the rest alone. They are not a ban on ever reorganizing a skill — when one
+needs cutting or restructuring, that's a deliberate pass with `tighten-docs`.
+
+The two fit together as long as additions don't create work for that pass, so
+follow `tighten-docs`' rules on keeping `SKILL.md` procedural and pushing bulky
+examples or variant detail into linked reference files instead of growing the
+skill.
