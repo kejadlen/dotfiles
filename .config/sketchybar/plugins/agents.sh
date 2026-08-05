@@ -85,7 +85,8 @@ cmd_status() {
     fi
 
     # list already orders blocked, then idle, then working, so the first row
-    # names the most urgent state and the label counts how many share it.
+    # names the most urgent state and the label counts how many share it. The
+    # ordering within a state doesn't matter here — only which state leads.
     # BSD head and cut have no long forms for these, so short flags it is.
     local state count
     state=$(head -n 1 <<<"$rows" | cut -f 1)
@@ -105,7 +106,9 @@ cmd_click() {
 }
 
 # list orders blocked first, so the top row is the session most likely to be
-# waiting on a human.
+# waiting on a human — and puts the ones already jumped to last within that
+# group, so repeated clicks walk the blocked sessions instead of sticking on
+# whichever one has been blocked longest.
 jump_to_top() {
     local pane
     pane=$(state_rows | head -n 1 | cut -f 6)
@@ -191,6 +194,11 @@ cmd_jump() {
     # A pane target resolves session, window and pane in one step; the
     # three-step form races, as ,agents' comment explains at more length.
     tmux switch-client ${target[@]+"${target[@]}"} -t "$pane" 2>/dev/null || return 0
+
+    # Sinks this pane to the bottom of its state group in `list`, so the next
+    # left click reaches for a different session. Ignored unless the pane is
+    # blocked, which ,agent-state decides for itself.
+    [[ -x $STATE_SCRIPT ]] && "$STATE_SCRIPT" visited "$pane" 2>/dev/null
 
     # Raises the most recently used Ghostty window, which is the right one when
     # a single window holds the tmux client. With several, macOS decides. The

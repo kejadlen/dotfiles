@@ -3,8 +3,10 @@
 # Tracks the state of Claude Code sessions, keyed by the tmux pane each one
 # runs in, so ,agents can rank them by who is waiting on a human.
 #
-# Written by ai/claude/hooks/agent-state.sh (the only writer), read by
-# ai/bin/,agents and by the sketchybar agents plugin.
+# Written by ai/claude/hooks/agent-state.sh, read by ai/bin/,agents and by the
+# sketchybar agents plugin. Those two readers also write, through `visited`:
+# jumping to a blocked session records the visit so the picker can move on to
+# the next one instead of offering the same session again.
 #
 # `list` is not read-only: it prunes rows whose pane is gone. The sketchybar
 # plugin runs it every time the hook reports a state change, so most pruning
@@ -52,6 +54,13 @@ CREATE TABLE IF NOT EXISTS panes (
   updated_at INTEGER NOT NULL,
   cwd        TEXT NOT NULL DEFAULT '',
   message    TEXT NOT NULL DEFAULT ''
+);
+-- Its own table rather than a column on panes, so an existing database picks it
+-- up from CREATE TABLE IF NOT EXISTS. ALTER TABLE ADD COLUMN would need a
+-- migration step, and this schema runs on every connection.
+CREATE TABLE IF NOT EXISTS visits (
+  pane       TEXT PRIMARY KEY,
+  visited_at INTEGER NOT NULL
 );
 "
 
@@ -108,6 +117,33 @@ cmd_clear() {
 $PRAGMAS
 $SCHEMA
 DELETE FROM panes WHERE pane = $(sql_quote "$TMUX_PANE");
+DELETE FROM visits WHERE pane = $(sql_quote "$TMUX_PANE");
+SQL
+}
+
+# Records that a human jumped to this pane while it was blocked, so `list` can
+# rank it below the blocked sessions they have not seen yet. Called by the two
+# places that switch a tmux client: ,agents and the sketchybar agents item.
+#
+# Whether the pane is blocked is decided here rather than trusted from the
+# caller. Switching a client fires no Claude hook, so the stored state is still
+# current at the moment of the jump, and a caller holding a stale row cannot
+# demote a session that has since gone back to working.
+cmd_visited() {
+    local pane=${1:-}
+
+    [[ $pane =~ ^%[0-9]+$ ]] || return 0
+    [[ -f $STATE_DB ]] || return 0
+
+    # The WHERE clause is what lets this parse: in an INSERT ... SELECT, SQLite
+    # cannot otherwise tell ON CONFLICT from the ON of a join.
+    db <<SQL >/dev/null
+$PRAGMAS
+$SCHEMA
+INSERT INTO visits (pane, visited_at)
+SELECT pane, $(date +%s) FROM panes
+WHERE pane = $(sql_quote "$pane") AND state = 'blocked'
+ON CONFLICT(pane) DO UPDATE SET visited_at = excluded.visited_at;
 SQL
 }
 
@@ -117,6 +153,11 @@ SQL
 # Ordered by state (blocked, then idle, then working) and, within a state,
 # oldest first — the session sitting in it longest is the one most likely to
 # have been forgotten.
+#
+# Except for sessions already visited while blocked, which sink below the rest
+# of their state, least recently visited first. Without that, jumping to a
+# blocked session and leaving it blocked would land on the same row the next
+# time the picker opens, since visiting a pane does not change its age.
 cmd_list() {
     [[ -f $STATE_DB ]] || return 0
 
@@ -143,12 +184,23 @@ $SCHEMA
 CREATE TEMP TABLE live (pane TEXT PRIMARY KEY, label TEXT NOT NULL);
 INSERT OR IGNORE INTO live (pane, label) VALUES ${values%,};
 DELETE FROM panes WHERE pane NOT IN (SELECT pane FROM live);
+DELETE FROM visits WHERE pane NOT IN (SELECT pane FROM live);
 .mode list
 .separator "\t"
+-- A visit counts only until the session next reports, so visited_at older than
+-- updated_at means the pane has moved on and belongs back in the age ordering.
+-- That also expires the demotion when a session blocks again: recording a state
+-- bumps updated_at past the visit, and a fresh block is worth surfacing.
+--
+-- Sorting the demoted rows on the visit rather than the age is what makes them
+-- rotate. max() picks whichever timestamp ranks the row, so both groups sort
+-- with one expression: the visit for a demoted row, the age for every other.
 SELECT p.state, l.label, p.cwd, p.updated_at, p.message, p.pane
 FROM panes p JOIN live l ON l.pane = p.pane
+LEFT JOIN visits v ON v.pane = p.pane
 ORDER BY CASE p.state WHEN 'blocked' THEN 0 WHEN 'idle' THEN 1 ELSE 2 END,
-         p.updated_at ASC;
+         CASE WHEN COALESCE(v.visited_at, 0) >= p.updated_at THEN 1 ELSE 0 END,
+         max(COALESCE(v.visited_at, 0), p.updated_at) ASC;
 SQL
 }
 
@@ -179,11 +231,12 @@ main() {
     }
 
     case $command in
-        record) cmd_record "$@" ;;
-        clear)  cmd_clear ;;
-        list)   cmd_list ;;
+        record)  cmd_record "$@" ;;
+        clear)   cmd_clear ;;
+        list)    cmd_list ;;
+        visited) cmd_visited "$@" ;;
         *)
-            echo "usage: ,agent-state <record|clear|list>" >&2
+            echo "usage: ,agent-state <record|clear|list|visited PANE>" >&2
             return 2
             ;;
     esac

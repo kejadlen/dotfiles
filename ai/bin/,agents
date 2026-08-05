@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 # Picker for running Claude Code sessions, ranked so the ones blocked on a
-# human come first. Bound to prefix+A in tmux.conf, where it runs in the same
-# floating pane as ,z and ,tmux-grab. State comes from ,agent-state, which the
-# Claude hook writes to.
+# human come first — barring any already jumped to and left blocked, which
+# ,agent-state sinks to the bottom of that group. Bound to prefix+A in
+# tmux.conf, where it runs in the same floating pane as ,z and ,tmux-grab.
+# State comes from ,agent-state, which the Claude hook writes to.
 
 set -euo pipefail
 if [[ "${TRACE-0}" == "1" ]]; then
@@ -77,7 +78,12 @@ main() {
     # last-active window instead.
     if ! tmux switch-client -t "$pane" 2>/dev/null; then
         tmux display-message "agents: pane $pane is gone"
+        return 0
     fi
+
+    # Recorded only once the jump lands, so a dead pane doesn't get demoted on
+    # the way out. ,agent-state ignores a pane that isn't blocked.
+    "$state_script" visited "$pane" || true
 }
 
 main "$@"
