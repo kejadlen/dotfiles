@@ -31,6 +31,25 @@ even for refactors, cleanups, or small follow-ups. Only squash when the
 prior commit specifically needs fixing up (e.g., correcting a bug it
 introduced, fixing a typo in code it added).
 
+### Splitting a commit
+
+`jj split -r <rev> -m 'message' <paths>` extracts the named paths
+non-interactively; `-m` is what keeps it out of `$EDITOR` when `<rev>`
+already has a description.
+
+By default the *selected* paths keep the original change ID and the
+remainder becomes a new child commit. To keep the original change's ID and
+description where they are and make the extracted paths the new commit,
+pass the same revision to both `-r` and `-A`:
+
+```bash
+jj split -r abcd -A abcd -m 'scope: message' path/to/file
+```
+
+Splitting an ancestor rebases every descendant, `@` included — content is
+preserved but commit IDs change, so it isn't an option when a commit ID
+has to stay put.
+
 ## Key Differences from Git
 
 No staging area: working copy changes map directly to commits. Operations
