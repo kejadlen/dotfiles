@@ -25,11 +25,10 @@
         (-?> dest dirname (partial #(ok :directory))))
       (ok :symlink dest src))))
 
-(ok :symlink "~/.dotfiles/ai/claude" "~/.claude")
-(ok :symlink "~/.dotfiles/ai/_AGENTS.md" "~/.claude/CLAUDE.md")
+(ok :symlink "~/.claude" "~/.dotfiles/ai/claude")
 
 (ok :directory "~/.pi")
-(ok :symlink "~/.dotfiles/ai/pi" "~/.pi/agent")
+(ok :symlink "~/.pi/agent" "~/.dotfiles/ai/pi")
 
 ;; moved to .config/git/config
 (no :symlink :$HOME/.gitconfig :$HOME/.dotfiles/.gitconfig)
