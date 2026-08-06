@@ -267,3 +267,16 @@ jj squash -m 'new message'            # inline replacement
 
 The same applies to `jj squash --from X --into Y`. If you actually want
 to merge the two descriptions, do it from a real terminal.
+
+**"New conflicts appeared in 1 commits" doesn't mean your commit caused
+them.** A conflict already sitting in the working copy — usually from a
+rebase someone ran in another terminal — gets carried into the new working
+copy commit and reported as new. With a fileset, `jj commit` keeps the named
+commit clean and leaves the conflict behind in `@`. Check provenance before
+resolving anything:
+
+```bash
+jj op log --limit 5                                # find the rebase that introduced it
+jj op show <op-id>                                 # commits it marked (conflict)
+jj log -r @ -T 'if(conflict, "CONFLICT", "clean")' # which commits are conflicted now
+```
