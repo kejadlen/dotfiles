@@ -123,10 +123,6 @@ edit = true
 accuse = ["file", "annotate"]
 jj = []
 sweep = ["abandon", 'trunk():: & empty() & ~bookmarks(exact:"mm") & mine()']
-tug = ["util", "exec", "--", "bash", "-c", """
-  ref=${1:-@}
-  jj bookmark move --from "closest_bookmark($ref)" --to "closest_pushable($ref)"
-""", ""]
 stack = ["util", "exec", "--", "bash", "-c", """
   jj rebase \
     --insert-after 'trunk()' \
