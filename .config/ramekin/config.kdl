@@ -27,6 +27,12 @@ mounts {
   // so the container needs the path the setting names.
   "~/.dotfiles/ai/skills"
 
+  // Pi packages, mounted since they can't be copied into the container.
+  "~/.pi/agent/git"
+
+  // Shadow the workspace's .envrc so repo secrets never reach the agent.
+  "/dev/null" target=".envrc"
+
   // Devlog entries are written from inside the container by the devlog skill,
   // so this rides in writable and persists across sessions.
   "~/.claude/devlog" writable=#true
