@@ -58,23 +58,44 @@ If the list is empty, all conflicts are resolved — skip to step 4.
 
 For each file still listed by `jj resolve --list -r @-`:
 
-1. Read the file to see its conflict markers. jj uses a different format
-   than git:
+1. Read the file to see its conflict markers. jj's format differs from
+   git's, and jj has two marker styles. The default (`diff`) shows one
+   side as a diff against the base:
 
    ```
-   <<<<<<< Conflict N of M
-   +++++++ Contents of side #1
-   (lines added on one side)
-   ------- Contents of base
-   (lines from the common ancestor)
-   +++++++ Contents of side #2
-   (lines added on the other side)
-   >>>>>>> Conflict N of M ends
+   <<<<<<< conflict 1 of 1
+   %%%%%%% diff from: <base commit>
+   \\\\\\\        to: <side #1 commit>
+   -base line
+   +side #1 line
+   +++++++ <side #2 commit>
+   side #2 content
+   >>>>>>> conflict 1 of 1 ends
    ```
 
-   The `+++++++` sections are the two sides being merged. The `-------`
-   section is the common ancestor. Remove all marker lines and keep the
-   correct final content.
+   The `%%%%%%%` block is a diff (`-` base, `+` side) turning the base
+   into one side; the `+++++++` block is the other side's full content.
+   Apply the diff mentally or take one side, then delete every marker line
+   (`<<<`, `%%%`, `\\\`, `+++`, `>>>`).
+
+   The `snapshot` style (set via `ui.conflict-marker-style`) instead shows
+   every side and the base in full:
+
+   ```
+   <<<<<<< conflict 1 of 1
+   +++++++ <side #1 commit>
+   side #1 content
+   ------- <base commit>
+   base content
+   +++++++ <side #2 commit>
+   side #2 content
+   >>>>>>> conflict 1 of 1 ends
+   ```
+
+   Here the `+++++++` sections are the sides and `-------` is the common
+   ancestor. Either way, remove all marker lines and keep the correct
+   merged content. Each label carries the commit's change ID and
+   description, which orients which side is which.
 
 2. Run `jj diff -r @-` for context on what each side was trying to
    accomplish.
