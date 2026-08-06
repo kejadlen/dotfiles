@@ -1,6 +1,6 @@
 ---
 name: mcporter
-description: Use when calling MCP tools via the mcporter CLI — covers call syntax, argument formats, timestamp handling, and tool discovery.
+description: Use when calling MCP tools via the mcporter CLI — covers call syntax, argument formats, timestamp handling, detecting errors, and tool discovery.
 ---
 
 # mcporter
@@ -37,6 +37,24 @@ mcporter call slack.get_thread_messages channel=general thread_ts=1772034831.268
 # --args preserves the string type.
 mcporter call slack.get_thread_messages --args '{"channel":"general","thread_ts":"1772034831.268949"}'
 ```
+
+## Errors
+
+`mcporter call` exits 0 when the upstream server returns an error, so a
+script can't trust `$?`. The failure shows up in the payload instead —
+an `APIResponseError` with `code` and `status` keys, and the readable
+message nested in `body` as a JSON string:
+
+```bash
+resp=$(mcporter call notion.notion-query-data-sources --args "$args")
+if [[ $(jq -r 'has("code") and has("status")' <<<"$resp") == true ]]; then
+    jq -r '(try (.body | fromjson | .message)) // .code' <<<"$resp" >&2
+    exit 1
+fi
+```
+
+Write calls can also outrun the default 60 s timeout — pass
+`--timeout 120000` or set `MCPORTER_CALL_TIMEOUT=120000`.
 
 ## Discovering tools
 
