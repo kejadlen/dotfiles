@@ -21,6 +21,13 @@ If `$ARGUMENTS` contains a change ID, use it as the conflicted revision.
 Otherwise run `jj status` in the main workspace and use `@-` if it has
 conflicts; stop and ask the user for a change ID if it doesn't.
 
+**When the conflict is in `@` itself, skip to step 3 and resolve in
+place.** A rebase run while the working copy holds uncommitted work leaves
+the conflict in `@`, not in a commit. `jj workspace add -r @` can't check
+out a revision that's already checked out, and the isolation buys nothing
+because there is no other `@` to protect. Edit the files directly and drop
+the `-r @-` from every `jj resolve` in the steps below.
+
 Per `jj-workspaces`' "Creating a Workspace" recipe, but anchored on the
 conflicted revision instead of trunk (skip its DAG-placement rebase step —
 this workspace's working-copy commit belongs directly on `<change-id>`,
@@ -96,6 +103,25 @@ For each file still listed by `jj resolve --list -r @-`:
    ancestor. Either way, remove all marker lines and keep the correct
    merged content. Each label carries the commit's change ID and
    description, which orients which side is which.
+
+   jj also emits a **diff-style** form where only one side is literal
+   content and the other is a diff from the base:
+
+   ```
+   <<<<<<< conflict 1 of 1
+   +++++++ yuwoklmp 1056139b "mm" (rebase destination)
+   (full content of this side)
+   %%%%%%% diff from: yuwoklmp 80b2d213 "mm" (parents of rebased revision)
+   \\\\\\\        to: omkzmwrk cc06fc10 (rebased revision)
+   -(lines the other side removed from the base)
+   +(lines the other side added)
+   >>>>>>> conflict 1 of 1 ends
+   ```
+
+   The `%%%%%%%` section is **not** file content — deleting its markers
+   would splice `-`/`+` prefixes into the file. Reconstruct each side with
+   `jj file show -r <rev> <path>` (the revisions are named in the marker
+   lines) and compare those instead of editing the hunks in place.
 
 2. Run `jj diff -r @-` for context on what each side was trying to
    accomplish.
