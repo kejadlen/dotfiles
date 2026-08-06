@@ -136,12 +136,13 @@ another commit) discards that combined view, and rebuilding it means
 re-running the merge by hand. If a megamerge is present, stay on it
 unless I explicitly ask you to move.
 
-To land changes while a megamerge is checked out, keep `@` on it: make
-the edits, then fold them into the right place with `jj absorb` (routes
-each hunk to the ancestor that last touched it), `jj squash --into
-<rev>` (targets a specific branch), or `jj rebase` (inserts a separate
-commit beneath the merge). Reach for these over `jj new` or `jj edit`
-onto another commit unless I explicitly say otherwise.
+Never edit an existing commit directly. Make the change in a new commit,
+then choose how it lands by context: `jj absorb` routes each hunk to the
+ancestor that last touched it, `jj squash --into <rev>` targets a
+specific commit, `jj rebase` inserts it as its own commit somewhere, and
+leaving it alone is fine when it stands on its own. This is what to do
+whether or not a megamerge is checked out — reach for these over `jj
+edit` unless I explicitly say otherwise.
 
 Commit quality:
 - Each commit should be one logical unit of change
