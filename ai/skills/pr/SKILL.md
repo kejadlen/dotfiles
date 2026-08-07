@@ -13,11 +13,18 @@ Create a pull request using gh for a specified revision.
 
 `$ARGUMENTS`
 
-Parse arguments: first word is the revision, second word is optional:
+The first word is the revision — a bookmark, change ID, revset, or commit
+hash. The second is optional:
 - `ready`: creates a ready-for-review PR instead of draft
 - `web`: opens a prepopulated PR in the browser for manual editing instead of creating it directly
 
-Revision must be provided (bookmark, change ID, revset, or commit hash). The revision will be resolved to a bookmark for the PR.
+When the argument is prose instead ("open a PR for the top two commits,
+ready for review"), read it as instructions and work out the revision
+yourself rather than treating its first word as one. Ask when that leaves
+the revision ambiguous.
+
+A revision is required either way, and gets resolved to a bookmark for the
+PR. Every `<revision>` below means the one you resolved here.
 
 ## Process
 
