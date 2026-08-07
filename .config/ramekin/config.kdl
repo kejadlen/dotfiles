@@ -20,17 +20,23 @@ profile "pi-bedrock" {
 mounts {
   // Agent config that sits outside the binary allowlist but is still config,
   // kept deliberately. Targets derive from the ~/ source.
-  "~/.pi/agent/keybindings.json"
-  "~/.pi/agent/extensions"
   "~/.claude/statusline.sh"
   "~/.claude/output-styles"
+
+  // Pi's settings.json points `skills` here rather than at ~/.pi/agent/skills,
+  // so the container needs the path the setting names.
+  "~/.dotfiles/ai/skills"
 
   // Devlog entries are written from inside the container by the devlog skill,
   // so this rides in writable and persists across sessions.
   "~/.claude/devlog" writable=#true
 
-  // Machine-local mounts. The jj repo registry is writable so jj can record
-  // repos; the git and jj config staples come from the binary.
+  // jj is the version control in here, and it carries its own identity and
+  // signing config, so it needs nothing from git. ~/.config/git deliberately
+  // stays out: its https→ssh rewrites can't be followed (no ssh binary, no
+  // keys) and can't be revoked either, since insteadOf only accumulates.
+  "~/.config/jj"
+  // Writable so jj can record repos it sees.
   "~/.config/jj/repos" writable=#true
 
   // ranger state and pi's pinch dir don't exist on this machine yet, so both
