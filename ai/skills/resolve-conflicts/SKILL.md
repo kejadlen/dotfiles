@@ -2,7 +2,7 @@
 name: resolve-conflicts
 description: Use when resolving jj conflicts after rebase, squash, or merge — handles conflict markers, mergiraf automation, and file-by-file manual resolution in an isolated workspace
 argument-hint: [change-id]
-allowed-tools: [Bash(mkdir -p work), Bash(jj workspace add --name=resolve-* -r * work/resolve-*), Bash(cd work/resolve-*), Bash(jj status), Bash(jj resolve *), Bash(jj diff *), Bash(jj log *), Bash(jj squash *), Bash(jj workspace forget resolve-*), Bash(jj workspace update-stale), Bash(rm -rf work/resolve-*)]
+allowed-tools: [Bash(mkdir -p work), Bash(jj workspace add --name=resolve-* -r * work/resolve-*), Bash(cd work/resolve-*), Bash(jj status), Bash(jj resolve *), Bash(jj diff *), Bash(jj log *), Bash(jj op log *), Bash(jj op show *), Bash(jj squash *), Bash(jj workspace forget resolve-*), Bash(jj workspace update-stale), Bash(rm -rf work/resolve-*)]
 ---
 
 # Resolve Conflicts
@@ -14,6 +14,21 @@ work never touches the main workspace's `@`. Invoke the `jj-workspaces`
 skill for the general mechanics referenced below (workspace naming,
 `work/` layout, sync behavior); the steps here are the conflict-specific
 application of it, using the exact commands `allowed-tools` permits.
+
+## Step 0 — Check where the conflict came from
+
+**"New conflicts appeared in 1 commits" doesn't mean the command you just
+ran caused them.** A conflict already sitting in the working copy — usually
+from a rebase someone ran in another terminal — gets carried into the new
+working copy commit and reported as new. With a fileset, `jj commit` keeps
+the named commit clean and leaves the conflict behind in `@`. Check
+provenance before resolving anything:
+
+```
+jj op log --limit 5                                # find the rebase that introduced it
+jj op show <op-id>                                 # commits it marked (conflict)
+jj log -r @ -T 'if(conflict, "CONFLICT", "clean")' # which commits are conflicted now
+```
 
 ## Step 1 — Set up an isolated resolution workspace
 
