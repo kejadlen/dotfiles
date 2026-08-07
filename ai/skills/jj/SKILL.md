@@ -1,6 +1,6 @@
 ---
 name: jj
-description: Use when running any jj (Jujutsu) version control command — committing, describing, bookmarks, rebase, squash, restore, push/pull, resolving conflicts, or inspecting log/diff/status — and when looking up jj syntax, flags, or behavior. Invoke before free-handing jj commands from memory.
+description: Use when running any jj (Jujutsu) version control command — committing, describing, bookmarks, rebase, squash, restore, push, or inspecting log/diff/status — and when looking up jj syntax, flags, or behavior. Invoke before free-handing jj commands from memory.
 ---
 
 # Jujutsu (jj) Version Control
@@ -9,10 +9,6 @@ Never treat this skill as authoritative. Run `jj <command> --help` to verify
 behavior, flags, and current options.
 
 ## Core Workflow
-
-1. Make file edits (changes exist in working copy)
-2. `jj commit -m 'message'` (snapshot current changes, start new empty working copy)
-3. Repeat
 
 ### commit vs. describe vs. new
 
@@ -85,14 +81,11 @@ the DAG.
 
 ## Key Differences from Git
 
-No staging area: working copy changes map directly to commits. Operations
-are immutable: `jj new`, `jj squash`, `jj rebase` create new commits rather
-than modify existing ones. The operation log (`jj op log`) enables undo/recovery.
-
-Tracking is automatic for *every* change, removals included. Deleting a
-file with `rm` (or moving/renaming it) is already snapshotted into `@` on
-the next jj command — there is no `git rm`, no `git add -A`, and no
-"untrack" step. Just delete the file and commit.
+No staging area — working copy edits map straight to `@`, and tracking is
+automatic for *every* change, removals included. Deleting a file with `rm`
+(or moving/renaming it) is already snapshotted into `@` on the next jj
+command — there is no `git rm`, no `git add -A`, and no "untrack" step.
+Just delete the file and commit.
 
 ## Bookmarks and Pushing
 
@@ -132,10 +125,9 @@ jj git push --named <name>=<rev>           # create named bookmark and push
 bookmark"). Use `--named` to create, push, and auto-track in one step.
 `-c` generates a bookmark name from the change ID (`push-<short-change-id>`).
 
-`--named` is the whole step, not a follow-up to `jj bookmark create` —
-it errors with "Bookmark already exists" when the name is taken locally.
-Running `create` first therefore fails twice: `--named` rejects the
-existing name, and `-b` rejects it for being untracked.
+`--named` is the whole step, not a follow-up to `jj bookmark create` — it
+errors "Bookmark already exists" if the name exists locally, so don't run
+`create` first.
 
 ## Restoring Files
 
