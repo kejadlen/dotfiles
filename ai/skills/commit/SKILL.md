@@ -1,7 +1,7 @@
 ---
 name: commit
 description: Use when the user asks to "commit changes", "commit my work", "/commit", "create a commit", "jj commit", "describe a change", "describe a revision", "/describe", "rewrite commit message", or "update revision description"
-argument-hint: <revision or fileset>
+argument-hint: <revision, fileset, or instructions>
 allowed-tools: [Bash(jj diff *), Bash(jj show *), Bash(jj log *)]
 ---
 
@@ -11,11 +11,22 @@ allowed-tools: [Bash(jj diff *), Bash(jj show *), Bash(jj log *)]
 
 Argument (empty if none was passed): `$ARGUMENTS`
 
-Determine which mode to use:
+Classify the argument before using it anywhere. It is one of three
+things:
 
-- **Describe mode** — argument names an existing revision (`@-`,
-  `abc123`, a bookmark name).
-- **Commit mode** — argument is empty or a fileset. This is the default.
+- A revision — `@-`, `abc123`, a bookmark name. Use describe mode.
+- A fileset — one or more paths. Use commit mode, scoped to those paths.
+- Instructions — prose saying what to commit, which paths to leave
+  alone, or how to split the work. Use commit mode, follow what it says,
+  and work out the fileset yourself.
+
+Commit mode is the default, including when the argument is empty.
+
+Only a revision or a fileset is ever safe to substitute into a command.
+Instructions are for you to read: pasted after `jj diff` or `jj commit
+-m '...'`, a sentence gets parsed as paths and the command fails on the
+first word that isn't one. Below, `<revision>` and `<fileset>` mean the
+value you resolved here, not the raw argument.
 
 When ambiguous, ask.
 
@@ -23,10 +34,10 @@ When ambiguous, ask.
 
 Rewrite the revision's description from scratch, discarding the existing one.
 
-1. Run `jj show -r $ARGUMENTS` to view the changes
+1. Run `jj show -r <revision>` to view the changes
 2. Invoke the `describing-changes` skill to draft a new description
-3. Apply with `jj describe -r $ARGUMENTS -m '...'`
-4. Verify with `jj show -r $ARGUMENTS`
+3. Apply with `jj describe -r <revision> -m '...'`
+4. Verify with `jj show -r <revision>`
 
 ## Commit Mode
 
@@ -45,7 +56,7 @@ files another agent or a hook left in the working copy.
 
 ### Fileset (optional)
 
-Fileset (empty means commit all pending changes): `$ARGUMENTS`
+An empty `<fileset>` commits all pending changes.
 
 A path containing a fileset metacharacter (`,` `~` `|` `&` `()`) parses
 as syntax and fails; wrap it in a double-quoted string literal, e.g.
@@ -53,7 +64,7 @@ as syntax and fails; wrap it in a double-quoted string literal, e.g.
 
 ### Process
 
-1. Run `jj diff $ARGUMENTS` to view changes being committed
+1. Run `jj diff <fileset>` to view changes being committed
 2. Confirm the commit's scope before writing it.
    - When a fileset is given, run `jj diff` (no args) to see all pending
      changes. Review the remaining files and mention any that look
@@ -84,6 +95,6 @@ as syntax and fails; wrap it in a double-quoted string literal, e.g.
 5. Check if a changelog exists (CHANGELOG.md, CHANGELOG, CHANGES.md, or similar)
    - If found, add an entry under the appropriate section
    - Scope the entry to only the changes in the fileset, if provided
-6. Commit with `jj commit -m '...' $ARGUMENTS` (include changelog in the fileset if you updated it)
+6. Commit with `jj commit -m '...' <fileset>` (include changelog in the fileset if you updated it)
    - **Put `-m` before `--` or fileset args.** jj parses everything after `--` as fileset, so `-m` content placed after `--` becomes a parse error.
 7. Verify with `jj show`
