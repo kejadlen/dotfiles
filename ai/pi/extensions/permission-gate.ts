@@ -16,7 +16,7 @@
  * a one-time user confirmation (re-prompted if the file changes).
  */
 
-import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { execSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import * as fs from "node:fs";
@@ -163,7 +163,7 @@ let sessionAllowEdits = false;
 // ---------------------------------------------------------------------------
 const PI_DOCS_PREFIX = path.join(
   os.homedir(),
-  ".volta/tools/image/packages/@mariozechner/pi-coding-agent/"
+  ".volta/tools/image/packages/@earendil-works/pi-coding-agent/"
 );
 
 let trackedFiles: Set<string> | null = null;

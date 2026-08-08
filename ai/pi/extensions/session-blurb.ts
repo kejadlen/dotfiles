@@ -11,8 +11,8 @@
  * already has a name (e.g. set via `/name`) is never touched.
  */
 
-import { complete, getModel } from "@mariozechner/pi-ai/compat";
-import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
+import { complete, getModel } from "@earendil-works/pi-ai/compat";
+import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 
 // --- Configuration ---------------------------------------------------------
 

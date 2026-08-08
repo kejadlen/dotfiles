@@ -12,7 +12,7 @@
  *   /fork-tmux -w           New window
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 type Mode = "split-h" | "split-v" | "window" | "popup";
 
