@@ -1,4 +1,5 @@
 /sessions/
 /auth.json
 /approved-permissions.json
+/models-store.json
 /trust.json

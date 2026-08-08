@@ -1,12 +1,12 @@
 {
-  "lastChangelogVersion": "0.73.1",
-  "defaultProvider": "openrouter",
+  "lastChangelogVersion": "0.84.1",
+  "defaultProvider": "zai",
   "skills": [
     "~/.dotfiles/ai/skills"
   ],
   "enableSkillCommands": true,
   "defaultThinkingLevel": "high",
-  "defaultModel": "openrouter/owl-alpha",
+  "defaultModel": "glm-5.2",
   "packages": [
     {
       "source": "git:github.com/DrCatHicks/learning-opportunities",
@@ -22,8 +22,7 @@
       ]
     },
     "git:git.kejadlen.dev/alpha/ramekin",
-    "git:github.com/obra/superpowers",
     "git:github.com/hegeldev/hegel-skill"
-   ],
-   "theme": "dark"
- }
+  ],
+  "theme": "dark"
+}
