@@ -2,8 +2,9 @@
  * Claude Plugins Bridge
  *
  * Loads skills from Claude Code's plugin cache (~/.claude/plugins/cache)
- * and makes them available in pi. Claude's installed plugins become the
- * source of truth — no duplicate configuration needed.
+ * and makes them available in pi. When a skill is also provided by pi itself
+ * (skills/ directories or packages), the pi version wins and the Claude
+ * plugin copy is skipped so the prompt never carries duplicates.
  *
  * Structure expected:
  *   ~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/
@@ -17,7 +18,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as os from "node:os";
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 const CACHE_DIR = path.join(os.homedir(), ".claude", "plugins", "cache");
 
@@ -186,19 +187,38 @@ function safeReaddirEntries(dir: string): fs.Dirent[] {
 }
 
 export default function claudePlugins(pi: ExtensionAPI) {
-  let skills: PluginSkill[] = [];
+  // Raw skills discovered from the plugin cache this session.
+  let discovered: PluginSkill[] = [];
+  // Skills actually injected into the prompt, after deferring to pi's own.
+  // Null until computed on the first before_agent_start of the session.
+  let injected: PluginSkill[] | null = null;
 
-  pi.on("session_start", async (_event, ctx) => {
-    skills = discoverSkills();
-    if (skills.length > 0) {
-      ctx.ui.notify(`Claude plugins: ${skills.length} skill(s) loaded`, "info");
-    }
+  pi.on("session_start", async () => {
+    discovered = discoverSkills();
+    injected = null;
   });
 
-  pi.on("before_agent_start", async (event) => {
-    if (skills.length === 0) return;
+  pi.on("before_agent_start", async (event, ctx) => {
+    if (discovered.length === 0) return;
 
-    const xml = skills
+    // systemPromptOptions.skills is what pi already loaded from its own
+    // skills/ directories and packages. Those win over plugin-cache copies.
+    if (injected === null) {
+      const piNames = new Set(
+        (event.systemPromptOptions.skills ?? []).map((s) => s.name)
+      );
+      injected = discovered.filter((s) => !piNames.has(s.name));
+      const skipped = discovered.length - injected.length;
+      const msg =
+        skipped > 0
+          ? `Claude plugins: ${injected.length} skill(s) loaded, ${skipped} deferred to pi`
+          : `Claude plugins: ${injected.length} skill(s) loaded`;
+      ctx.ui.notify(msg, "info");
+    }
+
+    if (injected.length === 0) return;
+
+    const xml = injected
       .map(
         (s) =>
           `  <skill>\n    <name>${s.name}</name>\n    <description>${escapeXml(s.description)}</description>\n    <location>${s.path}</location>\n  </skill>`
