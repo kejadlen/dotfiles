@@ -1,11 +1,29 @@
 // https://glide-browser.app/changelog#0.1.55a-split-views
+
+// Firefox relocates a split's tabs in the strip when the split is created.
+// Anchor the block back to where its leftmost member started.
+// forEach/find avoid Symbol.iterator, which Xray vision denies on browser-API values.
+async function create_split_view(tab_ids: TabID[]) {
+  const tabs = await browser.tabs.query({ currentWindow: true });
+  const members: { id: TabID; index: number }[] = [];
+  tab_ids.forEach((id) => {
+    const tab = tabs.find((t) => t.id === id);
+    if (tab) members.push({ id, index: tab.index });
+  });
+  if (members.length !== tab_ids.length) return;
+  members.sort((a, b) => a.index - b.index);
+
+  glide.unstable.split_views.create(tab_ids);
+  await browser.tabs.move(members.map((m) => m.id), { index: members[0]!.index });
+}
+
 glide.keymaps.set(
   "normal",
   "<C-w>v",
   async ({ tab_id }) => {
     await glide.excmds.execute("tab_new");
     const new_tab = await glide.tabs.active();
-    glide.unstable.split_views.create([tab_id, new_tab.id]);
+    await create_split_view([tab_id, new_tab.id]);
   },
   {
     description: "Create a split view with a new tab",
@@ -20,7 +38,7 @@ glide.keymaps.set(
     const currentIndex = allTabs.findIndex((t) => t.id === tab_id);
     const next = allTabs[currentIndex + 1];
     if (next?.id == null) return;
-    glide.unstable.split_views.create([tab_id, next.id]);
+    await create_split_view([tab_id, next.id]);
   },
   {
     description: "Split view with the next tab",
@@ -127,7 +145,7 @@ glide.keymaps.set(
         } else {
           const new_tab = await browser.tabs.create({ url: href, active: false });
           if (new_tab.id) {
-            glide.unstable.split_views.create([tab_id, new_tab.id]);
+            await create_split_view([tab_id, new_tab.id]);
           }
         }
       },
