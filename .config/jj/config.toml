@@ -169,3 +169,6 @@ patterns = ["'**/*.rs'"]
 
 [snapshot]
 auto-update-stale = true
+
+[remotes.origin]
+auto-track-bookmarks = "alpha/*"
