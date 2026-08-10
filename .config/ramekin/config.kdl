@@ -1,7 +1,8 @@
-// Machine default profile. Selects the builtin trivial `claude`; agent
-// config (CLAUDE.md, settings.json, skills, commands) rides in through the
-// binary allowlist off ~/.claude, so nothing needs restating here.
-profile "claude"
+// Machine default profile. Selects the builtin trivial `pi`; agent config
+// (AGENTS.md, settings.json, models.json, keybindings.json, extensions,
+// skills) rides in through the binary allowlist off ~/.pi/agent, so nothing
+// needs restating here. `-p claude` for the other builtin.
+profile "pi"
 
 // Pi against Amazon Bedrock. Pi selects the provider by flag (no env
 // equivalent); the model is left to pi at run time. AWS creds come from an
@@ -26,9 +27,6 @@ mounts {
   // Pi's settings.json points `skills` here rather than at ~/.pi/agent/skills,
   // so the container needs the path the setting names.
   "~/.dotfiles/ai/skills"
-
-  // Pi packages, mounted since they can't be copied into the container.
-  "~/.pi/agent/git"
 
   // Shadow the workspace's .envrc so repo secrets never reach the agent.
   "/dev/null" target=".envrc"
