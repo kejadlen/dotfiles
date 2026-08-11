@@ -102,13 +102,25 @@ revsets-use-glob-by-default = true
 [ui.movement]
 edit = true
 
+[revsets]
+# Advance to the newest commit worth pushing rather than the usually-empty
+# working copy. Left deliberately unambiguous: above a megamerge this resolves
+# to every stack tip at once and jj refuses, which beats picking one by guess.
+bookmark-advance-to = 'closest_pushable(@)'
+
 [revset-aliases]
 'immutable_heads()' = 'builtin_immutable_heads() | heads(~mine())'
 
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 'closest_merge()' = 'closest_merge(@)'
 'closest_merge(to)' = 'heads(::to & merges())'
-'closest_pushable(to)' = 'heads(::to & mutable() & ~description(exact:"") & (~empty() | merges()))'
+'closest_pushable(to)' = 'heads(::to & pushable())'
+
+# Commits a remote would actually accept: ours to rewrite, described, carrying
+# content, and not stranded above something git.private-commits refuses to push.
+# Excluding private descendants is what makes heads(pushable()) land on the
+# individual stack tips instead of the megamerge that swallows them.
+'pushable()' = 'mutable() & ~description(exact:"") & (~empty() | merges()) & ~(private() | wip())::'
 
 'user(x)' = 'author(x) | committer(x)'
 
@@ -148,6 +160,12 @@ pull = ["util", "exec", "--", "bash", "-c", """
     --onto "trunk()" \
     --simplify-parents
   jj sweep
+  # Then pull each stack's bookmark up to its tip. heads(pushable()) drops the
+  # megamerge and everything above a private commit, leaving the stacks themselves.
+  jj log --no-graph -r 'heads(pushable())' -T 'change_id ++ "\\n"' |
+    while read -r tip; do
+      jj bookmark advance --to "$tip"
+    done
 """]
 
 # https://github.com/jj-vcs/jj/discussions/3549
