@@ -22,17 +22,15 @@
       "mcp__plugin_episodic-memory_episodic-memory__search",
       "Skill(describing-changes)",
       "Skill(elements-of-style:writing-clearly-and-concisely)",
-      "Skill(jj-commit)",
+      "Skill(commit)",
       "Skill(superpowers:brainstorming)"
     ]
   },
+  "model": "opus",
   "enabledMcpjsonServers": [
     "episodic-memory"
   ],
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
-  },
+  "disableClaudeAiConnectors": true,
   "hooks": {
     "PreToolUse": [
       {
@@ -43,16 +41,101 @@
             "command": "~/.claude/hooks/no-git.sh"
           }
         ]
+      },
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/agent-state.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/agent-state.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/agent-state.sh"
+          }
+        ]
+      }
+    ],
+    "PermissionDenied": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/agent-state.sh"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/agent-state.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/agent-state.sh"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/agent-state.sh"
+          }
+        ]
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  },
   "enabledPlugins": {
     "claude-md-management@claude-plugins-official": true,
-    "elements-of-style@superpowers-marketplace": true,
-    "episodic-memory@superpowers-marketplace": true,
     "learning-opportunities@learning-opportunities": true,
+    "playground@claude-plugins-official": true,
+    "ranger@ranger": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
     "superpowers-developing-for-claude-code@superpowers-marketplace": true,
-    "superpowers@superpowers-marketplace": true,
-    "playground@claude-plugins-official": true
-  }
+    "typescript-lsp@claude-plugins-official": true,
+    "learning-opportunities-auto@learning-opportunities": true
+  },
+  "extraKnownMarketplaces": {
+    "ranger": {
+      "source": {
+        "source": "github",
+        "repo": "kejadlen/ranger"
+      }
+    }
+  },
+  "effortLevel": "high",
+  "agentPushNotifEnabled": true
 }
