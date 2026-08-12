@@ -45,6 +45,7 @@ private
 .hammerspoon/Spoons/*
 !.hammerspoon/Spoons/SpoonInstall
 
+/.pi/agent
 /ai/claude/*
 !/ai/claude/.gitignore
 
