@@ -36,6 +36,14 @@ If `$ARGUMENTS` contains a change ID, use it as the conflicted revision.
 Otherwise run `jj status` in the main workspace and use `@-` if it has
 conflicts; stop and ask the user for a change ID if it doesn't.
 
+**Anchor on the oldest conflicted commit, not `@-`.** A conflict inherited
+through ancestry shows up in every descendant, so `@-` is usually a symptom
+rather than the source. `jj status`'s hint names the real one ("start by
+creating a commit on top of the first conflicted commit"), and `jj log -r
+'conflicts()'` lists the full set. Fix the root and jj rebases the rest —
+step 4's squash then reports `Existing conflicts were resolved or abandoned
+from N commits`. Resolving at `@-` instead leaves every ancestor conflicted.
+
 **When the conflict is in `@` itself, skip to step 3 and resolve in
 place.** A rebase run while the working copy holds uncommitted work leaves
 the conflict in `@`, not in a commit. `jj workspace add -r @` can't check
@@ -78,7 +86,25 @@ If the list is empty, all conflicts are resolved — skip to step 4.
 
 ## Step 3 — Manual resolution loop
 
-For each file still listed by `jj resolve --list -r @-`:
+**A type conflict has no markers to edit.** When one side changes a path's
+type — a tracked file replaced by a symlink, say — `jj resolve --list` labels
+it `2-sided conflict including a symlink`, mergiraf has nothing textual to
+merge, and the materialized file is a description rather than content:
+
+```
+Conflict:
+  Removing file with id 401ff494… (<base> "…" (parents of rebased revision))
+  Adding file with id 0f6b69c3… (<side> "…" (rebase destination))
+  Adding symlink with id c4563938… (<side> "…" (rebased revision))
+```
+
+`jj file show` refuses these with "Path exists but is not a file." Read the
+intent from `jj diff --git -r <side> <path>` instead, where the mode change
+(`100644` → `120000`) and the symlink target both appear, then recreate the
+winning side by hand — `rm <path> && ln -s <target> <path>`. The Edit tool
+cannot write a symlink.
+
+For each text file still listed by `jj resolve --list -r @-`:
 
 1. Read the file to see its conflict markers. jj's format differs from
    git's, and jj has two marker styles. The default (`diff`) shows one
