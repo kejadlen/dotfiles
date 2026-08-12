@@ -8,21 +8,21 @@
   "defaultThinkingLevel": "high",
   "defaultModel": "glm-5.2",
   "packages": [
+    "git:git.kejadlen.dev/alpha/ramekin",
+    "git:git.kejadlen.dev/alpha/ranger",
+    "git:github.com/hegeldev/hegel-skill",
     {
       "source": "git:github.com/DrCatHicks/learning-opportunities",
       "skills": [
         "learning-opportunities/skills/**"
       ]
     },
-    "git:git.kejadlen.dev/alpha/ranger",
     {
       "source": "git:github.com/anthropics/claude-plugins-official",
       "skills": [
         "plugins/playground/skills/**"
       ]
-    },
-    "git:git.kejadlen.dev/alpha/ramekin",
-    "git:github.com/hegeldev/hegel-skill"
+    }
   ],
   "theme": "dark"
 }
