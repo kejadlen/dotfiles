@@ -140,6 +140,6 @@ fi
 parts="${parts}${ctx}${cost}${sty}"
 
 # Current time
-parts=$(printf "%s \033[2m•\033[0m \033[2m%s\033[0m" "$parts" "$(date +%H:%M)")
+parts=$(printf "%s \033[2m•\033[0m %s" "$parts" "$(date +%H:%M)")
 
 printf "✴️ %s\n" "$parts"
