@@ -160,12 +160,6 @@ pull = ["util", "exec", "--", "bash", "-c", """
     --onto "trunk()" \
     --simplify-parents
   jj sweep
-  # Then pull each stack's bookmark up to its tip. heads(pushable()) drops the
-  # megamerge and everything above a private commit, leaving the stacks themselves.
-  jj log --no-graph -r 'heads(pushable())' -T 'change_id ++ "\\n"' |
-    while read -r tip; do
-      jj bookmark advance --to "$tip"
-    done
 """]
 
 # https://github.com/jj-vcs/jj/discussions/3549
@@ -190,3 +184,4 @@ auto-update-stale = true
 
 [remotes.origin]
 auto-track-bookmarks = "alpha/*"
+fetch-tags = '~*'
