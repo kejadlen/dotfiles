@@ -46,4 +46,17 @@ mounts {
   // ranger state and pi's pinch dir don't exist on this machine yet, so both
   // stay inert (skip-if-missing) until something creates them.
   "~/.local/share/ranger" writable=#true
+
+  // Cargo's download caches, keyed by crate and version, so every Rust
+  // project wants the same ones and none of them conflict. Concurrent
+  // sessions only contend briefly, while cargo holds the package-cache lock
+  // to fetch. Build directories can't be shared this way — they take an
+  // exclusive lock and a differing rustc invalidates them — so those are a
+  // per-repo `cache` in .ramekin/config.kdl instead.
+  //
+  // Not under ~/.cache/ramekin: that is the base image's Docker build
+  // context. Skip-if-missing means an absent dir just silently costs cold
+  // fetches, so: mkdir -p ~/.cache/ramekin-rust/{registry,git}
+  "~/.cache/ramekin-rust/registry" target="/root/.cargo/registry" writable=#true
+  "~/.cache/ramekin-rust/git" target="/root/.cargo/git" writable=#true
 }
