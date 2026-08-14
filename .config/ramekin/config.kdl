@@ -1,7 +1,6 @@
 // Machine default profile. Selects the builtin trivial `pi`; agent config
-// (AGENTS.md, settings.json, models.json, keybindings.json, extensions,
-// skills) rides in through the binary allowlist off ~/.pi/agent, so nothing
-// needs restating here. `-p claude` for the other builtin.
+// (AGENTS.md, skills) rides in through the binary allowlist off ~/.pi/agent,
+// so nothing needs restating here. `-p claude` for the other builtin.
 profile "pi"
 
 // Pi against Amazon Bedrock. Pi selects the provider by flag (no env
@@ -25,8 +24,9 @@ mounts {
   "~/.claude/output-styles"
 
   // Pi's settings.json points `skills` here rather than at ~/.pi/agent/skills,
-  // so the container needs the path the setting names.
-  "~/.dotfiles/ai/skills"
+  // but settings.json isn't in the binary allowlist, so pi inside reads only
+  // the default dir. Retarget the mount to shadow the (empty) inherited bind.
+  "~/.dotfiles/ai/skills" target="/root/.pi/agent/skills"
 
   // Shadow the workspace's .envrc so repo secrets never reach the agent.
   "/dev/null" target=".envrc"
