@@ -128,6 +128,11 @@ namespace :dotslash do
     update_dotslash_release(name: "cq", repo: "technicalpickles/cq", path: ->(tag) { "cq-#{tag.delete_prefix("v")}-aarch64-apple-darwin/cq" }) { |tag| "cq-#{tag.delete_prefix("v")}-aarch64-apple-darwin.tar.gz" }
   end
 
+  desc "Update ranger"
+  task(:ranger) do
+    update_dotslash_release(name: "ranger", repo: "kejadlen/ranger") { "ranger-aarch64-apple-darwin.tar.gz" }
+  end
+
   desc "Update all dotslash files"
   task all: %i[
     age
@@ -138,6 +143,7 @@ namespace :dotslash do
     jq
     just
     ramekin
+    ranger
     sops
     tree_sitter
     zizmor

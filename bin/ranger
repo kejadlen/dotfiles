@@ -1,0 +1,25 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "ranger",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 3294891,
+      "hash": "blake3",
+      "digest": "0140c3ee21a4440c37c373d9606466e2ac8bf87b85ebd897adf7424242c2fc0a",
+      "path": "ranger",
+      "providers": [
+        {
+          "url": "https://github.com/kejadlen/ranger/releases/download/v2026-06-26+ce647e2/ranger-aarch64-apple-darwin.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/kejadlen/ranger",
+          "tag": "v2026-06-26+ce647e2",
+          "name": "ranger-aarch64-apple-darwin.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    }
+  }
+}
