@@ -125,10 +125,9 @@ Notes:
 ```rust
 use assert_cmd::Command;
 use assert_cmd::cargo::cargo_bin_cmd;
-use tempfile::tempdir;
 
 fn cmd() -> Command {
-    Command::from(cargo_bin_cmd!("<name>"))
+    cargo_bin_cmd!("<name>")
 }
 
 #[test]
@@ -136,6 +135,16 @@ fn shows_help() {
     cmd().arg("--help").assert().success();
 }
 ```
+
+`cargo_bin_cmd!` expands to `assert_cmd::Command::new(...)`, so it needs
+no conversion — wrapping it in `Command::from` trips
+`clippy::useless_conversion`. Pass the bin target name explicitly: the
+no-argument form resolves the *package* name, which differs from the
+binary name whenever the crate is named something like `<name>-cli`.
+
+Integration tests are compiled with `--test`, so `cfg(test)` is set and
+the `#![cfg_attr(test, allow(...))]` panic-lint exemption from
+`scaffolding.md` applies here too.
 
 ## Release
 
