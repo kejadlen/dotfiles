@@ -2,8 +2,6 @@
 
 `tests/property.rs` uses hegeltest to verify invariants across randomly generated inputs. Hegeltest is built on the Hypothesis engine — it generates test data, finds failures, and shrinks to minimal counterexamples automatically.
 
-Hegeltest requires [`uv`](https://docs.astral.sh/uv/) on `PATH` (it manages its Hypothesis backend via uv).
-
 ## Basic usage
 
 Test functions take a `TestCase` parameter and draw values from generators:

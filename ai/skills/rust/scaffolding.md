@@ -188,7 +188,6 @@ jobs:
           persist-credentials: false
       - run: rustup component add clippy rustfmt llvm-tools
       - run: cargo install grcov cargo-mutants just
-      - uses: astral-sh/setup-uv@SHA # v6
       - run: cargo fmt --check
       - run: just clippy coverage
       - run: just mutants
@@ -203,9 +202,6 @@ git ls-remote https://github.com/<owner>/<repo> <tag> | cut -f1
 
 `cargo fmt --check` instead of `just fmt` — CI should fail on
 unformatted code, not silently fix it.
-
-The `setup-uv` step is required because hegeltest uses `uv` to
-manage its Hypothesis backend.
 
 ## Testing
 
@@ -227,6 +223,3 @@ but don't verify. See `mutation-testing.md`.
 rustup component add clippy rustfmt llvm-tools
 cargo install grcov cargo-mutants just
 ```
-
-hegeltest also requires [`uv`](https://docs.astral.sh/uv/) on `PATH`
-— it manages the Hypothesis engine automatically.
