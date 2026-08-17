@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-# Tracks the state of Claude Code sessions, keyed by the tmux pane each one
-# runs in, so ,agents can rank them by who is waiting on a human.
+# Tracks the state of Claude Code and pi sessions, keyed by the tmux pane each
+# one runs in, so ,agents can rank them by who is waiting on a human.
 #
-# Written by ai/claude/hooks/agent-state.sh, read by ai/bin/,agents and by the
-# sketchybar agents plugin. Those two readers also write, through `visited`:
-# jumping to a blocked session records the visit so the picker can move on to
-# the next one instead of offering the same session again.
+# Written by ai/claude/hooks/agent-state.sh and by the pi extension
+# ai/pi/extensions/agent-state.ts; read by ai/bin/,agents and by the sketchybar
+# agents plugin. Those two readers also write, through `visited`: jumping to a
+# blocked session records the visit so the picker can move on to the next one
+# instead of offering the same session again.
 #
 # `list` is not read-only: it prunes rows whose pane is gone. The sketchybar
 # plugin runs it every time the hook reports a state change, so most pruning

@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-# Picker for running Claude Code sessions, ranked so the ones blocked on a
-# human come first — barring any already jumped to and left blocked, which
+# Picker for running Claude Code and pi sessions, ranked so the ones blocked
+# on a human come first — barring any already jumped to and left blocked, which
 # ,agent-state sinks to the bottom of that group. Bound to prefix+A in
 # tmux.conf, where it runs in the same floating pane as ,z and ,tmux-grab.
-# State comes from ,agent-state, which the Claude hook writes to.
+# State comes from ,agent-state, which the Claude hook and the pi extension
+# write to.
 
 set -euo pipefail
 if [[ "${TRACE-0}" == "1" ]]; then
@@ -18,7 +19,7 @@ main() {
     local rows
     rows=$("$state_script" list)
     if [[ -z $rows ]]; then
-        tmux display-message 'No Claude sessions tracked'
+        tmux display-message 'No agent sessions tracked'
         exit 0
     fi
 

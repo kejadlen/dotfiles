@@ -313,6 +313,16 @@ function isAllowed(toolName: string, input: Record<string, unknown>, ctx: Extens
 }
 
 // ---------------------------------------------------------------------------
+// Blocked reporting
+// ---------------------------------------------------------------------------
+
+// Tells agent-state.ts that a permission dialog has the session stopped on
+// a human. Emitting is always safe: with no subscriber it is a no-op.
+function reportBlocked(pi: ExtensionAPI, active: boolean, label?: string): void {
+  pi.events.emit("agent-state:blocked", { active, label });
+}
+
+// ---------------------------------------------------------------------------
 // Extension entry point
 // ---------------------------------------------------------------------------
 
@@ -379,15 +389,20 @@ export default function(pi: ExtensionAPI) {
       const pending = pendingProjectRules;
       pendingProjectRules = null; // Clear so we only prompt once
 
-      const summary = summarizeRules(pending.rules);
-      const message = "Project wants to auto-allow:\n" + summary.map((s) => `  ${s}`).join("\n");
-      const approved = await ctx.ui.confirm("Project permissions", message);
+      reportBlocked(pi, true, "project permissions");
+      try {
+        const summary = summarizeRules(pending.rules);
+        const message = "Project wants to auto-allow:\n" + summary.map((s) => `  ${s}`).join("\n");
+        const approved = await ctx.ui.confirm("Project permissions", message);
 
-      if (approved) {
-        const approvals = loadApprovals();
-        approvals[ctx.cwd] = { hash: hashContent(pending.raw) };
-        saveApprovals(approvals);
-        allowedCommands = mergeRules(BASE_COMMANDS, pending.rules);
+        if (approved) {
+          const approvals = loadApprovals();
+          approvals[ctx.cwd] = { hash: hashContent(pending.raw) };
+          saveApprovals(approvals);
+          allowedCommands = mergeRules(BASE_COMMANDS, pending.rules);
+        }
+      } finally {
+        reportBlocked(pi, false);
       }
     }
 
@@ -395,27 +410,34 @@ export default function(pi: ExtensionAPI) {
 
     const summary = formatArgs(event.toolName, event.input);
 
-    // For write/edit, offer a "allow for session" option
-    if (event.toolName === "write" || event.toolName === "edit") {
-      const choice = await ctx.ui.select(`${event.toolName}: ${summary}`, [
-        "Allow once",
-        "Allow for session",
-        "Block",
-      ]);
+    // Every dialog below blocks the session on a human; the finally keeps
+    // the paired un-block report happening on early returns too.
+    reportBlocked(pi, true, event.toolName);
+    try {
+      // For write/edit, offer a "allow for session" option
+      if (event.toolName === "write" || event.toolName === "edit") {
+        const choice = await ctx.ui.select(`${event.toolName}: ${summary}`, [
+          "Allow once",
+          "Allow for session",
+          "Block",
+        ]);
 
-      if (choice === "Allow for session") {
-        sessionAllowEdits = true;
-        ctx.ui.notify("Edits allowed for this session (tracked files only)", "info");
-        return;
+        if (choice === "Allow for session") {
+          sessionAllowEdits = true;
+          ctx.ui.notify("Edits allowed for this session (tracked files only)", "info");
+          return;
+        }
+        if (choice === "Allow once") return;
+        return { block: true, reason: "Blocked by user" };
       }
-      if (choice === "Allow once") return;
-      return { block: true, reason: "Blocked by user" };
-    }
 
-    const allowed = await ctx.ui.confirm(event.toolName, summary);
+      const allowed = await ctx.ui.confirm(event.toolName, summary);
 
-    if (!allowed) {
-      return { block: true, reason: "Blocked by user" };
+      if (!allowed) {
+        return { block: true, reason: "Blocked by user" };
+      }
+    } finally {
+      reportBlocked(pi, false);
     }
   });
 }
