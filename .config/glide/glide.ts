@@ -27,6 +27,11 @@ glide.fs.exists("local.glide.ts").then(exists => {
 // end of the tab strip. Native Gecko pref; must be set at top level.
 glide.prefs.set("browser.tabs.insertAfterCurrent", true);
 
+// Make smoothscroll take a bit longer - with the default values, when
+// I hit <space>, it goes too fast for me to keep track of where I was
+glide.prefs.set("general.smoothScroll.pages.durationMinMS", 200);
+glide.prefs.set("general.smoothScroll.pages.durationMaxMS", 400);
+
 glide.g.mapleader = "," // too used to using space for scrolling
 glide.buf.keymaps.del("normal", "s"); // use `s` for searching
 
