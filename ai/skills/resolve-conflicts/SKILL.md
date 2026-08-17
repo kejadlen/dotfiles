@@ -1,6 +1,6 @@
 ---
 name: resolve-conflicts
-description: Use when resolving jj conflicts after rebase, squash, or merge — handles conflict markers, mergiraf automation, and file-by-file manual resolution in an isolated workspace
+description: Use when resolving jj conflicts after rebase, squash, or merge — handles conflict markers, mergiraf automation, and file-by-file manual resolution, in place with `jj resolve -r` or in an isolated workspace
 argument-hint: [change-id]
 allowed-tools: [Bash(mkdir -p work), Bash(jj workspace add --name=resolve-* -r * work/resolve-*), Bash(cd work/resolve-*), Bash(jj status), Bash(jj resolve *), Bash(jj diff *), Bash(jj log *), Bash(jj op log *), Bash(jj op show *), Bash(jj squash *), Bash(jj workspace forget resolve-*), Bash(jj workspace update-stale), Bash(rm -rf work/resolve-*)]
 ---
@@ -9,8 +9,9 @@ allowed-tools: [Bash(mkdir -p work), Bash(jj workspace add --name=resolve-* -r *
 
 `$ARGUMENTS`
 
-This skill resolves conflicts in an isolated workspace so the resolution
-work never touches the main workspace's `@`. Invoke the `jj-workspaces`
+This skill resolves conflicts without disturbing the main workspace's `@` —
+in place with `jj resolve -r` where that suffices (step 1a), otherwise in an
+isolated workspace (step 1b). Invoke the `jj-workspaces`
 skill for the general mechanics referenced below (workspace naming,
 `work/` layout, sync behavior); the steps here are the conflict-specific
 application of it, using the exact commands `allowed-tools` permits.
@@ -30,7 +31,7 @@ jj op show <op-id>                                 # commits it marked (conflict
 jj log -r @ -T 'if(conflict, "CONFLICT", "clean")' # which commits are conflicted now
 ```
 
-## Step 1 — Set up an isolated resolution workspace
+## Step 1 — Pick the revision and the mechanism
 
 If `$ARGUMENTS` contains a change ID, use it as the conflicted revision.
 Otherwise run `jj status` in the main workspace and use `@-` if it has
@@ -50,6 +51,56 @@ the conflict in `@`, not in a commit. `jj workspace add -r @` can't check
 out a revision that's already checked out, and the isolation buys nothing
 because there is no other `@` to protect. Edit the files directly and drop
 the `-r @-` from every `jj resolve` in the steps below.
+
+**Try `jj resolve -r <rev>` before adding a workspace.** It rewrites the
+named revision and rebases descendants in place, so `@` never moves — which
+is what a workspace was buying you. That makes it the right default when a
+megamerge is checked out and `@` must stay put. A workspace only earns its
+cost when resolution needs a real checkout to work in: running the project's
+tooling, or hand-editing several files against a build.
+
+Always pass `--tool` explicitly. A bare `jj resolve` launches the
+interactive merge editor, which hangs a non-interactive Bash call.
+
+## Step 1a — Resolve in place with `jj resolve -r`
+
+`--tool :ours` and `--tool :theirs` take side #1 and side #2 whole, and they
+handle a `2-sided conflict including 1 deletion` that mergiraf can't touch —
+one command per file, no checkout:
+
+```
+jj resolve -r <rev> --tool :theirs <path>    # side #2 wins; removes the file if that side deleted it
+```
+
+Read the sides off the materialized markers first (`jj file show -r <rev>
+<path>`) to learn which number is which: the `+++++++ <change-id>` labelled
+`(rebased revision)` is your own commit's side.
+
+For a file needing real merge judgment, resolve it as a temp file and hand
+that to `cp` as a merge tool — the same in-place rewrite, but with content
+you wrote:
+
+```
+jj file show -r <rev> <path> > /tmp/fix              # materialized conflict markers
+# edit /tmp/fix — remove markers, write the merged content
+jj resolve -r <rev> --tool cpfix \
+  --config 'merge-tools.cpfix.program=cp' \
+  --config 'merge-tools.cpfix.merge-args=["/tmp/fix", "$output"]' \
+  <path>
+```
+
+Work root-first: each resolution clears that path from every descendant, and
+jj reports `Existing conflicts were resolved or abandoned from N commits`.
+When no conflicts remain, skip steps 2–4 entirely — there is nothing to
+squash, because the revisions were rewritten directly.
+
+**Check generated files afterward.** A generated artifact that auto-merged
+cleanly is the classic stale-output trap: the text merged, but the generator
+would emit something else. Re-run the generator and squash any diff into the
+commit that owns it — and run it from the main workspace, never from
+`work/`, where repo tooling reading `git ls-files` goes green-but-wrong.
+
+## Step 1b — Set up an isolated resolution workspace
 
 Per `jj-workspaces`' "Creating a Workspace" recipe, but anchored on the
 conflicted revision instead of trunk (skip its DAG-placement rebase step —
@@ -203,6 +254,7 @@ jj workspace update-stale
 
 ---
 
-> **Self-improving note:** If you discover new conflict marker formats, edge
-> cases with mergiraf, or better resolution patterns, update this skill using
-> the `self-improving-skills` skill.
+> **Self-improving note:** This is a self-improving skill. If you used it and
+> it came up short — a new conflict marker format, an edge case with mergiraf,
+> a better resolution pattern — invoke the `self-improving-skills` skill and
+> follow it before you finish.
