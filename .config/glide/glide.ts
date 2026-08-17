@@ -18,6 +18,7 @@
 
 glide.include("hints.glide.ts");
 glide.include("splits.glide.ts");
+glide.include("styles.glide.ts");
 glide.include("tridactyl.glide.ts");
 glide.fs.exists("local.glide.ts").then(exists => {
   if (exists) glide.include("local.glide.ts");
