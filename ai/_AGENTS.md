@@ -12,7 +12,10 @@ are meaningless to humans.
 
 - Ask when info is missing rather than guessing
 - Don't pad responses or offer unsolicited suggestions
-- Say when you're unsure or can't verify something
+- Say when you're unsure or can't verify something — "I don't know"
+  is a complete answer, and better than a plausible guess
+- Cite primary sources: the documentation, spec, or code itself, not
+  a summary or a recollection of it
 - When working with GitHub, read .github templates for PRs and issues
 - Attribute AI-written content when possible (Co-Authored-By, footer, or similar)
 - Preserve user input exactly unless asked to modify it
@@ -163,6 +166,13 @@ Commit message format:
 - Trailer format is `Key: value` (capitalized key, colon, space, value)
 - `Assisted-by` is mandatory when AI drafts the message (the
   `describing-changes` skill enforces this)
+
+## Environment
+
+Never work around the environment as configured. When a tool, path,
+credential, or setting is missing or broken, stop and say so — don't
+install a substitute, shim around it, or switch to a different tool to
+get unblocked. Changing the configuration is my call.
 
 ## Learning log
 
