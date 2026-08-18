@@ -244,6 +244,14 @@ test("resolveReportPath builds a path under the given state base dir", () => {
   assert.equal(path, join("/fake/state", "pi", "skill-eval", "reports", "2026-01-01T00-00-00-000Z.md"));
 });
 
+test("resolveReportPath appends a filename-safe label", () => {
+  const path = resolveReportPath(new Date("2026-01-01T00:00:00.000Z"), "/fake/state", "eval-jj workspaces");
+  assert.equal(
+    path,
+    join("/fake/state", "pi", "skill-eval", "reports", "2026-01-01T00-00-00-000Z-eval-jj_workspaces.md"),
+  );
+});
+
 test("writeReport creates parent directories and writes content", async () => {
   const dir = await mkdtemp(join(tmpdir(), "skill-eval-report-"));
   try {
@@ -309,4 +317,48 @@ test("buildReviewPrompt includes usage line and content for skills", () => {
 test("buildReviewPrompt notes no usage signal for AGENTS.md", () => {
   const prompt = buildReviewPrompt("agents", "/home/user/AGENTS.md", "# instructions", null);
   assert.match(prompt, /No usage signal available/);
+});
+
+import { parseCommandArgs } from "./index.ts";
+
+test("parseCommandArgs treats no arguments and an explicit subcommand as triage", () => {
+  assert.deepEqual(parseCommandArgs(""), { action: "triage" });
+  assert.deepEqual(parseCommandArgs("   "), { action: "triage" });
+  assert.deepEqual(parseCommandArgs("triage"), { action: "triage" });
+});
+
+test("parseCommandArgs keeps the bare-target form working as a review", () => {
+  assert.deepEqual(parseCommandArgs("jj"), { action: "review", target: "jj" });
+  assert.deepEqual(parseCommandArgs("review jj"), { action: "review", target: "jj" });
+});
+
+test("parseCommandArgs reads run flags and applies defaults", () => {
+  assert.deepEqual(parseCommandArgs("run jj"), { action: "run", target: "jj", repeat: 1, jobs: 3 });
+  assert.deepEqual(parseCommandArgs("run jj --repeat 3 --jobs 1 --only trigger"), {
+    action: "run",
+    target: "jj",
+    repeat: 3,
+    jobs: 1,
+    only: "trigger",
+  });
+});
+
+test("parseCommandArgs rejects malformed input with a specific message", () => {
+  const cases: [string, RegExp][] = [
+    ["run", /needs a skill name/],
+    ["run jj bash", /exactly one skill/],
+    ["run jj --repeat 0", /positive integer/],
+    ["run jj --jobs two", /positive integer/],
+    ["run jj --only sideways", /trigger or adherence/],
+    ["run jj --wat", /Unknown flag --wat/],
+    ["triage jj", /takes no arguments/],
+    ["review", /exactly one target/],
+    ["review a b", /exactly one target/],
+    ["frobnicate jj", /Unknown subcommand "frobnicate"/],
+  ];
+  for (const [args, pattern] of cases) {
+    const parsed = parseCommandArgs(args);
+    assert.equal(parsed.action, "error", `expected an error for "${args}"`);
+    if (parsed.action === "error") assert.match(parsed.message, pattern);
+  }
 });

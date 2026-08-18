@@ -6,6 +6,8 @@
  * trim/removal candidates, using Pi session logs as a usage signal.
  * Deep-reviews a single target by handing its content and usage
  * stats to the current conversation with a trim-focused rubric.
+ * Also runs behavioral evals declared in a skill's evals.yml through nested pi
+ * processes; see run.ts and README.md.
  */
 
 import { existsSync, statSync } from "node:fs";
@@ -17,6 +19,8 @@ import type {
   ExtensionContext,
   ExtensionCommandContext,
 } from "@mariozechner/pi-coding-agent";
+import { EVALS_FILENAME, loadEvalSuite } from "./evals.ts";
+import { formatEvalReport, runEvals, summarizeFailures, type EvalRunConfig } from "./run.ts";
 
 // ---------- Types ----------
 
@@ -299,10 +303,11 @@ export function formatTriageMarkdown(
   return lines.join("\n");
 }
 
-export function resolveReportPath(now: Date, stateBaseDir?: string): string {
+export function resolveReportPath(now: Date, stateBaseDir?: string, label?: string): string {
   const base = stateBaseDir ?? process.env.XDG_STATE_HOME ?? join(homedir(), ".local", "state");
   const timestamp = now.toISOString().replace(/[:.]/g, "-");
-  return join(base, "pi", "skill-eval", "reports", `${timestamp}.md`);
+  const suffix = label ? `-${label.replace(/[^a-zA-Z0-9._-]+/g, "_")}` : "";
+  return join(base, "pi", "skill-eval", "reports", `${timestamp}${suffix}.md`);
 }
 
 export async function writeReport(markdown: string, reportPath: string): Promise<void> {
@@ -380,9 +385,81 @@ export function buildReviewPrompt(
   return [`# Trim review: ${name}`, "", usageLine, "", rubric, "", "```", content, "```"].join("\n");
 }
 
+// ---------- Command arguments ----------
+
+export type ParsedCommand =
+  | { action: "triage" }
+  | { action: "review"; target: string }
+  | { action: "run"; target: string; repeat: number; jobs: number; only?: "trigger" | "adherence" }
+  | { action: "error"; message: string };
+
+const DEFAULT_REPEAT = 1;
+const DEFAULT_JOBS = 3;
+
+/**
+ * `/skill-eval` and `/skill-eval triage` triage; `/skill-eval run <skill>` runs
+ * behavioral evals; anything else is treated as a review target, which keeps the
+ * original bare-target form working.
+ */
+export function parseCommandArgs(args: string): ParsedCommand {
+  const tokens = args.trim().split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return { action: "triage" };
+
+  const [head, ...rest] = tokens;
+  if (head === "triage") {
+    if (rest.length > 0) return { action: "error", message: "triage takes no arguments." };
+    return { action: "triage" };
+  }
+
+  if (head === "review") {
+    if (rest.length !== 1) return { action: "error", message: "review takes exactly one target." };
+    return { action: "review", target: rest[0] };
+  }
+
+  if (head === "run") {
+    let target: string | undefined;
+    let repeat = DEFAULT_REPEAT;
+    let jobs = DEFAULT_JOBS;
+    let only: "trigger" | "adherence" | undefined;
+
+    for (let i = 0; i < rest.length; i++) {
+      const token = rest[i];
+      if (token === "--repeat" || token === "--jobs") {
+        const value = Number(rest[++i]);
+        if (!Number.isInteger(value) || value < 1) {
+          return { action: "error", message: `${token} needs a positive integer.` };
+        }
+        if (token === "--repeat") repeat = value;
+        else jobs = value;
+        continue;
+      }
+      if (token === "--only") {
+        const value = rest[++i];
+        if (value !== "trigger" && value !== "adherence") {
+          return { action: "error", message: "--only takes either trigger or adherence." };
+        }
+        only = value;
+        continue;
+      }
+      if (token.startsWith("-")) return { action: "error", message: `Unknown flag ${token}.` };
+      if (target !== undefined) return { action: "error", message: "run takes exactly one skill." };
+      target = token;
+    }
+
+    if (target === undefined) {
+      return { action: "error", message: "run needs a skill name: /skill-eval run <skill>." };
+    }
+    return { action: "run", target, repeat, jobs, ...(only ? { only } : {}) };
+  }
+
+  if (tokens.length > 1) return { action: "error", message: `Unknown subcommand "${head}".` };
+  return { action: "review", target: head };
+}
+
 // ---------- Wiring ----------
 
 const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
+const RUN_TIMEOUT_MS = 5 * 60 * 1000;
 
 function sessionsDirFor(): string {
   return join(homedir(), ".pi", "agent", "sessions");
@@ -441,30 +518,182 @@ async function runReview(
   return { ok: true, prompt, name: resolved.meta.path };
 }
 
+async function resolveEvalTarget(
+  ctx: ExtensionContext,
+  target: string,
+): Promise<{ ok: true; meta: SkillMeta } | { ok: false; message: string }> {
+  const contextSkills = parseAvailableSkillsBlock(ctx.getSystemPrompt());
+  const skills = await loadSkillsFromContext(contextSkills);
+  const agentsFiles = await discoverAgentsFiles(ctx.cwd);
+  const resolved = resolveTarget(target, skills, agentsFiles);
+
+  if (!resolved.ok) {
+    const label =
+      resolved.reason === "ambiguous" ? "Ambiguous target" : "No matching skill";
+    return {
+      ok: false,
+      message: `${label} for "${target}". Candidates: ${resolved.candidates.join(", ") || "none"}`,
+    };
+  }
+  if (resolved.kind !== "skill") {
+    return {
+      ok: false,
+      message: `"${target}" is an AGENTS.md file. Behavioral evals only work on skills, since they measure whether a skill loads and gets followed. Use /skill-eval review ${target} instead.`,
+    };
+  }
+  return { ok: true, meta: resolved.meta };
+}
+
+function evalConfig(ctx: ExtensionContext, repeat: number, jobs: number): EvalRunConfig | null {
+  const model = ctx.model;
+  if (!model) return null;
+  return {
+    provider: model.provider,
+    model: model.id,
+    thinking: ctx.thinkingLevel,
+    repeat,
+    jobs,
+    timeoutMs: RUN_TIMEOUT_MS,
+  };
+}
+
+/** UI methods are no-ops without a UI, so fall back to the console for headless runs. */
+function announce(ctx: ExtensionCommandContext, text: string, level: "info" | "warning" | "error"): void {
+  ctx.ui.notify(text, level);
+  if (!ctx.hasUI) {
+    if (level === "error") console.error(text);
+    else console.log(text);
+  }
+}
+
+async function handleRun(
+  pi: ExtensionAPI,
+  ctx: ExtensionCommandContext,
+  parsed: { target: string; repeat: number; jobs: number; only?: "trigger" | "adherence" },
+): Promise<void> {
+  const target = await resolveEvalTarget(ctx, parsed.target);
+  if (!target.ok) {
+    announce(ctx, target.message, "error");
+    return;
+  }
+
+  const loaded = await loadEvalSuite(target.meta.path);
+  if (!loaded.ok) {
+    announce(ctx, loaded.errors.join("\n"), "error");
+    return;
+  }
+  const suite = loaded.suite;
+
+  const config = evalConfig(ctx, parsed.repeat, parsed.jobs);
+  if (!config) {
+    announce(ctx, "No active model, so there's nothing to run evals with. Pick a model with /model first.", "error");
+    return;
+  }
+
+  const triggerCases = parsed.only === "adherence" ? 0 : suite.triggerPositive.length + suite.triggerNegative.length;
+  const adherenceCases = parsed.only === "trigger" ? 0 : suite.adherence.length;
+  if (triggerCases + adherenceCases === 0) {
+    const kind = parsed.only ? `${parsed.only} ` : "";
+    announce(ctx, `${EVALS_FILENAME} for ${target.meta.name} has no ${kind}cases to run.`, "error");
+    return;
+  }
+
+  // Each adherence case costs a judge run on top of the agent run.
+  const modelRuns = (triggerCases + adherenceCases * 2) * parsed.repeat;
+  if (ctx.hasUI) {
+    const proceed = await ctx.ui.confirm(
+      `Run evals for ${target.meta.name}?`,
+      `${modelRuns} nested ${config.provider}/${config.model} runs, ${parsed.jobs} at a time. This spends API credit.`,
+    );
+    if (!proceed) return;
+  }
+
+  ctx.ui.setStatus("skill-eval", `evals: ${target.meta.name} starting`);
+  let report;
+  try {
+    report = await runEvals({
+      skillName: target.meta.name,
+      skillPath: target.meta.path,
+      suite,
+      only: parsed.only,
+      config: {
+        ...config,
+        onProgress: (done, total, label) => {
+          ctx.ui.setStatus("skill-eval", `evals: ${target.meta.name} ${done}/${total} — ${label.slice(0, 40)}`);
+        },
+      },
+    });
+  } finally {
+    ctx.ui.setStatus("skill-eval", undefined);
+  }
+
+  const markdown = formatEvalReport(report);
+  const reportPath = resolveReportPath(report.finishedAt, undefined, `eval-${report.skillName}`);
+  await writeReport(markdown, reportPath);
+
+  const failures = summarizeFailures(report);
+  announce(ctx, `${markdown}\n\nReport saved to ${reportPath}`, failures.length > 0 ? "warning" : "info");
+
+  if (failures.length === 0) return;
+  pi.sendUserMessage(
+    [
+      `# Eval failures: ${report.skillName}`,
+      "",
+      `Behavioral evals for ${target.meta.path} came back with failures. Full report: ${reportPath}`,
+      "",
+      ...failures.map((note) => `- ${note}`),
+      "",
+      "Read the skill and propose specific edits to its text that would fix these, or say why a case is",
+      "wrong about the skill rather than the skill being wrong.",
+    ].join("\n"),
+    { deliverAs: "followUp" },
+  );
+}
+
 export default async function (pi: ExtensionAPI) {
   const { Type } = await import("typebox");
 
   pi.registerCommand("skill-eval", {
-    description: "Triage in-context skills/AGENTS.md for trim candidates, or deep-review one target",
+    description:
+      "triage | review <target> | run <skill> [--repeat N] [--jobs N] [--only trigger|adherence]",
+    getArgumentCompletions: (prefix: string) => {
+      const items = [
+        { value: "triage", label: "triage — rank skills and AGENTS.md files by trim potential" },
+        { value: "review ", label: "review <target> — critique one file's text" },
+        { value: "run ", label: "run <skill> — run its evals.yml through subagents" },
+      ].filter((item) => item.value.startsWith(prefix));
+      return items.length > 0 ? items : null;
+    },
     handler: async (args: string, ctx: ExtensionCommandContext) => {
-      const target = args.trim();
-      if (!target) {
-        const result = await runTriage(ctx);
-        if (!result.ok) {
-          ctx.ui.notify(result.message, "error");
-          return;
-        }
-        ctx.ui.notify(`${result.markdown}\n\nReport saved to ${result.reportPath}`, "info");
+      const parsed = parseCommandArgs(args);
+
+      if (parsed.action === "error") {
+        announce(ctx, `${parsed.message} Usage: /skill-eval [triage | review <target> | run <skill>]`, "error");
         return;
       }
 
-      const result = await runReview(ctx, target);
-      if (!result.ok) {
-        ctx.ui.notify(result.message, "error");
+      if (parsed.action === "triage") {
+        const result = await runTriage(ctx);
+        if (!result.ok) {
+          announce(ctx, result.message, "error");
+          return;
+        }
+        announce(ctx, `${result.markdown}\n\nReport saved to ${result.reportPath}`, "info");
         return;
       }
-      pi.sendUserMessage(result.prompt, { deliverAs: "followUp" });
-      ctx.ui.notify(`Queued review for ${result.name}`, "info");
+
+      if (parsed.action === "review") {
+        const result = await runReview(ctx, parsed.target);
+        if (!result.ok) {
+          announce(ctx, result.message, "error");
+          return;
+        }
+        pi.sendUserMessage(result.prompt, { deliverAs: "followUp" });
+        announce(ctx, `Queued review for ${result.name}`, "info");
+        return;
+      }
+
+      await handleRun(pi, ctx, parsed);
     },
   });
 
@@ -476,6 +705,7 @@ export default async function (pi: ExtensionAPI) {
     promptGuidelines: [
       "Use skill_eval with action 'triage' when asked to find skills or AGENTS.md files worth trimming.",
       "Use skill_eval with action 'review' and a target name when asked to critique a specific skill or AGENTS.md file.",
+      "Behavioral evals spend API credit, so they are user-driven: tell the user to run /skill-eval run <skill> rather than trying to run them yourself.",
     ],
     parameters: Type.Object({
       action: Type.Union([Type.Literal("triage"), Type.Literal("review")]),

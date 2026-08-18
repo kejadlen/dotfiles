@@ -46,6 +46,8 @@ Skills live in `ai/skills/<name>/SKILL.md`. See the `skill-notes` skill for auth
 
 Pi loads these via `ai/pi/settings.json`, which points to `~/.dotfiles/ai/skills`. Claude reaches them through `ai/claude/skills` (a symlink to `../skills`), so both agents read the same files — only ever edit `ai/skills/`.
 
+A skill can declare behavioral evals in `ai/skills/<name>/evals.yml` — prompts that should (and should not) load it, plus tasks with expectations to grade once it is loaded. Run them with `/skill-eval run <name>`; see `ai/pi/extensions/skill-eval/README.md`.
+
 ## Pi Packages
 
 Pi manages plugins natively via `pi install` / `pi remove` / `pi update` / `pi list`. Global packages are declared in `~/.pi/agent/settings.json` under `packages`. Project-scoped packages use `.pi/settings.json` with the `-l` flag.
