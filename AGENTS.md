@@ -21,7 +21,7 @@ Key directories:
 
 Main bookmark: `main`. Don't commit directly to `main` — work on the `@` change or create new ones.
 
-`ai/_AGENTS.md` owns the jj rules; reach for the `jj` skill before free-handing commands.
+`ai/_AGENTS.md` owns the jj rules; reach for the `jj` skill before free-handing commands. Its commit-granularity rules are looser here — there's nothing to build and no test suite to bisect, so related config changes can share a commit rather than being split into one logical unit each. Still split changes that have nothing to do with each other.
 
 ## Issue Tracker
 
