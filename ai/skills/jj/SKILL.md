@@ -5,10 +5,8 @@ description: Use when running any jj (Jujutsu) version control command — commi
 
 # Jujutsu (jj) version control
 
-Never treat this skill as authoritative. Run `jj <command> --help` to verify
-behavior, flags, and current options.
-
-Read `pitfalls.md` before reaching for `squash`, `show`, `file show`,
+Verify behavior and flags against `jj <command> --help`, and read
+`pitfalls.md` before reaching for `squash`, `diff`, `show`, `file show`,
 filesets, `-R`, or a revset with parentheses — it catalogues flags that fail
 silently, hang without a TTY, or make a no-op look like it worked.
 
@@ -83,8 +81,7 @@ hands `@` all of `mm`'s former parents, leaving a second near-identical
 megamerge beside the real one. `jj rebase -r @ -o mm` repairs it.
 
 `-o`/`--onto` is repeatable (`-d` is the older alias), so `-o p1 -o p2 ...`
-sets several parents. The `all:` revset modifier is not valid there —
-`-o 'all:mm- | x'` fails with "`:` is not an infix operator".
+sets several parents.
 
 Don't read the result off the ASCII graph. Diff the merge as an invariant
 across the rewrite, and list its parents explicitly:
@@ -105,8 +102,6 @@ command — no `git rm`, no `git add -A`. Just delete the file and commit.
 
 ## Bookmarks and pushing
 
-Bookmarks are mutable named pointers to commits (like git branches).
-
 ```bash
 jj bookmark list                           # show all bookmarks
 jj bookmark set feature -r <rev>           # move bookmark to revision
@@ -124,7 +119,6 @@ preferred way to move `main` after committing on top of it.
 
 ```bash
 jj bookmark advance                  # advance closest bookmarks to @ (default)
-jj bookmark advance --to @-          # advance closest bookmarks to @-
 jj bookmark advance main --to @-     # advance specific bookmark
 ```
 
@@ -161,7 +155,7 @@ jj restore --from kn --into kn FILE        # restore file in a specific revision
 
 **`jj restore FILE` is not "undo my last edit."** It resets the whole file
 to the parent, wiping *every* uncommitted change in it, not just the one you
-meant to back out. Run `jj diff FILE` first to see what would be lost; to
+meant to back out. Run `jj diff --git FILE` first to see what would be lost; to
 back out one surgical experiment, revert it with the tool that made it.
 
 ## Divergent changes
@@ -181,7 +175,7 @@ A bare change ID errors once it's divergent, so use the offsets jj suggests
 (`abcd/0`, `abcd/1`). Offsets go by recency with the newest at `/0`, so
 re-read `jj log` rather than reusing one from earlier in the session — a
 concurrent rewrite in another workspace shifts them all down by one. For
-`jj abandon`, pass the short commit ID, as jj's own hint recommends.
+`jj abandon`, pass the short commit ID.
 
 Not every duplicate is litter: copies pinned by tags or another
 `immutable_heads()` clause can't be abandoned at all.
