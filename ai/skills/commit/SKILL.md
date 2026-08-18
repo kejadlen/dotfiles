@@ -34,10 +34,10 @@ When ambiguous, ask.
 
 Rewrite the revision's description from scratch, discarding the existing one.
 
-1. Run `jj show -r <revision>` to view the changes
+1. Run `jj show --git -r <revision>` to view the changes
 2. Invoke the `describing-changes` skill to draft a new description
 3. Apply with `jj describe -r <revision> -m '...'`
-4. Verify with `jj show -r <revision>`
+4. Verify with `jj show --git -r <revision>`
 
 ## Commit Mode
 
@@ -64,9 +64,9 @@ as syntax and fails; wrap it in a double-quoted string literal, e.g.
 
 ### Process
 
-1. Run `jj diff <fileset>` to view changes being committed
+1. Run `jj diff --git <fileset>` to view changes being committed
 2. Confirm the commit's scope before writing it.
-   - When a fileset is given, run `jj diff` (no args) to see all pending
+   - When a fileset is given, run `jj diff --git` (no args) to see all pending
      changes. Review the remaining files and mention any that look
      related to the fileset — e.g., a lockfile updated alongside a
      manifest, or a config change paired with the code that uses it. Ask
@@ -97,4 +97,4 @@ as syntax and fails; wrap it in a double-quoted string literal, e.g.
    - Scope the entry to only the changes in the fileset, if provided
 6. Commit with `jj commit -m '...' <fileset>` (include changelog in the fileset if you updated it)
    - **Put `-m` before `--` or fileset args.** jj parses everything after `--` as fileset, so `-m` content placed after `--` becomes a parse error.
-7. Verify with `jj show`
+7. Verify with `jj show --git`
