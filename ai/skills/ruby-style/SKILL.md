@@ -27,7 +27,7 @@ config[:timeout]
 Use `[]` only when `nil` is a valid, expected result and you're
 handling it intentionally.
 
-## Block composition
+## Enumerable methods
 
 Chain `.with_index` and `.with_object` onto the base enumerator
 instead of using combined methods. This keeps each concern separate
@@ -48,6 +48,21 @@ hash.each_value { |value| ... }
 hash.each_key { |key| ... }
 ```
 
+The same goes for the specialized `each_*` readers — take the plain
+method and chain from there. The exception is hot paths on large
+strings, where the lazy `Enumerator` from `each_char` and friends beats
+building the whole array up front.
+
+```ruby
+# good
+str.chars.map { |char| char.ord }
+str.lines.grep(/^#/)
+
+# bad
+str.each_char.map { |char| char.ord }
+str.each_line.grep(/^#/)
+```
+
 ## Blocks
 
 Use [Weirich-style](https://www.youtube.com/watch?v=KDTRsJCOPyI)
@@ -65,16 +80,33 @@ items.each do |item|
   log(item)
 end
 
-Pathname.new(path).open do |f|
-  f.write(data)
-end
-
 # bad — side effects with braces
 items.each { |item| process(item) }
 
 # bad — value-returning with do...end
 names = items.map do |item| item.name end
 ```
+
+## Implicit block parameter
+
+Use `it` when the receiver makes the subject obvious. Name the parameter
+when the block runs long enough that the reader loses track of what `it`
+is, or when the name carries something the receiver doesn't. Prefer `it`
+over `_1` — it reads as English.
+
+```ruby
+# good
+users.map { it.name }
+paths.select { it.exist? }
+
+# bad — a name that adds nothing
+users.map { |user| user.name }
+```
+
+`it` only applies to a block that declares no parameters, so a block
+that needs two still names them: `hash.each { |key, value| ... }`. A
+local variable named `it` in scope shadows the implicit parameter
+silently, so watch for one.
 
 ## File and path operations
 
@@ -112,31 +144,60 @@ users.each_with_object({}) { |user, hash| hash[user.id] = user.name }
 Hash[users.map { |user| [user.id, user.name] }]
 ```
 
-## Frozen string literals
+## Trailing commas
 
-Prefer enabling frozen string literals process-wide with
-`RUBYOPT=--enable-frozen-string-literal` (set it in your shell profile,
-`.env`, or CI) over adding a `# frozen_string_literal: true` magic
-comment to every file. One environment setting covers the whole project
-instead of a comment that has to be added to — and kept on — each new
-file.
+Use a trailing comma on the last element of a multiline literal or
+argument list, so adding an element touches one line instead of two.
 
-```bash
-# good — one setting for the whole project
-export RUBYOPT=--enable-frozen-string-literal
+```ruby
+# good
+COLORS = [
+  "red",
+  "green",
+]
 
-# bad — per-file ceremony repeated in every file
-# frozen_string_literal: true
+client.call(
+  path,
+  timeout: 30,
+)
+
+# bad — a single-line literal gains nothing from it
+COLORS = ["red", "green",]
 ```
 
-The flag applies to every file that lacks its own magic comment, so a
-file can still opt out with an explicit `# frozen_string_literal: false`
-when it genuinely needs mutable string literals.
+Ruby rejects a trailing comma in a method definition's parameter list,
+so a multiline `def` is the one exception.
 
-Don't fight an existing convention. If a project already relies on the
-magic comment — RuboCop's `Style/FrozenStringLiteralComment` is enabled,
-or the files already carry it — keep adding the comment so the codebase
-stays consistent.
+Never add one to block parameters — it isn't cosmetic there. `|a,|`
+destructures the first element out of an array, where `|a|` binds the
+whole array.
+
+```ruby
+[[1, 2, 3]].map { |a| a }   # => [[1, 2, 3]]
+[[1, 2, 3]].map { |a,| a }  # => [1]
+```
+
+## Frozen string literals
+
+Enable frozen string literals process-wide with
+`RUBYOPT=--enable-frozen-string-literal` (set it in your shell profile,
+`.env`, or CI). Don't add `# frozen_string_literal:` magic comments to
+files — in either direction — one environment setting covers the whole
+project.
+
+```bash
+export RUBYOPT=--enable-frozen-string-literal
+```
+
+Literals in files with no magic comment are *chilled*: mutating one
+warns instead of raising. Run with `RUBYOPT=-W:deprecated` to find them,
+then `.dup` each one.
+
+## Requires
+
+Put `require` calls at the top of the file. Defer one inside a method
+or conditional only with an actual reason — cutting boot time for a
+rarely used, expensive dependency being the usual one.
 
 ## Binstubs
 
