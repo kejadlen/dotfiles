@@ -4,18 +4,18 @@
   "name": "jq",
   "platforms": {
     "macos-aarch64": {
-      "size": 841408,
+      "size": 841504,
       "hash": "blake3",
-      "digest": "d7f94364d8375d9004ac8169fdbb665f61360c2bcc7cceed1d7306dc6f8958b7",
+      "digest": "651534e32cf0d20894158c10fe984c89160650ca8e81ca9a545b501db5acac9a",
       "path": "jq",
       "providers": [
         {
-          "url": "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-macos-arm64"
+          "url": "https://github.com/jqlang/jq/releases/download/jq-1.8.2/jq-macos-arm64"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/jqlang/jq",
-          "tag": "jq-1.8.1",
+          "tag": "jq-1.8.2",
           "name": "jq-macos-arm64"
         }
       ]

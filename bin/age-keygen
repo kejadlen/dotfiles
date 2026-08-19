@@ -7,7 +7,6 @@
       "size": 9685129,
       "hash": "blake3",
       "digest": "d86f2a77816f81bf07ca2c983649b1a72d026f73aec09c3b80d42e1ac34e2b7b",
-      "format": "tar.gz",
       "path": "age/age-keygen",
       "providers": [
         {
@@ -19,7 +18,8 @@
           "tag": "v1.3.1",
           "name": "age-v1.3.1-darwin-arm64.tar.gz"
         }
-      ]
+      ],
+      "format": "tar.gz"
     }
   }
 }
