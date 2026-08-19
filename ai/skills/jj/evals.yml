@@ -1,0 +1,63 @@
+# Eval runs load no AGENTS.md, so every expectation below has to be earned by
+# SKILL.md and pitfalls.md alone — not by the global "always use jj" rule.
+
+trigger:
+  positive:
+    - prompt: I want to move my working copy changes into whichever ancestor commit last touched those lines.
+      note: absorb, which the description does not name
+    - prompt: The description on my last commit is wrong. How do I fix the message without moving @?
+      note: describe, named in the description
+    - prompt: I have three stacked bookmarks to push to origin. What order should I push them in?
+      note: bookmarks and push, both named in the description
+    - prompt: jj says my change is (divergent) and half my edits have vanished. What do I do?
+      note: divergent changes, which the description does not name
+    - prompt: How do I extract just one file out of a commit into its own commit?
+      note: split, which the description does not name
+  negative:
+    - prompt: Add fzf-git as a git submodule, shallow cloned.
+      note: version control adjacent, but git tooling with no jj involved
+    - prompt: What does `git rebase -i` do, and when would I reach for it?
+      note: pure git; the skill's git-differences section makes this tempting
+    - prompt: Write a bash script that renames every .jpeg in a directory to .jpg.
+
+adherence:
+  - prompt: |
+      I finished the change in @ and want to give it a message and start fresh work on top of it.
+      Which single command does that, and what does it do to @?
+    expect:
+      - names `jj commit -m` as the single command
+      - says it moves `@` to a new empty commit
+      - contrasts it with `jj describe`, which sets a message without moving `@`
+
+  - prompt: |
+      I have three stacked bookmarks to push to origin and was going to start with the tip,
+      using a bare `jj git push`. Is there a problem with that?
+    expect:
+      - says pushing the tip first drops the ancestor bookmarks out of the default push revset
+      - warns that the next push reports nothing changed and leaves the lower branch unpushed, so the failure reads like success
+      - tells me to push bottom-first or to pass `-b <bookmark>` per branch
+
+  - prompt: |
+      I wrote a fix in a commit on top of `mm` and now I can't push it. How do I get it into the
+      merge properly?
+    expect:
+      - explains that work on top of `mm` cannot be pushed because its diff against trunk contains every parent
+      - prescribes moving the commit beneath the merge with a single `jj rebase -r <rev> -A trunk -B mm`
+      - warns that rewriting `mm` separately leaves a second near-identical megamerge
+
+  - prompt: |
+      In this repo, split lib/a.rb out of @ into its own commit described "lib: extract a", and leave
+      the original change ID and description on the commit that still holds lib/b.rb. Then show me
+      the resulting log.
+    tools: [read, bash]
+    setup: |
+      jj git init
+      mkdir lib
+      printf 'class A\nend\n' > lib/a.rb
+      printf 'class B\nend\n' > lib/b.rb
+      jj describe -m 'lib: add a and b'
+    expect:
+      - runs `jj split` passing the same revision to both `-r` and `-A`
+      - passes `-m` to `jj split` so no editor opens
+      - "the final log shows the original description `lib: add a and b` still on the commit holding lib/b.rb"
+      - "the new commit described `lib: extract a` contains lib/a.rb"
