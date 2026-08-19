@@ -131,3 +131,13 @@ test("loadEvalSuite surfaces YAML decoding failures", async () => {
     await rm(dir, { recursive: true, force: true });
   }
 });
+
+test("parseEvalSuite explains the colon-space trap when prose parses as a mapping", () => {
+  const result = parseEvalSuite({
+    adherence: [{ prompt: "split a file out", expect: [{ "the log shows `lib": "add a and b` afterwards" }] }],
+  });
+  assert.equal(result.ok, false);
+  if (result.ok) return;
+  assert.match(result.errors[0], /got object\./);
+  assert.match(result.errors[0], /colon followed by a space \("the log shows `lib:"\) makes YAML read the line as a mapping/);
+});

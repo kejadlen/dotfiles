@@ -138,7 +138,7 @@ function parseAdherenceCases(raw: unknown, path: string, errors: string[]): Adhe
     } else {
       entry.expect.forEach((item, i) => {
         if (typeof item !== "string" || !item.trim()) {
-          errors.push(`${entryPath}.expect[${i}]: expected a non-empty string, got ${describe(item)}.`);
+          errors.push(`${entryPath}.expect[${i}]: expected a non-empty string, got ${describe(item)}.${hintForYamlShape(item)}`);
           return;
         }
         expect.push(item.trim());
@@ -174,6 +174,14 @@ function describe(value: unknown): string {
   if (value === null) return "null";
   if (Array.isArray(value)) return "a list";
   return typeof value;
+}
+
+/** A colon followed by a space turns a plain scalar into a mapping, which trips up prose. */
+function hintForYamlShape(value: unknown): string {
+  if (!isRecord(value)) return "";
+  const key = Object.keys(value)[0];
+  const colon = key ? ` ("${key}:")` : "";
+  return ` A colon followed by a space${colon} makes YAML read the line as a mapping. Quote the whole entry.`;
 }
 
 /** Validate decoded evals.yml data. Collects every problem rather than failing on the first. */
