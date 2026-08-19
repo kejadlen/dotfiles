@@ -33,6 +33,12 @@ export interface SubagentToolCall {
   args: Record<string, unknown>;
 }
 
+export interface RetryNote {
+  attempt: number;
+  maxAttempts: number;
+  errorMessage: string;
+}
+
 export interface SubagentResult {
   exitCode: number | null;
   timedOut: boolean;
@@ -41,6 +47,11 @@ export interface SubagentResult {
   toolCalls: SubagentToolCall[];
   finalText: string;
   costUsd: number;
+  elapsedMs: number;
+  /** Provider retries pi performed inside the run, e.g. overload or rate limiting. */
+  retries: RetryNote[];
+  /** Stop reason of the run's last assistant message, useful when the reply is empty. */
+  stopReason?: string;
   /** Set when the run itself failed, as opposed to the graded behavior failing. */
   error?: string;
 }
@@ -118,6 +129,44 @@ export function extractFinalText(events: any[]): string {
   return "";
 }
 
+export function extractRetries(events: any[]): RetryNote[] {
+  return events
+    .filter((event) => event.type === "auto_retry_start")
+    .map((event) => ({
+      attempt: event.attempt ?? 0,
+      maxAttempts: event.maxAttempts ?? 0,
+      errorMessage: String(event.errorMessage ?? "unknown provider error"),
+    }));
+}
+
+/** The provider error that ended the run, when retries were exhausted or the model reported one. */
+export function extractApiError(events: any[]): string | undefined {
+  for (let i = events.length - 1; i >= 0; i--) {
+    const event = events[i];
+    if (event.type === "auto_retry_end" && event.success === false) {
+      return String(event.finalError ?? "provider retries exhausted");
+    }
+  }
+  const messages = finalMessages(events);
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const message = messages[i];
+    if (message.role !== "assistant") continue;
+    if (message.stopReason === "error" || message.stopReason === "aborted") {
+      return String(message.errorMessage ?? `run ended with stopReason ${message.stopReason}`);
+    }
+    return undefined;
+  }
+  return undefined;
+}
+
+export function extractStopReason(events: any[]): string | undefined {
+  const messages = finalMessages(events);
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].role === "assistant") return messages[i].stopReason;
+  }
+  return undefined;
+}
+
 export function extractCost(events: any[]): number {
   let total = 0;
   for (const message of finalMessages(events)) {
@@ -170,6 +219,7 @@ export async function runSubagent(opts: SubagentOptions): Promise<SubagentResult
   delete env.PI_SESSION_FILE;
   delete env.PI_SESSION_ID;
 
+  const startedAt = Date.now();
   return await new Promise<SubagentResult>((resolve) => {
     const child = spawn(command, args, { cwd: opts.cwd, env, stdio: ["pipe", "pipe", "pipe"] });
     let stdout = "";
@@ -193,6 +243,8 @@ export async function runSubagent(opts: SubagentOptions): Promise<SubagentResult
       if (timer) clearTimeout(timer);
       opts.signal?.removeEventListener("abort", onAbort);
       const events = collectEvents(stdout);
+      const apiError = extractApiError(events);
+      const stopReason = extractStopReason(events);
       resolve({
         exitCode,
         timedOut,
@@ -201,7 +253,10 @@ export async function runSubagent(opts: SubagentOptions): Promise<SubagentResult
         toolCalls: extractToolCalls(events),
         finalText: extractFinalText(events),
         costUsd: extractCost(events),
-        ...(error ? { error } : {}),
+        elapsedMs: Date.now() - startedAt,
+        retries: extractRetries(events),
+        ...(stopReason ? { stopReason } : {}),
+        ...(error || apiError ? { error: error ?? apiError } : {}),
       });
     };
 

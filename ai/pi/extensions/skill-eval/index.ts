@@ -20,7 +20,7 @@ import type {
   ExtensionCommandContext,
 } from "@mariozechner/pi-coding-agent";
 import { EVALS_FILENAME, loadEvalSuite } from "./evals.ts";
-import { formatEvalReport, runEvals, summarizeFailures, type EvalRunConfig } from "./run.ts";
+import { filterSuite, formatEvalReport, runEvals, summarizeFailures, type EvalRunConfig } from "./run.ts";
 
 // ---------- Types ----------
 
@@ -390,7 +390,14 @@ export function buildReviewPrompt(
 export type ParsedCommand =
   | { action: "triage" }
   | { action: "review"; target: string }
-  | { action: "run"; target: string; repeat: number; jobs: number; only?: "trigger" | "adherence" }
+  | {
+      action: "run";
+      target: string;
+      repeat: number;
+      jobs: number;
+      only?: "trigger" | "adherence";
+      cases: string[];
+    }
   | { action: "error"; message: string };
 
 const DEFAULT_REPEAT = 1;
@@ -401,8 +408,39 @@ const DEFAULT_JOBS = 3;
  * behavioral evals; anything else is treated as a review target, which keeps the
  * original bare-target form working.
  */
+/** Split on whitespace, but keep quoted runs together so a filter can hold spaces. */
+export function tokenizeArgs(args: string): string[] {
+  const tokens: string[] = [];
+  let current = "";
+  let quote: '"' | "'" | null = null;
+  let started = false;
+
+  for (const char of args.trim()) {
+    if (quote) {
+      if (char === quote) quote = null;
+      else current += char;
+      continue;
+    }
+    if (char === '"' || char === "'") {
+      quote = char;
+      started = true;
+      continue;
+    }
+    if (/\s/.test(char)) {
+      if (started) tokens.push(current);
+      current = "";
+      started = false;
+      continue;
+    }
+    current += char;
+    started = true;
+  }
+  if (started) tokens.push(current);
+  return tokens;
+}
+
 export function parseCommandArgs(args: string): ParsedCommand {
-  const tokens = args.trim().split(/\s+/).filter(Boolean);
+  const tokens = tokenizeArgs(args);
   if (tokens.length === 0) return { action: "triage" };
 
   const [head, ...rest] = tokens;
@@ -421,9 +459,18 @@ export function parseCommandArgs(args: string): ParsedCommand {
     let repeat = DEFAULT_REPEAT;
     let jobs = DEFAULT_JOBS;
     let only: "trigger" | "adherence" | undefined;
+    const cases: string[] = [];
 
     for (let i = 0; i < rest.length; i++) {
       const token = rest[i];
+      if (token === "--case") {
+        const value = rest[++i];
+        if (value === undefined || value.startsWith("-")) {
+          return { action: "error", message: "--case needs a substring to match against case prompts and notes." };
+        }
+        cases.push(value);
+        continue;
+      }
       if (token === "--repeat" || token === "--jobs") {
         const value = Number(rest[++i]);
         if (!Number.isInteger(value) || value < 1) {
@@ -449,7 +496,7 @@ export function parseCommandArgs(args: string): ParsedCommand {
     if (target === undefined) {
       return { action: "error", message: "run needs a skill name: /skill-eval run <skill>." };
     }
-    return { action: "run", target, repeat, jobs, ...(only ? { only } : {}) };
+    return { action: "run", target, repeat, jobs, cases, ...(only ? { only } : {}) };
   }
 
   if (tokens.length > 1) return { action: "error", message: `Unknown subcommand "${head}".` };
@@ -569,7 +616,7 @@ function announce(ctx: ExtensionCommandContext, text: string, level: "info" | "w
 async function handleRun(
   pi: ExtensionAPI,
   ctx: ExtensionCommandContext,
-  parsed: { target: string; repeat: number; jobs: number; only?: "trigger" | "adherence" },
+  parsed: { target: string; repeat: number; jobs: number; only?: "trigger" | "adherence"; cases: string[] },
 ): Promise<void> {
   const target = await resolveEvalTarget(ctx, parsed.target);
   if (!target.ok) {
@@ -582,7 +629,7 @@ async function handleRun(
     announce(ctx, loaded.errors.join("\n"), "error");
     return;
   }
-  const suite = loaded.suite;
+  const suite = filterSuite(loaded.suite, parsed.cases);
 
   const config = evalConfig(ctx, parsed.repeat, parsed.jobs);
   if (!config) {
@@ -594,7 +641,8 @@ async function handleRun(
   const adherenceCases = parsed.only === "trigger" ? 0 : suite.adherence.length;
   if (triggerCases + adherenceCases === 0) {
     const kind = parsed.only ? `${parsed.only} ` : "";
-    announce(ctx, `${EVALS_FILENAME} for ${target.meta.name} has no ${kind}cases to run.`, "error");
+    const filtered = parsed.cases.length > 0 ? ` matching ${parsed.cases.map((c) => `"${c}"`).join(" or ")}` : "";
+    announce(ctx, `${EVALS_FILENAME} for ${target.meta.name} has no ${kind}cases${filtered} to run.`, "error");
     return;
   }
 
@@ -655,7 +703,7 @@ export default async function (pi: ExtensionAPI) {
 
   pi.registerCommand("skill-eval", {
     description:
-      "triage | review <target> | run <skill> [--repeat N] [--jobs N] [--only trigger|adherence]",
+      "triage | review <target> | run <skill> [--repeat N] [--jobs N] [--only trigger|adherence] [--case <substring>]",
     getArgumentCompletions: (prefix: string) => {
       const items = [
         { value: "triage", label: "triage — rank skills and AGENTS.md files by trim potential" },

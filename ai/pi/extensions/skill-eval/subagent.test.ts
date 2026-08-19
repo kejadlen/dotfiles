@@ -6,8 +6,11 @@ import { join } from "node:path";
 import {
   buildSubagentArgs,
   collectEvents,
+  extractApiError,
   extractCost,
   extractFinalText,
+  extractRetries,
+  extractStopReason,
   extractToolCalls,
   formatTranscript,
   runSetupScript,
@@ -191,4 +194,47 @@ test("runSubagent kills a run that outlives its timeout", async () => {
 
   assert.equal(result.timedOut, true);
   assert.match(result.error ?? "", /exceeded 200ms/);
+});
+
+test("extractRetries and extractApiError surface provider trouble inside a run", () => {
+  const events = [
+    { type: "auto_retry_start", attempt: 1, maxAttempts: 3, delayMs: 1000, errorMessage: "overloaded_error" },
+    { type: "auto_retry_start", attempt: 2, maxAttempts: 3, delayMs: 2000, errorMessage: "overloaded_error" },
+    { type: "auto_retry_end", success: false, attempt: 2, finalError: "still overloaded" },
+    { type: "agent_end", messages: [] },
+  ];
+  assert.deepEqual(extractRetries(events), [
+    { attempt: 1, maxAttempts: 3, errorMessage: "overloaded_error" },
+    { attempt: 2, maxAttempts: 3, errorMessage: "overloaded_error" },
+  ]);
+  assert.equal(extractApiError(events), "still overloaded");
+});
+
+test("extractApiError reports an errored final message and stays quiet on success", () => {
+  const errored = [
+    {
+      type: "agent_end",
+      messages: [{ role: "assistant", content: [], stopReason: "error", errorMessage: "context window exceeded" }],
+    },
+  ];
+  assert.equal(extractApiError(errored), "context window exceeded");
+  assert.equal(extractStopReason(errored), "error");
+  assert.equal(extractApiError([agentEnd]), undefined);
+  assert.equal(extractStopReason([agentEnd]), undefined);
+});
+
+test("runSubagent reports retries, stop reason, and elapsed time", async () => {
+  const script = `
+process.stdin.on("data", () => {});
+process.stdin.on("end", () => {
+  const emit = (o) => process.stdout.write(JSON.stringify(o) + "\\n");
+  emit({ type: "auto_retry_start", attempt: 1, maxAttempts: 3, delayMs: 10, errorMessage: "overloaded_error" });
+  emit({ type: "agent_end", messages: [{ role: "assistant", content: [{ type: "text", text: "done" }], stopReason: "stop", usage: { cost: { total: 0.01 } } }] });
+});
+`;
+  const result = await withFakePi(script, () => runSubagent({ ...baseOptions, cwd: "/tmp", stdin: "hi" }));
+  assert.equal(result.error, undefined);
+  assert.equal(result.stopReason, "stop");
+  assert.deepEqual(result.retries, [{ attempt: 1, maxAttempts: 3, errorMessage: "overloaded_error" }]);
+  assert.ok(result.elapsedMs >= 0);
 });

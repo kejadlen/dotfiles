@@ -319,7 +319,7 @@ test("buildReviewPrompt notes no usage signal for AGENTS.md", () => {
   assert.match(prompt, /No usage signal available/);
 });
 
-import { parseCommandArgs } from "./index.ts";
+import { parseCommandArgs, tokenizeArgs } from "./index.ts";
 
 test("parseCommandArgs treats no arguments and an explicit subcommand as triage", () => {
   assert.deepEqual(parseCommandArgs(""), { action: "triage" });
@@ -333,13 +333,24 @@ test("parseCommandArgs keeps the bare-target form working as a review", () => {
 });
 
 test("parseCommandArgs reads run flags and applies defaults", () => {
-  assert.deepEqual(parseCommandArgs("run jj"), { action: "run", target: "jj", repeat: 1, jobs: 3 });
+  assert.deepEqual(parseCommandArgs("run jj"), { action: "run", target: "jj", repeat: 1, jobs: 3, cases: [] });
   assert.deepEqual(parseCommandArgs("run jj --repeat 3 --jobs 1 --only trigger"), {
     action: "run",
     target: "jj",
     repeat: 3,
     jobs: 1,
+    cases: [],
     only: "trigger",
+  });
+});
+
+test("parseCommandArgs collects repeated --case filters", () => {
+  assert.deepEqual(parseCommandArgs("run jj --case pitfall --case squash"), {
+    action: "run",
+    target: "jj",
+    repeat: 1,
+    jobs: 3,
+    cases: ["pitfall", "squash"],
   });
 });
 
@@ -351,6 +362,8 @@ test("parseCommandArgs rejects malformed input with a specific message", () => {
     ["run jj --jobs two", /positive integer/],
     ["run jj --only sideways", /trigger or adherence/],
     ["run jj --wat", /Unknown flag --wat/],
+    ["run jj --case", /--case needs a substring/],
+    ["run jj --case --jobs 2", /--case needs a substring/],
     ["triage jj", /takes no arguments/],
     ["review", /exactly one target/],
     ["review a b", /exactly one target/],
@@ -361,4 +374,22 @@ test("parseCommandArgs rejects malformed input with a specific message", () => {
     assert.equal(parsed.action, "error", `expected an error for "${args}"`);
     if (parsed.action === "error") assert.match(parsed.message, pattern);
   }
+});
+
+test("tokenizeArgs keeps quoted runs together and drops the quotes", () => {
+  assert.deepEqual(tokenizeArgs("run jj --case 'Squash @ into'"), ["run", "jj", "--case", "Squash @ into"]);
+  assert.deepEqual(tokenizeArgs('run jj --case "file show"'), ["run", "jj", "--case", "file show"]);
+  assert.deepEqual(tokenizeArgs("  run   jj  "), ["run", "jj"]);
+  assert.deepEqual(tokenizeArgs(""), []);
+  assert.deepEqual(tokenizeArgs("run jj --case ''"), ["run", "jj", "--case", ""]);
+});
+
+test("parseCommandArgs accepts a quoted multi-word case filter", () => {
+  assert.deepEqual(parseCommandArgs("run jj --case 'Squash @ into'"), {
+    action: "run",
+    target: "jj",
+    repeat: 1,
+    jobs: 3,
+    cases: ["Squash @ into"],
+  });
 });

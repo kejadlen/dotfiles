@@ -8,6 +8,8 @@ import {
   formatEvalReport,
   loadedSkill,
   mapWithConcurrency,
+  filterSuite,
+  matchesFilters,
   parseJudgeVerdicts,
   runEvals,
   skillLoadPath,
@@ -103,9 +105,9 @@ const report: EvalReport = {
   thinking: "high",
   repeat: 1,
   trigger: [
-    { kind: "trigger", expected: "load", prompt: "calibrate the bench widget", attempts: [{ loaded: true }], passes: 1, costUsd: 0.01 },
-    { kind: "trigger", expected: "load", prompt: "check widget torque", attempts: [{ loaded: false }], passes: 0, costUsd: 0.01 },
-    { kind: "trigger", expected: "skip", prompt: "what is 2 + 2", attempts: [{ loaded: true }], passes: 0, costUsd: 0.01 },
+    { kind: "trigger", expected: "load", prompt: "calibrate the bench widget", attempts: [{ loaded: true, retries: [] }], passes: 1, costUsd: 0.01 },
+    { kind: "trigger", expected: "load", prompt: "check widget torque", attempts: [{ loaded: false, retries: [] }], passes: 0, costUsd: 0.01 },
+    { kind: "trigger", expected: "skip", prompt: "what is 2 + 2", attempts: [{ loaded: true, retries: [] }], passes: 0, costUsd: 0.01 },
   ],
   adherence: [
     {
@@ -114,6 +116,7 @@ const report: EvalReport = {
       attempts: [
         {
           transcript: "[assistant] wrangle --torque 42",
+          retries: [],
           expectations: [
             { expectation: "names the torque value 42", verdict: "pass", reason: "said 42" },
             { expectation: "reports newton-metres", verdict: "fail", reason: "no units given" },
@@ -153,10 +156,36 @@ test("summarizeFailures reports each miss and each unmet expectation", () => {
 test("summarizeFailures says nothing when every case passed", () => {
   const clean: EvalReport = {
     ...report,
-    trigger: [{ kind: "trigger", expected: "load", prompt: "p", attempts: [{ loaded: true }], passes: 1, costUsd: 0 }],
+    trigger: [
+      { kind: "trigger", expected: "load", prompt: "p", attempts: [{ loaded: true, retries: [] }], passes: 1, costUsd: 0 },
+    ],
     adherence: [],
   };
   assert.deepEqual(summarizeFailures(clean), []);
+});
+
+test("formatEvalReport warns when the provider retried, so scores aren't misread", () => {
+  const retried: EvalReport = {
+    ...report,
+    trigger: [
+      {
+        kind: "trigger",
+        expected: "load",
+        prompt: "p",
+        attempts: [{ loaded: false, retries: [{ attempt: 1, maxAttempts: 3, errorMessage: "overloaded_error" }] }],
+        passes: 0,
+        costUsd: 0,
+      },
+    ],
+    adherence: [],
+  };
+  const markdown = formatEvalReport(retried);
+  assert.match(markdown, /1 provider retry during this run, first: overloaded_error/);
+  assert.match(markdown, /may reflect the provider, not the skill/);
+});
+
+test("formatEvalReport stays quiet about retries when there were none", () => {
+  assert.doesNotMatch(formatEvalReport(report), /provider retr/);
 });
 
 /**
@@ -324,4 +353,32 @@ test("runEvals reports progress for every attempt", async () => {
     else process.env.PI_BIN = previous;
     await rm(dir, { recursive: true, force: true });
   }
+});
+
+test("matchesFilters looks at both the prompt and the note, case-insensitively", () => {
+  const testCase = { prompt: "Squash @ into its parent", note: "pitfall: editor hang" };
+  assert.equal(matchesFilters(testCase, []), true);
+  assert.equal(matchesFilters(testCase, ["PITFALL"]), true);
+  assert.equal(matchesFilters(testCase, ["squash @"]), true);
+  assert.equal(matchesFilters(testCase, ["rebase"]), false);
+  assert.equal(matchesFilters(testCase, ["rebase", "editor"]), true);
+});
+
+test("filterSuite narrows every section and leaves an unfiltered suite alone", () => {
+  const suite = {
+    triggerPositive: [{ prompt: "squash this" }, { prompt: "push a stack" }],
+    triggerNegative: [{ prompt: "git submodule" }],
+    adherence: [
+      { prompt: "squash into parent", expect: ["a"], tools: ["read"] },
+      { prompt: "push bottom-first", expect: ["b"], tools: ["read"] },
+    ],
+  };
+
+  const filtered = filterSuite(suite, ["squash"]);
+  assert.deepEqual(filtered.triggerPositive, [{ prompt: "squash this" }]);
+  assert.deepEqual(filtered.triggerNegative, []);
+  assert.equal(filtered.adherence.length, 1);
+  assert.equal(filtered.adherence[0].prompt, "squash into parent");
+
+  assert.deepEqual(filterSuite(suite, []), suite);
 });

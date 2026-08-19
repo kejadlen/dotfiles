@@ -87,17 +87,33 @@ problem in the file, so one run of the command surfaces all of them.
 /skill-eval run jj --only trigger        # skip the expensive half
 /skill-eval run jj --repeat 3            # attempts per case, to expose flakiness
 /skill-eval run jj --jobs 1              # cases in flight at once (default 3)
+/skill-eval run jj --case pitfall        # only cases whose prompt or note matches
+/skill-eval run jj --case 'file show'    # quote a filter containing spaces
 ```
 
 The command confirms the run count first. Trigger cases cost one model run
-each; adherence cases cost two, because grading is its own run. A report lands
-in `$XDG_STATE_HOME/pi/skill-eval/reports/` and, when anything failed, the
-failures arrive as a follow-up message so the conversation can fix the text.
+each; adherence cases cost two, because grading is its own run. Use `--case`
+while authoring, so iterating on one case doesn't re-bill the ones that already
+pass. A report lands in `$XDG_STATE_HOME/pi/skill-eval/reports/` and, when
+anything failed, the failures arrive as a follow-up message so the conversation
+can fix the text.
+
+A report that opens with a provider-retry line is not a verdict on the skill.
+Overload and rate limiting inside a nested run can empty a reply, which lands as
+`unclear` rather than `fail`; re-run those cases with `--case` before believing
+them.
 
 Trigger misses usually mean the `description` field needs the vocabulary of the
 prompt that missed. False positives on negative cases mean it claims too much
 ground. Adherence failures point at the body: an instruction stated once in
 passing, buried under prose, or contradicted elsewhere in the file.
+
+Write adherence cases where the skill has to *overcome* something, not where it
+merely agrees with the model. Asking whether a strong model can restate advice
+it just read tells you little; asking it to do something its training says is
+spelled differently tells you whether the skill lands. `ai/skills/jj/evals.yml`
+is the worked example — its second half draws on `pitfalls.md`, where jj's real
+behavior contradicts a git-shaped instinct.
 
 ## Layout
 

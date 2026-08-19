@@ -18,7 +18,7 @@ import { mkdtemp, mkdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
 import type { AdherenceCase, EvalSuite, TriggerCase } from "./evals.ts";
-import { formatTranscript, runSetupScript, runSubagent, type SubagentResult } from "./subagent.ts";
+import { formatTranscript, runSetupScript, runSubagent, type RetryNote, type SubagentResult } from "./subagent.ts";
 
 export interface EvalRunConfig {
   provider: string;
@@ -43,6 +43,7 @@ export interface ExpectationResult {
 
 export interface TriggerAttempt {
   loaded: boolean;
+  retries: RetryNote[];
   error?: string;
 }
 
@@ -59,6 +60,7 @@ export interface TriggerResult {
 export interface AdherenceAttempt {
   expectations: ExpectationResult[];
   transcript: string;
+  retries: RetryNote[];
   error?: string;
 }
 
@@ -114,6 +116,23 @@ export function loadedSkill(toolCalls: { name: string; args: Record<string, unkn
   });
 }
 
+/** Case matches when any filter appears in its prompt or note, compared case-insensitively. */
+export function matchesFilters(testCase: { prompt: string; note?: string }, filters: string[]): boolean {
+  if (filters.length === 0) return true;
+  const haystack = `${testCase.prompt}\n${testCase.note ?? ""}`.toLowerCase();
+  return filters.some((filter) => haystack.includes(filter.toLowerCase()));
+}
+
+/** Narrow a suite to the cases matching `--case` filters, for iterating on one case. */
+export function filterSuite(suite: EvalSuite, filters: string[]): EvalSuite {
+  if (filters.length === 0) return suite;
+  return {
+    triggerPositive: suite.triggerPositive.filter((c) => matchesFilters(c, filters)),
+    triggerNegative: suite.triggerNegative.filter((c) => matchesFilters(c, filters)),
+    adherence: suite.adherence.filter((c) => matchesFilters(c, filters)),
+  };
+}
+
 export function buildJudgePrompt(
   skillName: string,
   task: string,
@@ -143,10 +162,18 @@ export function buildJudgePrompt(
   ].join("\n");
 }
 
-/** Pull the verdict array out of a judge reply, tolerating code fences and surrounding prose. */
-export function parseJudgeVerdicts(text: string, expectations: string[]): ExpectationResult[] {
+/**
+ * Pull the verdict array out of a judge reply, tolerating code fences and
+ * surrounding prose. `context` describes the judge run itself, so an empty or
+ * truncated reply says why instead of just "unclear".
+ */
+export function parseJudgeVerdicts(text: string, expectations: string[], context?: string): ExpectationResult[] {
   const fallback = (reason: string): ExpectationResult[] =>
-    expectations.map((expectation) => ({ expectation, verdict: "unclear" as Verdict, reason }));
+    expectations.map((expectation) => ({
+      expectation,
+      verdict: "unclear" as Verdict,
+      reason: context ? `${reason} (${context})` : reason,
+    }));
 
   const start = text.indexOf("[");
   const end = text.lastIndexOf("]");
@@ -201,6 +228,7 @@ async function runTriggerAttempt(
     return {
       attempt: {
         loaded: loadedSkill(result.toolCalls, skillPath),
+        retries: result.retries,
         ...(result.error ? { error: result.error } : {}),
       },
       costUsd: result.costUsd,
@@ -213,7 +241,7 @@ async function judge(
   testCase: AdherenceCase,
   transcript: string,
   config: EvalRunConfig,
-): Promise<{ expectations: ExpectationResult[]; costUsd: number }> {
+): Promise<{ expectations: ExpectationResult[]; costUsd: number; retries: RetryNote[] }> {
   return await withSandbox("judge", async (cwd) => {
     const result = await runSubagent({
       cwd,
@@ -234,10 +262,25 @@ async function judge(
           reason: `judge run failed: ${result.error}`,
         })),
         costUsd: result.costUsd,
+        retries: result.retries,
       };
     }
-    return { expectations: parseJudgeVerdicts(result.finalText, testCase.expect), costUsd: result.costUsd };
+    return {
+      expectations: parseJudgeVerdicts(result.finalText, testCase.expect, describeJudgeRun(result)),
+      costUsd: result.costUsd,
+      retries: result.retries,
+    };
   });
+}
+
+/** Why a judge reply might be unusable: truncation, retries, or an empty response. */
+function describeJudgeRun(result: SubagentResult): string {
+  const parts = [`stopReason ${result.stopReason ?? "unknown"}`];
+  if (result.retries.length > 0) {
+    parts.push(`${result.retries.length} provider retr${result.retries.length === 1 ? "y" : "ies"}: ${result.retries[0].errorMessage}`);
+  }
+  parts.push(result.finalText.trim() ? `reply began "${firstLine(result.finalText, 60)}"` : "reply was empty");
+  return parts.join("; ");
 }
 
 async function runAdherenceAttempt(
@@ -257,6 +300,7 @@ async function runAdherenceAttempt(
           attempt: {
             expectations: unclearAll(testCase.expect, `setup script failed: ${setup.output || "no output"}`),
             transcript: "",
+            retries: [],
             error: `setup script failed: ${setup.output || "no output"}`,
           },
           costUsd: 0,
@@ -281,7 +325,7 @@ async function runAdherenceAttempt(
     } catch (error) {
       const message = (error as Error).message;
       return {
-        attempt: { expectations: unclearAll(testCase.expect, message), transcript: "", error: message },
+        attempt: { expectations: unclearAll(testCase.expect, message), transcript: "", retries: [], error: message },
         costUsd: 0,
       };
     }
@@ -292,6 +336,7 @@ async function runAdherenceAttempt(
         attempt: {
           expectations: unclearAll(testCase.expect, `run failed: ${result.error}`),
           transcript,
+          retries: result.retries,
           error: result.error,
         },
         costUsd: result.costUsd,
@@ -300,7 +345,11 @@ async function runAdherenceAttempt(
 
     const graded = await judge(skillName, testCase, transcript, config);
     return {
-      attempt: { expectations: graded.expectations, transcript },
+      attempt: {
+        expectations: graded.expectations,
+        transcript,
+        retries: [...result.retries, ...graded.retries],
+      },
       costUsd: result.costUsd + graded.costUsd,
     };
   });
@@ -441,6 +490,15 @@ export function formatEvalReport(report: EvalReport): string {
       `${report.repeat} attempt(s) per case · $${report.costUsd.toFixed(4)} · ${seconds}s`,
   );
   lines.push("");
+
+  const retries = [...report.trigger, ...report.adherence].flatMap((row) => row.attempts.flatMap((a) => a.retries));
+  if (retries.length > 0) {
+    lines.push(
+      `${retries.length} provider retr${retries.length === 1 ? "y" : "ies"} during this run, ` +
+        `first: ${retries[0].errorMessage}. Scores below may reflect the provider, not the skill.`,
+    );
+    lines.push("");
+  }
 
   if (report.trigger.length > 0) {
     lines.push(`## Trigger fidelity — ${triggerPasses}/${triggerTotal}`);
