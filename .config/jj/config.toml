@@ -54,6 +54,7 @@ max-inline-alternation = 0
 [colors]
 "diff modified" = "blue"
 "diff token" = { underline = false }
+log_private = "#a8a8a8"
 
 [signing]
 backend = "ssh"
@@ -77,16 +78,48 @@ draft_commit_description = '''
     diff.git(),
   )
 '''
-# show an empty diamond when unpushed
+# show an empty diamond when unpushed, a filled diamond-with-dot when private
 log_node = '''
-  if(self && !current_working_copy && !immutable && !conflict && in_branch(self),
-    "◇",
-    builtin_log_node
+  if(self && !current_working_copy && !immutable && !conflict && is_private(self),
+    "◈",
+    if(self && !current_working_copy && !immutable && !conflict && in_branch(self),
+      "◇",
+      builtin_log_node
+    )
+  )
+'''
+
+# builtin_log_compact fork: highlight the description of private commits.
+# Re-check against the builtin when updating jj.
+log = '''
+  if(self.root(),
+    format_root_commit(self),
+    label(
+      separate(" ",
+        if(self.current_working_copy(), "working_copy"),
+        if(self.immutable(), "immutable", "mutable"),
+        if(self.conflict(), "conflicted"),
+      ),
+      concat(
+        format_short_commit_header(self) ++ "\n",
+        separate(" ",
+          if(self.empty(), empty_commit_marker),
+          if(self.description(),
+            if(is_private(self) && !self.current_working_copy(),
+              label("log_private", self.description().first_line()),
+              self.description().first_line()
+            ),
+            label(if(self.empty(), "empty"), description_placeholder),
+          ),
+        ) ++ "\n",
+      ),
+    )
   )
 '''
 
 [template-aliases]
 'in_branch(commit)' = 'commit.contained_in("immutable_heads()..bookmarks()")'
+'is_private(commit)' = 'commit.description().starts_with("private:") || commit.description().contains("#private")'
 
 [ui]
 default-command = "st"
@@ -129,7 +162,7 @@ bookmark-advance-to = 'closest_pushable(@)'
 'trunk' = 'trunk()'
 
 'wip()' = 'description("wip:*")'
-'private()' = 'description("private:*")'
+'private()' = 'description("private:*") | description("*#private*")'
 
 [aliases]
 accuse = ["file", "annotate"]
