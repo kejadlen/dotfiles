@@ -1,7 +1,8 @@
 # Skill Eval
 
 Three ways to judge a skill or `AGENTS.md` file, from cheapest to most
-expensive:
+expensive. All three push toward a smaller file: efficacy is the bar every
+change has to clear, and length is what gets optimized once it's cleared.
 
 | Command | What it does | Cost |
 |---------|--------------|------|
@@ -94,9 +95,19 @@ problem in the file, so one run of the command surfaces all of them.
 The command confirms the run count first. Trigger cases cost one model run
 each; adherence cases cost two, because grading is its own run. Use `--case`
 while authoring, so iterating on one case doesn't re-bill the ones that already
-pass. A report lands in `$XDG_STATE_HOME/pi/skill-eval/reports/` and, when
-anything failed, the failures arrive as a follow-up message so the conversation
-can fix the text.
+pass. A report lands in `$XDG_STATE_HOME/pi/skill-eval/reports/`.
+
+Failures arrive as a follow-up message so the conversation can fix the text,
+with the ask being to sharpen or cut what's there before adding anything. A
+clean run over the whole suite arrives as a trim invitation instead: a green
+suite is the safety net that makes cutting cheap, since you can cut, re-run,
+and read a still-green score as proof the text wasn't load-bearing. Runs
+narrowed by `--case` or `--only` skip the invitation, because they only prove
+part of the suite.
+
+The report also lists bundled reference files no run opened. That's the
+cheapest trim signal the run produces, and it cuts both ways: either the file
+isn't earning its place, or no case reaches the behavior it covers.
 
 A report that opens with a provider-retry line is not a verdict on the skill.
 Overload and rate limiting inside a nested run can empty a reply, which lands as
@@ -122,7 +133,7 @@ behavior contradicts a git-shaped instinct.
 | `index.ts` | Command and tool registration, triage, review, target resolution |
 | `evals.ts` | `evals.yml` loading and validation |
 | `subagent.ts` | Spawning nested `pi` processes and parsing their JSON event stream |
-| `run.ts` | Case orchestration, judging, scoring, report formatting |
+| `run.ts` | Case orchestration, judging, scoring, report and follow-up formatting |
 
 Tests run without spending API credit; a stub entrypoint injected through
 `PI_BIN` stands in for `pi`.

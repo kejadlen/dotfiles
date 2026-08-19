@@ -20,7 +20,15 @@ import type {
   ExtensionCommandContext,
 } from "@mariozechner/pi-coding-agent";
 import { EVALS_FILENAME, loadEvalSuite } from "./evals.ts";
-import { filterSuite, formatEvalReport, runEvals, summarizeFailures, type EvalRunConfig } from "./run.ts";
+import {
+  buildFailureFollowUp,
+  buildTrimFollowUp,
+  filterSuite,
+  formatEvalReport,
+  runEvals,
+  summarizeFailures,
+  type EvalRunConfig,
+} from "./run.ts";
 
 // ---------- Types ----------
 
@@ -355,18 +363,29 @@ export function resolveTarget(
 
 // ---------- Review prompt ----------
 
-const SKILL_RUBRIC = `Review this skill for trim opportunities:
-- Redundant or repeated instructions
-- Sections that just restate the description
-- Unclear or unnecessary instructions
-- Structural drift from the skill-notes authoring conventions
-Propose specific cuts, not just observations.`;
+const SKILL_RUBRIC = `Cut this skill down. Load the \`tighten-docs\` skill and work its audit, then check the
+result against the \`skill-notes\` authoring conventions.
 
-const AGENTS_RUBRIC = `Review this AGENTS.md file for trim opportunities:
+What this file is likely paying for and not using:
+- Instructions the model already follows without being told
+- Repetition across sections, or a section that restates the description
+- Examples past the one that carries the point
+- Reference files nothing in SKILL.md routes to
+
+Efficacy outranks size. Text that changes behavior stays even when it reads badly, and the
+\`description\` frontmatter keeps every trigger context it has — a smaller skill that stops
+loading is a worse skill. Propose specific cuts, name what the skill would lose if each one
+landed, and give the line count you'd end at.`;
+
+const AGENTS_RUBRIC = `Cut this AGENTS.md down. Load the \`tighten-docs\` skill and work its audit.
+
+What this file is likely paying for and not using:
 - Stale guidance that no longer reflects current practice
-- Guidance duplicated elsewhere (in this file or in a referenced skill)
-- Instructions that don't actually change behavior
-Propose specific cuts, not just observations.`;
+- Guidance duplicated here and in a skill this file already routes to
+- Instructions that don't change behavior
+
+Every line here loads into every session, so length is the whole cost — but text that changes
+behavior stays regardless. Propose specific cuts and give the line count you'd end at.`;
 
 export function buildReviewPrompt(
   kind: "skill" | "agents",
@@ -382,7 +401,17 @@ export function buildReviewPrompt(
         }.`
       : "No usage signal available for this file type.";
 
-  return [`# Trim review: ${name}`, "", usageLine, "", rubric, "", "```", content, "```"].join("\n");
+  return [
+    `# Trim review: ${name}`,
+    "",
+    `${countLines(content)} line${countLines(content) === 1 ? "" : "s"}. ${usageLine}`,
+    "",
+    rubric,
+    "",
+    "```",
+    content,
+    "```",
+  ].join("\n");
 }
 
 // ---------- Command arguments ----------
@@ -682,20 +711,14 @@ async function handleRun(
   const failures = summarizeFailures(report);
   announce(ctx, `${markdown}\n\nReport saved to ${reportPath}`, failures.length > 0 ? "warning" : "info");
 
-  if (failures.length === 0) return;
-  pi.sendUserMessage(
-    [
-      `# Eval failures: ${report.skillName}`,
-      "",
-      `Behavioral evals for ${target.meta.path} came back with failures. Full report: ${reportPath}`,
-      "",
-      ...failures.map((note) => `- ${note}`),
-      "",
-      "Read the skill and propose specific edits to its text that would fix these, or say why a case is",
-      "wrong about the skill rather than the skill being wrong.",
-    ].join("\n"),
-    { deliverAs: "followUp" },
-  );
+  if (failures.length > 0) {
+    pi.sendUserMessage(buildFailureFollowUp(report, failures, reportPath), { deliverAs: "followUp" });
+    return;
+  }
+
+  // A green run only licenses trimming if it covered the whole suite.
+  if (parsed.cases.length > 0 || parsed.only !== undefined) return;
+  pi.sendUserMessage(buildTrimFollowUp(report, target.meta.lineCount, reportPath), { deliverAs: "followUp" });
 }
 
 export default async function (pi: ExtensionAPI) {

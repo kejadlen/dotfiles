@@ -12,12 +12,15 @@
  *
  * Runs are hermetic apart from globally discovered skills: no context files, no
  * extensions, no session, and a fresh sandbox directory per case.
+ *
+ * Scores are the point, but the run also feeds trimming: it records which
+ * bundled files anything opened, and a clean suite is the license to cut.
  */
 
-import { mkdtemp, mkdir, rm } from "node:fs/promises";
+import { mkdtemp, mkdir, readdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
-import type { AdherenceCase, EvalSuite, TriggerCase } from "./evals.ts";
+import { EVALS_FILENAME, type AdherenceCase, type EvalSuite, type TriggerCase } from "./evals.ts";
 import { formatTranscript, runSetupScript, runSubagent, type RetryNote, type SubagentResult } from "./subagent.ts";
 
 export interface EvalRunConfig {
@@ -43,6 +46,8 @@ export interface ExpectationResult {
 
 export interface TriggerAttempt {
   loaded: boolean;
+  /** Bundled files this attempt opened, relative to the skill directory. */
+  reads: string[];
   retries: RetryNote[];
   error?: string;
 }
@@ -60,6 +65,8 @@ export interface TriggerResult {
 export interface AdherenceAttempt {
   expectations: ExpectationResult[];
   transcript: string;
+  /** Bundled files this attempt opened, relative to the skill directory. */
+  reads: string[];
   retries: RetryNote[];
   error?: string;
 }
@@ -79,6 +86,8 @@ export interface EvalReport {
   model: string;
   thinking?: string;
   repeat: number;
+  /** Files bundled beside SKILL.md, relative to its directory. Empty for a bare `.md` skill. */
+  bundledFiles: string[];
   trigger: TriggerResult[];
   adherence: AdherenceResult[];
   costUsd: number;
@@ -97,23 +106,65 @@ export function skillLoadPath(skillPath: string): string {
 }
 
 /**
- * True when the run read the skill itself, or one of its bundled references.
- * A bare `.md` skill shares its directory with unrelated skills, so only the
- * file itself counts there.
+ * Which bundled references a run opened, relative to the skill directory. A
+ * bare `.md` skill shares its directory with unrelated skills, so it has no
+ * bundle to attribute reads to.
  */
+export function bundledReads(
+  toolCalls: { name: string; args: Record<string, unknown> }[],
+  skillPath: string,
+): string[] {
+  if (basename(skillPath) !== "SKILL.md") return [];
+  const bundleDir = resolve(dirname(skillPath));
+  const reads = new Set<string>();
+  for (const call of toolCalls) {
+    if (call.name !== "read") continue;
+    const raw = call.args?.path;
+    if (typeof raw !== "string") continue;
+    const rel = relative(bundleDir, resolve(raw));
+    if (rel === "" || rel.startsWith("..")) continue;
+    reads.add(rel.split(sep).join("/"));
+  }
+  return [...reads].sort();
+}
+
+/** True when the run read the skill itself, or one of its bundled references. */
 export function loadedSkill(toolCalls: { name: string; args: Record<string, unknown> }[], skillPath: string): boolean {
   const target = resolve(skillPath);
-  const bundleDir = basename(skillPath) === "SKILL.md" ? resolve(dirname(skillPath)) : undefined;
-  return toolCalls.some((call) => {
-    if (call.name !== "read") return false;
-    const raw = call.args?.path;
-    if (typeof raw !== "string") return false;
-    const read = resolve(raw);
-    if (read === target) return true;
-    if (!bundleDir) return false;
-    const rel = relative(bundleDir, read);
-    return rel !== "" && !rel.startsWith("..") && !rel.startsWith(`..${sep}`);
-  });
+  const readTarget = toolCalls.some(
+    (call) => call.name === "read" && typeof call.args?.path === "string" && resolve(call.args.path) === target,
+  );
+  return readTarget || bundledReads(toolCalls, skillPath).length > 0;
+}
+
+/**
+ * Files bundled beside SKILL.md, as trim candidates: a reference no case ever
+ * opens is either dead weight or a gap in the suite. `evals.yml` is the suite
+ * itself, so it never counts.
+ */
+export async function listBundledFiles(skillPath: string): Promise<string[]> {
+  if (basename(skillPath) !== "SKILL.md") return [];
+  const root = resolve(dirname(skillPath));
+
+  const walk = async (dir: string): Promise<string[]> => {
+    let entries;
+    try {
+      entries = await readdir(dir, { withFileTypes: true });
+    } catch {
+      return [];
+    }
+    const found: string[] = [];
+    for (const entry of entries) {
+      if (entry.name.startsWith(".")) continue;
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) found.push(...(await walk(full)));
+      else if (entry.isFile()) found.push(relative(root, full).split(sep).join("/"));
+    }
+    return found;
+  };
+
+  const files = await walk(root);
+  return files.filter((file) => file !== "SKILL.md" && file !== EVALS_FILENAME).sort();
 }
 
 /** Case matches when any filter appears in its prompt or note, compared case-insensitively. */
@@ -228,6 +279,7 @@ async function runTriggerAttempt(
     return {
       attempt: {
         loaded: loadedSkill(result.toolCalls, skillPath),
+        reads: bundledReads(result.toolCalls, skillPath),
         retries: result.retries,
         ...(result.error ? { error: result.error } : {}),
       },
@@ -300,6 +352,7 @@ async function runAdherenceAttempt(
           attempt: {
             expectations: unclearAll(testCase.expect, `setup script failed: ${setup.output || "no output"}`),
             transcript: "",
+            reads: [],
             retries: [],
             error: `setup script failed: ${setup.output || "no output"}`,
           },
@@ -325,7 +378,7 @@ async function runAdherenceAttempt(
     } catch (error) {
       const message = (error as Error).message;
       return {
-        attempt: { expectations: unclearAll(testCase.expect, message), transcript: "", retries: [], error: message },
+        attempt: { expectations: unclearAll(testCase.expect, message), transcript: "", reads: [], retries: [], error: message },
         costUsd: 0,
       };
     }
@@ -336,6 +389,7 @@ async function runAdherenceAttempt(
         attempt: {
           expectations: unclearAll(testCase.expect, `run failed: ${result.error}`),
           transcript,
+          reads: bundledReads(result.toolCalls, skillPath),
           retries: result.retries,
           error: result.error,
         },
@@ -348,6 +402,7 @@ async function runAdherenceAttempt(
       attempt: {
         expectations: graded.expectations,
         transcript,
+        reads: bundledReads(result.toolCalls, skillPath),
         retries: [...result.retries, ...graded.retries],
       },
       costUsd: result.costUsd + graded.costUsd,
@@ -457,6 +512,7 @@ export async function runEvals({ skillName, skillPath, suite, config, only }: Ru
     model: `${config.provider}/${config.model}`,
     thinking: config.thinking,
     repeat: config.repeat,
+    bundledFiles: await listBundledFiles(skillPath),
     trigger,
     adherence,
     costUsd: results.reduce((sum, r) => sum + r.costUsd, 0),
@@ -471,6 +527,17 @@ export async function runEvals({ skillName, skillPath, suite, config, only }: Ru
 function firstLine(text: string, max = 80): string {
   const line = text.split("\n")[0].trim();
   return line.length > max ? `${line.slice(0, max - 1)}…` : line;
+}
+
+/** Bundled references no attempt opened — the cheapest trim candidates in the skill. */
+export function unusedBundledFiles(report: EvalReport): string[] {
+  const opened = new Set<string>();
+  for (const row of [...report.trigger, ...report.adherence]) {
+    for (const attempt of row.attempts) {
+      for (const file of attempt.reads) opened.add(file);
+    }
+  }
+  return report.bundledFiles.filter((file) => !opened.has(file));
 }
 
 export function formatEvalReport(report: EvalReport): string {
@@ -544,6 +611,21 @@ export function formatEvalReport(report: EvalReport): string {
     }
   }
 
+  const unused = unusedBundledFiles(report);
+  if (report.bundledFiles.length > 0) {
+    const total = report.bundledFiles.length;
+    const them = unused.length === 1 ? "it" : "them";
+    lines.push("## Trim signals");
+    lines.push("");
+    lines.push(
+      unused.length === 0
+        ? `Some run opened ${total === 1 ? "the one bundled file" : `all ${total} bundled files`}.`
+        : `Never opened, ${unused.length} of ${total} bundled ${total === 1 ? "file" : "files"}: ` +
+          `${unused.join(", ")}. Either no case reaches ${them} or the skill doesn't need ${them}.`,
+    );
+    lines.push("");
+  }
+
   return lines.join("\n");
 }
 
@@ -570,4 +652,47 @@ export function summarizeFailures(report: EvalReport): string[] {
     }
   }
   return notes;
+}
+
+/**
+ * Follow-up for a run with failures. Efficacy comes first, but a fix that only
+ * adds text is how a skill bloats, so the ask is to pay for new lines with old
+ * ones.
+ */
+export function buildFailureFollowUp(report: EvalReport, failures: string[], reportPath: string): string {
+  return [
+    `# Eval failures: ${report.skillName}`,
+    "",
+    `Behavioral evals for ${report.skillPath} came back with failures. Full report: ${reportPath}`,
+    "",
+    ...failures.map((note) => `- ${note}`),
+    "",
+    "Read the skill and propose specific edits to its text that would fix these, or say why a case is",
+    "wrong about the skill rather than the skill being wrong.",
+    "",
+    "Reach the fix by sharpening or cutting what's already there before adding anything. If a failure",
+    "genuinely needs new instruction, name something else in the file to delete alongside it.",
+  ].join("\n");
+}
+
+/**
+ * Follow-up for a clean run. A green suite is the safety net that makes cutting
+ * cheap: cut, re-run, and the score says whether the text was load-bearing.
+ */
+export function buildTrimFollowUp(report: EvalReport, lineCount: number, reportPath: string): string {
+  const unused = unusedBundledFiles(report);
+  return [
+    `# Trim pass: ${report.skillName}`,
+    "",
+    `Every case passed for ${report.skillPath} (${report.runs} run(s)). Full report: ${reportPath}`,
+    "",
+    `The suite is now a safety net, so cuts are cheap to verify: cut, re-run \`/skill-eval run ${report.skillName}\`,`,
+    `and a still-green score says the text wasn't load-bearing. The skill file is ${lineCount} lines.`,
+    ...(unused.length > 0
+      ? ["", `No run opened ${unused.join(" or ")}, so start there.`]
+      : []),
+    "",
+    "Load the `tighten-docs` skill and propose specific cuts. Leave the `description` frontmatter's",
+    "trigger vocabulary alone — a smaller skill that stops loading is a worse skill.",
+  ].join("\n");
 }

@@ -308,15 +308,17 @@ test("resolveTarget matches AGENTS.md by basename", () => {
   }
 });
 
-test("buildReviewPrompt includes usage line and content for skills", () => {
-  const prompt = buildReviewPrompt("skill", "jj", "# jj skill content", { count: 3, lastUsed: 1735689600000 });
-  assert.match(prompt, /Usage in the last 90 days: 3/);
+test("buildReviewPrompt includes size, usage, and content for skills", () => {
+  const prompt = buildReviewPrompt("skill", "jj", "# jj skill content\nline two\n", { count: 3, lastUsed: 1735689600000 });
+  assert.match(prompt, /2 lines\. Usage in the last 90 days: 3/);
   assert.match(prompt, /jj skill content/);
+  assert.match(prompt, /tighten-docs/);
+  assert.match(prompt, /Efficacy outranks size/);
 });
 
 test("buildReviewPrompt notes no usage signal for AGENTS.md", () => {
   const prompt = buildReviewPrompt("agents", "/home/user/AGENTS.md", "# instructions", null);
-  assert.match(prompt, /No usage signal available/);
+  assert.match(prompt, /1 line\. No usage signal available/);
 });
 
 import { parseCommandArgs, tokenizeArgs } from "./index.ts";

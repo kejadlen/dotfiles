@@ -1,11 +1,15 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
+  buildFailureFollowUp,
   buildJudgePrompt,
+  buildTrimFollowUp,
+  bundledReads,
   formatEvalReport,
+  listBundledFiles,
   loadedSkill,
   mapWithConcurrency,
   filterSuite,
@@ -14,6 +18,7 @@ import {
   runEvals,
   skillLoadPath,
   summarizeFailures,
+  unusedBundledFiles,
   type EvalReport,
 } from "./run.ts";
 
@@ -36,6 +41,36 @@ test("loadedSkill counts only the file itself for a bare .md skill", () => {
   const skillPath = "/skills/jj.md";
   assert.equal(loadedSkill([{ name: "read", args: { path: "/skills/jj.md" } }], skillPath), true);
   assert.equal(loadedSkill([{ name: "read", args: { path: "/skills/bash.md" } }], skillPath), false);
+});
+
+test("bundledReads lists skill-relative reads and ignores everything else", () => {
+  const skillPath = "/skills/jj/SKILL.md";
+  const calls = [
+    { name: "read", args: { path: "/skills/jj/SKILL.md" } },
+    { name: "read", args: { path: "/skills/jj/references/rebase.md" } },
+    { name: "read", args: { path: "/skills/jj/references/rebase.md" } },
+    { name: "read", args: { path: "/skills/other/SKILL.md" } },
+    { name: "bash", args: { command: "cat /skills/jj/pitfalls.md" } },
+  ];
+  assert.deepEqual(bundledReads(calls, skillPath), ["SKILL.md", "references/rebase.md"]);
+  assert.deepEqual(bundledReads(calls, "/skills/jj.md"), []);
+});
+
+test("listBundledFiles finds references and skips SKILL.md, evals.yml, and dotfiles", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "skill-eval-bundle-"));
+  try {
+    await writeFile(join(dir, "SKILL.md"), "# skill");
+    await writeFile(join(dir, "evals.yml"), "trigger: {}");
+    await writeFile(join(dir, "pitfalls.md"), "# pitfalls");
+    await writeFile(join(dir, ".hidden"), "x");
+    await mkdir(join(dir, "references"));
+    await writeFile(join(dir, "references", "rebase.md"), "# rebase");
+
+    assert.deepEqual(await listBundledFiles(join(dir, "SKILL.md")), ["pitfalls.md", "references/rebase.md"]);
+    assert.deepEqual(await listBundledFiles(join(dir, "bare.md")), []);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
 });
 
 test("skillLoadPath passes the bundle directory for SKILL.md and the file otherwise", () => {
@@ -104,10 +139,11 @@ const report: EvalReport = {
   model: "anthropic/claude-opus-5",
   thinking: "high",
   repeat: 1,
+  bundledFiles: ["calibration.md", "torque.md"],
   trigger: [
-    { kind: "trigger", expected: "load", prompt: "calibrate the bench widget", attempts: [{ loaded: true, retries: [] }], passes: 1, costUsd: 0.01 },
-    { kind: "trigger", expected: "load", prompt: "check widget torque", attempts: [{ loaded: false, retries: [] }], passes: 0, costUsd: 0.01 },
-    { kind: "trigger", expected: "skip", prompt: "what is 2 + 2", attempts: [{ loaded: true, retries: [] }], passes: 0, costUsd: 0.01 },
+    { kind: "trigger", expected: "load", prompt: "calibrate the bench widget", attempts: [{ loaded: true, reads: ["SKILL.md"], retries: [] }], passes: 1, costUsd: 0.01 },
+    { kind: "trigger", expected: "load", prompt: "check widget torque", attempts: [{ loaded: false, reads: [], retries: [] }], passes: 0, costUsd: 0.01 },
+    { kind: "trigger", expected: "skip", prompt: "what is 2 + 2", attempts: [{ loaded: true, reads: ["SKILL.md"], retries: [] }], passes: 0, costUsd: 0.01 },
   ],
   adherence: [
     {
@@ -116,6 +152,7 @@ const report: EvalReport = {
       attempts: [
         {
           transcript: "[assistant] wrangle --torque 42",
+          reads: ["torque.md"],
           retries: [],
           expectations: [
             { expectation: "names the torque value 42", verdict: "pass", reason: "said 42" },
@@ -153,15 +190,70 @@ test("summarizeFailures reports each miss and each unmet expectation", () => {
   assert.match(notes[2], /"reports newton-metres" came back fail: no units given/);
 });
 
+const clean: EvalReport = {
+  ...report,
+  trigger: [
+    {
+      kind: "trigger",
+      expected: "load",
+      prompt: "calibrate the bench widget",
+      attempts: [{ loaded: true, reads: ["SKILL.md", "calibration.md"], retries: [] }],
+      passes: 1,
+      costUsd: 0,
+    },
+  ],
+  adherence: [],
+};
+
 test("summarizeFailures says nothing when every case passed", () => {
-  const clean: EvalReport = {
-    ...report,
-    trigger: [
-      { kind: "trigger", expected: "load", prompt: "p", attempts: [{ loaded: true, retries: [] }], passes: 1, costUsd: 0 },
-    ],
-    adherence: [],
-  };
   assert.deepEqual(summarizeFailures(clean), []);
+});
+
+test("unusedBundledFiles names the references no attempt opened", () => {
+  assert.deepEqual(unusedBundledFiles(report), ["calibration.md"]);
+  assert.deepEqual(unusedBundledFiles(clean), ["torque.md"]);
+  assert.deepEqual(unusedBundledFiles({ ...report, bundledFiles: [] }), []);
+});
+
+test("formatEvalReport flags unopened bundled files as trim candidates", () => {
+  const markdown = formatEvalReport(report);
+  assert.match(markdown, /## Trim signals\n\nNever opened, 1 of 2 bundled files: calibration\.md\./);
+  assert.match(markdown, /Either no case reaches it or the skill doesn't need it\./);
+});
+
+test("formatEvalReport says so when every bundled file earned a read", () => {
+  const covered: EvalReport = { ...clean, bundledFiles: ["calibration.md"] };
+  assert.match(formatEvalReport(covered), /Some run opened the one bundled file\./);
+  const both: EvalReport = { ...clean, bundledFiles: ["SKILL.md", "calibration.md"] };
+  assert.match(formatEvalReport(both), /Some run opened all 2 bundled files\./);
+});
+
+test("formatEvalReport skips trim signals for a skill with no bundled files", () => {
+  assert.doesNotMatch(formatEvalReport({ ...report, bundledFiles: [] }), /Trim signals/);
+});
+
+test("buildFailureFollowUp asks for cuts before additions", () => {
+  const message = buildFailureFollowUp(report, summarizeFailures(report), "/reports/eval.md");
+  assert.match(message, /# Eval failures: widget-wrangler/);
+  assert.match(message, /\/reports\/eval\.md/);
+  assert.match(message, /- The description did not fire/);
+  assert.match(message, /sharpening or cutting what's already there before adding anything/);
+  assert.match(message, /name something else in the file to delete/);
+});
+
+test("buildTrimFollowUp turns a green suite into a trim invitation", () => {
+  const message = buildTrimFollowUp(clean, 212, "/reports/eval.md");
+  assert.match(message, /# Trim pass: widget-wrangler/);
+  assert.match(message, /Every case passed/);
+  assert.match(message, /The skill file is 212 lines/);
+  assert.match(message, /No run opened torque\.md, so start there\./);
+  assert.match(message, /tighten-docs/);
+  assert.match(message, /trigger vocabulary alone/);
+});
+
+test("buildTrimFollowUp stays quiet about unopened files when there are none", () => {
+  const message = buildTrimFollowUp({ ...clean, bundledFiles: [] }, 40, "/reports/eval.md");
+  assert.doesNotMatch(message, /No run opened/);
 });
 
 test("formatEvalReport warns when the provider retried, so scores aren't misread", () => {
@@ -172,7 +264,7 @@ test("formatEvalReport warns when the provider retried, so scores aren't misread
         kind: "trigger",
         expected: "load",
         prompt: "p",
-        attempts: [{ loaded: false, retries: [{ attempt: 1, maxAttempts: 3, errorMessage: "overloaded_error" }] }],
+        attempts: [{ loaded: false, reads: [], retries: [{ attempt: 1, maxAttempts: 3, errorMessage: "overloaded_error" }] }],
         passes: 0,
         costUsd: 0,
       },
