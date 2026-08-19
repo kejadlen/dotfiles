@@ -45,6 +45,73 @@ adherence:
       - prescribes moving the commit beneath the merge with a single `jj rebase -r <rev> -A trunk -B mm`
       - warns that rewriting `mm` separately leaves a second near-identical megamerge
 
+  # The cases below come from pitfalls.md, where a model's git-shaped instinct is
+  # wrong. Filter to them with `--case pitfall`.
+
+  - prompt: |
+      Print the contents of version.rb as it exists in the parent commit, then tell me which version
+      string that copy contains.
+    note: 'pitfall: `jj file show` ignores a revision passed without -r, and only warns'
+    tools: [read, bash]
+    setup: |
+      jj git init
+      printf 'VERSION = "1.0"\n' > version.rb
+      jj commit -m 'app: add version'
+      printf 'VERSION = "2.0"\n' > version.rb
+      jj describe -m 'app: bump version'
+    expect:
+      - passes `-r` to `jj file show` rather than naming the revision as a positional argument
+      - reports that the parent's copy contains 1.0
+      - does not report 2.0 as the parent's version
+
+  - prompt: |
+      Show me the diff for just lib/a.rb in the parent commit, and nothing else.
+    note: 'pitfall: `jj show` takes no path arguments, so `jj diff -r` is the way'
+    tools: [read, bash]
+    setup: |
+      jj git init
+      mkdir lib
+      printf 'class A\nend\n' > lib/a.rb
+      printf 'class B\nend\n' > lib/b.rb
+      jj commit -m 'lib: add a and b'
+    expect:
+      - scopes the diff with `jj diff -r` and the path
+      - never passes a path argument to `jj show`
+      - the output it reports covers lib/a.rb and not lib/b.rb
+
+  - prompt: |
+      Squash @ into its parent, keeping the parent's message.
+    note: 'pitfall: squash opens $EDITOR when both commits have descriptions'
+    tools: [read, bash]
+    setup: |
+      jj git init
+      printf 'a\n' > a.txt
+      jj commit -m 'app: add a'
+      printf 'b\n' > b.txt
+      jj describe -m 'app: add b'
+      # Fail fast instead of hanging a headless run: the pitfall still bites, but a
+      # squash that reaches for an editor errors rather than waiting forever.
+      # Quote the value, or jj stores a boolean and rejects it as an invalid editor.
+      jj config set --repo ui.editor '/bin/false'
+    expect:
+      - passes `--use-destination-message` or `-u` to `jj squash`
+      - the squash succeeds without an editor error
+      - "the surviving commit keeps the message `app: add a`"
+
+  - prompt: |
+      Commit only the file bin/,z with the message "bin: add ,z". Leave bin/normal uncommitted.
+    note: 'pitfall: a comma in a path parses as fileset syntax'
+    tools: [read, bash]
+    setup: |
+      jj git init
+      mkdir bin
+      printf '#!/bin/sh\n' > 'bin/,z'
+      printf '#!/bin/sh\n' > bin/normal
+    expect:
+      - wraps the path in a double-quoted fileset string literal so the comma is treated literally
+      - the commit it creates contains bin/,z
+      - bin/normal is still uncommitted in the working copy afterward
+
   - prompt: |
       In this repo, split lib/a.rb out of @ into its own commit described "lib: extract a", and leave
       the original change ID and description on the commit that still holds lib/b.rb. Then show me
