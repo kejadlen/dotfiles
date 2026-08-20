@@ -1,2 +1,4 @@
 # this is a 10k+ line file that's provided by glide anyway
 glide.d.ts
+
+node_modules/

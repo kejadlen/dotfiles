@@ -17,6 +17,7 @@
 // Try typing `glide.` and see what you can do!
 
 glide.include("hints.glide.ts");
+glide.include("pihole.glide.ts");
 glide.include("splits.glide.ts");
 glide.include("styles.glide.ts");
 glide.include("tridactyl.glide.ts");
