@@ -53,15 +53,20 @@ class MeetingBar {
         case .authorized, .fullAccess, .writeOnly:
             self.init(calendarTitle: calendarTitle, eventStore: eventStore)
         case .denied:
-            throw MeetingBarError(message: "Calendar access denied")
+            throw MeetingBarError(
+                message: "Calendar access previously denied for this process. "
+                    + "Grant it in System Settings > Privacy & Security > Calendars.")
         case .restricted:
-            throw MeetingBarError(message: "Calendar access restricted")
+            throw MeetingBarError(message: "Calendar access restricted by policy")
         case .notDetermined:
             let semaphore = DispatchSemaphore(value: 0)
             var accessGranted = false
 
+            var requestError: Error?
+
             eventStore.requestFullAccessToEvents { granted, error in
                 accessGranted = granted
+                requestError = error
                 semaphore.signal()
             }
 
@@ -70,7 +75,9 @@ class MeetingBar {
             if accessGranted {
                 self.init(calendarTitle: calendarTitle, eventStore: eventStore)
             } else {
-                throw MeetingBarError(message: "Calendar access denied")
+                let detail = requestError.map { ": \($0.localizedDescription)" } ?? ""
+                throw MeetingBarError(
+                    message: "Calendar access request was not granted\(detail)")
             }
         @unknown default:
             throw MeetingBarError(message: "Unknown authorization status")

@@ -11,7 +11,15 @@ if [ "$BUTTON" = "right" ]; then
         exit 0
     fi
 
-    JSON=$("$CONFIG_DIR/meetingbar.swift" "$CALENDAR")
+    if ! JSON=$("$CONFIG_DIR/meetingbar.swift" "$CALENDAR"); then
+        sketchybar --remove '/meetingbar\.popup\./' 2>/dev/null
+        sketchybar --add item meetingbar.popup.0 popup.meetingbar \
+                   --set meetingbar.popup.0 \
+                         icon.drawing=off \
+                         label="Calendar unavailable — check sketchybar's log" \
+                   --set meetingbar popup.drawing=on
+        exit 1
+    fi
 
     PINNED_ID=""
     if [ -f "$PIN_FILE" ]; then
@@ -63,7 +71,7 @@ if [ "$BUTTON" = "right" ]; then
     sketchybar --set meetingbar popup.drawing=on
 else
     # Left click: open the displayed event's meeting URL.
-    JSON=$("$CONFIG_DIR/meetingbar.swift" "$CALENDAR")
+    JSON=$("$CONFIG_DIR/meetingbar.swift" "$CALENDAR") || exit 1
     URL=$(echo "$JSON" | jq -r '.primary.url // empty')
 
     if [ -n "$URL" ]; then
