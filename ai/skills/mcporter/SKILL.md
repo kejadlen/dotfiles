@@ -56,6 +56,26 @@ fi
 Write calls can also outrun the default 60 s timeout — pass
 `--timeout 120000` or set `MCPORTER_CALL_TIMEOUT=120000`.
 
+## Config discovery
+
+`--config` defaults to `./config/mcporter.json` — relative to the current
+directory, and never searched for in a parent. A project config there adds its
+servers to the global `~/.mcporter/mcporter.json` set, so the same command sees
+a different set of servers depending on where you run it.
+
+A broken project config takes down the whole load, global servers included, and
+every mcporter-backed skill with it:
+
+```
+[mcporter] Invalid URL
+    at normalizeServerEntry (.../config-normalize.js:20:18)
+```
+
+`normalizeServerEntry` runs `new URL()` on `baseUrl` before expanding anything,
+so `${VAR}` in a `baseUrl` fails whether or not the variable is set, and
+`${VAR:-default}` is never honored — it needs a literal URL. Until the config is
+fixed, run from a subdirectory to skip it: `(cd app && mcporter list)`.
+
 ## Discovering tools
 
 ```bash
