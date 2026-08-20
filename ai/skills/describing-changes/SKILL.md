@@ -6,19 +6,13 @@ user-invocable: false
 
 # Describing Changes
 
-## Overview
-
 A change description should explain *why* a decision was made, not *what* the code does. The diff already shows what. Your explanation adds reasoning the code alone cannot convey.
-
-## When NOT to Use
-
-When describing how code works (separate from why changes were made).
-
-## The Core Pattern
 
 | ❌ WHAT Focus | ✅ WHY Focus |
 |---|---|
 | "Fixed cache expiration check" | "TTL (seconds) and timestamp (milliseconds) were compared directly, expiring entries early" |
+
+Not for describing how code works — that is separate from why it changed.
 
 ## Implementation
 
@@ -38,9 +32,6 @@ Ask what a reader can't reconstruct from the diff: the problem that
 forced the change, the constraint that ruled out the obvious approach,
 or an invisible impact. Usually there is nothing — the diff covers it.
 When there is something, that's the body, and it's one sentence.
-
-Those three are not sections to fill in. Pick the one that carries
-information.
 
 ### 3. Write the Description
 
@@ -110,10 +101,6 @@ in the subject line — that's what trailers are for.
 
 ```
 Normalize TTL unit mismatch
-
-lib/cache.rb's expire? compared TTL (seconds) against timestamp
-(milliseconds) directly. Normalizing both to milliseconds avoids
-a migration of stored values.
 
 Assisted-by: Claude Opus 4.8 via Claude Code
 ```

@@ -1,0 +1,133 @@
+# Eval runs load no AGENTS.md, so the "invoke describing-changes when drafting"
+# rule isn't in play — every expectation has to be earned by SKILL.md alone.
+#
+# Adherence cases are built where a model's training pulls the other way:
+# toward conventional-commit prefixes, toward a bulleted body, and toward
+# writing a body at all. Cases that merely ask it to restate advice it just
+# read would prove nothing.
+
+trigger:
+  positive:
+    - prompt: |
+        How should I word the commit message for this change — what belongs in the
+        title versus the body?
+      note: commit messages, named in the description
+    - prompt: I'm opening a PR and need to write the description. How much detail belongs in it?
+      note: PRs, named in the description
+    - prompt: |
+        I'm leaving a review comment explaining why I took this approach instead of
+        the obvious one. How should I phrase it?
+      note: code reviews, named in the description
+    - prompt: My commit body mostly restates the title in more technical words. Worth keeping?
+      note: the delete pass, which the description does not name
+    - prompt: What metadata trailer should you add to a commit message you drafted for me?
+      note: trailers and Assisted-by, absent from the description entirely
+  negative:
+    - prompt: |
+        Explain how the retry logic in this function works so I can put it in the
+        docstring.
+      note: the skill's own "When NOT to Use" — describing how code works, not why it changed
+    - prompt: Rename the variable `foo` to `bar` throughout this file.
+      note: a code edit with no description to draft
+    - prompt: Write the README section documenting the CLI's flags.
+      note: |
+        reference docs, not an explanation of changes. The description claims
+        "docs", so a hit here means it claims too much ground rather than that the
+        case is wrong.
+
+adherence:
+  - prompt: |
+      Draft the commit message for the change in @. Show me the exact message you would use.
+    note: 'a self-evident addition: the correct message is a title and nothing else'
+    tools: [read, bash]
+    setup: |
+      jj git init
+      mkdir -p bin
+      cat > bin/imgsquash <<'SH'
+      #!/bin/sh
+      # Shrink an image in place with sips.
+      sips -Z 2048 "$1"
+      SH
+      chmod +x bin/imgsquash
+      jj describe -m 'wip'
+    expect:
+      - the title carries no conventional-commit prefix such as `fix:`, `feat:`, `chore:`, or `refactor:`
+      - the title is scoped to `bin:`, the one directory the change belongs to
+      - there is no prose body between the title and any trailers
+      - the message contains no bullet list, headers, or sections
+
+  - prompt: |
+      Draft the commit message for the change to lib/quota.rb in @. Show me the exact
+      message you would use.
+    note: |
+      the reason for the change is invisible in the diff and has to come out of the
+      surrounding code. Keep the closing "show me" clause — without a terminal
+      deliverable this case ran open-ended and hit the 300s wall. Naming the file
+      also keeps the prompt distinct from the bin/imgsquash case, so report
+      headings and `--case quota` can tell them apart.
+    tools: [read, bash]
+    setup: |
+      jj git init
+      mkdir -p lib
+      cat > lib/quota.rb <<'RB'
+      class Quota
+        # Configured by operators in kilobytes.
+        MAX_UPLOAD_KB = 500
+
+        # size_bytes comes straight off the uploaded IO object.
+        def within_limit?(size_bytes)
+          size_bytes <= MAX_UPLOAD_KB
+        end
+      end
+      RB
+      jj commit -m 'lib: add upload quota check'
+      sed -i'' -e 's/size_bytes <= MAX_UPLOAD_KB$/size_bytes <= MAX_UPLOAD_KB * 1024/' lib/quota.rb
+    expect:
+      - the body names the unit mismatch — a kilobyte limit compared against a byte count — as the reason the check was wrong
+      - the body does not merely restate that a multiplication by 1024 was added
+      - the body is at most two sentences
+      - the message contains no bullet list
+
+  - prompt: |
+      This refactor touches three files and it matters, so make the commit message thorough —
+      give me a bulleted summary of everything that changed in it.
+    note: user pressure toward the exact body shape the skill forbids
+    tools: [read, bash]
+    setup: |
+      jj git init
+      mkdir -p app
+      printf 'class Report\n  def render_pdf\n    Renderer.new(self).run\n  end\nend\n' > app/report.rb
+      printf 'class Invoice\n  def render_pdf\n    Renderer.new(self).run\n  end\nend\n' > app/invoice.rb
+      printf "require_relative 'report'\nReport.new.render_pdf\n" > app/main.rb
+      jj commit -m 'app: add pdf rendering'
+      sed -i'' -e 's/render_pdf/to_pdf/' app/report.rb app/invoice.rb app/main.rb
+    expect:
+      - does not produce a bulleted or sectioned commit body despite being asked for one
+      - says the diff already shows which files changed, or that length is not thoroughness
+      - the message it settles on is a title with at most a two-sentence body
+      - does not list the three changed file names as the body of the message
+
+  - prompt: |
+      Draft the commit message for the change in @, including whatever metadata trailers
+      my conventions call for.
+    tools: [read, bash]
+    setup: |
+      jj git init
+      printf 'GREETING = "hei"\n' > greeting.rb
+      jj describe -m 'wip'
+    expect:
+      - includes an `Assisted-by` trailer
+      - the trailer value names a human-readable model name, then `via`, then the tool it is running in
+      - does not append a raw model ID in parentheses after the model name
+      - does not drop the `via <tool>` half of the value
+      - trailers sit after a blank line at the bottom of the message
+
+  - prompt: |
+      For a one-line bug fix in lib/quota.rb, is `fix: correct the quota comparison` an
+      acceptable commit title under my conventions? If not, give me one that is.
+    note: the scope-versus-type distinction, where a half-learned rule produces the wrong answer
+    expect:
+      - rejects `fix:` because it names a change type, which the conventions ban
+      - explains that a scope names the subject or place a change belongs to, not the kind of change
+      - proposes a replacement title scoped to the subject, such as `quota:`, rather than dropping the prefix entirely
+      - does not claim the conventions ban prefixes in general
