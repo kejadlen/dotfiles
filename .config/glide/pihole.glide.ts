@@ -59,27 +59,14 @@ async function piholeSleep(seconds: number): Promise<void> {
   if (status.blocking !== "disabled") throw new Error(`blocking status is "${status.blocking}"`);
 }
 
-// Reuses the .yank-notification class styled in glide.ts. The injected
-// function is stringified across processes, so it can't capture anything.
-async function notify(text: string): Promise<void> {
-  await glide.content.execute(
-    (message: string) => {
-      const el = DOM.create_element("div", { className: "yank-notification", textContent: message });
-      document.documentElement.appendChild(el);
-      setTimeout(() => el.remove(), 2000);
-    },
-    { tab_id: await glide.tabs.active(), args: [text] },
-  );
-}
-
 const piholeSleepCmd = glide.excmds.create(
   { name: "pihole-sleep", description: `Disable Pi-hole blocking for ${SLEEP_SECONDS} seconds` },
   async () => {
     try {
       await piholeSleep(SLEEP_SECONDS);
-      await notify(`Pi-hole disabled for ${SLEEP_SECONDS}s`);
+      glide.g["dev.kejadlen"]!.notify(`Pi-hole disabled for ${SLEEP_SECONDS}s`);
     } catch (err) {
-      await notify(`Pi-hole: ${err instanceof Error ? err.message : String(err)}`);
+      glide.g["dev.kejadlen"]!.notify(`Pi-hole: ${err instanceof Error ? err.message : String(err)}`);
     }
   },
 );

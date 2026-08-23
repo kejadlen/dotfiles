@@ -21,6 +21,7 @@ glide.include("pihole.glide.ts");
 glide.include("splits.glide.ts");
 glide.include("styles.glide.ts");
 glide.include("tridactyl.glide.ts");
+glide.include("utils.glide.ts");
 glide.fs.exists("local.glide.ts").then(exists => {
   if (exists) glide.include("local.glide.ts");
 });
@@ -118,37 +119,10 @@ browser.webRequest.onBeforeRequest.addListener(
   ["blocking"]
 );
 
-glide.styles.add(`
-  .yank-notification {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 2147483646;
-    background: var(--glide-cmdl-bg);
-    color: var(--glide-cmdl-fg);
-    border: 1px solid hsla(0, 0%, 100%, 0.1);
-    border-radius: 4px;
-    box-shadow: 0 -8px 32px hsla(0, 0%, 0%, 0.4);
-    font-family: var(--glide-cmdl-font-family);
-    font-size: var(--glide-cmdl-font-size);
-    line-height: var(--glide-cmdl-line-height);
-    padding: 0.75rem 1rem;
-    max-width: 600px;
-    word-break: break-all;
-  }
-`);
-
 glide.keymaps.set("normal", "yy", async () => {
   const url = glide.ctx.url;
   await navigator.clipboard.writeText(url.toString());
-
-  const notification = DOM.create_element("div", {
-    className: "yank-notification",
-    textContent: `Yanked: ${url}`,
-  });
-
-  document.documentElement.appendChild(notification);
-  setTimeout(() => notification.remove(), 2000);
+  glide.g["dev.kejadlen"]!.notify(`Yanked: ${url}`);
 });
 
 async function getStashesFolder() {
