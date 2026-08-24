@@ -18,7 +18,6 @@ immediately instead of propagating `nil` through the code.
 # good
 config.fetch(:timeout)
 config.fetch(:timeout, 30)
-config.fetch(:timeout) { expensive_default }
 
 # bad — silent nil on typos or missing keys
 config[:timeout]
@@ -26,6 +25,39 @@ config[:timeout]
 
 Use `[]` only when `nil` is a valid, expected result and you're
 handling it intentionally.
+
+## Safe navigation
+
+Reach for `&.` only where `nil` is a legitimate value you handle right
+there. Used defensively, it turns a nil receiver into a nil result and
+passes the problem to the next line — the same silent propagation
+`.fetch` exists to prevent.
+
+```ruby
+# good — an empty queue is expected, and the nil is resolved here
+label = queue.shift&.strip || "(idle)"
+
+# bad — hides which of the three was missing, and why
+user&.profile&.avatar&.url
+```
+
+When a value shouldn't be nil, let it raise; the backtrace points at
+the real bug. When it should, handle it once — a guard clause, a
+default, or a null object — rather than threading `&.` through every
+call downstream.
+
+```ruby
+# good
+return unless user
+
+user.profile.avatar.url
+```
+
+Two behaviors make long chains worse than they look. Only the link
+`&.` attaches to is guarded, so `a&.b.c` still raises when `a` is nil.
+And a predicate answers `nil` instead of `false`, so `x&.empty?` is
+neither true nor false — `unless x&.empty?` runs its body when `x` is
+nil.
 
 ## Enumerable methods
 
@@ -36,32 +68,20 @@ and composes naturally with any iterator.
 ```ruby
 # good — compose onto the base enumerator
 array.each.with_index { |item, i| ... }
-array.map.with_index { |item, i| ... }
-array.flat_map.with_index { |item, i| ... }
 array.each.with_object([]) { |item, acc| ... }
 hash.each { |key, value| ... }
 
 # bad — specialized methods
 array.each_with_index { |item, i| ... }
 array.each_with_object([]) { |item, acc| ... }
-hash.each_value { |value| ... }
-hash.each_key { |key| ... }
 ```
 
-The same goes for the specialized `each_*` readers — take the plain
-method and chain from there. The exception is hot paths on large
-strings, where the lazy `Enumerator` from `each_char` and friends beats
-building the whole array up front.
-
-```ruby
-# good
-str.chars.map { |char| char.ord }
-str.lines.grep(/^#/)
-
-# bad
-str.each_char.map { |char| char.ord }
-str.each_line.grep(/^#/)
-```
+The same goes for the specialized `each_*` readers (`each_value`,
+`each_key`) and the string readers (`str.chars.map`, not
+`str.each_char.map`) — take the plain method and chain from there.
+The exception is hot paths on large strings, where the lazy
+`Enumerator` from `each_char` and friends beats building the whole
+array up front.
 
 ## Blocks
 
@@ -82,9 +102,6 @@ end
 
 # bad — side effects with braces
 items.each { |item| process(item) }
-
-# bad — value-returning with do...end
-names = items.map do |item| item.name end
 ```
 
 ## Implicit block parameter
@@ -118,17 +135,14 @@ stdlib.
 # good
 path = Pathname.new("/app/config/database.yml")
 path.dirname
-path.extname
 path / ".." / "secrets.yml"
 
 # bad — procedural and harder to chain
 File.dirname("/app/config/database.yml")
-File.extname("/app/config/database.yml")
 File.expand_path("../secrets.yml", "/app/config/database.yml")
 ```
 
-Use `File` only for the operations that don't have a `Pathname`
-equivalent (`File.read`, `File.write`, `File.open` with a block).
+Use `File` for plain IO when `Pathname` adds nothing.
 
 ## Building hashes
 
@@ -143,6 +157,78 @@ users.to_h { |user| [user.id, user.name] }
 users.each_with_object({}) { |user, hash| hash[user.id] = user.name }
 Hash[users.map { |user| [user.id, user.name] }]
 ```
+
+## Memoization
+
+Compute values in `initialize` and expose them with `attr_reader`. An
+object built that way is complete the moment it exists, and its state
+doesn't depend on which methods have been called yet.
+
+```ruby
+# good
+class Report
+  def initialize(rows)
+    @rows = rows
+    @total = rows.sum(&:amount)
+  end
+
+  attr_reader :total
+end
+
+# bad — state accumulates as methods get called
+def total
+  @total ||= @rows.sum(&:amount)
+end
+```
+
+Lazy caching earns its place when the work is expensive and often
+skipped — reading a file, calling out over the network. Guard it with
+`defined?`, which asks whether the variable was assigned rather than
+what it holds.
+
+```ruby
+# good
+def manifest
+  return @manifest if defined?(@manifest)
+
+  @manifest = parse(path.read)
+end
+```
+
+Never memoize with `||=`. It rewrites to `@x || @x = ...`, so a `nil`
+or `false` result reads as "not computed yet" and reruns the work on
+every call — the expensive case the cache existed to prevent.
+
+## Parsing
+
+Reach for `StringScanner` when the input has structure — anything you'd
+otherwise pick apart with a chain of `split` or an offset you increment
+by hand. The scanner
+holds the cursor, anchors every match at it, and `eos?` says when the
+input is spent.
+
+```ruby
+require "strscan"
+
+# good
+scanner = StringScanner.new(input)
+key = scanner.scan(/\w+/)
+scanner.skip(/\s*=\s*/)
+value = scanner.scan(/[^;]+/)
+raise ArgumentError, "unparsed: #{scanner.rest}" unless scanner.eos?
+
+# bad — quietly accepts anything with an "=" in it
+key, value = input.split("=", 2)
+```
+
+`scan` and `skip` return `nil` without moving the cursor when the
+pattern doesn't match, so treat that `nil` as the parse error the way
+you'd treat a missing key from `.fetch` — raise on it instead of
+letting it flow onward.
+
+Skip the scanner when there's nothing to track: one `match` against a
+whole string, or a genuinely flat delimited line. And for a format that
+already has a parser — JSON, YAML, CSV — use that parser.
 
 ## Trailing commas
 
@@ -160,9 +246,6 @@ client.call(
   path,
   timeout: 30,
 )
-
-# bad — a single-line literal gains nothing from it
-COLORS = ["red", "green",]
 ```
 
 Ruby rejects a trailing comma in a method definition's parameter list,
