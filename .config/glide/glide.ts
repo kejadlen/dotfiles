@@ -81,13 +81,6 @@ glide.autocmds.create("UrlEnter", { hostname: "www.reddit.com" }, async () => {
   await browser.tabs.update({ url: url.toString() });
 });
 
-// x -> xcancel
-glide.autocmds.create("UrlEnter", { hostname: "x.com" }, async () => {
-  const url = new URL(glide.ctx.url);
-  url.hostname = "xcancel.com";
-  await browser.tabs.update({ url: url.toString() });
-});
-
 // strip tracking params (rewrites the request before it fires, no reload)
 // forEach avoids Symbol.iterator, which Xray vision denies on cross-compartment values.
 const trackingParams = ["utm_*", "uta_*", "fbclid", "gclid"];
