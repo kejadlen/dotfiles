@@ -133,12 +133,18 @@ namespace :dotslash do
     update_dotslash_release(name: "ranger", repo: "kejadlen/ranger") { "ranger-aarch64-apple-darwin.tar.gz" }
   end
 
+  desc "Update frork"
+  task(:frork) do
+    update_dotslash_release(name: "frork", repo: "kejadlen/frork") { "frork-aarch64-apple-darwin.tar.gz" }
+  end
+
   desc "Update all dotslash files"
   task all: %i[
     age
     age-keygen
     cq
     fzf
+    frork
     jj
     jq
     just

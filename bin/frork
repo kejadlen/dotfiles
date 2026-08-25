@@ -1,0 +1,25 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "frork",
+  "platforms": {
+    "macos-aarch64": {
+      "size": 1888259,
+      "hash": "blake3",
+      "digest": "ee42b9eb63726d3f6ad7b35dda284ef07ec1c762c1cfa518595ce0ee57132b86",
+      "path": "frork",
+      "providers": [
+        {
+          "url": "https://github.com/kejadlen/frork/releases/download/v2026-08-29+d4a7805/frork-aarch64-apple-darwin.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/kejadlen/frork",
+          "tag": "v2026-08-29+d4a7805",
+          "name": "frork-aarch64-apple-darwin.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    }
+  }
+}
