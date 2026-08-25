@@ -110,9 +110,18 @@ cheapest trim signal the run produces, and it cuts both ways: either the file
 isn't earning its place, or no case reaches the behavior it covers.
 
 A report that opens with a provider-retry line is not a verdict on the skill.
-Overload and rate limiting inside a nested run can empty a reply, which lands as
-`unclear` rather than `fail`; re-run those cases with `--case` before believing
-them.
+Overload, rate limiting, or the five-minute per-run timeout can kill a nested
+run before anything reaches the judge. Those cases report once as `run error`,
+list their expectations as `ungraded` rather than `fail`, and print the tail of
+the transcript under "Where it stopped" so you can tell a thrashing agent from
+one that just ran out of clock. When every failure in a run is a dead run, the
+follow-up asks for a re-run instead of edits — unproven is not disproven, and a
+timeout says nothing about the text. Re-run with `--case` before believing any
+of it.
+
+`ungraded` and `unclear` are different: `ungraded` means no verdict exists,
+while `unclear` means the judge read the transcript and it didn't settle the
+expectation. Only the second is a signal about the skill.
 
 Trigger misses usually mean the `description` field needs the vocabulary of the
 prompt that missed. False positives on negative cases mean it claims too much

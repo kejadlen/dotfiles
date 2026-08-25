@@ -529,6 +529,21 @@ function firstLine(text: string, max = 80): string {
   return line.length > max ? `${line.slice(0, max - 1)}…` : line;
 }
 
+/**
+ * The end of a transcript from a run that died. A killed run stalls at its last
+ * action, so the tail is the diagnostic — it separates an agent thrashing on
+ * tool calls from one that simply ran out of clock.
+ */
+export function transcriptTail(transcript: string, maxLines = 20): string[] {
+  const all = transcript.split("\n");
+  while (all.length > 0 && all.at(-1)!.trim() === "") all.pop();
+  const tail = all.slice(-maxLines);
+  while (tail.length > 0 && tail[0].trim() === "") tail.shift();
+  if (tail.length === 0) return [];
+  const elided = all.length - tail.length;
+  return elided > 0 ? [`…${elided} earlier line(s) elided`, ...tail] : tail;
+}
+
 /** Bundled references no attempt opened — the cheapest trim candidates in the skill. */
 export function unusedBundledFiles(report: EvalReport): string[] {
   const opened = new Set<string>();
@@ -602,7 +617,33 @@ export function formatEvalReport(report: EvalReport): string {
       lines.push("");
       row.attempts.forEach((attempt, i) => {
         if (row.attempts.length > 1) lines.push(`Attempt ${i + 1}:`);
-        if (attempt.error) lines.push(`- run error: ${attempt.error}`);
+        // A failed run grades nothing, so every expectation carries the same
+        // reason. Print it once: repeating it per expectation reads as several
+        // independent findings instead of one dead run.
+        if (attempt.error) {
+          const count = attempt.expectations.length;
+          lines.push(`- run error: ${attempt.error}`);
+          lines.push(
+            `- ${count} expectation(s) ungraded, so this case says nothing about the skill. Re-run it before ` +
+              `changing the text.`,
+          );
+          for (const expectation of attempt.expectations) {
+            lines.push(`  - ungraded: ${expectation.expectation}`);
+          }
+          const tail = transcriptTail(attempt.transcript);
+          lines.push("");
+          if (tail.length > 0) {
+            lines.push("Where it stopped:");
+            lines.push("");
+            lines.push("```");
+            lines.push(...tail);
+            lines.push("```");
+          } else {
+            lines.push("The run produced no output before it died.");
+          }
+          lines.push("");
+          return;
+        }
         for (const expectation of attempt.expectations) {
           lines.push(`- ${expectation.verdict}: ${expectation.expectation} — ${expectation.reason}`);
         }
@@ -629,11 +670,40 @@ export function formatEvalReport(report: EvalReport): string {
   return lines.join("\n");
 }
 
+/**
+ * Whether any failure in the report is a verdict on the skill rather than a dead
+ * run. A killed or errored run fails every expectation under it for the same
+ * reason, which says nothing about the text.
+ */
+export function hasGradedFailure(report: EvalReport): boolean {
+  for (const row of report.trigger) {
+    if (row.passes === row.attempts.length) continue;
+    if (row.attempts.some((a) => !a.error)) return true;
+  }
+  for (const row of report.adherence) {
+    for (const attempt of row.attempts) {
+      if (attempt.error) continue;
+      if (attempt.expectations.some((e) => e.verdict !== "pass")) return true;
+    }
+  }
+  return false;
+}
+
 /** Failure detail worth pulling into the conversation so the skill text can be fixed. */
 export function summarizeFailures(report: EvalReport): string[] {
   const notes: string[] = [];
   for (const row of report.trigger) {
     if (row.passes === row.attempts.length) continue;
+    const errored = row.attempts.filter((a) => a.error);
+    // A run that died never chose whether to load the skill, so reporting it as
+    // a trigger miss invents a verdict the run didn't reach.
+    if (errored.length === row.attempts.length) {
+      notes.push(
+        `No verdict on "${firstLine(row.prompt, 120)}": the run failed (${errored[0].error}). ` +
+          `Re-run this case; it says nothing about the description.`,
+      );
+      continue;
+    }
     const loads = row.attempts.filter((a) => a.loaded).length;
     notes.push(
       row.expected === "load"
@@ -643,6 +713,16 @@ export function summarizeFailures(report: EvalReport): string[] {
   }
   for (const row of report.adherence) {
     for (const attempt of row.attempts) {
+      // One note per dead run, not one per expectation: the reason is identical
+      // across them, and repeating it reads as several independent findings.
+      if (attempt.error) {
+        const count = attempt.expectations.length;
+        notes.push(
+          `No verdict on "${firstLine(row.prompt, 80)}": the run failed (${attempt.error}), leaving ` +
+            `${count} expectation(s) ungraded. Re-run this case; it says nothing about the skill.`,
+        );
+        continue;
+      }
       for (const expectation of attempt.expectations) {
         if (expectation.verdict === "pass") continue;
         notes.push(
@@ -660,6 +740,22 @@ export function summarizeFailures(report: EvalReport): string[] {
  * ones.
  */
 export function buildFailureFollowUp(report: EvalReport, failures: string[], reportPath: string): string {
+  // With nothing graded, asking for edits invites rewriting the skill against a
+  // blank transcript. Ask for a re-run instead.
+  const ask = hasGradedFailure(report)
+    ? [
+        "Read the skill and propose specific edits to its text that would fix these, or say why a case is",
+        "wrong about the skill rather than the skill being wrong.",
+        "",
+        "Reach the fix by sharpening or cutting what's already there before adding anything. If a failure",
+        "genuinely needs new instruction, name something else in the file to delete alongside it.",
+      ]
+    : [
+        "Every failure above is a run that died, so nothing was graded and the skill text is unproven, not",
+        `disproven. Re-run the affected cases with \`/skill-eval run ${report.skillName} --case <filter>\` before`,
+        "changing a word of the skill. If they keep dying, fix the case or the harness — a timeout is not a",
+        "verdict on the text.",
+      ];
   return [
     `# Eval failures: ${report.skillName}`,
     "",
@@ -667,11 +763,7 @@ export function buildFailureFollowUp(report: EvalReport, failures: string[], rep
     "",
     ...failures.map((note) => `- ${note}`),
     "",
-    "Read the skill and propose specific edits to its text that would fix these, or say why a case is",
-    "wrong about the skill rather than the skill being wrong.",
-    "",
-    "Reach the fix by sharpening or cutting what's already there before adding anything. If a failure",
-    "genuinely needs new instruction, name something else in the file to delete alongside it.",
+    ...ask,
   ].join("\n");
 }
 

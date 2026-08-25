@@ -9,6 +9,7 @@ import {
   buildTrimFollowUp,
   bundledReads,
   formatEvalReport,
+  hasGradedFailure,
   listBundledFiles,
   loadedSkill,
   mapWithConcurrency,
@@ -18,6 +19,7 @@ import {
   runEvals,
   skillLoadPath,
   summarizeFailures,
+  transcriptTail,
   unusedBundledFiles,
   type EvalReport,
 } from "./run.ts";
@@ -230,6 +232,105 @@ test("formatEvalReport says so when every bundled file earned a read", () => {
 
 test("formatEvalReport skips trim signals for a skill with no bundled files", () => {
   assert.doesNotMatch(formatEvalReport({ ...report, bundledFiles: [] }), /Trim signals/);
+});
+
+// A run killed by the timeout: every expectation carries the same reason and
+// nothing reached the judge.
+const deadReason = "run failed: run exceeded 300000ms and was killed";
+const dead: EvalReport = {
+  ...report,
+  trigger: [],
+  adherence: [
+    {
+      kind: "adherence",
+      prompt: "calibrate it and report the torque",
+      attempts: [
+        {
+          transcript: "[assistant] reading torque.md\n[tool] read torque.md\n[assistant] checking the bench",
+          reads: ["torque.md"],
+          retries: [],
+          error: "run exceeded 300000ms and was killed",
+          expectations: [
+            { expectation: "names the torque value 42", verdict: "unclear", reason: deadReason },
+            { expectation: "reports newton-metres", verdict: "unclear", reason: deadReason },
+          ],
+        },
+      ],
+      passes: 0,
+      costUsd: 0.05,
+    },
+  ],
+};
+
+test("transcriptTail keeps the end and says how much it dropped", () => {
+  const long = Array.from({ length: 25 }, (_, i) => `line ${i + 1}`).join("\n");
+  const tail = transcriptTail(long, 5);
+  assert.equal(tail[0], "…20 earlier line(s) elided");
+  assert.equal(tail.at(-1), "line 25");
+  assert.deepEqual(transcriptTail("only\n\n", 5), ["only"]);
+  assert.deepEqual(transcriptTail("", 5), []);
+});
+
+test("summarizeFailures collapses a dead run into one note instead of one per expectation", () => {
+  const notes = summarizeFailures(dead);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /No verdict on "calibrate it and report the torque"/);
+  assert.match(notes[0], /2 expectation\(s\) ungraded/);
+  assert.match(notes[0], /says nothing about the skill/);
+});
+
+test("summarizeFailures does not call a dead trigger run a description miss", () => {
+  const deadTrigger: EvalReport = {
+    ...report,
+    adherence: [],
+    trigger: [
+      {
+        kind: "trigger",
+        expected: "load",
+        prompt: "check widget torque",
+        attempts: [{ loaded: false, reads: [], retries: [], error: "run exceeded 300000ms and was killed" }],
+        passes: 0,
+        costUsd: 0.01,
+      },
+    ],
+  };
+  const notes = summarizeFailures(deadTrigger);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /No verdict on "check widget torque"/);
+  assert.doesNotMatch(notes[0], /did not fire/);
+});
+
+test("hasGradedFailure separates real verdicts from dead runs", () => {
+  assert.equal(hasGradedFailure(report), true);
+  assert.equal(hasGradedFailure(dead), false);
+  assert.equal(hasGradedFailure(clean), false);
+});
+
+test("formatEvalReport prints a dead run once and shows where it stopped", () => {
+  const markdown = formatEvalReport(dead);
+  assert.match(markdown, /- run error: run exceeded 300000ms and was killed/);
+  assert.match(markdown, /2 expectation\(s\) ungraded, so this case says nothing about the skill/);
+  assert.match(markdown, /  - ungraded: names the torque value 42/);
+  assert.match(markdown, /Where it stopped:/);
+  assert.match(markdown, /\[assistant\] checking the bench/);
+  // The identical reason should not be repeated once per expectation.
+  assert.equal(markdown.match(/run exceeded 300000ms/g)?.length, 1);
+});
+
+test("formatEvalReport says so when a dead run produced no output at all", () => {
+  const silent: EvalReport = {
+    ...dead,
+    adherence: [{ ...dead.adherence[0], attempts: [{ ...dead.adherence[0].attempts[0], transcript: "" }] }],
+  };
+  assert.match(formatEvalReport(silent), /The run produced no output before it died\./);
+});
+
+test("buildFailureFollowUp asks for a re-run when nothing was graded", () => {
+  const message = buildFailureFollowUp(dead, summarizeFailures(dead), "/reports/eval.md");
+  assert.match(message, /unproven, not\ndisproven/);
+  assert.match(message, /--case <filter>` before/);
+  assert.match(message, /a timeout is not a\nverdict on the text/);
+  assert.doesNotMatch(message, /propose specific edits/);
 });
 
 test("buildFailureFollowUp asks for cuts before additions", () => {
