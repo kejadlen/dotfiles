@@ -17,6 +17,10 @@ profile "pi-bedrock" {
   mounts { "~/.aws" }
 }
 
+env {
+  LANG "en_US.UTF-8"
+}
+
 mounts {
   // Agent config that sits outside the binary allowlist but is still config,
   // kept deliberately. Targets derive from the ~/ source.
@@ -30,10 +34,6 @@ mounts {
 
   // Shadow the workspace's .envrc so repo secrets never reach the agent.
   "/dev/null" target=".envrc"
-
-  // Devlog entries are written from inside the container by the devlog skill,
-  // so this rides in writable and persists across sessions.
-  "~/.claude/devlog" writable=#true
 
   // jj is the version control in here, and it carries its own identity and
   // signing config, so it needs nothing from git. ~/.config/git deliberately
