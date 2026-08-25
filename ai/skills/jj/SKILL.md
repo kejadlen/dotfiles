@@ -17,6 +17,9 @@ silently, hang without a TTY, or make a no-op look like it worked.
 ### commit vs. describe vs. new
 
 The working copy `@` is always a real commit; edits stream into it live.
+There is no staging area, and tracking covers removals — `rm`, moves, and
+renames are snapshotted into `@` on the next jj command. No `git rm`, no
+`git add -A`; delete the file and commit.
 
 | Command | Sets message? | Moves `@`? | Use for |
 |---|---|---|---|
@@ -94,12 +97,6 @@ jj diff --from trunk --to mm --summary | diff /tmp/mm-before.txt -
 jj log --no-graph -r mm -T 'parents.map(|p| p.change_id().short()).join("\n")'
 ```
 
-## Key differences from git
-
-No staging area, and tracking is automatic for *every* change, removals
-included. `rm` (or a move/rename) is snapshotted into `@` on the next jj
-command — no `git rm`, no `git add -A`. Just delete the file and commit.
-
 ## Bookmarks and pushing
 
 ```bash
@@ -150,8 +147,12 @@ silently leaves the lower branch unpushed — it reads like success.
 ```bash
 jj restore --changes-in @                  # undo all working copy changes
 jj restore SOME_FILE                       # restore file from parent
-jj restore --from kn --into kn FILE        # restore file in a specific revision
+jj restore --changes-in kn FILE            # restore file in a specific revision
 ```
+
+`--from` and `--into` are a source and a destination, so naming the same
+revision for both restores a file from itself and prints "Nothing changed."
+To back a file out inside one commit, use `--changes-in <rev>`.
 
 **`jj restore FILE` is not "undo my last edit."** It resets the whole file
 to the parent, wiping *every* uncommitted change in it, not just the one you
@@ -178,8 +179,5 @@ concurrent rewrite in another workspace shifts them all down by one. For
 `jj abandon`, pass the short commit ID.
 
 Not every duplicate is litter: copies pinned by tags or another
-`immutable_heads()` clause can't be abandoned at all.
-
-```bash
-jj log -r 'divergent() & ~immutable()'   # the only ones you could touch
-```
+`immutable_heads()` clause can't be abandoned at all, so
+`jj log -r 'divergent() & ~immutable()'` lists the ones you could touch.
