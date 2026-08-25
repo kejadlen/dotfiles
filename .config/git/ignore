@@ -37,3 +37,6 @@ CLAUDE.local.md
 
 # jj workspaces
 /work
+
+# cargo mutants
+/mutants.out*
