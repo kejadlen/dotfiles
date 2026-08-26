@@ -1,4 +1,4 @@
-# AI/LLM Coding Conventions
+# Agent conventions
 
 ## Communication
 
@@ -11,7 +11,9 @@ include the title or a short description alongside the ID/key. IDs alone
 are meaningless to humans.
 
 - Ask when info is missing rather than guessing
-- Don't pad responses or offer unsolicited suggestions
+- Don't pad responses. Don't offer unsolicited suggestions, with three
+  exceptions named below: suggest committing, offer a learning
+  exercise, report friction
 - Say when you're unsure or can't verify something — "I don't know"
   is a complete answer, and better than a plausible guess
 - Cite primary sources: the documentation, spec, or code itself, not
@@ -44,25 +46,21 @@ thoroughness.
 
 ## Writing
 
-Invoke the technical-writing skill whenever drafting or reviewing
-prose for humans — documentation, commit messages, PR descriptions,
-user-facing text, error messages, and comments. No exceptions; the
-skill prevents clarity errors that compound across projects.
+Invoke the technical-writing skill when drafting or reviewing
+documentation and user-facing prose — docs, READMEs, error messages,
+PR descriptions. It prevents clarity errors that compound across
+projects. Commit messages route to `describing-changes` instead; code
+comments follow the Concision and Code sections.
 
 Choose list or prose format based on clarity; don't preserve format
 just because it's already there. Use lists for distinct, independent
 items. Use prose when explaining relationships or cause-and-effect. Use
 tables for multi-column data.
 
-Avoid the "**bold**: explanation" pattern in lists:
-- **Option A**: explanation text here
-- **Foo**: description follows
-
-Use instead:
-- Plain list items without bold labels
-- Prose paragraphs when choices relate to each other
-- Tables for multi-column comparisons
-- Bold only in headers and inline emphasis
+Never write list items as "**Bold label**: explanation" — use plain
+items, prose when the items relate to each other, or a table for
+multi-column comparisons. Bold belongs in headings and inline emphasis
+only.
 
 Sentence case in headings — never title case. Use the Oxford comma.
 Don't omit articles ("a," "an," "the"). Write "the file has a newer
@@ -86,14 +84,11 @@ Write documentation as standalone artifacts. Readers cannot access
 this conversation; prose must carry its own meaning.
 
 When editing documentation:
-- Link to repository context when needed
-- Write out details that cannot be linked
-- Avoid references to unavailable conversations or artifacts
-- Use shared domain knowledge, not chat-specific context
+- Link to repository context when needed; write out details that
+  cannot be linked
 - Skip template patterns unless they serve the document's purpose
-- Let new ideas establish their own connections
-- Preserve the document's line length and wrapping style
-- Keep lists intact; avoid converting them to prose unnecessarily
+- Don't reformat what you aren't changing — preserve line length,
+  wrapping, and existing lists
 
 ## Code
 
@@ -121,7 +116,8 @@ are fine. For syntax and flags, use the `jj` skill or run `jj --help`.
 Required skills for jj operations:
 - `commit` when committing changes or updating revision descriptions
 - `jj-workspaces` for isolated workspaces (replaces git worktrees)
-- `describing-changes` for all commit messages and change descriptions
+- `describing-changes` for every commit message and change description
+  — it owns title format, trailers, and the mandatory `Assisted-by`
 
 Use `jj commit` to commit the current change, not `jj describe`.
 
@@ -157,16 +153,6 @@ Commit quality:
 - Proactively suggest committing once a logical chunk of work is done —
   don't wait for the user to ask
 
-Commit message format:
-- No conventional commit prefixes (`fix:`, `feat:`, `refactor:`, etc.)
-- Subjects are plain English sentences — capitalize the first word,
-  keep it under 60 characters
-- Use [git trailers](https://alchemists.io/articles/git_trailers)
-  for metadata, placed after a blank line at the bottom of the message
-- Trailer format is `Key: value` (capitalized key, colon, space, value)
-- `Assisted-by` is mandatory when AI drafts the message (the
-  `describing-changes` skill enforces this)
-
 ## Environment
 
 Never work around the environment as configured. When a tool, path,
@@ -188,9 +174,7 @@ invoke `til` to surface relevant prior learnings before proceeding.
 ## Learning exercises
 
 After architectural work — a new module, a schema change, a refactor,
-an unfamiliar pattern — offer me a short learning exercise on it. This
-is one unsolicited suggestion I do want, so the "don't offer
-unsolicited suggestions" rule above doesn't apply here.
+an unfamiliar pattern — offer me a short learning exercise on it.
 
 Keep the offer to one sentence and stop there; never start an exercise
 before I say yes. Once I do, invoke the `learning-opportunities` skill
