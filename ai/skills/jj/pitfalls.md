@@ -37,6 +37,22 @@ jj diff -- 'glob:"bin/*" ~ glob:"bin/,special"'
 **Put `-m` before `--` or fileset args.** jj parses everything after `--` as
 fileset, so `-m` placed after `--` becomes a parse error.
 
+**Filesets resolve from the cwd, but `jj diff --git` prints paths from the
+workspace root.** Pasting a path out of diff output into a fileset silently
+matches nothing whenever the cwd isn't the workspace root — jj warns "No
+matching entries for paths" and then does the operation on an empty set, so
+`jj commit <fileset>` produces an empty commit rather than failing:
+
+```bash
+cd ~/src/gusto/gists/kejadlen                  # workspace root is ~/src/gusto/gists
+jj diff --git                                  # prints a/kejadlen/config/claude.json
+jj diff --stat kejadlen/config                 # WRONG — no matching entries
+jj diff --stat config                          # correct — relative to cwd
+```
+
+`jj st` prints cwd-relative paths, so it's the safe place to copy from. Use
+`jj workspace root` when the cwd's depth is unclear.
+
 ## Inspecting revisions
 
 **`jj show` does not accept path arguments.** It takes an optional revision
