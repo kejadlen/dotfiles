@@ -60,21 +60,24 @@ PR. Every `<revision>` below means the one you resolved here.
    mandatory.
 6. Generate a PR title summarizing all commits in the changeset (not just the
    most recent). The title reflects the overall change, not individual commits.
-7. Draft the PR summary: three to five sentences of prose covering why the
-   change was made and its impact. No headers or bullet lists unless a
-   repository template requires them. Include only an "Assisted-by" footer for
-   attribution, no "Generated with Claude Code".
+7. Draft the PR summary: one to three sentences of prose on why the change
+   was made and its impact. Three is a ceiling, not a target — one sentence a
+   reviewer can't reconstruct from the diff beats three that pad around it. No
+   headers or bullet lists unless a repository template requires them. Include
+   only an "Assisted-by" footer for attribution, no "Generated with Claude
+   Code".
    - Lead with user-facing impact and the tradeoff a reviewer would question.
    - Say nothing a reader gets from the diff or the file list. No "added
      function X" or "modified file Y".
    - Link related context found in the session — "Depends on #123", "Closes
-     #456", a Slack permalink.
+     #456", a Slack permalink. Link lines don't count toward the budget.
    - Never wrap commit SHAs or PR/issue numbers in backticks—GitHub
      auto-links raw `a1b2c3d` and `#123` but backticks prevent it
    - Do not hard-wrap prose with manual newlines; GitHub wraps Markdown
      itself, so they render as awkward mid-sentence breaks
    - Delete pass before creating the PR: cut every sentence that summarizes
-     the diff, restates the title, or exists to look thorough.
+     the diff, restates the title, or exists to look thorough. If one
+     sentence survives, ship one.
 8. **Code review**: Review the diff from trunk to the revision before opening the
    PR. Fix anything that breaks correctness; note nits for later. Read
    `jj diff --git --from trunk --to <revision>` rather than the working

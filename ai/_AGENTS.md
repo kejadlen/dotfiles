@@ -31,8 +31,9 @@ Brevity applies everywhere, not just chat replies:
 
 - Commit message: title plus trailers. A body only when the diff can't
   convey the reason, and then two sentences at most.
-- PR description: three to five sentences of prose. No headers or
-  sections unless a repository template requires them.
+- PR description: one to three sentences of prose, and one is often
+  enough. No headers or sections unless a repository template requires
+  them.
 - Code comment: one line. If it needs a paragraph, the code needs work.
 - Slack message: as short as the ask. No preamble, no recap.
 
