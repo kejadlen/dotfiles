@@ -11,5 +11,7 @@
 # directory and its contents are both required.
 !hooks/
 !hooks/**
+!output-styles/
+!output-styles/**
 !rules/
 !rules/**
