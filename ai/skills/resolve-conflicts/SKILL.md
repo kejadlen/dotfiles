@@ -94,6 +94,26 @@ jj reports `Existing conflicts were resolved or abandoned from N commits`.
 When no conflicts remain, skip steps 2–4 entirely — there is nothing to
 squash, because the revisions were rewritten directly.
 
+**Resolving the root can push a fresh conflict into a downstream
+megamerge.** A merge commit whose tree recorded the old resolution goes
+`(conflict)` once its parents change, so a clean run at the root can be
+followed by `New conflicts appeared in N commits` naming the megamerge. That
+conflict is `3-sided` when the merge has three parents, and **no merge tool
+can take it** — `:ours`, `:theirs`, and the `cp` trick all fail with "has 3
+sides. At most 2 sides are supported." Resolve it by writing the file in the
+working copy (the conflict materializes there through ancestry) and then
+`jj squash --into <megamerge>`; that clears the megamerge and every
+descendant without moving `@` off it.
+
+When taking one side of a 3-sided materialization, don't splice the
+`+++++++` block in as-is — its region can overlap content that also appears
+after `>>>>>>>`, so a literal copy duplicates lines. Reconstruct the intended
+file from `jj file show -r <parent> <path>` for each parent instead.
+
+`cp -p` rather than plain `cp` as the merge-tool program preserves the
+executable bit, which matters for any conflict jj labels `including an
+executable`.
+
 **Check generated files afterward.** A generated artifact that auto-merged
 cleanly is the classic stale-output trap: the text merged, but the generator
 would emit something else. Re-run the generator and squash any diff into the
