@@ -120,6 +120,18 @@ would emit something else. Re-run the generator and squash any diff into the
 commit that owns it — and run it from the main workspace, never from
 `work/`, where repo tooling reading `git ls-files` goes green-but-wrong.
 
+**Check the files that *didn't* conflict.** When a rebase turns a linear stack
+into siblings under a merge — `jj rebase --insert-after 'trunk()'` on part of
+the stack — content that used to arrive from an ancestor now arrives through
+the merge, and jj unions both sides. Tables, lists, and JSON objects merge
+textually clean and semantically wrong: two keys added at different offsets
+both survive, so a rename recorded on one side leaves the old entry alive on
+the other. `jj resolve --list` will not mention the file. Diff the merge
+against each parent for every path both siblings touched, and validate
+structured files (`jq .`, the language's parser) rather than eyeballing the
+diff. Fixes here belong in the merge commit — the sibling's base never had the
+line to remove — so hand-edit in the working copy and `jj squash --into <merge>`.
+
 ## Step 1b — Set up an isolated resolution workspace
 
 Per `jj-workspaces`' "Creating a Workspace" recipe, but anchored on the
