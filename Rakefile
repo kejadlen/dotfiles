@@ -1,3 +1,5 @@
+require "json"
+
 namespace :sync do
   desc "Sync David Lanham wallpapers (assumes the unzipped updates are in ~/Downloads)"
   task :dlanham do
@@ -45,9 +47,20 @@ namespace :sync do
 end
 
 namespace :dotslash do
-  def update_dotslash_release(name:, repo:, path: name, tag: nil, &asset)
-    require "json"
+  # The tag recorded in an existing bin/<name>, or nil when it has yet to be
+  # generated.
+  def dotslash_tag(file)
+    return nil unless File.exist?(file)
 
+    providers = JSON.parse(File.read(file).sub(/\A#!.*\n/, ""))
+      .dig("platforms", "macos-aarch64", "providers") || []
+    provider = providers.find { |p| p["type"] == "github-release" }
+    provider && provider["tag"]
+  rescue JSON::ParserError
+    nil
+  end
+
+  def update_dotslash_release(name:, repo:, path: name, tag: nil, &asset)
     unless tag
       tag = JSON.parse(`gh release view --repo #{repo} --json tagName`)["tagName"]
     end
@@ -70,7 +83,22 @@ namespace :dotslash do
     platform[:format] = entry["format"] if entry["format"] && !entry["format"].start_with?("TODO")
 
     dotslash = { name: name, platforms: { "macos-aarch64" => platform } }
-    File.write("bin/#{name}", "#!/usr/bin/env dotslash\n\n#{JSON.pretty_generate(dotslash)}\n")
+
+    file = "bin/#{name}"
+    previous_tag = dotslash_tag(file)
+    contents = "#!/usr/bin/env dotslash\n\n#{JSON.pretty_generate(dotslash)}\n"
+    unchanged = File.exist?(file) && File.read(file) == contents
+    File.write(file, contents) unless unchanged
+
+    puts(if previous_tag.nil?
+           "#{name}: added #{tag}"
+         elsif unchanged
+           "#{name}: up to date (#{tag})"
+         elsif previous_tag == tag
+           "#{name}: regenerated (#{tag})"
+         else
+           "#{name}: #{previous_tag} → #{tag}"
+         end)
   end
 
   desc "Update jq"
