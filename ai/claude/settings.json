@@ -5,6 +5,7 @@
     "PLAYWRIGHT_MCP_BROWSER": "webkit"
   },
   "permissions": {
+    "defaultMode": "acceptEdits",
     "allow": [
       "Bash(gh issue view:*)",
       "Bash(gh project field-list:*)",
@@ -125,8 +126,7 @@
     "ranger@ranger": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "superpowers-developing-for-claude-code@superpowers-marketplace": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "learning-opportunities-auto@learning-opportunities": true
+    "typescript-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "ranger": {
