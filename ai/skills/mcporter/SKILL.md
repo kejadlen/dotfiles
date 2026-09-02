@@ -71,10 +71,15 @@ every mcporter-backed skill with it:
     at normalizeServerEntry (.../config-normalize.js:20:18)
 ```
 
-`normalizeServerEntry` runs `new URL()` on `baseUrl` before expanding anything,
-so `${VAR}` in a `baseUrl` fails whether or not the variable is set, and
-`${VAR:-default}` is never honored — it needs a literal URL. Until the config is
-fixed, run from a subdirectory to skip it: `(cd app && mcporter list)`.
+Which fields get env-expanded is version-dependent. 0.8.1 expands only `headers`
+and `env`, so a `${VAR}` in `baseUrl` reaches `new URL()` verbatim and throws
+whether or not the variable is set; 0.13.4 expands every field *except* those
+two, and honors `${VAR:-default}` fallbacks. Assume nothing in between.
+
+`MCPORTER_CONFIG=<path>` replaces the config layers rather than adding to them,
+so a project config belongs off `config/mcporter.json` and named explicitly —
+that keeps it out of unrelated runs on every version. Failing that, run from a
+subdirectory to skip it: `(cd app && mcporter list)`.
 
 ## Discovering tools
 
