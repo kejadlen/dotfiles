@@ -76,6 +76,14 @@ Read the sides off the materialized markers first (`jj file show -r <rev>
 <path>`) to learn which number is which: the `+++++++ <change-id>` labelled
 `(rebased revision)` is your own commit's side.
 
+**No merge tool takes a type conflict**, `:ours` and `:theirs` included — a
+side that adds a symlink fails with "Only conflicts that involve normal files
+(not symlinks, etc.) are supported." Recreate the winning side in the working
+copy per step 3, then land it in the conflicted ancestor with `jj squash --into
+<rev> <path>`; the fileset keeps unrelated working-copy edits out, and jj
+rebases the descendants and reports `Existing conflicts were resolved or
+abandoned from N commits`.
+
 For a file needing real merge judgment, resolve it as a temp file and hand
 that to `cp` as a merge tool — the same in-place rewrite, but with content
 you wrote:
@@ -186,6 +194,11 @@ intent from `jj diff --git -r <side> <path>` instead, where the mode change
 (`100644` → `120000`) and the symlink target both appear, then recreate the
 winning side by hand — `rm <path> && ln -s <target> <path>`. The Edit tool
 cannot write a symlink.
+
+On the conflicted revision that diff prints the `Conflict:` description rather
+than a mode change, so the symlink target isn't in it. Get the target from the
+pre-rebase commit — `jj evolog -r <rev>` names it, and `jj diff --git -r
+<old-commit-id> <path>` on that hidden commit shows the real change.
 
 For each text file still listed by `jj resolve --list -r @-`:
 
