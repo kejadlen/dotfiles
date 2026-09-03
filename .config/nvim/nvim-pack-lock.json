@@ -23,9 +23,9 @@
       "src": "https://github.com/rktjmp/hotpot.nvim.git"
     },
     "indent-blankline.nvim": {
-      "rev": "d28a3f70721c79e3c5f6693057ae929f3d9c0a03",
+      "rev": "f1e186e44d3b7f9ae918008e2c28ce37c6023d2d",
       "src": "https://github.com/lukas-reineke/indent-blankline.nvim.git",
-      "version": "'v3.9.1'"
+      "version": "'v3.10.1'"
     },
     "lightline.vim": {
       "rev": "e358557",

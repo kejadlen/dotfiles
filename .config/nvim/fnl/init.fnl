@@ -129,7 +129,7 @@
                {:src "https://github.com/junegunn/fzf.git" :version :v0.74.0}
                "https://github.com/junegunn/fzf.vim.git"
                {:src "https://github.com/lukas-reineke/indent-blankline.nvim.git"
-                :version :v3.9.1}
+                :version :v3.10.1}
                {:src "https://github.com/neovim/nvim-lspconfig.git"
                 :version :v2.11.0}
                {:src "https://github.com/nvim-treesitter/nvim-treesitter.git"
