@@ -202,6 +202,8 @@
 
 ;;; treesitter
 (require :treesitter)
+(let [{: setup} (require :treesitter-context)]
+  (setup {:multiline_threshold 5}))
 
 ;; https://neovim.io/doc/user/lsp.html#vim.lsp.foldexpr()
 (set vim.o.foldmethod :expr)
