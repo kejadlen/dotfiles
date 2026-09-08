@@ -127,6 +127,8 @@
                {:src "https://github.com/j-hui/fidget.nvim.git"
                 :version :v2.0.0}
                {:src "https://github.com/junegunn/fzf.git" :version :v0.74.0}
+               {:src "https://github.com/junegunn/vim-easy-align.git"
+                :version :2.10.0}
                "https://github.com/junegunn/fzf.vim.git"
                {:src "https://github.com/lukas-reineke/indent-blankline.nvim.git"
                 :version :v3.10.1}
@@ -243,8 +245,9 @@
 ;; indent-blankline
 (let [{: setup} (require :ibl)] (setup))
 
-;; mini.align
-; (let [{: setup} (require :mini.align)] (setup))
+;; easy-align
+(vim.keymap.set :x :ga "<Plug>(EasyAlign)")
+(vim.keymap.set :n :ga "<Plug>(EasyAlign)")
 
 ;;; generate help files
 

@@ -67,6 +67,11 @@
       "rev": "a2ff28a",
       "src": "https://github.com/tpope/vim-dispatch.git"
     },
+    "vim-easy-align": {
+      "rev": "0db4ea6132110631ec678a99a82aa49a0686ae65",
+      "src": "https://github.com/junegunn/vim-easy-align.git",
+      "version": "'2.10.0'"
+    },
     "vim-fennel": {
       "rev": "cb93482",
       "src": "https://github.com/atweiden/vim-fennel.git"
