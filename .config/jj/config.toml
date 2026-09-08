@@ -140,6 +140,9 @@ edit = true
 # working copy. Left deliberately unambiguous: above a megamerge this resolves
 # to every stack tip at once and jj refuses, which beats picking one by guess.
 bookmark-advance-to = 'closest_pushable(@)'
+# Default, minus the megamerge bookmark, so advancing lands on the trunk-side
+# bookmark under it. Pattern form is empty when `mm` is gone; bare `mm` errors.
+bookmark-advance-from = 'heads(::to & bookmarks() & ~bookmarks(exact:"mm"))'
 
 [revset-aliases]
 'immutable_heads()' = 'builtin_immutable_heads() | heads(~mine())'
