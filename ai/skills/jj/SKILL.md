@@ -86,6 +86,12 @@ megamerge beside the real one. `jj rebase -r @ -o mm` repairs it.
 `-o`/`--onto` is repeatable (`-d` is the older alias), so `-o p1 -o p2 ...`
 sets several parents.
 
+The `jj stack` alias does this for a whole branch rather than one commit,
+defaulting to `mm+::@-` — everything between the merge and `@`. Read it with
+`jj config get aliases.stack`; `jj stack --help` doesn't work, because the
+alias shells out and the flag lands on the wrapped `jj rebase` as an empty
+`--revisions`.
+
 Don't read the result off the ASCII graph. Diff the merge as an invariant
 across the rewrite, and list its parents explicitly:
 
@@ -167,10 +173,14 @@ because two workspaces rewrote it concurrently. jj labels these
 vanished. Don't rewrite the missing files; recover them:
 
 ```bash
-jj log -r 'divergent()'              # find them
+jj log -r 'change_id(abcd)'          # list every copy of the change
 jj diff -r <commit> --name-only      # see what each holds
 jj restore --from <commit> <paths>   # recover
 ```
+
+There is no `divergent()` revset — on jj 0.37 it fails with "Function
+`divergent` doesn't exist" and suggests `merges`. Find the copies through
+`change_id(<id>)`, or spot them by the `(divergent)` label in `jj log`.
 
 A bare change ID errors once it's divergent, so use the offsets jj suggests
 (`abcd/0`, `abcd/1`). Offsets go by recency with the newest at `/0`, so
@@ -179,5 +189,7 @@ concurrent rewrite in another workspace shifts them all down by one. For
 `jj abandon`, pass the short commit ID.
 
 Not every duplicate is litter: copies pinned by tags or another
-`immutable_heads()` clause can't be abandoned at all, so
-`jj log -r 'divergent() & ~immutable()'` lists the ones you could touch.
+`immutable_heads()` clause can't be abandoned at all, so filter with
+`jj log -r 'change_id(abcd) & ~immutable()'` to see the ones you could touch.
+`jj abandon` on an already-hidden copy reports "Skipping 1 revisions that are
+already hidden. No revisions to abandon." — that is success, not a failure.
