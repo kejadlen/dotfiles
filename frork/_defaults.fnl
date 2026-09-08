@@ -48,19 +48,6 @@
                          [:showhidden :bool true]]
         ; https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces
         :com.apple.spaces [[:spans-displays :bool true]]
-        :com.apple.driver.AppleBluetoothMultitouch.trackpad [[:Clicking :int 1]
-                                                             [:TrackpadFourFingerVertSwipeGesture
-                                                              :int
-                                                              0]
-                                                             [:TrackpadThreeFingerDrag
-                                                              :bool
-                                                              true]
-                                                             [:TrackpadThreeFingerHorizSwipeGesture
-                                                              :int
-                                                              0]
-                                                             [:TrackpadThreeFingerVertSwipeGesture
-                                                              :int
-                                                              0]]
         ; don't write .DS_Store to network volumes
         :com.apple.desktopservices [[:DSDontWriteNetworkStores :bool true]]
         :com.apple.finder [; don't ask when changing file extension
@@ -100,6 +87,11 @@
                           ".*\\.soundestlink\\.com/image/newsletter"
                           "c\\d+\\.patreon(usercontent)?\\.com"
                           :mcusercontent.com
-                          "cdn\\.shopify\\.com/s/files"]]
+                          "cdn\\.shopify\\.com/s/files"
+                          "substackcdn\\.com"
+                          ;; SPS
+                          "cdn\\.smore\\.com"
+                          ;; 404 Media
+                          "storage\\.ghost\\.io"]]
   (ok :defaults :com.freron.MailMate :MmAllowedImageURLRegexp :string
       (.. "https://(" (table.concat allowed-image-urls "|") ")/.*")))
