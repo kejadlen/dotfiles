@@ -42,6 +42,14 @@ written, so favor legibility.
 Use short flags only when no long form exists, or when long flags
 would harm clarity (for example, repeated `-v` to raise verbosity).
 
+On macOS "no long form exists" is broader than it looks, because the base
+utilities are BSD rather than GNU. `awk` is the one that bites: it is BWK awk,
+where `--assign` and `--field-separator` don't exist and `awk --assign FS='\t'`
+fails with `unknown option --assign ignored` followed by a syntax error on the
+mangled program. Use `-v` and `-F` there. `cat -A` is absent too — `sed 's/ /·/g'`
+is the portable way to make whitespace visible. Reach for the long form first,
+but check it on the utility you're actually invoking rather than assuming GNU.
+
 ## Executable permissions
 
 Scripts meant to be run directly need the executable bit (`chmod +x`).
