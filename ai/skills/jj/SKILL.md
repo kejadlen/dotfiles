@@ -7,10 +7,32 @@ description: Use when running any jj (Jujutsu) version control command — commi
 
 Verify behavior and flags against `jj <command> --help`, and read
 `pitfalls.md` before reaching for `squash`, `diff`, `show`, `file show`,
-filesets, `-R`, or a revset with parentheses — it catalogues flags that fail
-silently, hang without a TTY, or make a no-op look like it worked.
+`config get`, `tag`, `op`, filesets, `-R`, or a revset with parentheses — it
+catalogues flags that fail silently, hang without a TTY, or make a no-op look
+like it worked.
 
 *This is a self-improving skill — see the `self-improving-skills` skill.*
+
+Flags below are verified against jj 0.45.1 unless a line names another
+version.
+
+## Naming revisions
+
+**Re-read `jj log` before reusing an ID from earlier in the session.** Any
+rewrite — yours, another workspace's, or the human's in another terminal —
+gives commits new IDs and can abandon a change outright. "Revision `abcd`
+doesn't exist" means the ID went stale far more often than it means you
+mistyped it, and it is the most common jj failure there is: re-derive the ID
+rather than hunting for the typo.
+
+- Prefer change IDs, a bookmark, or `@`-relative expressions, which resolve
+  fresh. A bare commit-ID prefix is both stale-prone and ambiguous.
+- `-r main` fails when the repo has no *local* `main` — a clone often has only
+  `main@origin`, and jj's hint lists what does exist. `trunk` is the
+  paren-free alias to reach for, but it resolves out of config rather than
+  being fixed: `jj config get 'revset-aliases."trunk()"'` when the repo's
+  answer matters.
+- A divergent change ID errors on its own; jj prints the offsets to use.
 
 ## Core workflow
 
@@ -62,6 +84,30 @@ When the hunks all belong in one specific commit, use `jj squash --into <rev>
 <fileset>` instead — `pitfalls.md` covers its `--from` and `-u`/`-m`
 requirements.
 
+## Rebase
+
+Which commits move is set by exactly one of `-b`/`-s`/`-r`; where they land by
+exactly one of `-o`/`-A`/`-B`:
+
+| Flag | Selects |
+|---|---|
+| `-b, --branch` | the whole branch relative to the destination's ancestors — jj's own gloss is that `-b=br -o=dst` equals `-s=roots(dst..br) -o=dst`. The default when none of the three is given is `-b @` |
+| `-s, --source` | the revset and all its descendants |
+| `-r, --revision` | just the revset, re-parenting its descendants onto its former parents |
+| `-o, --onto` | new parent; repeatable, so `-o p1 -o p2` makes a merge (`-d` is the older alias) |
+| `-A, --insert-after` / `-B, --insert-before` | splice into the DAG at a position, rewriting neighbours |
+
+Also useful: `--skip-emptied` drops commits a rebase makes empty,
+`--keep-divergent` stops jj abandoning a copy, `--simplify-parents` prunes
+redundant edges from a merge.
+
+**`--ignore-immutable` is a global flag, not a rebase one** — it works on
+`rebase`, `bookmark set`, `git push`, and every other rewriting command, so
+"Commit `<id>` is immutable" has the same override everywhere. `-b` hits it
+most, because a branch reaches further back than you meant. Check what the
+revset actually covers before overriding; immutability usually means you
+selected too much, not that it's in the way.
+
 ## Megamerges
 
 A megamerge is bookmarked `mm` by convention, and the `jj-workspaces` skill
@@ -82,9 +128,6 @@ Do it in one rewrite. `-r` always re-parents the rebased commit's descendants
 onto its former parents, so rewriting `mm` separately to add a destination
 hands `@` all of `mm`'s former parents, leaving a second near-identical
 megamerge beside the real one. `jj rebase -r @ -o mm` repairs it.
-
-`-o`/`--onto` is repeatable (`-d` is the older alias), so `-o p1 -o p2 ...`
-sets several parents.
 
 The `jj stack` alias does this for a whole branch rather than one commit,
 defaulting to `mm+::@-` — everything between the merge and `@`. Read it with
@@ -111,9 +154,18 @@ jj bookmark set feature -r <rev>           # move bookmark to revision
 jj bookmark track main --remote=origin     # start tracking a remote bookmark
 ```
 
+`jj bookmark set` refuses to move a bookmark backwards or sideways
+(`-B`/`--allow-backwards` overrides). That guard fires on the ordinary case of
+resetting a local bookmark onto its remote after a rewrite, so
+`jj bookmark set main -r main@origin` needs the flag; it is only a real
+warning when you didn't expect the target to be behind.
+
 A bookmark reported "ahead by at least N, behind by at least N" against its
 remote is usually just a rebase, not lost work — compare the tips with
 `jj diff --from <remote> --to <local> --stat` before assuming otherwise.
+
+A bookmark name that resolves to more than one commit errors `Name <x> is
+conflicted`; jj prints the commit IDs to disambiguate with.
 
 ### Advancing bookmarks after commit
 
@@ -133,11 +185,26 @@ jj git push -c <rev>                       # create auto-named bookmark and push
 jj git push --named <name>=<rev>           # create named bookmark and push
 ```
 
-`-b` refuses to push untracked bookmarks ("Refusing to create new remote
-bookmark"). `--named` creates, pushes, and auto-tracks in one step — it is
-the whole step, not a follow-up to `jj bookmark create`, and errors
-"Bookmark already exists" if the name is already local. `-c` derives the name
-from the change ID (`push-<short-change-id>`).
+One decision, on whether the name already exists locally. Check with
+`jj bookmark list` if you don't know:
+
+| Local bookmark | Command |
+|---|---|
+| doesn't exist yet | `jj git push --named <name>=<rev>` — creates, pushes, tracks |
+| already exists | `jj git push -b <name>` — pushes, tracks if untracked |
+
+So `jj bookmark create <name>` followed by `jj git push --named <name>=<rev>`
+is always wrong: the create makes the name local, and `--named` then errors
+"Bookmark already exists". Pick one or the other, not both.
+
+There is no `--allow-new` on 0.45 — reaching for it is a git habit. 0.45
+auto-tracks on `-b` instead ("If a bookmark isn't tracking anything yet, the
+remote bookmark will be tracked automatically"); older versions refused with
+"Refusing to create new remote bookmark", which is the error `--allow-new`
+looks like it would fix.
+
+`-c` derives the name from the change ID (`push-<short-change-id>`).
+`jj git push --dry-run` exists and is cheap; `jj absorb --dry-run` does not.
 
 **Push a stack bottom-first, or pass `-b <bookmark>` per branch.** A bare
 `jj git push` only considers `remote_bookmarks(remote=origin)..@`, so pushing

@@ -16,7 +16,18 @@ jj log -r 'trunk()'                  # WRONG — triggers permission prompt
 `trunk` is a config alias for `trunk()`, so it stays correct per repo. Don't
 substitute a hardcoded bookmark — `trunk()` resolves differently across
 repos, and plenty of them point at something other than `main@origin`.
-`jj config get revset-aliases."trunk()"` shows the current repo's value.
+
+**Reading a paren'd config key needs the whole key single-quoted.** jj parses
+the key as TOML, so it has to *see* the double quotes around the paren'd
+segment; letting the shell strip them fails with a TOML parse error that names
+the stripped key and points at a column, which reads like the key is malformed
+rather than unquoted:
+
+```bash
+jj config get 'revset-aliases."trunk()"'         # correct
+jj config get revset-aliases."trunk()"           # WRONG — shell eats the quotes
+jj config get revset-aliases.'immutable_heads()' # WRONG — jj sees no quotes
+```
 
 **Fileset expressions with special characters need quoting.** Fileset
 operators (`,` `~` `|` `&` `()`) in a bare path are parsed as syntax, not
@@ -68,6 +79,19 @@ jj diff --stat config                          # correct — relative to cwd
 `jj st` prints cwd-relative paths, so it's the safe place to copy from. Use
 `jj workspace root` when the cwd's depth is unclear.
 
+**`-R` does not move the cwd, so a repo-relative path under it is a parse
+error.** Filesets still resolve from wherever you actually are, and a path
+that doesn't exist there fails with "Failed to parse fileset: Invalid file
+pattern" — nothing about the real problem. Prefix it `root:` instead:
+
+```bash
+jj -R ~/src/alpha/dotfiles diff 'root:"ai/skills/jj/SKILL.md"'   # correct
+jj -R ~/src/alpha/dotfiles diff ai/skills/jj/SKILL.md            # WRONG
+```
+
+jj's own hint says this ("Consider using root:...") but only when it can
+guess, so don't wait for it.
+
 ## Inspecting revisions
 
 **Always pass `--git` when reading a diff.** The default color-words format
@@ -76,7 +100,9 @@ so a piped diff is both ambiguous and unquotable. Works on `jj diff`,
 `jj show`, and `jj log -p`.
 
 **`jj show` does not accept path arguments.** It takes an optional revision
-but cannot be scoped to a path. Use `jj diff` instead:
+but cannot be scoped to a path, and it reports the path as a bad revision
+("Revision `docs/local-development.md` doesn't exist"), so the message sends
+you looking for a stale change ID instead. Use `jj diff`:
 
 ```bash
 jj diff -r @- --git                  # all changes in parent revision
@@ -171,7 +197,16 @@ jj config get core.excludesFile     # errors when unset (the common case)
 ls ~/.config/git/ignore             # the XDG fallback jj actually reads
 ```
 
+## Tags
+
+Subcommands on 0.45 are `list`, `set`, `delete`, `track`, and `untrack` —
+there is no `jj tag create` or `jj tag move`, and `jj tag` with no subcommand
+just prints usage. `untrack` takes `<TAG[@REMOTE]>` forms, not bare names, and
+both `list` and `untrack` accept fileset-style patterns (`'glob:"v*"'`), which
+need the same quoting as any other paren- or star-bearing argument.
+
 ## Operations
 
 **`jj op undo` has been removed (v0.39+).** Use `jj op revert` or
-`jj undo`/`jj redo`.
+`jj undo`/`jj redo`. The removal shows up as `Usage: jj operation` with no
+error line, which reads like a missing argument rather than a gone subcommand.

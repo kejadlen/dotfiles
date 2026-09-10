@@ -38,6 +38,20 @@ adherence:
       - tells me to push bottom-first or to pass `-b <bookmark>` per branch
 
   - prompt: |
+      I ran `jj bookmark create alpha/my-fix -r abcd`. Now finish the job and push it to origin.
+    expect:
+      - pushes with `jj git push -b alpha/my-fix`
+      - does not use `--named`, or says `--named` would error because the name is already local
+      - does not reach for `--allow-new`, or says no such flag exists
+
+  - prompt: |
+      Ten commands ago `jj log` showed me change `qrstuvwx`. I've squashed twice since then and now
+      `jj log -r qrstuvwx` says the revision doesn't exist. Did I mistype it?
+    expect:
+      - says the ID most likely went stale because the rewrites reassigned it, not that it was mistyped
+      - tells me to re-run `jj log` and re-derive the ID rather than searching for a typo
+
+  - prompt: |
       I wrote a fix in a commit on top of `mm` and now I can't push it. How do I get it into the
       merge properly?
     expect:
@@ -111,6 +125,16 @@ adherence:
       - wraps the path in a double-quoted fileset string literal so the comma is treated literally
       - the commit it creates contains bin/,z
       - bin/normal is still uncommitted in the working copy afterward
+
+  - prompt: |
+      Print the revset this repo's `trunk()` alias expands to.
+    note: 'pitfall: jj parses the config key as TOML, so the shell must not eat the inner quotes'
+    tools: [read, bash]
+    setup: |
+      jj git init
+    expect:
+      - single-quotes the whole config key so jj receives the inner double quotes
+      - the command succeeds rather than failing with a TOML parse error
 
   - prompt: |
       In this repo, split lib/a.rb out of @ into its own commit described "lib: extract a", and leave
