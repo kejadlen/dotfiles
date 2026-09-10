@@ -101,3 +101,22 @@ exclude_re = [
 
 Every exclusion needs a comment. Undocumented exclusions hide real
 gaps.
+
+## Tree copying
+
+cargo-mutants builds each mutant in a scratch copy of the tree, and
+since 25.1.0 that copy ignores every gitignore file by default —
+untracked and ignored files come along too. A path that isn't a
+regular file (a sandbox bind-mounting `/dev/null` over `.envrc`, say)
+aborts the run:
+
+```
+Error: Failed to copy .../.envrc to /tmp/cargo-mutants-.../.envrc
+    the source path is neither a regular file nor a symlink to a regular file
+```
+
+Set `gitignore = true` in `.cargo/mutants.toml` so the copy skips
+ignored files, including matches from the global git ignore. Filtering
+only applies in a tree with a `.git` directory, so a jj repo must be
+colocated. `--in-place` skips the copy entirely but can't be combined
+with `-j`.
