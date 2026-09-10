@@ -1,7 +1,39 @@
-# Dotfiles
+# dotfiles
 
-This repo contains both my dotfiles as well as [Ansible][ansible] playbooks to
-provision new machines.
+## Bootstrapping
+
+macOS things:
+
+- In System Settings
+  - General > Sharing
+    - [ ] Set computer name (to make SSH easier)
+    - [ ] Enable Remote Login
+  - Menu Bar
+    - [ ] Automatically hide and show the menu bar: Always
+    - [ ] Show menu bar background
+  - Displays
+    - [ ] More Space
+  - Keyboard > Keyboard Shortcuts > Modifier Keys
+    - [ ] Caps Lock (⇪) -> Control (⌃)
+
+```sh
+git clone https://git.kejadlen.dev/alpha/dotfiles.git ~/.dotfiles
+~/.dotfiles/bootstrap.sh
+```
+
+`bootstrap.sh` installs Homebrew and DotSlash, then runs `frork` to handle
+the rest.
+
+Other non-automatable things:
+
+- [ ] Unlock with Apple Watch
+- [ ] 1Password
+- [ ] CleanShot X
+- [ ] Hamerspoon
+- Firefox Developer Edition
+  - [ ] [uBlock Origin hard mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-hard-mode)
+- [ ] MailMate
+- [ ] Syncthing
 
 ## Hammerspoon and Fennel
 
