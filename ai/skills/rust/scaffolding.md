@@ -87,6 +87,10 @@ Notes on this template:
   are lint levels, so they live here rather than in `.clippy.toml`. See
   `style.md` "Panic discipline" for rationale and how to opt out at a
   single call site when an invariant is genuinely local.
+- A project that's already a multi-crate workspace hoists the block to
+  `[workspace.lints.clippy]` in the root manifest. Each member must opt
+  in with `[lints] workspace = true`; a member without it gets no lints
+  and Cargo won't warn.
 
 Cross-cutting choices (edition, lock file, fs-err, tracing, tokio
 features) are explained in `SKILL.md`.
