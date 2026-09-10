@@ -1,4 +1,4 @@
-(local {: ok} (require :flork))
+(local {: ok} (require :frork))
 
 (let [ComputerName "Perfect Cherry Blossom"
       LocalHostName (ComputerName:gsub " " "-")]

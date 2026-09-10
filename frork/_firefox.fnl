@@ -3,7 +3,7 @@
 
 (local {: view} (require :fennel))
 (local lfs (require :lfs))
-(local {: ok :utils {: assert-platform : expand-env-vars}} (require :flork))
+(local {: ok :utils {: assert-platform : expand-env-vars}} (require :frork))
 
 (assert-platform :Darwin)
 

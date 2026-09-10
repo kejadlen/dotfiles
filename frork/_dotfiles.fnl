@@ -1,4 +1,4 @@
-(local {: ok : no :utils {: dirname}} (require :flork))
+(local {: ok :utils {: dirname}} (require :frork))
 
 (ok :git "~/.dotfiles" "https://git.kejadlen.dev/alpha/dotfiles.git")
 
@@ -29,9 +29,6 @@
 
 (ok :directory "~/.pi")
 (ok :symlink "~/.pi/agent" "~/.dotfiles/ai/pi")
-
-;; moved to .config/git/config
-(no :symlink :$HOME/.gitconfig :$HOME/.dotfiles/.gitconfig)
 
 ;; for per-system configuration
 (ok :directory :$HOME/.config/jj/conf.d)
