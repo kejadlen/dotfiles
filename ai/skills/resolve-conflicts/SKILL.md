@@ -39,9 +39,15 @@ conflicts; stop and ask the user for a change ID if it doesn't.
 
 **Anchor on the oldest conflicted commit, not `@-`.** A conflict inherited
 through ancestry shows up in every descendant, so `@-` is usually a symptom
-rather than the source. `jj status`'s hint names the real one ("start by
-creating a commit on top of the first conflicted commit"), and `jj log -r
-'conflicts()'` lists the full set. Fix the root and jj rebases the rest —
+rather than the source. `jj status`'s hint points at a root ("start by
+creating a commit on top of the first conflicted commit"), but it
+**under-reports when there is more than one** — it can name two while a third
+commit holds conflicts no ancestor produced. Treat it as a starting point, not
+the set. The discriminating check is to run `jj resolve --list -r <rev>` over
+every revision `jj log -r 'conflicts()'` lists, and compare: a commit whose
+paths are absent from its parent is its own root. Miss one and the resolution
+looks like it is working — descendants clear, the count drops — and then the
+megamerge keeps reporting conflicts you cannot trace. Fix the root and jj rebases the rest —
 step 4's squash then reports `Existing conflicts were resolved or abandoned
 from N commits`. Resolving at `@-` instead leaves every ancestor conflicted.
 
@@ -127,6 +133,18 @@ cleanly is the classic stale-output trap: the text merged, but the generator
 would emit something else. Re-run the generator and squash any diff into the
 commit that owns it — and run it from the main workspace, never from
 `work/`, where repo tooling reading `git ls-files` goes green-but-wrong.
+
+**A file neither side conflicted on can still be broken.** When one branch
+deletes a data source and another adds code that reads it, the two changes
+never touch the same lines, so `jj resolve --list` stays silent while the
+reader is left addressing fields that no longer exist. Nothing in the conflict
+machinery catches this; a test that loads the deleted file is what surfaces it,
+as an unrelated-looking `ENOENT` at import time. Resolving it means writing an
+adapter, not merging text — so find the authority on the surviving shape rather
+than inventing one. Comments saying a function "mirrors" some module name that
+module as the authority; read it. Land the fix with `jj squash --into <rev>
+<path>` on the commit that caused the break, which is the one that deleted the
+source, not the one that added the reader.
 
 **Check the files that *didn't* conflict.** When a rebase turns a linear stack
 into siblings under a merge — `jj rebase --insert-after 'trunk()'` on part of
