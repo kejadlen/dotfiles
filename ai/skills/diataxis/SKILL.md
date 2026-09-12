@@ -138,6 +138,19 @@ Check coverage across all four quadrants. Most projects over-invest in reference
 | One page serves all needs | "Getting Started" that's tutorial + reference + how-to | Split into separate pages by mode |
 | Empty structure imposed | Four sections created with no content | Let structure emerge from content; don't create empty shells |
 
+## Limits
+
+Treat Diataxis as a map, not the only valid documentation system. Hillel Wayne's [critique][hw] names gaps to weigh case by case:
+
+- The compass fits tools and libraries best, because their conceptual models are simple. Frameworks require readers to understand how concepts relate, so their explanations end up teaching. Django's explanation section, for example, is triple the size of its tutorials and how-to guides combined. Languages need sequential teaching, not random-access pages.
+- Conceptual overviews fall outside the quadrants. An overview presents the big picture before the tutorial, for readers deciding whether to learn the subject at all.
+- Examples and snippets aren't the same thing. Examples are complete code intended to be studied; snippets are code intended to be copied and used.
+- Some guides branch instead of running in a line. Julia Evans's debugging mysteries, for instance, don't fit the linear how-to shape.
+
+[hw]: https://www.hillelwayne.com/post/problems-with-the-4doc-model/
+
+When content doesn't fit a quadrant, give it the form it needs instead of forcing it into one.
+
 ## Quality
 
 Diataxis addresses *deep quality* — documentation that flows, anticipates user needs, and feels right to use. It does not replace *functional quality* (accuracy, completeness, consistency). Both are necessary. Functional quality is the prerequisite; deep quality emerges when documentation respects user needs.
