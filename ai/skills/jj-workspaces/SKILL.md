@@ -117,7 +117,7 @@ Use Task tool to dispatch in parallel. **Start agents in the workspace directory
 
 ### Phase 3: Execution (Agent)
 
-**Agent MUST:**
+**Agent steps, in order:**
 1. `cd` into workspace directory first—all work happens FROM that directory
 2. Make file edits to implement task
 3. Run verification (tests, type checks)
@@ -126,7 +126,9 @@ Use Task tool to dispatch in parallel. **Start agents in the workspace directory
 
 **Why `jj split` instead of `jj commit`:** Splitting moves changes into a new parent commit while leaving the workspace's working copy commit empty. This keeps the workspace commit as the megamerge parent, maintaining the DAG structure. The `-m` flag provides the description inline, avoiding interactive prompts.
 
-**FORBIDDEN for agents:**
+**Leave to the coordinator:** it owns workspace lifecycle, DAG
+placement, and pushing, and does each only after reviewing every
+agent's work.
 - `jj workspace` commands
 - `jj git push`
 - `jj rebase`
@@ -134,7 +136,7 @@ Use Task tool to dispatch in parallel. **Start agents in the workspace directory
   `squash`, `abandon`, `restore --into`). Check `jj log -r
   'working_copies()'` before touching any revision other than `@`. Two
   workspaces rewriting the same commit is what produces divergent changes.
-- Any work outside assigned workspace
+- Any work outside the assigned workspace
 
 ### Phase 4: Review (Coordinator)
 

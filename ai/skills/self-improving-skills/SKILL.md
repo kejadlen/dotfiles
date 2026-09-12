@@ -10,17 +10,6 @@ user-invocable: false
 
 Skills are living documents. When you use a skill and learn something it doesn't cover, **update the skill after completing the task.** This applies whether the skill is nearly empty or well-established.
 
-## When the Skill Doesn't Cover What You Need
-
-The skill won't have everything — especially early on. Figure it out:
-
-1. **Check the tool's own help.** Run `--help`, `help`, or equivalent. CLI tools document themselves.
-2. **Read nearby docs.** Look for READMEs, man pages, or doc directories in the tool's install path.
-3. **Experiment.** Try the command. Read the error. Adjust.
-4. **Search the filesystem.** `find`, `rg`, `ls` for config files, examples, or related scripts.
-
-Once you've figured it out, that's exactly the kind of thing to capture in the skill.
-
 ## When to Improve
 
 - **You had to check `--help`.** If the skill didn't have the command you needed and you had to fall back to `--help` or docs, that's the clearest signal the skill is missing something. After the task, add what you learned.

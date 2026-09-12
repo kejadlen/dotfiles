@@ -102,7 +102,7 @@ in the subject line — that's what trailers are for.
 ```
 Normalize TTL unit mismatch
 
-Assisted-by: Claude Opus 4.8 via Claude Code
+Assisted-by: <Model name> via <tool name>
 ```
 
 ### Required trailers
@@ -110,11 +110,10 @@ Assisted-by: Claude Opus 4.8 via Claude Code
 `Assisted-by` is mandatory when AI drafts or substantially edits the
 message. The format is `Assisted-by: [Model name] via [tool name]`
 — the human-readable model name, then `via`, then the tool. Use the
-actual model and tool you are running inside; do not copy examples
-blindly.
+actual model and tool you are running inside.
 
-Correct: `Assisted-by: Claude Opus 4.8 via Claude Code`. Do not append
-the raw model ID in parentheses (`Claude Opus 4.8 (claude-opus-4-8)`),
+Do not append the raw model ID in parentheses
+(`<Model name> (<model-id>)`),
 drop the `via [tool name]` half, or substitute the model ID for the
 name.
 

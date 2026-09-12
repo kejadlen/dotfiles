@@ -1,6 +1,6 @@
 ---
 name: technical-writing
-description: Use when writing or reviewing technical documentation, API docs, tutorials, READMEs, or developer guides. Covers terminology, audience analysis, document structure, lists, paragraphs, illustrations, and sample code. Complements elements-of-style (prose clarity) and diataxis (document classification).
+description: Use when writing or reviewing technical documentation, API docs, tutorials, READMEs, or developer guides. Covers terminology, audience analysis, document structure, lists, paragraphs, illustrations, and sample code. Complements diataxis (document classification).
 ---
 
 # Technical Writing
@@ -8,9 +8,7 @@ description: Use when writing or reviewing technical documentation, API docs, tu
 Actionable reference for technical documentation, distilled from
 Google's Technical Writing courses.
 
-For sentence-level prose rules, use `writing-clearly-and-concisely`
-(from the elements-of-style plugin). For classifying documentation
-types, use `diataxis`.
+For classifying documentation types, use `diataxis`.
 
 ## Terminology
 

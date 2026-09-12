@@ -200,15 +200,9 @@ Friction worth naming:
 Just name it — don't fix or file it unless asked. Don't pad the reply
 or restate points already made; surface only what hasn't come up.
 
-## Anti-rationalization
+## Process on small tasks
 
-These conventions exist because LLMs skip steps when unsupervised.
-If you catch yourself thinking any of these, stop — you're
-rationalizing a shortcut:
-
-- "This is simple enough to skip"
-- "I already tested manually"
-- "The spirit, not the letter"
-- "This case is different"
-
-Follow the process.
+The steps above — loading the named skill, running checks, the delete
+pass — apply to small changes too; that's where small mistakes slip
+through. If a step genuinely doesn't apply, say so rather than
+skipping it silently.
