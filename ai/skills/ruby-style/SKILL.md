@@ -104,6 +104,22 @@ end
 items.each { |item| process(item) }
 ```
 
+`assert_raises` is the exception, because it is genuinely both: the
+block runs for the side effect of raising, but the method hands back
+the exception a test then asserts on. Let the layout pick the
+delimiter — braces when the call fits on one line, `do...end` when it
+does not.
+
+```ruby
+assert_raises(ArgumentError) { Birthday.new(year: 1985, day: 12) }
+
+assert_raises(RuntimeError) do
+  silence_warnings do
+    raise "boom"
+  end
+end
+```
+
 ## Implicit block parameter
 
 Use `it` when the receiver makes the subject obvious. Name the parameter
