@@ -34,6 +34,21 @@ For glob patterns, use `glob:"pattern"` the same way:
 jj diff -- 'glob:"bin/*" ~ glob:"bin/,special"'
 ```
 
+**`revsets-use-glob-by-default` swallows string-pattern kind prefixes.** With
+this config set, `description("substring:foo")` doesn't select the substring
+kind — the prefix becomes literal glob text, so the pattern silently matches
+nothing. No parse error, just an empty result set that reads like "no such
+commits." Write raw glob syntax instead (`description("*#private*")`),
+and remember glob `*` does match across newlines in multi-paragraph
+descriptions.
+
+**A bare bookmark name in a revset errors once that bookmark is gone.**
+`jj log -r mm` fails with "Revision `mm` doesn't exist", which takes down every
+command that reads a stored revset naming it. Both `bookmarks(exact:"mm")` and
+`present(mm)` return the empty set instead, so use one of them in config —
+`revsets.bookmark-advance-from` excludes the megamerge with
+`~bookmarks(exact:"mm")` for exactly this reason.
+
 **Put `-m` before `--` or fileset args.** jj parses everything after `--` as
 fileset, so `-m` placed after `--` becomes a parse error.
 
@@ -55,12 +70,17 @@ jj diff --stat config                          # correct — relative to cwd
 
 ## Inspecting revisions
 
+**Always pass `--git` when reading a diff.** The default color-words format
+marks insertions and deletions with color alone and wraps to terminal width,
+so a piped diff is both ambiguous and unquotable. Works on `jj diff`,
+`jj show`, and `jj log -p`.
+
 **`jj show` does not accept path arguments.** It takes an optional revision
 but cannot be scoped to a path. Use `jj diff` instead:
 
 ```bash
-jj diff -r @-                        # all changes in parent revision
-jj diff -r @- path/to/file           # specific file in parent revision
+jj diff -r @- --git                  # all changes in parent revision
+jj diff -r @- --git path/to/file     # specific file in parent revision
 ```
 
 **`jj file show` needs `-r`, and silently ignores a revision without it.**
