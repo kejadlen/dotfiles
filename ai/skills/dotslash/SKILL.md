@@ -41,11 +41,12 @@ bin/<name> --help   # or whatever smoke test is appropriate
 
 ### Hand-writing the file (fallback)
 
-Prefer extending `update_dotslash_release` over hand-writing JSON. Reserve hand-writing for cases the helper structurally can't reach — a non-GitHub host or an unusual URL scheme:
+Prefer extending `update_dotslash_release` over hand-writing JSON. Reserve hand-writing for cases the helper can't reach — a non-GitHub host, an unusual URL scheme, or a repo with no Rakefile to hold the helper (`Gusto/claude-code` ships DotSlash launchers inside plugins and has none):
 
 1. Find the asset with `gh release view --repo owner/repo --json tagName,assets` and pick the `macos-arm64` / `macos-aarch64` / `darwin-arm64` one.
 2. Run `dotslash -- create-url-entry URL`. It computes size and hash and infers `format` from the URL suffix; you fill in `path`.
-3. Determine `path`: for a bare binary, the filename to save as (e.g. `"jq"`, omit `format`); for an archive, the executable's relative path inside it (list contents with `curl -sL URL | tar tzf -`).
+   On a private repo it can't do this — it fetches the URL with no auth and gets a 404. Download the asset instead (`gh release download <tag> --repo owner/repo --pattern '<asset>'`), then take `size` from `ls -l` and `digest` from `shasum -a 256`, and set `"hash": "sha256"` to match.
+3. Determine `path`: for a bare binary, the filename to save as (e.g. `"jq"`, omit `format`); for an archive, the executable's relative path inside it (list contents with `curl -sL URL | tar tzf -`, or `tar tzf <file>` on the copy you downloaded above).
 4. Write `bin/<name>` with the structure below, then `chmod +x`:
 
 ```
@@ -76,7 +77,7 @@ Prefer extending `update_dotslash_release` over hand-writing JSON. Reserve hand-
 }
 ```
 
-Include both an HTTP provider (direct URL, tried first) and a GitHub Release provider (uses `gh` CLI, works with private repos).
+Include both an HTTP provider (direct URL, tried first) and a GitHub Release provider (uses `gh` CLI, works with private repos). On a private repo, omit the HTTP provider — `releases/download/...` needs auth the bare `url` provider never sends, so it is a dead entry that masks the real error when the fallback breaks.
 
 ## Updating existing binaries
 
