@@ -42,7 +42,6 @@ brew "universal-ctags", args: ["HEAD"] # don't remember why this is installing f
 
 # install from taps
 
-# brew "fabianishere/personal/pam_reattach" # doesn't exist anymore - don't think I need this?
 brew "felixkratz/formulae/sketchybar"
 brew "kejadlen/tap/fennel-ls", args: ["HEAD"]
 
