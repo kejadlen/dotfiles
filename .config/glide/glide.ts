@@ -70,16 +70,72 @@ glide.autocmds.create("UrlEnter", { hostname: "mail.google.com" }, async () => {
   });
 });
 
-// new reddit is bad (but old.reddit.com doesn't serve media paths)
-glide.autocmds.create("UrlEnter", { hostname: "www.reddit.com" }, async () => {
-  const url = new URL(glide.ctx.url);
+// new reddit is bad (but old.reddit.com doesn't serve media paths), and reddit
+// belongs in the Social container.
+type ContainerName = "Social";
 
-  // old reddit doesn't serve these
-  if (url.pathname.startsWith("/media")) return;
+const containerStoreIds = new Map<ContainerName, string>();
 
-  url.hostname = "old.reddit.com";
-  await browser.tabs.update({ url: url.toString() });
-});
+async function containerStoreId(name: ContainerName): Promise<string | null> {
+  const cached = containerStoreIds.get(name);
+  if (cached) return cached;
+
+  const identity = (await browser.contextualIdentities.query({ name }))[0];
+  const storeId = identity?.cookieStoreId ?? null;
+  if (storeId) containerStoreIds.set(name, storeId);
+  return storeId;
+}
+
+type MoveResult = "moved" | "already" | "missing";
+
+// A tab's container is fixed at creation, so "moving" it means reopening the
+// URL in a new container tab and dropping the original.
+async function moveToContainer(
+  name: ContainerName,
+  tabId: number,
+  url?: string,
+): Promise<MoveResult> {
+  const storeId = await containerStoreId(name);
+  if (!storeId) return "missing";
+
+  const tab = await browser.tabs.get(tabId);
+  if (tab.cookieStoreId === storeId) return "already";
+
+  await browser.tabs.create({
+    url: url ?? tab.url,
+    cookieStoreId: storeId,
+    windowId: tab.windowId,
+    index: tab.index,
+    active: tab.active,
+    pinned: tab.pinned,
+  });
+  await browser.tabs.remove(tabId);
+  return "moved";
+}
+
+glide.autocmds.create(
+  "UrlEnter",
+  /^https?:\/\/([a-z0-9-]+\.)*reddit\.com(\/|$)/i,
+  async ({ url, tab_id }) => {
+    const parsed = new URL(url);
+
+    // old reddit doesn't serve /media paths
+    if (parsed.hostname !== "old.reddit.com" && !parsed.pathname.startsWith("/media")) {
+      parsed.hostname = "old.reddit.com";
+    }
+
+    const result = await moveToContainer("Social", tab_id, parsed.toString());
+    if (result === "missing") {
+      glide.g["dev.kejadlen"]!.notify(
+        'reddit: no "Social" container found',
+      );
+      return;
+    }
+    if (result === "already" && parsed.toString() !== url) {
+      await browser.tabs.update(tab_id, { url: parsed.toString() });
+    }
+  },
+);
 
 // strip tracking params (rewrites the request before it fires, no reload)
 // forEach avoids Symbol.iterator, which Xray vision denies on cross-compartment values.
