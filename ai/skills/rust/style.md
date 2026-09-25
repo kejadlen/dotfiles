@@ -303,15 +303,51 @@ spreading it through new code.
 The Clippy configuration below disallows `chrono` types so the
 distinction is enforced at lint time.
 
+### Use `camino` for paths
+
+[`camino`](https://docs.rs/camino) provides `Utf8Path` and
+`Utf8PathBuf`, which are paths guaranteed to be valid UTF-8. Use them
+for paths throughout the program instead of `Path` and `PathBuf`.
+
+Why:
+
+- Paths `Display` directly and convert to `&str` for free — no
+  `.display()`, `.to_string_lossy()`, or `.to_str().unwrap()` at every
+  log line, error message, or serialization site.
+- They implement `serde` traits as plain strings (with the `serde1`
+  feature), so paths in config files round-trip cleanly.
+- They implement `AsRef<Path>`, so they pass straight to `fs-err` and
+  anything else that takes `std::path` types.
+
+```toml
+[dependencies]
+camino = "*"
+```
+
+```rust
+use camino::Utf8PathBuf;
+
+let path = Utf8PathBuf::try_from(std_path)?;
+tracing::info!("reading {path}");
+let contents = fs::read_to_string(&path)?;
+```
+
+Convert once, where a `PathBuf` enters the program, with
+`Utf8PathBuf::try_from`. That conversion fails loudly on a non-UTF-8
+path instead of corrupting it, which keeps the OS-boundary rule below
+intact.
+
 ## OS boundaries
 
 Rust types only protect what they model. Crossing the OS↔Rust boundary
 means picking the type that matches what the OS actually returns —
 which is usually bytes, not text.
 
-- Filesystem paths: `Path` / `PathBuf` / `OsStr` / `OsString`. Don't
-  round-trip through `String`. Paths are arbitrary bytes on Unix and
-  UTF-16 on Windows; `String` is neither.
+- Filesystem paths: `Utf8Path` / `Utf8PathBuf` from `camino`, converted
+  from `Path` / `PathBuf` with `try_from` at the boundary. Don't
+  round-trip through `String` with lossy conversions. Paths are
+  arbitrary bytes on Unix and UTF-16 on Windows, so a path that isn't
+  UTF-8 should produce an error rather than be silently rewritten.
 - Process arguments and environment: `OsString`. Reach for
   `std::env::args_os()` and `std::env::var_os()`, not `args()` /
   `var()`.
