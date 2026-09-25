@@ -71,7 +71,8 @@ glide.autocmds.create("UrlEnter", { hostname: "mail.google.com" }, async () => {
 });
 
 // new reddit is bad (but old.reddit.com doesn't serve media paths), and reddit
-// belongs in the Social container.
+// belongs in the Social container. Intercept at the network level so the
+// new-reddit interstitial never loads.
 type ContainerName = "Social";
 
 const containerStoreIds = new Map<ContainerName, string>();
@@ -86,55 +87,75 @@ async function containerStoreId(name: ContainerName): Promise<string | null> {
   return storeId;
 }
 
+// Prime the cache so the webRequest listener below can branch synchronously.
+void containerStoreId("Social");
+
 type MoveResult = "moved" | "already" | "missing";
 
 // A tab's container is fixed at creation, so "moving" it means reopening the
-// URL in a new container tab and dropping the original.
+// URL in a new container tab and dropping the original. Concurrent moves on
+// the same tab collapse — the listener can fire twice for one navigation.
+const movesInProgress = new Set<number>();
+
 async function moveToContainer(
   name: ContainerName,
   tabId: number,
   url?: string,
 ): Promise<MoveResult> {
-  const storeId = await containerStoreId(name);
-  if (!storeId) return "missing";
+  if (movesInProgress.has(tabId)) return "already";
+  movesInProgress.add(tabId);
+  try {
+    const storeId = await containerStoreId(name);
+    if (!storeId) return "missing";
 
-  const tab = await browser.tabs.get(tabId);
-  if (tab.cookieStoreId === storeId) return "already";
+    const tab = await browser.tabs.get(tabId);
+    if (tab.cookieStoreId === storeId) return "already";
 
-  await browser.tabs.create({
-    url: url ?? tab.url,
-    cookieStoreId: storeId,
-    windowId: tab.windowId,
-    index: tab.index,
-    active: tab.active,
-    pinned: tab.pinned,
-  });
-  await browser.tabs.remove(tabId);
-  return "moved";
+    await browser.tabs.create({
+      url: url ?? tab.url,
+      cookieStoreId: storeId,
+      windowId: tab.windowId,
+      index: tab.index,
+      active: tab.active,
+      pinned: tab.pinned,
+    });
+    await browser.tabs.remove(tabId);
+    return "moved";
+  } finally {
+    movesInProgress.delete(tabId);
+  }
 }
 
-glide.autocmds.create(
-  "UrlEnter",
-  /^https?:\/\/([a-z0-9-]+\.)*reddit\.com(\/|$)/i,
-  async ({ url, tab_id }) => {
-    const parsed = new URL(url);
+browser.webRequest.onBeforeRequest.addListener(
+  (details) => {
+    const url = new URL(details.url);
 
     // old reddit doesn't serve /media paths
-    if (parsed.hostname !== "old.reddit.com" && !parsed.pathname.startsWith("/media")) {
-      parsed.hostname = "old.reddit.com";
+    if (url.hostname !== "old.reddit.com" && !url.pathname.startsWith("/media")) {
+      url.hostname = "old.reddit.com";
+    }
+    const target = url.toString();
+
+    const socialId = containerStoreIds.get("Social");
+    if (socialId && details.cookieStoreId === socialId) {
+      return target === details.url ? undefined : { redirectUrl: target };
     }
 
-    const result = await moveToContainer("Social", tab_id, parsed.toString());
-    if (result === "missing") {
-      glide.g["dev.kejadlen"]!.notify(
-        'reddit: no "Social" container found',
-      );
-      return;
-    }
-    if (result === "already" && parsed.toString() !== url) {
-      await browser.tabs.update(tab_id, { url: parsed.toString() });
-    }
+    // Reopen in the Social container rather than load here.
+    void moveToContainer("Social", details.tabId, target).then((result) => {
+      if (result === "missing") {
+        glide.g["dev.kejadlen"]!.notify('reddit: no "Social" container found');
+      }
+    });
+
+    // Cancel only once the container is known to exist — a missing one
+    // leaves the page readable instead of canceled. Until the cache warms,
+    // redirect so the navigation still lands on old reddit.
+    if (socialId) return { cancel: true };
+    return target === details.url ? undefined : { redirectUrl: target };
   },
+  { urls: ["*://*.reddit.com/*"], types: ["main_frame"] },
+  ["blocking"]
 );
 
 // strip tracking params (rewrites the request before it fires, no reload)
