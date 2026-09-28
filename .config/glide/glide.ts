@@ -314,6 +314,13 @@ glide.keymaps.set("normal", "<D-A-t>", async () => {
 },
   { description: "Open a new tab at the end of the tab strip" });
 
+// Forward to Firefox's built-in screenshot shortcut; the config sandbox can't
+// invoke the Browser:Screenshot command directly.
+glide.keymaps.set(["normal", "insert"], "<D-S-2>", async () => {
+  await glide.keys.send("<D-S-s>", { skip_mappings: true });
+},
+  { description: "Take a screenshot" });
+
 // mash+o (cmd+ctrl+alt+o): send the current tab to the "main" window — the
 // normal window with the most tabs — and drop it at the end of that strip.
 glide.keymaps.set(["normal", "insert"], "<C-A-D-o>", async ({ tab_id }) => {
