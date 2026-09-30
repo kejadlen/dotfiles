@@ -307,7 +307,7 @@ glide.excmds.create(
 );
 
 // cmd+opt+t: open a new tab at the end of the tab strip (overrides insertAfterCurrent for this call)
-glide.keymaps.set("normal", "<D-A-t>", async () => {
+glide.keymaps.set(["normal", "insert"], "<D-A-t>", async () => {
   const tabs = await browser.tabs.query({});
   const lastIndex = tabs.reduce((max, t) => (t.index > max ? t.index : max), -1);
   await browser.tabs.create({ active: true, index: lastIndex + 1 });
