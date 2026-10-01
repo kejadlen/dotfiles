@@ -314,6 +314,32 @@ glide.keymaps.set(["normal", "insert"], "<D-A-t>", async () => {
 },
   { description: "Open a new tab at the end of the tab strip" });
 
+// Tridactyl-style :tabmove — "+N"/"-N" relative, "N" 1-based absolute, "^"/"$" start/end.
+// Targets are clamped to the tab's pinned/unpinned group, since tabs.move
+// silently no-ops on a move across that boundary.
+glide.excmds.create(
+  { name: "tab_move", description: "Move the current tab: +N, -N, N, ^, or $ (default)" },
+  async ({ tab_id, args_arr }) => {
+    const arg = args_arr[0] ?? "$";
+    const tab = await browser.tabs.get(tab_id);
+    const tabs = await browser.tabs.query({ windowId: tab.windowId });
+    const pinnedCount = tabs.reduce((n, t) => (t.pinned ? n + 1 : n), 0);
+    const [first, last] = tab.pinned ? [0, pinnedCount - 1] : [pinnedCount, tabs.length - 1];
+
+    let index: number;
+    if (arg === "^") index = first;
+    else if (arg === "$") index = last;
+    else if (/^[+-]\d+$/.test(arg)) index = tab.index + Number(arg);
+    else if (/^\d+$/.test(arg)) index = Number(arg) - 1;
+    else {
+      glide.g["dev.kejadlen"]!.notify(`tab_move: expected +N, -N, N, ^, or $, got "${arg}"`);
+      return;
+    }
+
+    await browser.tabs.move(tab_id, { index: Math.min(Math.max(index, first), last) });
+  },
+);
+
 // Forward to Firefox's built-in screenshot shortcut; the config sandbox can't
 // invoke the Browser:Screenshot command directly.
 glide.keymaps.set(["normal", "insert"], "<D-S-2>", async () => {
