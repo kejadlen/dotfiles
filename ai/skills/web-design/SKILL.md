@@ -9,12 +9,10 @@ These are personal defaults for building web interfaces. When a project
 has its own design system, component library, or established conventions,
 follow those instead.
 
-## Semantic HTML
+For semantic markup, browser support, accessibility, and validation,
+use `web-standards`.
 
-Lead with semantic HTML. Reach for meaningful elements — `main`,
-`article`, `nav`, `kbd`, `details`, `dl`/`dt` — before wrapping content
-in generic `div`s. Semantic markup gives the CSS something to target and
-carries accessibility along with it.
+## CSS
 
 matklad's [CSS: the unavoidable bad
 parts](https://matklad.github.io/2026/06/04/css-unavoidable-bad-parts.html)
