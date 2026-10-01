@@ -9,6 +9,10 @@ Supplementary notes on designing software with AI, accumulated from experience a
 
 *This is a self-improving skill — see the `self-improving-skills` skill.*
 
+## Before proposing: read the existing record
+
+If the task points at a design record, or the repo already keeps them, read it first. Implementation conforms to the record, not the reverse, and a dated record is never rewritten to match behavior that arrived after it.
+
 ## The implementation trap
 
 AI collapses design and implementation into a single step. Describe a feature, receive hundreds of lines — with every architectural decision made silently. The first time you see the AI's design thinking is when you're reading code, which is the most expensive place to discover a disagreement.

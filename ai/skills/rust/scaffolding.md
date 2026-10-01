@@ -80,11 +80,12 @@ Notes on this template:
   detail survives through tests and library consumers.
 - `hegeltest` — property-based testing built on the Hypothesis engine,
   with built-in shrinking.
-- `[lints.clippy]` — `self_named_module_files` enforces `foo.rs` over
-  `foo/mod.rs` for module files. The rest are panic-discipline lints:
-  `unwrap`, `expect`, raw `panic!`, slice indexing, and unchecked
-  arithmetic are denial-of-service bugs waiting for untrusted input. All
-  are lint levels, so they live here rather than in `.clippy.toml`. See
+- `[lints.clippy]` — `self_named_module_files` enforces `foo/mod.rs`
+  over `foo.rs` for directory modules (P-MOD in `style.md`). The rest
+  are panic-discipline lints: `unwrap`, `expect`, raw `panic!`, slice
+  indexing, and unchecked arithmetic are denial-of-service bugs waiting
+  for untrusted input. All are lint levels, so they live here rather
+  than in `.clippy.toml`. See
   `style.md` "Panic discipline" for rationale and how to opt out at a
   single call site when an invariant is genuinely local.
 - A project that's already a multi-crate workspace hoists the block to

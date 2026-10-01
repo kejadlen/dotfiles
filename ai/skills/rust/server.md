@@ -82,23 +82,31 @@ async fn main() -> miette::Result<()> {
 
 async fn shutdown_signal() {
     let ctrl_c = async {
-        signal::ctrl_c().await.expect("install ctrl-c handler");
+        if let Err(err) = signal::ctrl_c().await {
+            tracing::error!(%err, "failed to install SIGINT handler");
+            std::future::pending::<()>().await;
+        }
     };
 
     #[cfg(unix)]
     let terminate = async {
-        signal::unix::signal(signal::unix::SignalKind::terminate())
-            .expect("install SIGTERM handler")
-            .recv()
-            .await;
+        match signal::unix::signal(signal::unix::SignalKind::terminate()) {
+            Ok(mut sigterm) => {
+                sigterm.recv().await;
+            }
+            Err(err) => {
+                tracing::error!(%err, "failed to install SIGTERM handler");
+                std::future::pending::<()>().await;
+            }
+        }
     };
 
     #[cfg(not(unix))]
     let terminate = std::future::pending::<()>();
 
     tokio::select! {
-        _ = ctrl_c => tracing::info!("received SIGINT, shutting down"),
-        _ = terminate => tracing::info!("received SIGTERM, shutting down"),
+        () = ctrl_c => tracing::info!("received SIGINT, shutting down"),
+        () = terminate => tracing::info!("received SIGTERM, shutting down"),
     }
 }
 ```
@@ -106,6 +114,9 @@ async fn shutdown_signal() {
 Notes:
 
 - `shutdown_signal()` returns once either SIGINT or SIGTERM fires.
+  A handler that fails to install logs the error and parks forever
+  rather than panicking, so the other signal still works and the
+  template passes the `expect_used` lint under `-D warnings`.
   `axum::serve(...).with_graceful_shutdown(...)` stops accepting new
   connections and lets in-flight requests finish.
 - Distroless containers have no init process. Either rely on this

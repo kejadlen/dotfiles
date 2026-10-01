@@ -18,6 +18,7 @@ immediately instead of propagating `nil` through the code.
 # good
 config.fetch(:timeout)
 config.fetch(:timeout, 30)
+config.fetch(:timeout) { expensive_default }
 
 # bad — silent nil on typos or missing keys
 config[:timeout]
@@ -68,12 +69,16 @@ and composes naturally with any iterator.
 ```ruby
 # good — compose onto the base enumerator
 array.each.with_index { |item, i| ... }
+array.map.with_index { |item, i| ... }
+array.flat_map.with_index { |item, i| ... }
 array.each.with_object([]) { |item, acc| ... }
 hash.each { |key, value| ... }
 
 # bad — specialized methods
 array.each_with_index { |item, i| ... }
 array.each_with_object([]) { |item, acc| ... }
+hash.each_value { |value| ... }
+hash.each_key { |key| ... }
 ```
 
 The same goes for the specialized `each_*` readers (`each_value`,
@@ -159,6 +164,10 @@ File.expand_path("../secrets.yml", "/app/config/database.yml")
 ```
 
 Use `File` for plain IO when `Pathname` adds nothing.
+
+`system`, `exec`, and Rake's `sh` reject a `Pathname` with a
+`TypeError` — they want a `String`. Convert at that boundary:
+`sh "ls", path.to_s`.
 
 ## Building hashes
 
@@ -291,6 +300,11 @@ export RUBYOPT=--enable-frozen-string-literal
 Literals in files with no magic comment are *chilled*: mutating one
 warns instead of raising. Run with `RUBYOPT=-W:deprecated` to find them,
 then `.dup` each one.
+
+Don't fight an existing convention. If a project already relies on the
+magic comment — RuboCop's `Style/FrozenStringLiteralComment` is
+enabled, or the files already carry it — keep adding it so the codebase
+stays consistent.
 
 ## Requires
 
