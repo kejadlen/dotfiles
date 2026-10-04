@@ -1,39 +1,81 @@
 /**
- * ask_user - let the agent ask the user a question mid-turn.
+ * ask_user - let the agent ask the user a question without blocking.
  *
- * The question appears as a dialog instead of ending the turn in chat, so
- * the answer comes back as a tool result and the agent continues where it
- * left off. With options, the user picks from a list (with an "Other…"
- * escape hatch to type instead); without, the user types a free-form reply.
+ * The tool returns immediately with a pending id, and the question opens as
+ * a dialog in parallel with the agent's turn, so the model can keep working
+ * while it waits. When the user answers, the answer is sent as a steering
+ * user message tagged with the id and the question — delivered after the
+ * current assistant turn, or as a fresh turn if the agent went idle first.
  *
  * Uses the built-in ctx.ui dialogs rather than a custom component, so it
  * also works over RPC (headless modes get an error result instead).
  */
 
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI, ExtensionToolContext } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
 import { Type } from "typebox";
 
 interface AskUserDetails {
+  id: string;
   question: string;
   options: string[];
-  answer: string | null;
-  typed?: boolean;
 }
 
 const OTHER = "Other…";
+
+// One dialog at a time: a second ctx.ui dialog disposes the first without
+// resolving its promise, so concurrent questions would hang.
+let dialogChain: Promise<void> = Promise.resolve();
+
+async function showDialog(
+  ctx: ExtensionToolContext,
+  question: string,
+  options: string[],
+): Promise<string | null> {
+  if (options.length === 0) {
+    return (await ctx.ui.input(question, "Your answer…")) ?? null;
+  }
+  const choice = await ctx.ui.select(question, [...options, OTHER]);
+  if (choice === undefined) return null;
+  if (choice === OTHER) {
+    return (await ctx.ui.input(question, "Your answer…")) ?? null;
+  }
+  return choice;
+}
+
+function askLater(
+  pi: ExtensionAPI,
+  ctx: ExtensionToolContext,
+  details: AskUserDetails,
+): void {
+  dialogChain = dialogChain
+    .then(async () => {
+      const answer = await showDialog(ctx, details.question, details.options);
+      const text =
+        answer === null
+          ? `[ask_user ${details.id}] dismissed "${details.question}" without an answer — re-ask it, or proceed without it.`
+          : `[ask_user ${details.id}] answer to "${details.question}": ${answer}`;
+      // Steer queues the message until the current assistant turn ends;
+      // if the agent is already idle it starts a new turn instead.
+      pi.sendUserMessage(text, { deliverAs: "steer" });
+    })
+    .catch(() => {
+      // Keep the chain alive for later questions.
+    });
+}
 
 export default function askUser(pi: ExtensionAPI) {
   pi.registerTool({
     name: "ask_user",
     label: "Ask user",
     description:
-      "Ask the user a question and wait for their answer. Use whenever you " +
-      "need information or a decision from the user before continuing; the " +
-      "answer returns as the tool result and you keep going in the same " +
-      "turn. Pass options to offer a choice (the user can still type a " +
-      "different answer); omit them for a free-text answer. Prefer this " +
-      "over ending your turn with a question in plain text.",
+      "Ask the user a question and keep working. Returns immediately with a " +
+      "pending id; the user answers in a dialog and their answer arrives " +
+      "later as a user message tagged [ask_user <id>] that repeats the " +
+      "question — match it by id and act on it then. Continue other work in " +
+      "this turn while it's pending rather than ending the turn or re-asking. " +
+      "Pass options to offer a choice (the user can still type a different " +
+      "answer); omit them for a free-text answer.",
     parameters: Type.Object({
       question: Type.String({ description: "The question to ask" }),
       options: Type.Optional(
@@ -45,14 +87,7 @@ export default function askUser(pi: ExtensionAPI) {
     executionMode: "sequential",
     annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
 
-    async execute(_toolCallId, params, signal, _onUpdate, ctx) {
-      const details = (answer: string | null, typed = false): AskUserDetails => ({
-        question: params.question,
-        options: params.options ?? [],
-        answer,
-        typed,
-      });
-
+    async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
       if (!ctx.hasUI) {
         return {
           content: [
@@ -62,51 +97,28 @@ export default function askUser(pi: ExtensionAPI) {
             },
           ],
           isError: true,
-          details: details(null),
+          details: { id: "", question: params.question, options: [] },
         };
       }
 
-      // Free-form question: go straight to the input dialog.
-      if (!params.options || params.options.length === 0) {
-        const answer = await ctx.ui.input(params.question, "Your answer…", { signal });
-        if (answer === undefined) {
-          return {
-            content: [{ type: "text", text: "User dismissed the question without answering." }],
-            details: details(null, true),
-          };
-        }
-        return {
-          content: [{ type: "text", text: `User answered: ${answer}` }],
-          details: details(answer, true),
-        };
-      }
-
-      const labels = params.options.filter((o) => o !== OTHER);
-      const choice = await ctx.ui.select(params.question, [...labels, OTHER], { signal });
-      if (choice === undefined) {
-        return {
-          content: [{ type: "text", text: "User dismissed the question without answering." }],
-          details: details(null),
-        };
-      }
-
-      if (choice === OTHER) {
-        const answer = await ctx.ui.input(params.question, "Your answer…", { signal });
-        if (answer === undefined) {
-          return {
-            content: [{ type: "text", text: "User dismissed the question without answering." }],
-            details: details(null, true),
-          };
-        }
-        return {
-          content: [{ type: "text", text: `User answered: ${answer}` }],
-          details: details(answer, true),
-        };
-      }
+      const details: AskUserDetails = {
+        id: Math.random().toString(36).slice(2, 6),
+        question: params.question,
+        options: (params.options ?? []).filter((o) => o !== OTHER),
+      };
+      askLater(pi, ctx, details);
 
       return {
-        content: [{ type: "text", text: `User selected: ${choice}` }],
-        details: details(choice),
+        content: [
+          {
+            type: "text",
+            text:
+              `Question ${details.id} asked: "${details.question}". The user's ` +
+              `answer arrives later as a user message tagged ` +
+              `[ask_user ${details.id}] — continue other work until then.`,
+          },
+        ],
+        details,
       };
     },
 
@@ -120,16 +132,16 @@ export default function askUser(pi: ExtensionAPI) {
     },
 
     renderResult(result, _options, theme) {
-      const details = result.details as AskUserDetails | undefined;
-      if (!details) {
+      if (result.isError) {
         const text = result.content[0];
         return new Text(text?.type === "text" ? text.text : "", 0, 0);
       }
-      if (details.answer === null) {
-        return new Text(theme.fg("warning", "Dismissed"), 0, 0);
-      }
-      const prefix = details.typed ? "✓ (typed) " : "✓ ";
-      return new Text(theme.fg("success", prefix) + theme.fg("accent", details.answer), 0, 0);
+      const details = result.details as AskUserDetails;
+      return new Text(
+        theme.fg("muted", `⏳ ${details.id} — answer arrives as a user message`),
+        0,
+        0,
+      );
     },
   });
 }

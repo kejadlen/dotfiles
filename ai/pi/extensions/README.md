@@ -29,18 +29,29 @@ dialogs, and this extension records `blocked` for their duration.
 
 # Ask User
 
-Gives the agent an `ask_user` tool: a question shows as a dialog mid-turn,
-and the answer returns as the tool result, so the agent keeps going instead
-of ending its turn and waiting for a chat reply.
+Gives the agent an `ask_user` tool that asks the user a question without
+blocking: the tool returns immediately with a pending id, the question
+opens as a dialog in parallel with the agent's turn, and the answer is
+delivered later as a user message tagged `[ask_user <id>]` that repeats the
+question, so the model correlates them by id.
 
 ## How it works
+
+`execute()` fires the dialog without awaiting it and returns at once with
+an id (four random characters). When the user answers, the extension calls
+`pi.sendUserMessage(text, { deliverAs: "steer" })`: while the agent is
+mid-run the message queues as steering and enters after the current
+assistant turn; if the agent already went idle, it starts a fresh turn.
 
 Built on the `ctx.ui` dialogs rather than a custom component, so it works
 in the TUI and over RPC. With `options`, the user picks from a list with
 an "Other…" escape hatch that opens a text input; without, the user types
-a free-form answer. Dismissing either dialog cancels the question and the
-tool reports that the user didn't answer. In headless modes (JSON, print)
-the tool returns an error telling the agent to ask in its reply instead.
+a free-form answer. Dismissing the dialog sends a message saying the
+question was dismissed, so the model knows to re-ask or proceed. Dialogs
+are serialized (a module-level promise chain) because a second `ctx.ui`
+dialog disposes the first without resolving it. In headless modes (JSON,
+print) the tool returns an error telling the agent to ask in its reply
+instead.
 
 `permission-gate.ts` allowlists `ask_user` — gating a question behind a
 confirmation dialog would just be a second question.
