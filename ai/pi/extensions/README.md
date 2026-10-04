@@ -27,6 +27,24 @@ pi has no built-in permission prompt, so `permission-gate.ts` emits
 `agent-state:blocked` events on the shared extension event bus around its
 dialogs, and this extension records `blocked` for their duration.
 
+# Ask User
+
+Gives the agent an `ask_user` tool: a question shows as a dialog mid-turn,
+and the answer returns as the tool result, so the agent keeps going instead
+of ending its turn and waiting for a chat reply.
+
+## How it works
+
+Built on the `ctx.ui` dialogs rather than a custom component, so it works
+in the TUI and over RPC. With `options`, the user picks from a list with
+an "Other…" escape hatch that opens a text input; without, the user types
+a free-form answer. Dismissing either dialog cancels the question and the
+tool reports that the user didn't answer. In headless modes (JSON, print)
+the tool returns an error telling the agent to ask in its reply instead.
+
+`permission-gate.ts` allowlists `ask_user` — gating a question behind a
+confirmation dialog would just be a second question.
+
 # Permission Gate
 
 Requires explicit user confirmation before every tool call, with
@@ -40,7 +58,8 @@ directories, and pi documentation.
 **Bash tool** — auto-allowed only if the command matches the allowlist
 and contains no shell chaining (`|`, `&&`, `;`, `` ` ``, `$()`).
 
-Everything else prompts for confirmation.
+Everything else prompts for confirmation, except `ask_user` (dialog-only,
+no side effects).
 
 ## Base Allowlist
 

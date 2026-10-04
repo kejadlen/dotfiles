@@ -280,6 +280,9 @@ function isTrackedFile(filePath: string, ctx: ExtensionContext): boolean {
 }
 
 function isAllowed(toolName: string, input: Record<string, unknown>, ctx: ExtensionContext): boolean {
+  // Dialog-only, no side effects; prompting to ask a prompt would be absurd.
+  if (toolName === "ask_user") return true;
+
   if (toolName === "read") {
     const filePath = path.resolve(ctx.cwd, String(input.path ?? ""));
     // Resolve symlinks so a tracked symlink pointing outside the repo
