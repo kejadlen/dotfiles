@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-# Measures library line coverage with grcov and fails below the
-# threshold. Uses a separate CARGO_TARGET_DIR so instrumented and
-# normal build artifacts never mix — mixing causes phantom uncovered
-# lines. Override the gate with COVERAGE_THRESHOLD (defaults to 100).
+# Measures library line coverage with grcov and fails below 100%.
+# Uses a separate CARGO_TARGET_DIR so instrumented and normal build
+# artifacts never mix — mixing causes phantom uncovered lines.
 #
 # Scaffolded into a project as bin/coverage; the `coverage` justfile
 # recipe runs it. See the rust skill's coverage.md and scaffolding.md.
@@ -13,7 +12,7 @@ if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
 fi
 
-readonly THRESHOLD="${COVERAGE_THRESHOLD:-100}"
+readonly THRESHOLD=100
 readonly TARGET_DIR="target/coverage"
 
 main() {

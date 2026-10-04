@@ -164,8 +164,7 @@ give it the executable bit (`chmod +x bin/coverage`). Read
   phantom uncovered lines with grcov.
 - 100% coverage on library code only — `--keep-only 'src/**'
   --ignore 'src/bin/**'`. Binary code is tested via integration tests
-  but not measured. Lower the gate for a project with
-  `COVERAGE_THRESHOLD=90 just coverage`.
+  but not measured.
 - `covdir` output — machine-readable JSON, parsed with `jq` for a
   clean summary. Exclusion markers (`cov-excl-line`, etc.) are
   documented in `coverage.md`.
