@@ -1,12 +1,15 @@
 {
-  "lastChangelogVersion": "0.84.1",
+  "lastChangelogVersion": "1.0.4",
   "defaultProvider": "zai",
   "skills": [
     "~/.dotfiles/ai/skills"
   ],
   "enableSkillCommands": true,
   "defaultThinkingLevel": "high",
-  "defaultModel": "glm-5.2",
+  "defaultModel": "glm-5.3",
+  "defaultTools": [
+    "+codemode"
+  ],
   "packages": [
     "git:git.kejadlen.dev/alpha/ramekin",
     "git:git.kejadlen.dev/alpha/ranger",
