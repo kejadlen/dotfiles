@@ -15,7 +15,9 @@ trap cleanup EXIT
 main() {
     tmp=$(mktemp -t vipe.XXXXXX)
 
-    if [[ ! -t 0 ]]; then
+    if [[ -t 0 ]]; then
+        pbpaste > "$tmp"
+    else
         cat > "$tmp"
     fi
 
@@ -23,7 +25,11 @@ main() {
     # shellcheck disable=SC2086
     $editor "$tmp" </dev/tty >/dev/tty
 
-    cat "$tmp"
+    if [[ -t 1 ]]; then
+        pbcopy < "$tmp"
+    else
+        cat "$tmp"
+    fi
 }
 
 main "$@"
