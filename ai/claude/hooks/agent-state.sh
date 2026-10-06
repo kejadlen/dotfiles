@@ -40,12 +40,11 @@ fields=$(jq -r '
       (.hook_event_name | flat),
       (.agent_id        | flat),
       (.cwd             | flat),
-      (.message         | flat),
-      (.tool_name       | flat)
+      (.message         | flat)
     ] | join("\u001f")
 ' <<<"$payload" 2>/dev/null) || exit 0
 
-IFS=$'\x1f' read -r event agent_id cwd message tool <<<"$fields"
+IFS=$'\x1f' read -r event agent_id cwd message <<<"$fields"
 
 # A subagent's hooks carry an agent_id and share their parent's pane, so
 # letting them report would have background tool calls overwrite the state of
@@ -63,31 +62,30 @@ case $event in
         # AskUserQuestion, which raises no notification of its own. Both mean
         # Claude has stopped and cannot continue without the user.
         #
-        # What gets recorded is the *reason*, short enough to read in one
-        # column. A notification's own text is nearly all boilerplate —
-        # "Claude needs your permission to use Bash" — so the prefix comes off
-        # and whatever names the tool is what remains. PreToolUse doesn't set
-        # message at all, but it names the tool in a field.
-        if [[ -n $tool ]]; then
-            message=$tool
+        # kind says which of the two it is, so a question needs no message.
+        # For a permission prompt, what gets recorded is the tool, short enough
+        # to read in one column. A notification's own text is nearly all
+        # boilerplate — "Claude needs your permission to use Bash" — so the
+        # prefix comes off and whatever names the tool is what remains.
+        if [[ $event == PreToolUse ]]; then
+            kind=question
+            message=''
         else
+            kind=permission
             message=${message#Claude needs your permission to use }
             message=${message#Claude needs your permission to }
             message=${message#Claude needs your permission}
             message=${message%.}
-            # Distinct from the 'waiting for input' a question gets: this
-            # session is stopped on a permission prompt, tool unknown.
-            [[ -n $message ]] || message='needs permission'
         fi
-        "$state_script" record blocked "$cwd" "$message" || true
+        "$state_script" record --app claude-code --kind "$kind" blocked "$cwd" "$message" || true
         changed=1
         ;;
     Stop)
-        "$state_script" record idle "$cwd" 'turn finished' || true
+        "$state_script" record --app claude-code 'done' "$cwd" 'turn finished' || true
         changed=1
         ;;
     UserPromptSubmit|PostToolUse|PermissionDenied)
-        "$state_script" record working "$cwd" '' || true
+        "$state_script" record --app claude-code working "$cwd" '' || true
         changed=1
         ;;
     SessionEnd)

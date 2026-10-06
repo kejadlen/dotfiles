@@ -3,11 +3,17 @@
 # Tracks the state of Claude Code and pi sessions, keyed by the tmux pane each
 # one runs in, so ,agents can rank them by who is waiting on a human.
 #
+# States, kind, and app follow the vocabulary of OSC 7501, the Program Status
+# Protocol (https://www.superlogical.com/rex/docs/build/program-status), so a
+# producer here can emit the sequence later without translating. Nothing in
+# this stack consumes it yet, which is why the record still lives here.
+#
 # Written by ai/claude/hooks/agent-state.sh and by the pi extension
 # ai/pi/extensions/agent-state.ts; read by ai/bin/,agents and by the sketchybar
 # agents plugin. Those two readers also write, through `visited`: jumping to a
 # blocked session records the visit so the picker can move on to the next one
-# instead of offering the same session again.
+# instead of offering the same session again, and jumping to a done session
+# marks it idle.
 #
 # `list` is not read-only: it prunes rows whose pane is gone. The sketchybar
 # plugin runs it every time the hook reports a state change, so most pruning
@@ -48,17 +54,21 @@ PRAGMA synchronous = NORMAL;
 .output stdout
 "
 
+# Rows are rebuilt by the next hook to fire, so a schema change renames the
+# table and drops the old one rather than migrating it.
 readonly SCHEMA="
-CREATE TABLE IF NOT EXISTS panes (
+DROP TABLE IF EXISTS panes;
+CREATE TABLE IF NOT EXISTS records (
   pane       TEXT PRIMARY KEY,
   state      TEXT NOT NULL,
+  kind       TEXT NOT NULL DEFAULT '',
+  app        TEXT NOT NULL DEFAULT '',
   updated_at INTEGER NOT NULL,
   cwd        TEXT NOT NULL DEFAULT '',
   message    TEXT NOT NULL DEFAULT ''
 );
--- Its own table rather than a column on panes, so an existing database picks it
--- up from CREATE TABLE IF NOT EXISTS. ALTER TABLE ADD COLUMN would need a
--- migration step, and this schema runs on every connection.
+-- Its own table rather than a column on records, so a records schema change
+-- drops nothing a hook cannot rebuild.
 CREATE TABLE IF NOT EXISTS visits (
   pane       TEXT PRIMARY KEY,
   visited_at INTEGER NOT NULL
@@ -77,16 +87,33 @@ db() {
     sqlite3 -batch -noheader "$STATE_DB"
 }
 
+readonly RECORD_USAGE="usage: ,agent-state record [--app APP] [--kind permission|question|auth] <blocked|done|idle|working> [cwd] [message]"
+
 cmd_record() {
+    local app="" kind=""
+    while [[ ${1:-} == --* ]]; do
+        case $1 in
+            --app)  app=${2:-}; shift 2 || { echo "$RECORD_USAGE" >&2; return 2; } ;;
+            --kind) kind=${2:-}; shift 2 || { echo "$RECORD_USAGE" >&2; return 2; } ;;
+            *)      echo "$RECORD_USAGE" >&2; return 2 ;;
+        esac
+    done
+
     local state=${1:-} cwd=${2:-$PWD} message=${3:-}
 
     case $state in
-        blocked|idle|working) ;;
-        *)
-            echo "usage: ,agent-state record <blocked|idle|working> [cwd] [message]" >&2
-            return 2
-            ;;
+        blocked|done|idle|working) ;;
+        *) echo "$RECORD_USAGE" >&2; return 2 ;;
     esac
+
+    # The spec gives kind meaning only on blocked.
+    case $kind in
+        "") ;;
+        permission|question|auth) [[ $state == blocked ]] || kind="" ;;
+        *) echo "$RECORD_USAGE" >&2; return 2 ;;
+    esac
+
+    [[ $app =~ ^[A-Za-z0-9_.+-]{0,32}$ ]] || { echo "$RECORD_USAGE" >&2; return 2; }
 
     # The pane is the row identity, so outside tmux there is nothing to record.
     [[ -n "${TMUX_PANE:-}" ]] || return 0
@@ -99,11 +126,13 @@ cmd_record() {
     db <<SQL >/dev/null
 $PRAGMAS
 $SCHEMA
-INSERT INTO panes (pane, state, updated_at, cwd, message)
-VALUES ($(sql_quote "$TMUX_PANE"), $(sql_quote "$state"), $(date +%s),
-        $(sql_quote "$cwd"), $(sql_quote "$message"))
+INSERT INTO records (pane, state, kind, app, updated_at, cwd, message)
+VALUES ($(sql_quote "$TMUX_PANE"), $(sql_quote "$state"), $(sql_quote "$kind"),
+        $(sql_quote "$app"), $(date +%s), $(sql_quote "$cwd"), $(sql_quote "$message"))
 ON CONFLICT(pane) DO UPDATE SET
   state      = excluded.state,
+  kind       = excluded.kind,
+  app        = excluded.app,
   updated_at = excluded.updated_at,
   cwd        = excluded.cwd,
   message    = excluded.message;
@@ -117,19 +146,21 @@ cmd_clear() {
     db <<SQL >/dev/null
 $PRAGMAS
 $SCHEMA
-DELETE FROM panes WHERE pane = $(sql_quote "$TMUX_PANE");
+DELETE FROM records WHERE pane = $(sql_quote "$TMUX_PANE");
 DELETE FROM visits WHERE pane = $(sql_quote "$TMUX_PANE");
 SQL
 }
 
-# Records that a human jumped to this pane while it was blocked, so `list` can
-# rank it below the blocked sessions they have not seen yet. Called by the two
-# places that switch a tmux client: ,agents and the sketchybar agents item.
+# Records that a human jumped to this pane. A blocked pane gets a visit, so
+# `list` can rank it below the blocked sessions they have not seen yet. A done
+# pane becomes idle, since done means the result is unseen and now it has been.
+# Called by the two places that switch a tmux client: ,agents and the sketchybar
+# agents item.
 #
-# Whether the pane is blocked is decided here rather than trusted from the
-# caller. Switching a client fires no Claude hook, so the stored state is still
-# current at the moment of the jump, and a caller holding a stale row cannot
-# demote a session that has since gone back to working.
+# The pane's state is read here rather than trusted from the caller. Switching
+# a client fires no Claude hook, so the stored state is still current at the
+# moment of the jump, and a caller holding a stale row cannot demote a session
+# that has since gone back to working.
 cmd_visited() {
     local pane=${1:-}
 
@@ -142,16 +173,19 @@ cmd_visited() {
 $PRAGMAS
 $SCHEMA
 INSERT INTO visits (pane, visited_at)
-SELECT pane, $(date +%s) FROM panes
+SELECT pane, $(date +%s) FROM records
 WHERE pane = $(sql_quote "$pane") AND state = 'blocked'
 ON CONFLICT(pane) DO UPDATE SET visited_at = excluded.visited_at;
+-- updated_at stays put, so the age still counts from when the turn finished.
+UPDATE records SET state = 'idle'
+WHERE pane = $(sql_quote "$pane") AND state = 'done';
 SQL
 }
 
 # Emits one tab-separated row per live session:
-#   state  session:window  dir  age  message  pane
+#   state  session:window  dir  age  message  pane  app  kind
 #
-# Ordered by state (blocked, then idle, then working) and, within a state,
+# Ordered by state (blocked, done, idle, then working) and, within a state,
 # oldest first — the session sitting in it longest is the one most likely to
 # have been forgotten.
 #
@@ -184,7 +218,7 @@ $PRAGMAS
 $SCHEMA
 CREATE TEMP TABLE live (pane TEXT PRIMARY KEY, label TEXT NOT NULL);
 INSERT OR IGNORE INTO live (pane, label) VALUES ${values%,};
-DELETE FROM panes WHERE pane NOT IN (SELECT pane FROM live);
+DELETE FROM records WHERE pane NOT IN (SELECT pane FROM live);
 DELETE FROM visits WHERE pane NOT IN (SELECT pane FROM live);
 .mode list
 .separator "\t"
@@ -196,10 +230,10 @@ DELETE FROM visits WHERE pane NOT IN (SELECT pane FROM live);
 -- Sorting the demoted rows on the visit rather than the age is what makes them
 -- rotate. max() picks whichever timestamp ranks the row, so both groups sort
 -- with one expression: the visit for a demoted row, the age for every other.
-SELECT p.state, l.label, p.cwd, p.updated_at, p.message, p.pane
-FROM panes p JOIN live l ON l.pane = p.pane
+SELECT p.state, l.label, p.cwd, p.updated_at, p.message, p.pane, p.app, p.kind
+FROM records p JOIN live l ON l.pane = p.pane
 LEFT JOIN visits v ON v.pane = p.pane
-ORDER BY CASE p.state WHEN 'blocked' THEN 0 WHEN 'idle' THEN 1 ELSE 2 END,
+ORDER BY CASE p.state WHEN 'blocked' THEN 0 WHEN 'done' THEN 1 WHEN 'idle' THEN 2 ELSE 3 END,
          CASE WHEN COALESCE(v.visited_at, 0) >= p.updated_at THEN 1 ELSE 0 END,
          max(COALESCE(v.visited_at, 0), p.updated_at) ASC;
 SQL
@@ -217,7 +251,7 @@ format_rows() {
         }
         {
             n = split($3, parts, "/")
-            printf "%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, parts[n], age(now - $4), $5, $6
+            printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, parts[n], age(now - $4), $5, $6, $7, $8
         }
     '
 }

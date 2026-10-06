@@ -2,19 +2,19 @@
  * Agent State - report this pi session's state to ,agent-state.
  *
  * The pi counterpart to ai/claude/hooks/agent-state.sh: records blocked,
- * working, and idle into the SQLite database keyed by tmux pane, so the
+ * working, done, and idle into the SQLite database keyed by tmux pane, so the
  * ,agents picker (prefix+A) and the sketchybar agents item rank pi sessions
  * alongside Claude Code ones.
  *
  *   agent_start             -> working
- *   agent_settled (isIdle)  -> idle, "turn finished"
+ *   agent_settled (isIdle)  -> done, "turn finished"
  *   session_start           -> republish current state (reload-safe)
  *   session_shutdown        -> clear the pane's row
  *
  * pi has no built-in permission prompt, so blocked arrives on the shared
- * event bus: permission-gate.ts emits "agent-state:blocked" around its
- * dialogs. Those are modal and every open is paired with a close, so a
- * boolean tracks it.
+ * event bus as "agent-state:blocked", from whichever extension raises a
+ * dialog. Those are modal and every open is paired with a close, so a
+ * boolean tracks it. kind defaults to permission, the gate's case.
  *
  * Writes are fire-and-forget through a serial queue. Ordering matters
  * (the clear that /resume fires must land before the session_start record
@@ -35,11 +35,13 @@ const TRIGGER_SKETCHYBAR = [
 	"[ -x \"$sketchybar_bin\" ] && \"$sketchybar_bin\" --trigger agent_state_change >/dev/null 2>&1 || true",
 ].join("; ");
 
-type AgentState = "blocked" | "working" | "idle";
+type AgentState = "blocked" | "working" | "done" | "idle";
+type BlockedKind = "permission" | "question" | "auth";
 
 interface BlockedEvent {
 	active: boolean;
 	label?: string;
+	kind?: BlockedKind;
 }
 
 export default function (pi: ExtensionAPI) {
@@ -56,8 +58,12 @@ export default function (pi: ExtensionAPI) {
 	let agentActive = false;
 	let blocked = false;
 	let blockedMessage: string | undefined;
+	let blockedKind: BlockedKind = "permission";
+	// A fresh session is at rest; only a turn that ran and settled is done.
+	let ranTurn = false;
 	let lastState: AgentState | undefined;
 	let lastMessage: string | undefined;
+	let lastKind: BlockedKind | undefined;
 
 	let queue: Promise<void> = Promise.resolve();
 
@@ -77,18 +83,30 @@ export default function (pi: ExtensionAPI) {
 		return task;
 	}
 
-	function desired(): { state: AgentState; message?: string } {
-		if (blocked) return { state: "blocked", message: blockedMessage };
+	function desired(): { state: AgentState; message?: string; kind?: BlockedKind } {
+		if (blocked) return { state: "blocked", message: blockedMessage, kind: blockedKind };
 		if (agentActive) return { state: "working" };
-		return { state: "idle", message: "turn finished" };
+		if (ranTurn) return { state: "done", message: "turn finished" };
+		return { state: "idle" };
 	}
 
 	function publish(force = false): void {
 		const next = desired();
-		if (!force && next.state === lastState && next.message === lastMessage) return;
+		if (
+			!force &&
+			next.state === lastState &&
+			next.message === lastMessage &&
+			next.kind === lastKind
+		) {
+			return;
+		}
 		lastState = next.state;
 		lastMessage = next.message;
-		void run(STATE_SCRIPT, ["record", next.state, cwd, next.message ?? ""]);
+		lastKind = next.kind;
+		const args = ["record", "--app", "pi"];
+		if (next.kind) args.push("--kind", next.kind);
+		args.push(next.state, cwd, next.message ?? "");
+		void run(STATE_SCRIPT, args);
 	}
 
 	pi.events.on("agent-state:blocked", (data) => {
@@ -97,6 +115,7 @@ export default function (pi: ExtensionAPI) {
 
 		blocked = event.active;
 		blockedMessage = event.active ? event.label : undefined;
+		blockedKind = event.kind ?? "permission";
 		publish();
 	});
 
@@ -113,6 +132,7 @@ export default function (pi: ExtensionAPI) {
 	pi.on("agent_start", async () => {
 		if (!interactive) return;
 		agentActive = true;
+		ranTurn = true;
 		publish();
 	});
 

@@ -41,17 +41,18 @@ readonly ITEM="${item%%.popup.*}"
 
 # The same colors prefix+A uses in ,agents, so the bar and the picker agree.
 readonly COLOR_BLOCKED=0xffff5f5f
-readonly COLOR_IDLE=0xffffd75f
+readonly COLOR_DONE=0xffffd75f
 readonly COLOR_WORKING=0xff888888
 
 # Nerd Font glyphs rather than emoji, because these go in a *label* and a label
 # takes one font — the default SauceCodePro Nerd Font, which has no emoji
 # coverage. An emoji there would draw as nothing at all, the way icon=🤖 did
 # before it got an explicit Apple Color Emoji font. These are Material Design
-# icons (alert-circle, check-circle, cog), which Nerd Fonts v3 carries at the
-# codepoints MDI itself assigns.
+# icons (alert-circle, check-circle, sleep, cog), which Nerd Fonts v3 carries at
+# the codepoints MDI itself assigns.
 readonly GLYPH_BLOCKED=󰀨
-readonly GLYPH_IDLE=󰗠
+readonly GLYPH_DONE=󰗠
+readonly GLYPH_IDLE=󰒲
 readonly GLYPH_WORKING=󰒓
 
 state_rows() {
@@ -62,7 +63,7 @@ state_rows() {
 color_for() {
     case ${1-} in
         blocked) printf '%s' "$COLOR_BLOCKED" ;;
-        idle) printf '%s' "$COLOR_IDLE" ;;
+        done) printf '%s' "$COLOR_DONE" ;;
         *) printf '%s' "$COLOR_WORKING" ;;
     esac
 }
@@ -70,6 +71,7 @@ color_for() {
 glyph_for() {
     case ${1-} in
         blocked) printf '%s' "$GLYPH_BLOCKED" ;;
+        done) printf '%s' "$GLYPH_DONE" ;;
         idle) printf '%s' "$GLYPH_IDLE" ;;
         *) printf '%s' "$GLYPH_WORKING" ;;
     esac
@@ -84,7 +86,7 @@ cmd_status() {
         return 0
     fi
 
-    # list already orders blocked, then idle, then working, so the first row
+    # list already orders blocked, done, idle, then working, so the first row
     # names the most urgent state and the label counts how many share it. The
     # ordering within a state doesn't matter here — only which state leads.
     # BSD head and cut have no long forms for these, so short flags it is.
@@ -141,7 +143,7 @@ show_popup() {
             label.padding_right=6
     else
         local index=0
-        local state _session dir age message pane
+        local state _session dir age message pane _app kind
         # Fields are re-joined on US (0x1f) before reading them. Tab counts as
         # IFS whitespace, so `read` collapses a run of tabs into one delimiter
         # and silently shifts every later field left — a session with no message
@@ -150,7 +152,8 @@ show_popup() {
         # whitespace, so empty fields survive.
         # session:window is read but not shown: clicking a row goes to the pane
         # directly, so the tmux coordinate is noise here. ,agents still lists it.
-        while IFS=$'\x1f' read -r state _session dir age message pane; do
+        while IFS=$'\x1f' read -r state _session dir age message pane _app kind; do
+            [[ -n $message ]] || message=$kind
             local row="$ITEM.popup.$index"
             # Padded here rather than in ,agent-state, which stays a plain data
             # source. The label font is monospace, so columns line up.
@@ -195,10 +198,11 @@ cmd_jump() {
     # three-step form races, as ,agents' comment explains at more length.
     tmux switch-client ${target[@]+"${target[@]}"} -t "$pane" 2>/dev/null || return 0
 
-    # Sinks this pane to the bottom of its state group in `list`, so the next
-    # left click reaches for a different session. Ignored unless the pane is
-    # blocked, which ,agent-state decides for itself.
+    # Sinks a blocked pane to the bottom of its state group in `list`, so the
+    # next left click reaches for a different session, and turns a done pane
+    # idle. A visit can change the leading state, so the item redraws after.
     [[ -x $STATE_SCRIPT ]] && "$STATE_SCRIPT" visited "$pane" 2>/dev/null
+    cmd_status
 
     # Raises the most recently used Ghostty window, which is the right one when
     # a single window holds the tmux client. With several, macOS decides. The

@@ -34,11 +34,13 @@ main() {
         {
             state = sprintf("%-7s", $1)
             if      ($1 == "blocked") state = "\033[31m" state "\033[0m"
-            else if ($1 == "idle")    state = "\033[33m" state "\033[0m"
+            else if ($1 == "done")    state = "\033[33m" state "\033[0m"
             else                      state = "\033[2m"  state "\033[0m"
+            # A blocked row without a message still says what it is waiting on.
+            message = $5 != "" ? $5 : $8
             # Pane id leads so the delimiting tab lands at a fixed column; after
             # the variable-length message it would leave a ragged edge.
-            printf "%s\t%s %-16s %-14s %5s  %s\n", $6, state, $2, $3, $4, $5
+            printf "%s\t%s %-11s %-16s %-14s %5s  %s\n", $6, state, $7, $2, $3, $4, message
         }
     ' <<<"$rows")
 
@@ -83,8 +85,14 @@ main() {
     fi
 
     # Recorded only once the jump lands, so a dead pane doesn't get demoted on
-    # the way out. ,agent-state ignores a pane that isn't blocked.
+    # the way out. A visit can turn done into idle, so sketchybar redraws too.
     "$state_script" visited "$pane" || true
+    local sketchybar_bin
+    sketchybar_bin=$(command -v sketchybar) ||
+        sketchybar_bin=/opt/homebrew/opt/sketchybar/bin/sketchybar
+    if [[ -x $sketchybar_bin ]]; then
+        "$sketchybar_bin" --trigger agent_state_change >/dev/null 2>&1 || true
+    fi
 }
 
 main "$@"
