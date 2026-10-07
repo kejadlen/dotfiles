@@ -25,8 +25,10 @@ text as AI-generated.
 ## Workflow
 
 1. Read [`ai-tropes.md`](ai-tropes.md) for the full catalog, with
-   examples for each pattern, organized by word choice, sentence
-   structure, paragraph structure, tone, formatting, and composition.
+   examples for each pattern. Each tropes.fyi entry is tagged with a
+   category (word choice, sentence structure, paragraph structure,
+   tone, formatting, or composition) and a trend (`new`, `rising`,
+   `consistent`, or `fading`).
 2. Scan the prose for each trope category, looking for repetition or
    stacking — one instance of a pattern is usually fine; multiple is
    the tell.
