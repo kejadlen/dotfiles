@@ -16,6 +16,32 @@
 //
 // Try typing `glide.` and see what you can do!
 
+// :config_reload doesn't remove browser.* listeners, so old ones keep running
+// on their old config's state. A listener added with `listen` removes itself
+// once a newer config has loaded. Defined before any include, since
+// glide.include evaluates files asynchronously.
+const CONFIG_GENERATION_PREF = "dev.kejadlen.config_generation";
+const configGeneration = `${Date.now()}-${Math.random()}`;
+glide.prefs.set(CONFIG_GENERATION_PREF, configGeneration);
+
+function listen<T extends (...args: any[]) => any, P extends unknown[]>(
+  event: { addListener(callback: T, ...params: P): void; removeListener(callback: T): void },
+  listener: T,
+  ...params: P
+): void {
+  const guarded = ((...args: Parameters<T>) => {
+    if (glide.prefs.get(CONFIG_GENERATION_PREF) !== configGeneration) {
+      event.removeListener(guarded);
+      return;
+    }
+    return listener(...args);
+  }) as T;
+  event.addListener(guarded, ...params);
+}
+
+// utils.glide.ts fills in the rest once it's included.
+glide.g["dev.kejadlen"] = { listen } as DevKejadlen;
+
 glide.include("hints.glide.ts");
 glide.include("pihole.glide.ts");
 glide.include("splits.glide.ts");
@@ -126,7 +152,8 @@ async function moveToContainer(
   }
 }
 
-browser.webRequest.onBeforeRequest.addListener(
+listen(
+  browser.webRequest.onBeforeRequest,
   (details) => {
     const url = new URL(details.url);
 
@@ -161,7 +188,8 @@ browser.webRequest.onBeforeRequest.addListener(
 // strip tracking params (rewrites the request before it fires, no reload)
 // forEach avoids Symbol.iterator, which Xray vision denies on cross-compartment values.
 const trackingParams = ["utm_*", "uta_*", "fbclid", "gclid"];
-browser.webRequest.onBeforeRequest.addListener(
+listen(
+  browser.webRequest.onBeforeRequest,
   (details) => {
     const url = new URL(details.url);
     const toDelete: string[] = [];
@@ -181,7 +209,8 @@ browser.webRequest.onBeforeRequest.addListener(
 );
 
 // doi -> sci-hub — intercept at network level before the redirect fires
-browser.webRequest.onBeforeRequest.addListener(
+listen(
+  browser.webRequest.onBeforeRequest,
   (details) => {
     return { redirectUrl: `https://sci-hub.st/${details.url}` };
   },

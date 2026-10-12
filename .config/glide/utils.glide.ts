@@ -30,23 +30,27 @@ glide.styles.add(`
   }
 `);
 
-interface Utils {
-  /** Show a transient notification overlay in the browser UI. */
-  notify(text: string): void;
-}
-
 declare global {
+  interface DevKejadlen {
+    /** Show a transient notification overlay in the browser UI. */
+    notify(text: string): void;
+    /** Add a browser.* listener that removes itself after :config_reload; defined in glide.ts. */
+    listen<T extends (...args: any[]) => any, P extends unknown[]>(
+      event: { addListener(callback: T, ...params: P): void; removeListener(callback: T): void },
+      listener: T,
+      ...params: P
+    ): void;
+  }
+
   interface GlideGlobals {
-    "dev.kejadlen"?: Utils;
+    "dev.kejadlen"?: DevKejadlen;
   }
 }
 
 // Keymap and excmd callbacks run in the main process, where `document`
 // is the browser UI itself; `DOM` is main-process-only by design.
-glide.g["dev.kejadlen"] = {
-  notify(text: string): void {
-    const el = DOM.create_element("div", { className: "glide-notification", textContent: text });
-    document.documentElement.appendChild(el);
-    setTimeout(() => el.remove(), 2000);
-  },
+glide.g["dev.kejadlen"]!.notify = (text: string): void => {
+  const el = DOM.create_element("div", { className: "glide-notification", textContent: text });
+  document.documentElement.appendChild(el);
+  setTimeout(() => el.remove(), 2000);
 };
