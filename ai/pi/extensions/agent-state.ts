@@ -1,7 +1,7 @@
 /**
  * Agent State - report this pi session's state to ,agent-state.
  *
- * The pi counterpart to ai/claude/hooks/agent-state.sh: records blocked,
+ * The pi counterpart to ai/skills/agent-state/hooks/register.ts: records blocked,
  * working, done, and idle into the SQLite database keyed by tmux pane, so the
  * ,agents picker (prefix+A) and the sketchybar agents item rank pi sessions
  * alongside Claude Code ones.
@@ -27,7 +27,7 @@ import { join } from "node:path";
 
 const STATE_SCRIPT = join(process.env.HOME ?? "", ".dotfiles/ai/bin/,agent-state");
 
-// Runs after each write, matching the Claude hook: pushes the new state at
+// Runs after each write, matching the Claude mod: pushes the new state at
 // sketchybar's agents item instead of leaving it to poll. Resolved through
 // sh with the Homebrew fallback because the spawn may not carry brew's PATH.
 const TRIGGER_SKETCHYBAR = [

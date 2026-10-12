@@ -8,7 +8,7 @@
 # producer here can emit the sequence later without translating. Nothing in
 # this stack consumes it yet, which is why the record still lives here.
 #
-# Written by ai/claude/hooks/agent-state.sh and by the pi extension
+# Written by ai/skills/agent-state/hooks/register.ts and by the pi extension
 # ai/pi/extensions/agent-state.ts; read by ai/bin/,agents and by the sketchybar
 # agents plugin. Those two readers also write, through `visited`: jumping to a
 # blocked session records the visit so the picker can move on to the next one
@@ -158,7 +158,7 @@ SQL
 # agents item.
 #
 # The pane's state is read here rather than trusted from the caller. Switching
-# a client fires no Claude hook, so the stored state is still current at the
+# a client fires no Claude Code event, so the stored state is still current at the
 # moment of the jump, and a caller holding a stale row cannot demote a session
 # that has since gone back to working.
 cmd_visited() {

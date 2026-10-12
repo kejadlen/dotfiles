@@ -4,7 +4,7 @@
 # on a human come first — barring any already jumped to and left blocked, which
 # ,agent-state sinks to the bottom of that group. Bound to prefix+A in
 # tmux.conf, where it runs in the same floating pane as ,z and ,tmux-grab.
-# State comes from ,agent-state, which the Claude hook and the pi extension
+# State comes from ,agent-state, which the Claude Code mod and the pi extension
 # write to.
 
 set -euo pipefail
