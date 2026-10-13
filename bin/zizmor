@@ -4,18 +4,18 @@
   "name": "zizmor",
   "platforms": {
     "macos-aarch64": {
-      "size": 8280312,
+      "size": 8490680,
       "hash": "blake3",
-      "digest": "f72d76d95d14b044d8ecdc2ee81c5af5a59b39491dfe04ff7a54b3aa33ae8725",
+      "digest": "117538f5115b97fffff03a478790a1c8e94f63716aabf34bf492ed4f7d7a9bac",
       "path": "zizmor",
       "providers": [
         {
-          "url": "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/zizmorcore/zizmor/releases/download/v1.31.1/zizmor-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/zizmorcore/zizmor",
-          "tag": "v1.29.0",
+          "tag": "v1.31.1",
           "name": "zizmor-aarch64-apple-darwin.tar.gz"
         }
       ],
