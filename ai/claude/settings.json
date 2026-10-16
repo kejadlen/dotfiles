@@ -5,32 +5,11 @@
     "PLAYWRIGHT_MCP_BROWSER": "webkit"
   },
   "permissions": {
-    "allow": [
-      "Bash(gh issue view:*)",
-      "Bash(gh project field-list:*)",
-      "Bash(gh project issue view:*)",
-      "Bash(gh project item-list:*)",
-      "Bash(gh project view:*)",
-      "Bash(jj diff:*)",
-      "Bash(jj log:*)",
-      "Bash(jj show:*)",
-      "Bash(jj st:*)",
-      "Bash(jj status:*)",
-      "Bash(jj workspace update-stale:*)",
-      "mcp__dash-api__list_installed_docsets",
-      "mcp__dash-api__search_documentation",
-      "mcp__plugin_episodic-memory_episodic-memory__read",
-      "mcp__plugin_episodic-memory_episodic-memory__search",
-      "Skill(describing-changes)",
-      "Skill(commit)",
-      "Skill(superpowers:brainstorming)"
-    ],
     "deny": [
       "Read(**/.envrc)",
       "Read(//**/.envrc)"
     ],
     "defaultMode": "acceptEdits",
-    "disableBypassPermissionsMode": "disable",
     "disableAutoMode": "disable"
   },
   "model": "opus",
@@ -52,76 +31,6 @@
             "command": "~/.claude/hooks/no-envrc.sh"
           }
         ]
-      },
-      {
-        "matcher": "AskUserQuestion",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/agent-state.sh"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/agent-state.sh"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/agent-state.sh"
-          }
-        ]
-      }
-    ],
-    "PermissionDenied": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/agent-state.sh"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/agent-state.sh"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/agent-state.sh"
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/agent-state.sh"
-          }
-        ]
       }
     ]
   },
@@ -134,7 +43,8 @@
     "ranger@ranger": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "superpowers-developing-for-claude-code@superpowers-marketplace": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "ranger": {
