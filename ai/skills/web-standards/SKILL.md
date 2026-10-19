@@ -140,4 +140,4 @@ moves in order.
 
 ---
 
-*This is a self-improving skill — see the `self-improving-skills` skill.*
+*This is a self-improving skill. If you used it and it came up short — a missing command, flag, gotcha, or workflow — invoke the `self-improving-skills` skill and follow it before you finish.*

@@ -12,8 +12,6 @@ Create isolated jj workspaces for experimentation, parallel development, and sub
 
 **Important:** Run `jj` (or `jj status`) periodically in each workspace. jj only snapshots the working copy when you run a command—it doesn't watch for file changes. Running `jj` ensures it sees your edits.
 
-**Note (v0.39+):** `jj workspace add` now links with relative paths by default, enabling workspaces to work inside containers or when moved together. Existing workspaces with absolute paths continue to work.
-
 ## When to Use
 
 **Triggers:**
@@ -52,7 +50,7 @@ jj workspace update-stale
 Use the paren-free `trunk` alias, not `trunk()` — Claude Code's shell
 parser treats the parentheses as a subshell even when quoted and triggers
 a permission prompt. Don't hardcode a bookmark instead; `trunk()` resolves
-differently per repo. See the `jj` skill's Common Pitfalls section.
+differently per repo. See "Revsets and filesets" in the `jj` skill's `pitfalls.md`.
 
 **Result (with mm):** `trunk → workspace change → mm`
 
@@ -101,7 +99,7 @@ jj diff -r approach-a@ -r approach-b@
 
 ## Subagent Coordination
 
-For dispatching agents to work in parallel. **Execute setup BEFORE dispatching ANY agents.**
+For dispatching agents to work in parallel. Finish setup before dispatching any agent.
 
 ### Phase 1: Setup (Coordinator)
 
@@ -109,7 +107,7 @@ Create workspace(s) using the standard process above.
 
 ### Phase 2: Dispatch (Coordinator)
 
-Use Task tool to dispatch in parallel. **Start agents in the workspace directory** using the Task tool's working directory or by instructing the agent to `cd` first. Each agent gets:
+Dispatch subagents in parallel, and tell each one to `cd` into its workspace before anything else. Each agent gets:
 - Task specification
 - Workspace path (exactly one) - agent starts here
 - Verification commands
@@ -118,7 +116,7 @@ Use Task tool to dispatch in parallel. **Start agents in the workspace directory
 ### Phase 3: Execution (Agent)
 
 **Agent steps, in order:**
-1. `cd` into workspace directory first—all work happens FROM that directory
+1. `cd` into the workspace directory first; all work happens from there
 2. Make file edits to implement task
 3. Run verification (tests, type checks)
 4. Split changes to parent: `jj split -m '<description>' .` (selects all files, creates parent commit with changes, leaves working copy empty)
@@ -157,12 +155,12 @@ rm -rf work/<name>
 
 | Mistake | Fix |
 |---------|-----|
-| Working from wrong directory | Agent must `cd` into workspace directory first—jj resolves its context from cwd, so all commands run FROM there |
+| Working from wrong directory | Agent must `cd` into workspace directory first—jj resolves its context from cwd, so all commands run from there |
 | Skipping DAG placement | Must run `jj rebase` to place in DAG (with `-B mm` if megamerge exists) |
 | Agent skipping split | Agent must run `jj split -m '<description>' .` to finalize changes |
 | Skipping `jj workspace update-stale` | Run in main workspace after workspace operations |
-| Creating workspaces during dispatch | Create ALL workspaces BEFORE dispatch |
-| Agent touching other workspaces | Agents work ONLY in assigned path |
+| Creating workspaces during dispatch | Create every workspace before dispatch |
+| Agent touching other workspaces | Agents work only in their assigned path |
 | Empty WC commits after rebase | After rebase + forget, run `jj abandon 'empty() & description(exact:"") & @-'` to drop the workspace's leftover empty WC |
 | Forgetting cleanup | Remove directories after forgetting workspace |
 | jj not seeing file changes | Run `jj` or `jj status` periodically—jj only snapshots on command execution |

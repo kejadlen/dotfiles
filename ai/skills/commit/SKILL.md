@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Use when the user asks to "commit changes", "commit my work", "/commit", "create a commit", "jj commit", "describe a change", "describe a revision", "/describe", "rewrite commit message", or "update revision description"
+description: Use when committing work with jj, or writing or rewriting a revision's description (including /commit and /describe)
 argument-hint: <revision, fileset, or instructions>
 allowed-tools: [Bash(jj diff *), Bash(jj show *), Bash(jj log *), Bash(jj st *), Bash(jj workspace list)]
 ---

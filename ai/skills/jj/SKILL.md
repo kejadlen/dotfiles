@@ -11,7 +11,7 @@ Verify behavior and flags against `jj <command> --help`, and read
 catalogues flags that fail silently, hang without a TTY, or make a no-op look
 like it worked.
 
-*This is a self-improving skill — see the `self-improving-skills` skill.*
+*This is a self-improving skill. If you used it and it came up short — a missing command, flag, gotcha, or workflow — invoke the `self-improving-skills` skill and follow it before you finish.*
 
 Flags below are verified against jj 0.45.1 unless a line names another
 version.

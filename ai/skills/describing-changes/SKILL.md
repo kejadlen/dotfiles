@@ -16,7 +16,7 @@ Not for describing how code works — that is separate from why it changed.
 
 ## Implementation
 
-**REQUIRED SUB-SKILL:** Use the technical-writing skill. Change descriptions are prose for humans; apply the writing skill to ensure clarity and conciseness.
+Apply the `technical-writing` skill: change descriptions are prose for humans.
 
 ### 1. Identify What Changed
 

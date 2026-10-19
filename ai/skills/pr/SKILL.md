@@ -1,6 +1,6 @@
 ---
 name: pr
-description: Use when the user asks to "create a pull request", "create a PR", "/pr", "open a PR", "submit for review", or "push and create PR"
+description: Use when opening a pull request for a jj revision, including pushing it first (/pr)
 argument-hint: <revision> [ready|web]
 allowed-tools: [Bash(jj diff *), Bash(jj log *), Bash(jj show *), Bash(jj bookmark list *)]
 ---
@@ -56,8 +56,7 @@ PR. Every `<revision>` below means the one you resolved here.
    proceeding.
 4. Check for .github PR templates and follow them. For checklist items that do
    not apply, use strikethrough: `- ~~Irrelevant item~~`
-5. **Invoke the `technical-writing` skill** before drafting any prose. This is
-   mandatory.
+5. Invoke the `technical-writing` skill before drafting any prose.
 6. Generate a PR title summarizing all commits in the changeset (not just the
    most recent). The title reflects the overall change, not individual commits.
 7. Draft the PR summary: one to three sentences of prose on why the change

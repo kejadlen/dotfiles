@@ -9,9 +9,8 @@ Catches AI writing tropes that other writing skills miss. Sources:
 [tropes.fyi](https://tropes.fyi) and
 [Modeltell](https://github.com/thirdshiftlab/modeltell).
 
-Complements `technical-writing` (structure, terminology),
-`writing-clearly-and-concisely` (sentence-level clarity), and
-`diataxis` (document classification). Those skills cover good writing in
+Complements `technical-writing` (structure, terminology, sentence-level
+clarity) and `diataxis` (document classification). Those skills cover good writing in
 general; this one covers the specific patterns LLMs reach for that flag
 text as AI-generated.
 

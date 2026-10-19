@@ -19,7 +19,8 @@ are meaningless to humans.
 - Cite primary sources: the documentation, spec, or code itself, not
   a summary or a recollection of it
 - When working with GitHub, read .github templates for PRs and issues
-- Attribute AI-written content when possible (Co-Authored-By, footer, or similar)
+- Attribute AI-written content: commits and PRs use the `Assisted-by`
+  trailer (`describing-changes` owns the format); elsewhere, a footer
 - Preserve user input exactly unless asked to modify it
 - "Update based on my comments" means find inline comments I've left
   (in files, on a PR, in a doc, etc.), apply the feedback, and remove

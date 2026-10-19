@@ -7,7 +7,7 @@ description: Use when starting non-trivial implementation work, when design deci
 
 Supplementary notes on designing software with AI, accumulated from experience and external sources.
 
-*This is a self-improving skill — see the `self-improving-skills` skill.*
+*This is a self-improving skill. If you used it and it came up short — a missing command, flag, gotcha, or workflow — invoke the `self-improving-skills` skill and follow it before you finish.*
 
 ## Before proposing: read the existing record
 

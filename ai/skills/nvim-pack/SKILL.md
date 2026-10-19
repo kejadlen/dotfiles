@@ -50,7 +50,7 @@ Located at `$XDG_CONFIG_HOME/nvim/nvim-pack-lock.json`. Tracks `rev`, `src`, and
 
 **Unfreeze:** Change `version` back to a branch/tag/range. `:restart`.
 
-**Revert after update:** Restore lockfile from VCS (`git checkout HEAD -- nvim-pack-lock.json` or `jj restore`), then `:restart` and `:lua vim.pack.update(nil, {offline = true, target = "lockfile"})`.
+**Revert after update:** Restore the lockfile from VCS (`jj restore nvim-pack-lock.json`), then `:restart` and `:lua vim.pack.update(nil, {offline = true, target = "lockfile"})`.
 
 **Cross-machine sync:** Commit the lockfile, pull on the other machine, `:restart`, then run `:lua vim.pack.update(nil, {target = "lockfile"})`.
 
