@@ -11,9 +11,9 @@
   [fg bg 0 0])
 
 (local normal   (ll colors.fg colors.black))
-(local inactive (ll colors.bright-black colors.black))
+(local inactive (ll colors.comment-gray colors.black))
 (local insert   (ll colors.bg semantic.string))
-(local visual   (ll colors.bg colors.selection-bg))
+(local visual   (ll colors.fg colors.selection-bg))
 (local replace  (ll colors.bg semantic.error))
 
 ;; Middle section is transparent (matches your current config)

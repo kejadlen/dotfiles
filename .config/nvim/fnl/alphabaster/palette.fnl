@@ -9,7 +9,7 @@
 
    ;; ANSI normal
    :black      "#282A36"
-   :red        "#E97C7C"
+   :red        "#FFB3B3"
    :green      "#7BC275"
    :yellow     "#E6E6A1"
    :blue       "#C4AAEA"
@@ -18,8 +18,8 @@
    :white      "#F0F0E4"
 
    ;; ANSI bright
-   :bright-black   "#44475A"
-   :bright-red     "#F09292"
+   :bright-black   "#9BA3C9"
+   :bright-red     "#FFC9C9"
    :bright-green   "#96D988"
    :bright-yellow  "#EFE9B0"
    :bright-blue    "#D0BCF0"
@@ -28,10 +28,10 @@
    :bright-white   "#FFFFFF"
 
    ;; Special
-   :comment-gray "#888888"
+   :comment-gray "#A0A0A0"
    :cursor     "#f2d5cf"
    :selection-bg "#626880"
-   :selection-fg "#c6d0f5"
+   :selection-fg "#F0F0E4"
 
    ;; Dimmed background for unfocused windows (matches tmux pane-focus-out)
    :dim-bg     "#333333"})
@@ -40,19 +40,19 @@
 ;; Only 4 categories get color. Everything else is default fg.
 (local semantic
   {:comment    colors.comment-gray   ;; visible but secondary
-   :string     colors.blue        ;; lavender/purple
-   :constant   colors.blue        ;; same as strings — all literal values are lavender
+   :string     colors.bright-blue ;; lavender/purple
+   :constant   colors.bright-blue ;; same as strings — all literal values are lavender
    :definition colors.cyan
 
    ;; Diagnostics
    :error      colors.red
    :warn       colors.yellow
    :info       colors.cyan
-   :hint       colors.magenta
+   :hint       colors.bright-magenta
 
    ;; Diff
-   :added      colors.green
+   :added      colors.bright-green
    :removed    colors.red
-   :changed    colors.blue})
+   :changed    colors.bright-blue})
 
 {: colors : semantic}

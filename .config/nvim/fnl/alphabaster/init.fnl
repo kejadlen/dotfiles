@@ -87,17 +87,17 @@
   (hi :VertSplit {:fg colors.bright-black})
   (hi :WinSeparator {:fg colors.bright-black})
   (hi :StatusLine {:bg colors.black})
-  (hi :StatusLineNC {:bg colors.black :fg colors.bright-black})
+  (hi :StatusLineNC {:bg colors.black :fg colors.comment-gray})
   (hi :Pmenu {:fg colors.fg :bg colors.black})
-  (hi :PmenuSel {:fg colors.fg :bg colors.bright-black})
+  (hi :PmenuSel {:fg colors.fg :bg colors.selection-bg})
   (hi :PmenuSbar {:bg colors.black})
   (hi :PmenuThumb {:bg colors.bright-black})
   (hi :TabLine {:fg colors.fg :bg colors.black})
-  (hi :TabLineSel {:fg semantic.definition :bg colors.bright-black :bold true})
+  (hi :TabLineSel {:fg colors.fg :bg colors.selection-bg :bold true})
   (hi :TabLineFill {:bg colors.black})
 
   ;;; Search — high contrast, needs to pop
-  (hi :Search {:fg colors.fg :bg colors.bright-black})
+  (hi :Search {:fg colors.fg :bg colors.selection-bg})
   (hi :IncSearch {:fg colors.bg :bg colors.bright-yellow})
   (hi :CurSearch {:fg colors.bg :bg colors.bright-green})
 
@@ -274,7 +274,7 @@
   (hi :SpellLocal {:undercurl true :sp semantic.warn})
 
   ;; Misc UI
-  (hi :MatchParen {:bg colors.bright-black})
+  (hi :MatchParen {:bg colors.selection-bg})
   (hi :Folded {:fg colors.bright-black})
   (hi :FoldColumn {:fg colors.bright-black})
   (hi :NonText {:fg colors.bright-black})
@@ -289,7 +289,7 @@
   (hi :Todo {:fg semantic.comment :bold true})
   (hi :Underlined {:fg colors.fg :underline true})
   (hi :Ignore {:fg colors.bg})
-  (hi :Error {:fg colors.bright-white :bg semantic.error})
+  (hi :Error {:fg colors.bg :bg semantic.error})
   (hi :Conceal {:fg colors.bright-black})
   (hi :CursorColumn {:bg colors.black})
   (hi :ColorColumn {:bg colors.black})
