@@ -1,179 +1,107 @@
 ---
 name: jj-workspaces
 user-invocable: false
-description: Use when needing isolated workspace for experiments, parallel development, or subagent coordination - covers solo experimentation and multi-agent workflows with jj workspaces
+description: Use when needing isolated workspace for experiments, parallel development, or subagent coordination - covers creating, placing, finalizing, and removing jj workspaces, alone or alongside other agents
 ---
 
 # jj Workspaces
 
-## Overview
+A workspace is a second working copy attached to the same repo, with its
+own working-copy commit, named `<name>@` from any workspace. All
+workspaces share history, so comparing or combining their work needs no
+extra setup.
 
-Create isolated jj workspaces for experimentation, parallel development, and subagent coordination. All workspaces share repository history, so switching between them and comparing their changes needs no extra setup.
+jj only snapshots a working copy when a command runs in it, so run `jj st`
+after a batch of edits.
 
-**Important:** Run `jj` (or `jj status`) periodically in each workspace. jj only snapshots the working copy when you run a command—it doesn't watch for file changes. Running `jj` ensures it sees your edits.
+Put workspaces under `work/` at the repo root. The global git ignore
+excludes `/work`, so they never show up as untracked files. Name them in
+lowercase, prefixed with the ticket ID when the work is tracked
+(`abc-123-auth-feature`, `async-refactor`).
 
-## When to Use
+## Create
 
-**Triggers:**
-- Testing breaking changes or refactors that might not work
-- Comparing multiple implementation approaches
-- Running long-running operations without blocking other work
-- Dispatching subagents to implement features in parallel
-- Need isolated development for any reason
-
-## Workspace Location
-
-**Always use `work/` directory** (relative to repo root).
-
-**Naming:** Use lowercase, descriptive names. Include story/ticket ID as prefix if work is tracked (e.g., `abc-123-auth-feature`, `async-refactor`, `api-v2`).
-
-## Creating a Workspace
+`-r` sets the new working-copy commit's parents, so the workspace starts
+on trunk, or on whatever `<rev>` the work belongs on:
 
 ```bash
-# 1. Ensure work directory exists and create workspace
 mkdir -p work
-jj workspace add --name=<name> work/<name>
-
-# Or from specific revision
-jj workspace add --name=<name> -r <rev> work/<name>
-
-# 2. Place in DAG - if megamerge (mm) exists, insert between trunk and mm
-jj rebase -r <name>@ -A trunk -B mm
-
-# If no megamerge, just rebase onto trunk:
-# jj rebase -r <name>@ -d trunk
-
-# 3. Sync main workspace
-jj workspace update-stale
+jj workspace add --name=<name> -r trunk work/<name>
 ```
 
-Use the paren-free `trunk` alias, not `trunk()` — Claude Code's shell
-parser treats the parentheses as a subshell even when quoted and triggers
-a permission prompt. Don't hardcode a bookmark instead; `trunk()` resolves
-differently per repo. See "Revsets and filesets" in the `jj` skill's `pitfalls.md`.
-
-**Result (with mm):** `trunk → workspace change → mm`
-
-`<name>@` names that workspace's working-copy commit and resolves from any
-workspace; `jj workspace list` shows them all.
-
-## Solo Experiments
-
-### Work and Evaluate
+With a megamerge, also add the workspace as a parent of `mm`:
 
 ```bash
-cd work/<name>
-# Make changes, run tests, build
-# Commits are isolated to this workspace
+jj rebase -s mm -o 'mm- | <name>@'
 ```
 
-**If successful:** Merge back:
-```bash
-jj rebase -s <name>@ -d @
-jj workspace remove <name>
-```
+Rebase `mm` rather than the workspace. Moving `<name>@` from the main
+workspace leaves `<name>` stale, and edits written there before jj next
+runs in it come out divergent.
 
-**If unsuccessful:** Remove it:
-```bash
-jj workspace remove <name>
-```
+## Finalize
 
-`remove` snapshots the working copy, forgets the workspace, abandons
-its working-copy commit if empty and undescribed, and deletes the
-directory. Pass several names to clean up a batch at once.
-
-### Parallel Experiments
-
-Create multiple workspaces to compare approaches:
+From inside the workspace:
 
 ```bash
-jj workspace add --name=approach-a work/approach-a
-jj workspace add --name=approach-b work/approach-b
-# Don't forget to place each in DAG if mm exists
+jj split -m '<description>' .
 ```
 
-Compare from main workspace:
+This moves every change into a new commit beneath the working-copy
+commit, which is left empty. Use it instead of `jj commit` when the
+workspace sits under `mm`: the working-copy commit is one of the
+megamerge's parents, and `jj commit` would start a new one on top of it,
+outside `mm`, so follow-up edits (review fixes, a retry) would miss the
+megamerge. After `split`, the working copy stays wired into `mm`.
+
+## Inspect
+
+From any workspace:
+
 ```bash
 jj log -r 'working_copies()'
-jj diff -r approach-a@ -r approach-b@
+jj diff -r <name>@-                              # finalized work
+jj diff --from approach-a@- --to approach-b@-
 ```
 
-## Subagent Coordination
+## Remove
 
-For dispatching agents to work in parallel. Finish setup before dispatching any agent.
-
-### Phase 1: Setup (Coordinator)
-
-Create workspace(s) using the standard process above.
-
-### Phase 2: Dispatch (Coordinator)
-
-Dispatch subagents in parallel, and tell each one to `cd` into its workspace before anything else. Each agent gets:
-- Task specification
-- Workspace path (exactly one) - agent starts here
-- Verification commands
-- Success criteria
-
-### Phase 3: Execution (Agent)
-
-**Agent steps, in order:**
-1. `cd` into the workspace directory first; all work happens from there
-2. Make file edits to implement task
-3. Run verification (tests, type checks)
-4. Split changes to parent: `jj split -m '<description>' .` (selects all files, creates parent commit with changes, leaves working copy empty)
-5. Report: what changed, verification output, change ID
-
-**Why `jj split` instead of `jj commit`:** Splitting moves changes into a new parent commit while leaving the workspace's working copy commit empty. This keeps the workspace commit as the megamerge parent, maintaining the DAG structure. The `-m` flag provides the description inline, avoiding interactive prompts.
-
-**Leave to the coordinator:** it owns workspace lifecycle, DAG
-placement, and pushing, and does each only after reviewing every
-agent's work.
-- `jj workspace` commands
-- `jj git push`
-- `jj rebase`
-- Rewriting a commit another workspace has checked out (`describe`,
-  `squash`, `abandon`, `restore --into`). Check `jj log -r
-  'working_copies()'` before touching any revision other than `@`. Two
-  workspaces rewriting the same commit is what produces divergent changes.
-- Any work outside the assigned workspace
-
-### Phase 4: Review (Coordinator)
-
-```bash
-jj workspace update-stale  # Sync to see agent's changes
-jj diff -r <name>@         # Review work
-jj status                  # Check conflicts, resolve if needed
-```
-
-### Phase 5: Cleanup
+From the main workspace:
 
 ```bash
 jj workspace remove <name>
+jj abandon 'empty() & description(exact:"") & ~working_copies() & ~merges() & mutable()'
 ```
 
-## Common Mistakes
+`jj workspace remove` snapshots the working copy, forgets the workspace,
+and deletes its directory; `jj workspace forget` only forgets. The
+`abandon` drops the empty commit `split` left under `mm`. Without a
+megamerge, `remove` discards it on its own. Don't use `jj sweep` here: it
+also abandons other workspaces' empty working copies and unwires them
+from `mm`.
 
-| Mistake | Fix |
-|---------|-----|
-| Working from wrong directory | Agent must `cd` into workspace directory first—jj resolves its context from cwd, so all commands run from there |
-| Skipping DAG placement | Must run `jj rebase` to place in DAG (with `-B mm` if megamerge exists) |
-| Agent skipping split | Agent must run `jj split -m '<description>' .` to finalize changes |
-| Skipping `jj workspace update-stale` | Run in main workspace after workspace operations |
-| Creating workspaces during dispatch | Create every workspace before dispatch |
-| Agent touching other workspaces | Agents work only in their assigned path |
-| `forget` + `abandon` + `rm -rf` to clean up | `jj workspace remove` does all three; a following `jj abandon` of the empty WC fails because it's already gone |
-| jj not seeing file changes | Run `jj` or `jj status` periodically—jj only snapshots on command execution |
-| Files written in one workspace vanish | Concurrent rewrite left the change divergent. See the `jj` skill's Divergent Changes section—recover, don't rewrite |
-| "Overkill for one agent" | Use the same workflow for one agent as for many—consistency beats a special case |
+Finalized work survives removal. To throw a workspace away instead, run
+`jj restore` inside it (and abandon any commits it finalized), then
+remove it as above and run `jj simplify-parents -r mm`: the abandoned
+commit's parent was trunk, which `mm` inherits as a redundant parent.
+Don't abandon `<name>@` before removing it, since that leaves the
+workspace stale and `remove` refuses it.
 
-## Failure Recovery
+## Sharing the repo with other agents
 
-**Agent timeout:** Retry with fresh context. Work in workspace is preserved.
+Create every workspace before dispatching anyone, and give each
+agent exactly one workspace path to `cd` into first, since jj resolves
+the repo from the current directory. Each agent edits and finalizes only
+its own workspace. Creating, placing, removing, and pushing stay with
+whoever dispatched them, after reviewing the work.
 
-**Verification fails:** Agent reports failure. Coordinator decides: retry, fix, or revert.
+## Gotchas
 
-**Conflicts after sync:** Expected. Coordinator resolves via the
-`resolve-conflicts` skill.
+| Symptom | Cause and fix |
+|---------|---------------|
+| Files written in one workspace vanish | A concurrent rewrite left the change divergent. See the `jj` skill's Divergent changes section; recover, don't rewrite |
+| mise errors "Config files ... are not trusted" | The new workspace's `mise.toml` is a new path. Ask the user to run `mise trust <workspace>/mise.toml` |
+| Conflicts after another workspace's rewrite | Expected. Resolve them with the `resolve-conflicts` skill |
 
 ## References
 
