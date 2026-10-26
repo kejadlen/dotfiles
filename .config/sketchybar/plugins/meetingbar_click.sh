@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CALENDAR=alpha.chen@gusto.com
+CALENDAR=
 PIN_FILE="${TMPDIR}meetingbar_pin"
 
 if [ "$BUTTON" = "right" ]; then
