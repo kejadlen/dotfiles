@@ -53,23 +53,44 @@ export const register: Register = on => {
 		writes = writes.then(operation, operation).catch(() => undefined);
 		return writes;
 	};
+	// No event fires when a prompt is answered, so a blocked session goes back
+	// to working once the tool call it was blocked on resolves.
+	let blocked = false;
+
 	on("turn.start", async ($, event, next) => {
-		if (isPrimaryAgent(event.agentId)) await enqueue(async () => publish($, working(await cwd($))));
+		if (isPrimaryAgent(event.agentId)) {
+			blocked = false;
+			await enqueue(async () => publish($, working(await cwd($))));
+		}
 		return next(event);
 	});
 
 	on("turn.complete", async ($, event, next) => {
-		if (isPrimaryAgent(event.agentId)) await enqueue(async () => publish($, done(await cwd($))));
+		if (isPrimaryAgent(event.agentId)) {
+			blocked = false;
+			await enqueue(async () => publish($, done(await cwd($))));
+		}
 		return next(event);
 	});
 
-	on("tool.call", { tool: "AskUserQuestion" }, async ($, event, next) => {
-		if (isPrimaryAgent(event.agentId)) await enqueue(async () => publish($, questionRequest(await cwd($))));
-		return next(event);
+	on("tool.call", async ($, event, next) => {
+		if (!isPrimaryAgent(event.agentId)) return next(event);
+
+		if (event.tool === "AskUserQuestion") {
+			blocked = true;
+			await enqueue(async () => publish($, questionRequest(await cwd($))));
+		}
+		const result = await next(event);
+		if (blocked) {
+			blocked = false;
+			await enqueue(async () => publish($, working(await cwd($))));
+		}
+		return result;
 	}).catch(($, event, next) => next(event));
 
 	on("classic.PermissionRequest", async ($, event, next) => {
 		if (isPrimaryAgent(event.agent_id)) {
+			blocked = true;
 			await enqueue(async () => publish($, permissionRequest(event.tool_name, await cwd($))));
 		}
 		return next(event);
