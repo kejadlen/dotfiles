@@ -100,10 +100,6 @@
       "rev": "520498f",
       "src": "https://github.com/hashivim/vim-terraform.git"
     },
-    "vim-tmux-navigator": {
-      "rev": "c45243d",
-      "src": "https://github.com/christoomey/vim-tmux-navigator.git"
-    },
     "vim-unimpaired": {
       "rev": "db65482",
       "src": "https://github.com/tpope/vim-unimpaired.git"

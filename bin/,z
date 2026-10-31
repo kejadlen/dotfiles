@@ -31,7 +31,13 @@ main() {
     local name
     name=$(basename "$dir")
 
-    tmux new-window -n "$name" -c "$dir"
+    if [[ -n "${TMUX:-}" ]]; then
+        tmux new-window -n "$name" -c "$dir"
+    else
+        local session
+        session=$(rex session new "$name" --cwd "$dir" --json | jq -r .session_id)
+        rex "do" session.select session_id="$session" >/dev/null
+    fi
 }
 
 main "$@"
