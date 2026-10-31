@@ -5,6 +5,15 @@
     "PLAYWRIGHT_MCP_BROWSER": "webkit"
   },
   "permissions": {
+    "allow": [
+      "Skill(skill:commit)",
+      "Skill(skill:describing-changes)",
+      "Skill(skill:design-notes)",
+      "Skill(skill:jj)",
+      "Skill(skill:ranger:ranger)",
+      "Skill(skill:technical-writing)",
+      "Skill(skill:til)"
+    ],
     "deny": [
       "Read(**/.envrc)",
       "Read(//**/.envrc)"
