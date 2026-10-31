@@ -1,0 +1,31 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "mergiraf",
+  "platforms": {
+    "linux-aarch64": {
+      "size": 6784472,
+      "hash": "blake3",
+      "digest": "0c80c5e7dddfbb3df19f40fa074cb83815595bcf8c586086261cd680a60a74cc",
+      "format": "tar.gz",
+      "path": "mergiraf",
+      "providers": [
+        {
+          "url": "https://codeberg.org/mergiraf/mergiraf/releases/download/v0.18.0/mergiraf_aarch64-unknown-linux-gnu.tar.gz"
+        }
+      ]
+    },
+    "linux-x86_64": {
+      "size": 6996332,
+      "hash": "blake3",
+      "digest": "c5fc1e049fb7c271d9322a5e11efea286a7986ac8d03b28ccee298f8385a583e",
+      "format": "tar.gz",
+      "path": "mergiraf",
+      "providers": [
+        {
+          "url": "https://codeberg.org/mergiraf/mergiraf/releases/download/v0.18.0/mergiraf_x86_64-unknown-linux-gnu.tar.gz"
+        }
+      ]
+    }
+  }
+}
