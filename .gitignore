@@ -26,6 +26,7 @@ private
 !.config/pip
 !.config/ramekin
 .config/ramekin/agent
+!.config/rex
 !.config/ripgrep
 !.config/sketchybar
 !.config/starship

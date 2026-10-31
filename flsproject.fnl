@@ -1,2 +1,2 @@
-{:extra-globals "hs spoon vim"}
+{:extra-globals "hs spoon vim rex"}
 

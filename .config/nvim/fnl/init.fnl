@@ -117,7 +117,6 @@
 (vim.pack.add [;; was using jaawerth/fennel.vim, but there are some annoyances
                ;; with it, so let's try this one instead
                "https://github.com/atweiden/vim-fennel.git"
-               "https://github.com/christoomey/vim-tmux-navigator.git"
                "https://github.com/direnv/direnv.vim.git"
                "https://github.com/hashivim/vim-terraform.git"
                "https://github.com/itchyny/lightline.vim.git"
@@ -213,6 +212,24 @@
                     (tset (. vim.wo current-win) 0 :foldexpr
                           "v:lua.vim.lsp.foldexpr()")))]
   (nvim-create-autocmd :LspAttach {: callback}))
+
+;;; pane navigation
+;; ctrl+hjkl crosses into the surrounding tmux or Rex pane at nvim's edge.
+(let [rex-direction {:h :left :j :down :k :up :l :right}
+      tmux-flag {:h :-L :j :-D :k :-U :l :-R}
+      navigate (fn [key]
+                 (let [win (nvim-get-current-win)]
+                   (vim.cmd.wincmd key)
+                   (when (= win (nvim-get-current-win))
+                     (if vim.env.TMUX
+                         (vim.system [:tmux :select-pane :-t vim.env.TMUX_PANE
+                                      (. tmux-flag key)])
+                         vim.env.REX_SESSION
+                         (vim.system [:rex :api :call :-s vim.env.REX_SESSION
+                                      :session.focus_direction
+                                      (vim.json.encode {:direction (. rex-direction key)})])))))]
+  (each [key _ (pairs rex-direction)]
+    (vim.keymap.set :n (.. :<C- key :>) #(navigate key))))
 
 ;;; focus dimming
 ;; Fade the background when neovim loses focus (matches tmux pane-focus-out behavior).
