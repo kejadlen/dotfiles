@@ -6,6 +6,7 @@
   },
   "permissions": {
     "allow": [
+      "Bash(rex session rename *)",
       "Skill(commit)",
       "Skill(describing-changes)",
       "Skill(design-notes)",
@@ -42,6 +43,17 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/no-sops.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh -c 'rex __internal session-start --agent claude 2>/dev/null || true'",
+            "timeout": 5
           }
         ]
       }

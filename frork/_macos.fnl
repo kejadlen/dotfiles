@@ -20,6 +20,11 @@
   (ok :symlink (.. mailmate :Tags.plist)
       "~/.dotfiles/macos/MailMate/Tags.plist"))
 
+;; Rex over ssh:// looks for rex in ~/.local/bin, outside the app bundle.
+(ok :directory "~/.local/bin")
+(ok :symlink "~/.local/bin/rex"
+    "~/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS/rex")
+
 ;; this is slow - maybe replace with a hand-rolled assertion type?
 (ok :brew-bundle "~/.dotfiles/Brewfile")
 

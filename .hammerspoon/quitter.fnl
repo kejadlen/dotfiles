@@ -17,6 +17,8 @@
                       :Miniflux
                       :Phanpy
                       :Obsidian
+                      "Rex Beta"
+                      :Rex
                       :Safari
                       :Tuna]
                :timeouts {:Fusion [:minute 30]

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "superlogical": {
+      "baseUrl": "https://www.superlogical.com/rex/community-mcp"
+    }
+  },
+  "imports": []
+}
