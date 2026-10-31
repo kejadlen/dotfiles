@@ -1,0 +1,31 @@
+#!/usr/bin/env dotslash
+
+{
+  "name": "rex",
+  "platforms": {
+    "linux-aarch64": {
+      "size": 15581867,
+      "hash": "blake3",
+      "digest": "73c311fb42c6e83e078d710b4e4cf932aa7eb2dcc6abbc1c8f4d3b4209aedaf1",
+      "format": "tar.gz",
+      "path": "rex",
+      "providers": [
+        {
+          "url": "https://blob.superlogical.com/download/rex/preview/e6592f74969959db77f1f84261901ef599a025cf/rex-linux-arm64.tar.gz"
+        }
+      ]
+    },
+    "linux-x86_64": {
+      "size": 17137604,
+      "hash": "blake3",
+      "digest": "de5d105746766e34ac1e70e48794ad5477097ca399c8575eaf21575329689348",
+      "format": "tar.gz",
+      "path": "rex",
+      "providers": [
+        {
+          "url": "https://blob.superlogical.com/download/rex/preview/e6592f74969959db77f1f84261901ef599a025cf/rex-linux-amd64.tar.gz"
+        }
+      ]
+    }
+  }
+}
