@@ -4,6 +4,11 @@
 # https://github.com/laktak/extrakto, and the copy/open-URL flow from
 # https://github.com/junegunn/tmux-fzf-url (via this repo's retired
 # ,tmux-copy script, which credited it directly).
+#
+# Two entry points: the tmux binding in .config/tmux/tmux.conf runs this in a
+# floating pane, and the rex binding in .config/rex/config.fnl runs it in a
+# session.new_layer float, passing "--rex SESSION BLOCK" so capture and
+# write-back target the pane that opened it.
 
 set -euo pipefail
 if [[ "${TRACE-0}" == "1" ]]; then
@@ -25,11 +30,33 @@ render_preview() {
 }
 
 main() {
+    # Rex mode: the config.fnl binding passes the triggering session and block
+    # as arguments. Tmux mode has to discover the pane below instead.
+    local mode=tmux rex_session rex_block
+    if [[ "${1:-}" == "--rex" && -n "${2:-}" && -n "${3:-}" ]]; then
+        mode=rex
+        rex_session=$2
+        rex_block=$3
+    fi
+
     # tmux doesn't expand #{pane_id} in a new-pane shell-command argument, so
     # the triggering pane is looked up here instead: {last} is the pane that
     # was active in this window right before the new floating pane took over.
     local pane_id
-    pane_id=$(tmux display-message -p -t '{last}' '#{pane_id}')
+    if [[ $mode == rex ]]; then
+        pane_id=$rex_block
+    else
+        pane_id=$(tmux display-message -p -t '{last}' '#{pane_id}')
+    fi
+
+    # A closing layer doesn't restore focus to the pane that opened it, so
+    # rex mode refocuses it on every exit after the float is up. A plain
+    # rex focus as the script's last act survives the layer teardown.
+    if [[ $mode == rex ]]; then
+        refocus() { rex focus -s "$rex_session" "$pane_id" >/dev/null 2>&1 || true; }
+    else
+        refocus() { :; }
+    fi
 
     # -J asks tmux for its own hard-wrap tracking instead of guessing from
     # whitespace: rows the terminal actually wrapped come back pre-joined (a
@@ -39,13 +66,17 @@ main() {
     # Captured once in natural (oldest-to-newest) order; reused both as the
     # preview's context source and, reversed below, for token extraction.
     local pane_text
-    pane_text=$(tmux capture-pane -p -J -S - -t "$pane_id")
-    [[ -n "$pane_text" ]] || exit 0
+    if [[ $mode == rex ]]; then
+        pane_text=$(rex capture -s "$rex_session" -b "$pane_id" --unwrap)
+    else
+        pane_text=$(tmux capture-pane -p -J -S - -t "$pane_id")
+    fi
+    [[ -n "$pane_text" ]] || { refocus; exit 0; }
 
     # Saved to a file so the preview subprocess -- a separate invocation of
     # this script, spawned by fzf once per highlighted item -- can look up
     # context for that item without re-capturing the pane itself.
-    local pane_file
+    # Not local: the EXIT trap runs after main returns, when locals are gone.
     pane_file=$(mktemp)
     trap 'rm -f "$pane_file"' EXIT
     printf '%s\n' "$pane_text" >"$pane_file"
@@ -114,7 +145,7 @@ main() {
             }
         }
     ' | sort -t $'\t' -k1,1n -k2,2n | cut -f3-)
-    [[ -n "$tokens" ]] || exit 0
+    [[ -n "$tokens" ]] || { refocus; exit 0; }
 
     # Float via fzf's own tmux popup, unless the caller already gave us a
     # floating container (e.g. a tmux binding running this in a floating
@@ -122,7 +153,8 @@ main() {
     # FZF_DEFAULT_OPTS (.zshrc) carries its own --tmux default too, so it's
     # cleared here — otherwise it fires regardless of our own --tmux flag.
     local tmux_opts=(--tmux "80%,60%")
-    [[ -n "${IN_TMUX_FLOAT:-}" ]] && tmux_opts=()
+    # Rex mode always runs inside the layer float, like IN_TMUX_FLOAT.
+    [[ -n "${IN_TMUX_FLOAT:-}" || $mode == rex ]] && tmux_opts=()
 
     # --expect reports which key completed the selection: it's the first
     # line of output, empty unless ctrl-y/ctrl-o was the trigger, with the
@@ -139,7 +171,10 @@ main() {
         --header 'enter: insert  ctrl-y: copy  ctrl-o: open' --header-first \
         --expect ctrl-y,ctrl-o \
         --preview "\"$0\" __preview__ {}" \
-        --border-label ' grab ') || exit 0
+        --border-label ' grab ') || true
+    # Covers the cancel path too: refocus before deciding anything about the
+    # result, so every exit after this point leaves focus on the right pane.
+    refocus
     [[ -n "$result" ]] || exit 0
 
     local key selection
@@ -150,13 +185,25 @@ main() {
     case "$key" in
         ctrl-y)
             printf '%s' "$selection" | pbcopy
-            tmux display-message 'Copied to clipboard'
+            # No known rex equivalent of display-message yet. An if, not
+            # [[ ]] && -- a false && as the last statement exits 1, which
+            # makes the rex float stay open after the copy.
+            if [[ $mode == tmux ]]; then
+                tmux display-message 'Copied to clipboard'
+            fi
             ;;
         ctrl-o)
             open -- "$selection"
             ;;
         *)
-            tmux send-keys -l -t "$pane_id" -- "$selection"
+            if [[ $mode == rex ]]; then
+                # jq builds the JSON so quotes and backslashes in the pick
+                # survive; write delivers bytes as if typed, no newline.
+                jq -n --arg d "$selection" '{data:$d}' |
+                    rex block call -s "$rex_session" -b "$pane_id" write - >/dev/null
+            else
+                tmux send-keys -l -t "$pane_id" -- "$selection"
+            fi
             ;;
     esac
 }

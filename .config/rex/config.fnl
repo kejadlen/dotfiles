@@ -55,3 +55,40 @@
   (rex.bind (.. :ctrl+b> mod :c) :client.tab.new)
   (rex.bind (.. :ctrl+b> mod :n) :client.tab.next)
   (rex.bind (.. :ctrl+b> mod :p) :client.tab.previous))
+
+(local bin (.. (os.getenv :HOME) "/.dotfiles/bin"))
+
+;; Rex's PATH lacks brew and nix, so the dotslash-wrapped tools (zoxide, fzf, jq)
+;; can't exec; the float runs the script with an explicit PATH instead.
+;; TODO: Drop this if new_layer gains the --interactive option from Rex af0c204.
+(fn with-path [script ...]
+  ["/bin/zsh" "-c"
+   "export PATH=\"$HOME/.dotfiles/bin:$HOME/.nix-profile/bin:/opt/homebrew/bin:$PATH\"; exec \"$0\" \"$@\""
+   script ...])
+
+;; Centered at 80% x 60%, the same box as the tmux floating panes.
+(fn float [label script ...]
+  (rex.session.new_layer
+    {:bounds [0.1 0.2 0.8 0.6]
+     :focus true
+     :layout (rex.layout.block
+               {:flavor :com.superlogical.terminal.shell
+                : label
+                :options {:command (with-path script ...) :shell "none"}})}))
+
+(fn zoxide [] (float :zoxide (.. bin "/,z")))
+(rex.action {:name :zoxide :title "Open Directory in New Session" :run zoxide})
+;; Keys bound to a custom action by name do nothing in Rex Beta 1696, though
+;; the palette runs it, so the key calls the function directly.
+(rex.bind :ctrl+b>g #(do (zoxide) true))
+
+;; Scrollback token grabber, the same float as tmux's Tab binding. "--rex
+;; SESSION BLOCK" tells ,tmux-grab to capture and write back through the rex
+;; API instead of tmux, targeting the pane that opened the float.
+(fn grab []
+  (fn [ctx]
+    (float :grab (.. bin "/,tmux-grab") "--rex" ctx.session_id ctx.block_id)
+    ;; Without true, the Tab also reaches the pane and opens z4h's completion.
+    true))
+
+(rex.bind :ctrl+b>tab (grab))

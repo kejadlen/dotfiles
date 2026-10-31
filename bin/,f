@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# fzf file picker for the ctrl+t widget. Runs inside a rex floating layer,
+# lists files from the layer's working directory (the triggering pane's cwd,
+# passed by the widget), and writes the space-joined selection to the result
+# file named by the only argument. Aborting the picker (esc, ctrl-c) leaves
+# the file untouched.
+
+set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+main() {
+    local result_file=$1
+
+    local selection
+    # Listing and preview match FZF_CTRL_T_COMMAND/OPTS in .zshrc; the
+    # fullscreen flags override FZF_DEFAULT_OPTS so fzf fills the layer.
+    # No --multi, like the inline widget: enter accepts the highlighted
+    # item — with --multi, enter with nothing tab-marked prints nothing and
+    # exits 0, silently.
+    selection=$(fd --type f --strip-cwd-prefix --hidden --follow --exclude .git |
+        fzf \
+            --height 100% \
+            --no-margin \
+            --no-padding \
+            --border-label ' files ' \
+            --highlight-line \
+            --info inline-right \
+            --preview 'bat -n --color=always {}' \
+            --bind 'ctrl-/:change-preview-window(down|hidden|)') || exit 0
+
+    printf '%s\n' "$selection" >"$result_file"
+}
+
+main "$@"
