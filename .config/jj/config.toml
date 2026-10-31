@@ -170,7 +170,7 @@ bookmark-advance-from = 'heads(::to & bookmarks() & ~bookmarks(exact:"mm"))'
 [aliases]
 accuse = ["file", "annotate"]
 jj = []
-sweep = ["abandon", 'trunk():: & empty() & ~bookmarks(exact:"mm") & mine()']
+sweep = ["abandon", 'trunk():: & empty() & ~bookmarks(exact:"mm") & mine() & mutable()']
 stack = ["util", "exec", "--", "bash", "-c", """
   jj rebase \
     --insert-after 'trunk()' \
