@@ -23,14 +23,14 @@ Main bookmark: `main`. Don't commit directly to `main` — work on the `@` chang
 
 `ai/_AGENTS.md` owns the jj rules; reach for the `jj` skill before free-handing commands. Its commit-granularity rules are looser here — there's nothing to build and no test suite to bisect, so related config changes can share a commit rather than being split into one logical unit each. Still split changes that have nothing to do with each other.
 
-## Issue Tracker
+## Task Tracking
 
-Issues are on Gitea at https://git.kejadlen.dev/alpha/dotfiles/issues. Use the `tea` CLI:
+Tasks live in the `dotfiles` backlog, managed with the `ranger` CLI (see the `ranger` skill):
 
 ```bash
-tea issues list -r alpha/dotfiles -l git.kejadlen.dev
-tea issues create -r alpha/dotfiles -l git.kejadlen.dev -t "Title" -d "Description"
-tea comment -r alpha/dotfiles -l git.kejadlen.dev <index> "Comment body"
+ranger task list --backlog dotfiles
+ranger task create --backlog dotfiles --state ready --description "..." "Title"
+ranger comment add <key> "Comment body"
 ```
 
 ## Conventions
