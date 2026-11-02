@@ -79,6 +79,19 @@ printf "$fmt" "$arg"
 Don't disable warnings globally or at the file level unless there's a
 compelling reason.
 
+## Exit status
+
+Two silent exit-1 traps in scripts that gate on exit status (rex floats stay
+open, hooks fire, CI fails):
+
+`[[ cond ]] && cmd` as a function's last statement returns 1 when the
+condition is false — `set -e` doesn't fire, the failure only propagates as
+`$?`. Use `if`/`fi` when the branch is conditional.
+
+An `EXIT` trap runs after `main`'s locals are destroyed, so a trap
+referencing a local errors under `set -u` and flips the exit status — and
+the cleanup never runs. Keep trap-referenced variables global.
+
 ---
 
 *This is a self-improving skill. If you used it and it came up short — a missing command, flag, gotcha, or workflow — invoke the `self-improving-skills` skill and follow it before you finish.*
