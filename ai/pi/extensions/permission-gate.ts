@@ -333,6 +333,7 @@ function isContainer(): boolean {
   try { fs.accessSync("/.dockerenv"); return true; } catch {}
   try { fs.accessSync("/run/.containerenv"); return true; } catch {}
   if (process.env.container || process.env.CONTAINER) return true;
+  if (process.env.RAMEKIN) return true;
   return false;
 }
 

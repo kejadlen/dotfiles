@@ -4,18 +4,18 @@
   "name": "ramekin",
   "platforms": {
     "macos-aarch64": {
-      "size": 1317733,
+      "size": 1317822,
       "hash": "blake3",
-      "digest": "a9b98c85179091a67784ff455df133353ca54657fa186bb155bff76628bd5005",
+      "digest": "4a5adc21c19c0c54b2e6930ccff9eccffa88696f53b88302325ac51a3153a630",
       "path": "ramekin",
       "providers": [
         {
-          "url": "https://github.com/kejadlen/ramekin/releases/download/v2026-11-03+2883516/ramekin-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/kejadlen/ramekin/releases/download/v2026-11-04+8e5b77b/ramekin-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/kejadlen/ramekin",
-          "tag": "v2026-11-03+2883516",
+          "tag": "v2026-11-04+8e5b77b",
           "name": "ramekin-aarch64-apple-darwin.tar.gz"
         }
       ],
