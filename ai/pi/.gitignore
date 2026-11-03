@@ -1,5 +1,11 @@
 /sessions/
 /auth.json
 /approved-permissions.json
+/auth.json
+/logs/
+/mcp-auth.json
+/mcp-cache.json
 /models-store.json
+/npm/
+/sessions/
 /trust.json
