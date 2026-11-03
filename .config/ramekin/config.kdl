@@ -3,6 +3,9 @@
 // so nothing needs restating here. `-p claude` for the other builtin.
 profile "pi"
 
+// Apple's `container` CLI instead of Docker; needs `container system start`.
+runtime "apple"
+
 // Pi against Amazon Bedrock. Pi selects the provider by flag (no env
 // equivalent); the model is left to pi at run time. AWS creds come from an
 // SSO profile — fill in the placeholders and `aws sso login` on the host.
