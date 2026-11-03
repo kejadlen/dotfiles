@@ -229,6 +229,7 @@ alias clear=z4h-clear-screen-soft-bottom
 (( $+commands[eza] )) && alias ls=eza
 alias \$='noglob ' # allow pasting commands with leading $
 alias git='noglob git' # so that shortcuts like @^ work
+alias nix='noglob nix' # because # is used a lot in args
 alias rake='noglob rake' # don't match on square brackets
 alias tree='eza --tree'
 
