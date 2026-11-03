@@ -23,6 +23,8 @@ Main bookmark: `main`. Don't commit directly to `main` — work on the `@` chang
 
 `ai/_AGENTS.md` owns the jj rules; reach for the `jj` skill before free-handing commands. Its commit-granularity rules are looser here — there's nothing to build and no test suite to bisect, so related config changes can share a commit rather than being split into one logical unit each. Still split changes that have nothing to do with each other.
 
+Rex-related changes — Rex config, the `rex` skill, and Rex integrations in other tools — go on the `rex` branch, one of the parents of the `mm` megamerge. Commit them in `@`, then move each commit beneath the merge and onto the branch tip with `jj rebase -r <rev> -A rex -B mm` and `jj bookmark advance rex --to <rev>`. That rebase only splices cleanly while the `rex` bookmark sits at the branch tip, so keep it there.
+
 ## Task Tracking
 
 Tasks live in the `dotfiles` backlog, managed with the `ranger` CLI (see the `ranger` skill):
