@@ -18,4 +18,12 @@ RUN ARCH=$(uname -m) && \
     curl -fsSL "https://codeberg.org/mergiraf/mergiraf/releases/download/v0.18.0/mergiraf_${MF_ARCH}-unknown-linux-gnu.tar.gz" \
     | tar xz -C /usr/local/bin mergiraf
 
-COPY bin/shellcheck /usr/local/bin/shellcheck
+COPY bin/shellcheck .ramekin/bin/mergiraf .ramekin/bin/rex /usr/local/bin/
+
+# lua5.4 + fennel to compile and load-check the Fennel configs (.hammerspoon,
+# .config/rex). Rex's init.lua prepends ~/.luarocks/share/lua/5.4/?.lua to its
+# embedded Lua's package.path, so link the Debian fennel library there.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    lua5.4 fennel && rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /root/.luarocks/share/lua/5.4 && \
+    ln -s /usr/share/lua/5.4/fennel.lua /root/.luarocks/share/lua/5.4/fennel.lua
