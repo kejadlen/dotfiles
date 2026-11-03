@@ -5,16 +5,20 @@
 
 (local {: colors : semantic} (require :alphabaster.palette))
 
-;; Lightline expects: [fg, bg, cterm_fg, cterm_bg]
-;; We only use GUI colors, so cterm values are placeholders.
-(fn ll [fg bg]
-  [fg bg 0 0])
+;; Lightline expects: [gui_fg, gui_bg, cterm_fg, cterm_bg, attr]
+;; The palette is cterm slots, so the GUI values are placeholders.
+(fn ll [fg bg ?attr]
+  [:NONE :NONE fg bg ?attr])
 
-(local normal   (ll colors.fg colors.black))
-(local inactive (ll colors.comment-gray colors.black))
-(local insert   (ll colors.bg semantic.string))
-(local visual   (ll colors.fg colors.selection-bg))
-(local replace  (ll colors.bg semantic.error))
+;; Reversing an accent paints it behind text in the terminal's background.
+(fn accent [color]
+  (ll color :NONE :reverse))
+
+(local normal   (ll :NONE colors.surface))
+(local inactive (ll semantic.comment colors.surface))
+(local insert   (accent semantic.string))
+(local visual   (ll :NONE colors.selection-bg))
+(local replace  (accent semantic.error))
 
 ;; Middle section is transparent (matches your current config)
 (local middle [[:NONE :NONE :NONE :NONE]])

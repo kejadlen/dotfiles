@@ -21,6 +21,11 @@ palette = 13=#EDBBE0
 palette = 14=#B6E2EA
 palette = 15=#FFFFFF
 
+# Fills for alphabaster in nvim; see .config/nvim/fnl/alphabaster/README.md.
+palette = 60=#626880
+palette = 235=#282A36
+palette = 236=#333333
+
 cursor-color = #f2d5cf
 cursor-text = #121218
 selection-background = #626880

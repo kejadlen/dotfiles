@@ -20,3 +20,6 @@ cursor-color = #f2d5cf
 cursor-text = #121218
 selection-background = #626880
 selection-foreground = #F0F0E4
+palette = 60=#626880
+palette = 235=#282A36
+palette = 236=#333333

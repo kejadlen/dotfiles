@@ -18,8 +18,16 @@
 (local {: colors : semantic} (require :alphabaster.palette))
 (local api vim.api)
 
+;; :sp is dropped because cterm has no underline color, and nvim_set_hl would
+;; read a slot number there as an RGB integer.
 (fn hi [group opts]
-  (api.nvim_set_hl 0 group opts))
+  (api.nvim_set_hl 0 group
+                   (collect [k v (pairs opts)]
+                     (case k
+                       :fg (values :ctermfg v)
+                       :bg (values :ctermbg v)
+                       :sp nil
+                       _ (values k v)))))
 
 (fn link [group target]
   (api.nvim_set_hl 0 group {:link target}))
@@ -29,12 +37,12 @@
   (set vim.g.colors_name :alphabaster)
 
   ;;; Base
-  (hi :Normal {:fg colors.fg :bg colors.bg})
+  (hi :Normal {})
   ;; NormalNC matches Normal so inactive splits don't dim on their own;
   ;; the FocusLost autocmd in init.fnl dims both together when the whole
   ;; terminal pane loses focus.
-  (hi :NormalNC {:fg colors.fg :bg colors.bg})
-  (hi :NormalFloat {:fg colors.fg :bg colors.black})
+  (hi :NormalNC {})
+  (hi :NormalFloat {:bg colors.surface})
   (hi :FloatBorder {:fg colors.bright-black})
 
   ;;; === THE 4 SEMANTIC CATEGORIES ===
@@ -78,28 +86,28 @@
   (link :Character :Constant)
 
   ;;; UI elements
-  (hi :Visual {:bg colors.selection-bg :fg colors.selection-fg})
-  (hi :CursorLine {:bg colors.black})
-  (hi :CursorLineNr {:fg semantic.definition :bg colors.black})
+  (hi :Visual {:bg colors.selection-bg})
+  (hi :CursorLine {:bg colors.surface})
+  (hi :CursorLineNr {:fg semantic.definition :bg colors.surface})
   (hi :LineNr {:fg colors.bright-black})
   ;; No explicit bg — inherits from Normal/NormalNC so it dims with the window.
   (hi :SignColumn {})
   (hi :VertSplit {:fg colors.bright-black})
   (hi :WinSeparator {:fg colors.bright-black})
-  (hi :StatusLine {:bg colors.black})
-  (hi :StatusLineNC {:bg colors.black :fg colors.comment-gray})
-  (hi :Pmenu {:fg colors.fg :bg colors.black})
-  (hi :PmenuSel {:fg colors.fg :bg colors.selection-bg})
-  (hi :PmenuSbar {:bg colors.black})
+  (hi :StatusLine {:bg colors.surface})
+  (hi :StatusLineNC {:bg colors.surface :fg semantic.comment})
+  (hi :Pmenu {:bg colors.surface})
+  (hi :PmenuSel {:bg colors.selection-bg})
+  (hi :PmenuSbar {:bg colors.surface})
   (hi :PmenuThumb {:bg colors.bright-black})
-  (hi :TabLine {:fg colors.fg :bg colors.black})
-  (hi :TabLineSel {:fg colors.fg :bg colors.selection-bg :bold true})
-  (hi :TabLineFill {:bg colors.black})
+  (hi :TabLine {:bg colors.surface})
+  (hi :TabLineSel {:bg colors.selection-bg :bold true})
+  (hi :TabLineFill {:bg colors.surface})
 
   ;;; Search — high contrast, needs to pop
-  (hi :Search {:fg colors.fg :bg colors.selection-bg})
-  (hi :IncSearch {:fg colors.bg :bg colors.bright-yellow})
-  (hi :CurSearch {:fg colors.bg :bg colors.bright-green})
+  (hi :Search {:bg colors.selection-bg})
+  (hi :IncSearch {:fg colors.bright-yellow :reverse true})
+  (hi :CurSearch {:fg colors.bright-green :reverse true})
 
   ;;; Diagnostics — these are actionable, worth color
   (hi :DiagnosticError {:fg semantic.error})
@@ -238,13 +246,13 @@
 
   ;; indent-blankline
   ;; Indent guides should be subtle — they're structural, not semantic
-  (hi :IblIndent {:fg colors.black})
+  (hi :IblIndent {:fg colors.surface})
   (hi :IblScope {:fg colors.bright-black})  ;; current scope slightly brighter
 
   ;; treesitter-context
   ;; The sticky context header at top of window
-  (hi :TreesitterContext {:bg colors.black})
-  (hi :TreesitterContextLineNumber {:fg semantic.definition :bg colors.black})
+  (hi :TreesitterContext {:bg colors.surface})
+  (hi :TreesitterContextLineNumber {:fg semantic.definition :bg colors.surface})
 
   ;; fidget (LSP progress)
   (hi :FidgetTitle {:fg semantic.definition})
@@ -252,9 +260,9 @@
 
   ;; fzf.vim
   ;; Matched characters should stand out
-  (hi :fzf1 {:fg colors.fg :bg colors.black})
-  (hi :fzf2 {:fg colors.fg :bg colors.black})
-  (hi :fzf3 {:fg colors.fg :bg colors.black})
+  (hi :fzf1 {:bg colors.surface})
+  (hi :fzf2 {:bg colors.surface})
+  (hi :fzf3 {:bg colors.surface})
 
   ;; dirvish (file browser)
   (link :DirvishPathTail :Normal)
@@ -279,7 +287,7 @@
   (hi :FoldColumn {:fg colors.bright-black})
   (hi :NonText {:fg colors.bright-black})
   (hi :SpecialKey {:fg colors.bright-black})
-  (hi :Whitespace {:fg colors.black})  ;; listchars (tabs, trailing spaces)
+  (hi :Whitespace {:fg colors.surface})  ;; listchars (tabs, trailing spaces)
   (hi :Directory {:fg semantic.definition})
   (hi :Title {:fg semantic.definition})
   (hi :Question {:fg semantic.info})
@@ -287,12 +295,12 @@
   (hi :WarningMsg {:fg semantic.warn})
   (hi :ErrorMsg {:fg semantic.error :bold true})
   (hi :Todo {:fg semantic.comment :bold true})
-  (hi :Underlined {:fg colors.fg :underline true})
-  (hi :Ignore {:fg colors.bg})
-  (hi :Error {:fg colors.bg :bg semantic.error})
+  (hi :Underlined {:underline true})
+  (hi :Ignore {:fg colors.surface})
+  (hi :Error {:fg semantic.error :reverse true})
   (hi :Conceal {:fg colors.bright-black})
-  (hi :CursorColumn {:bg colors.black})
-  (hi :ColorColumn {:bg colors.black})
-  (hi :QuickFixLine {:bg colors.black}))
+  (hi :CursorColumn {:bg colors.surface})
+  (hi :ColorColumn {:bg colors.surface})
+  (hi :QuickFixLine {:bg colors.surface}))
 
 {: setup}

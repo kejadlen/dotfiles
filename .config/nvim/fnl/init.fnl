@@ -21,7 +21,8 @@
 (set vim.o.listchars "tab:⇥ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·")
 (set vim.o.number true)
 (set vim.o.showmode false)
-(set vim.o.termguicolors true)
+;; Off so alphabaster's slot numbers draw with the terminal's theme.
+(set vim.o.termguicolors false)
 (set vim.o.virtualedit :block)
 (set vim.o.wildmode "longest:full")
 (set vim.o.winborder :rounded)
@@ -221,10 +222,10 @@
 (let [group (nvim-create-augroup :focus-dim {})
       {: colors} (require :alphabaster.palette)
       set-bg (fn [bg]
-               (nvim-set-hl 0 :Normal {:fg colors.fg : bg})
-               (nvim-set-hl 0 :NormalNC {:fg colors.fg : bg}))
+               (nvim-set-hl 0 :Normal {:ctermbg bg})
+               (nvim-set-hl 0 :NormalNC {:ctermbg bg}))
       dim-bg #(set-bg colors.dim-bg)
-      restore-bg #(set-bg colors.bg)]
+      restore-bg #(set-bg nil)]
   (nvim-create-autocmd :FocusLost {:callback dim-bg : group})
   (nvim-create-autocmd :FocusGained {:callback restore-bg : group}))
 

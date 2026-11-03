@@ -29,17 +29,20 @@ Initial design used red for comments (matching original Alabaster). In practice,
 
 Lavender/purple for strings matches the paramount colorscheme, preserving muscle memory. Strings and constants are conceptually similar anyway: literal values that serve as reference points. Using the same color for both simplifies the mental model from 4 categories to 3 visual colors.
 
-### Colors sourced from Ghostty
+### Colors come from the terminal
 
-All colors come from `~/.config/ghostty/config` to maintain consistency between terminal and editor:
+The colorscheme sets terminal color numbers, not hex values, and `init.fnl` turns `termguicolors` off. Neovim draws with whichever theme the terminal has loaded, so it switches between `~/.config/ghostty/themes/alphabaster` and `alphabaster-light` along with the terminal.
 
-```
-Background:  #121218
-Foreground:  #F0F0E4
-Yellow:      #E6E6A1  (comments)
-Lavender:    #C4AAEA  (strings, constants)
-Cyan:        #A2D6E0  (definitions)
-```
+| Role | Slot | Dark | Light |
+|---|---|---|---|
+| Comments | 8 | `#9BA3C9` | `#5F6480` |
+| Strings, constants | 12 | `#D0BCF0` | `#7A4FC4` |
+| Definitions | 6 | `#A2D6E0` | `#0A6677` |
+| Surfaces (status line, floats, cursor line) | 235 | `#282A36` | `#EEEEEA` |
+| Unfocused background | 236 | `#333333` | `#EBEBE6` |
+| Selection | 60 | `#626880` | `#DCD6EE` |
+
+Slots 0–15 hold text colors, and none of them works as a fill in both themes, so the theme files also redefine xterm slots 235, 236, and 60. In Rex, turn on Settings › Themes › Use extended theme palette for both modes, or those three fall back to xterm's standard grays.
 
 ## File Structure
 

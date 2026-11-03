@@ -1,47 +1,37 @@
 ;; fnl/alphabaster/palette.fnl
 ;;
-;; Color definitions sourced from ~/.config/ghostty/config
+;; Terminal color numbers rather than hex, so Neovim draws with whichever
+;; theme the terminal has loaded: ~/.config/ghostty/themes/alphabaster or
+;; alphabaster-light. Requires termguicolors off.
 
-;; Ghostty terminal colors (named)
 (local colors
-  {:bg         "#121218"
-   :fg         "#F0F0E4"
+  {;; ANSI slots
+   :red            1
+   :green          2
+   :yellow         3
+   :blue           4
+   :magenta        5
+   :cyan           6
+   :bright-black   8
+   :bright-red     9
+   :bright-green   10
+   :bright-yellow  11
+   :bright-blue    12
+   :bright-magenta 13
+   :bright-cyan    14
 
-   ;; ANSI normal
-   :black      "#282A36"
-   :red        "#FFB3B3"
-   :green      "#7BC275"
-   :yellow     "#E6E6A1"
-   :blue       "#C4AAEA"
-   :magenta    "#E2A6D4"
-   :cyan       "#A2D6E0"
-   :white      "#F0F0E4"
-
-   ;; ANSI bright
-   :bright-black   "#9BA3C9"
-   :bright-red     "#FFC9C9"
-   :bright-green   "#96D988"
-   :bright-yellow  "#EFE9B0"
-   :bright-blue    "#D0BCF0"
-   :bright-magenta "#EDBBE0"
-   :bright-cyan    "#B6E2EA"
-   :bright-white   "#FFFFFF"
-
-   ;; Special
-   :comment-gray "#A0A0A0"
-   :cursor     "#f2d5cf"
-   :selection-bg "#626880"
-   :selection-fg "#F0F0E4"
-
-   ;; Dimmed background for unfocused windows (matches tmux pane-focus-out)
-   :dim-bg     "#333333"})
+   ;; No ANSI slot reads as a fill in both themes, so the theme files redefine
+   ;; these xterm slots. Rex needs "Use extended theme palette" on for them.
+   :surface      235
+   :dim-bg       236  ;; unfocused background (matches tmux pane-focus-out)
+   :selection-bg 60})
 
 ;; Semantic roles (Alabaster philosophy)
 ;; Only 4 categories get color. Everything else is default fg.
 (local semantic
-  {:comment    colors.comment-gray   ;; visible but secondary
-   :string     colors.bright-blue ;; lavender/purple
-   :constant   colors.bright-blue ;; same as strings — all literal values are lavender
+  {:comment    colors.bright-black ;; visible but secondary
+   :string     colors.bright-blue  ;; lavender/purple
+   :constant   colors.bright-blue  ;; same as strings — all literal values are lavender
    :definition colors.cyan
 
    ;; Diagnostics
