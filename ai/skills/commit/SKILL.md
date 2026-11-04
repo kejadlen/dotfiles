@@ -54,6 +54,11 @@ When squashing, pass a fileset: `jj squash --into @- <paths>`. A bare
 `jj squash` moves *every* pending change into the parent, including
 files another agent or a hook left in the working copy.
 
+Resolve `--into` targets against the repo as it is *now*, never from an
+earlier command's output — with concurrent writers, `@-` can change
+between commands, and a stale `@-` squashes into whatever is parent now
+(a megamerge, someone's WIP). Run `jj log -r @-` immediately before.
+
 ### Fileset (optional)
 
 An empty `<fileset>` commits all pending changes.
