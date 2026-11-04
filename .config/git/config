@@ -19,6 +19,9 @@
 	insteadof = https://git.kejadlen.dev/
 [url "git@github.com:"]
 	insteadof = https://github.com/
+# pi requires owner/repo-shaped git URLs; quire has no owner, so strip the dummy pkg/ segment.
+[url "ssh://quire/"]
+	insteadof = ssh://quire/pkg/
 [transfer]
 	fsckobjects = true
 
