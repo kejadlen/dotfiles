@@ -259,10 +259,14 @@ end
 
 desc "Upgrade neovim"
 task :upgrade_neovim do
-  chdir File.expand_path("~/Library/Caches/Homebrew/neovim--git") do
-    sh "git tag --delete nightly stable" do
-      # no-op so that `sh` doesn't throw an
-      # exception if a tag doesn't exist
+  # fetch.prunetags fetches tags despite brew's --no-tags, so the moving
+  # nightly/stable tags would otherwise be rejected as clobbers.
+  %w[tree-sitter neovim].each do |formula|
+    chdir File.expand_path("~/Library/Caches/Homebrew/#{formula}--git") do
+      sh "git tag --delete nightly stable" do
+        # no-op so that `sh` doesn't throw an
+        # exception if a tag doesn't exist
+      end
     end
   end
   sh "brew upgrade tree-sitter --fetch-HEAD"
