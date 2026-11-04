@@ -70,16 +70,17 @@ cd work/<name>
 **If successful:** Merge back:
 ```bash
 jj rebase -s <name>@ -d @
-jj workspace forget <name>
-jj abandon 'empty() & description(exact:"") & @-'
-rm -rf work/<name>
+jj workspace remove <name>
 ```
 
-**If unsuccessful:** Forget and clean up:
+**If unsuccessful:** Remove it:
 ```bash
-jj workspace forget <name>
-rm -rf work/<name>
+jj workspace remove <name>
 ```
+
+`remove` snapshots the working copy, forgets the workspace, abandons
+its working-copy commit if empty and undescribed, and deletes the
+directory. Pass several names to clean up a batch at once.
 
 ### Parallel Experiments
 
@@ -147,8 +148,7 @@ jj status                  # Check conflicts, resolve if needed
 ### Phase 5: Cleanup
 
 ```bash
-jj workspace forget <name>
-rm -rf work/<name>
+jj workspace remove <name>
 ```
 
 ## Common Mistakes
@@ -161,8 +161,7 @@ rm -rf work/<name>
 | Skipping `jj workspace update-stale` | Run in main workspace after workspace operations |
 | Creating workspaces during dispatch | Create every workspace before dispatch |
 | Agent touching other workspaces | Agents work only in their assigned path |
-| Empty WC commits after rebase | After rebase + forget, run `jj abandon 'empty() & description(exact:"") & @-'` to drop the workspace's leftover empty WC |
-| Forgetting cleanup | Remove directories after forgetting workspace |
+| `forget` + `abandon` + `rm -rf` to clean up | `jj workspace remove` does all three; a following `jj abandon` of the empty WC fails because it's already gone |
 | jj not seeing file changes | Run `jj` or `jj status` periodically—jj only snapshots on command execution |
 | Files written in one workspace vanish | Concurrent rewrite left the change divergent. See the `jj` skill's Divergent Changes section—recover, don't rewrite |
 | "Overkill for one agent" | Use the same workflow for one agent as for many—consistency beats a special case |

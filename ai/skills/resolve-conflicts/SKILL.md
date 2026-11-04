@@ -2,7 +2,7 @@
 name: resolve-conflicts
 description: Use when resolving jj conflicts after rebase, squash, or merge — handles conflict markers, mergiraf automation, and file-by-file manual resolution, in place with `jj resolve -r` or in an isolated workspace
 argument-hint: [change-id]
-allowed-tools: [Bash(mkdir -p work), Bash(jj workspace add --name=resolve-* -r * work/resolve-*), Bash(cd work/resolve-*), Bash(jj status), Bash(jj resolve *), Bash(jj diff *), Bash(jj log *), Bash(jj op log *), Bash(jj op show *), Bash(jj squash *), Bash(jj workspace forget resolve-*), Bash(jj workspace update-stale), Bash(rm -rf work/resolve-*)]
+allowed-tools: [Bash(mkdir -p work), Bash(jj workspace add --name=resolve-* -r * work/resolve-*), Bash(cd work/resolve-*), Bash(jj status), Bash(jj resolve *), Bash(jj diff *), Bash(jj log *), Bash(jj op log *), Bash(jj op show *), Bash(jj squash *), Bash(jj workspace remove resolve-*), Bash(jj workspace update-stale)]
 ---
 
 # Resolve Conflicts
@@ -301,17 +301,13 @@ Do not run `jj squash` automatically. Prompt the user:
 > `<change-id>`, or review the diff first with `jj diff`.
 
 Once the user confirms the squash, `<change-id>` is fixed up and the
-workspace's working-copy commit is left empty. Clean up per
-`jj-workspaces`' cleanup recipe:
+workspace's working-copy commit is left empty. From the main workspace —
+`remove` deletes `work/resolve-<change-id>`, so don't run it from inside —
+clean up per `jj-workspaces`' cleanup recipe, then sync so the main
+workspace sees the resolved change:
 
 ```
-jj workspace forget resolve-<change-id>
-rm -rf work/resolve-<change-id>
-```
-
-Then, from the main workspace, sync so it sees the resolved change:
-
-```
+jj workspace remove resolve-<change-id>
 jj workspace update-stale
 ```
 

@@ -71,7 +71,7 @@ diff. If the same defect survives two fix attempts, bring it to the user.
 
 ## Hand off
 
-When review accepts a track, forget its workspace per `jj-workspaces`, leaving
+When review accepts a track, remove its workspace per `jj-workspaces`, leaving
 the change in place. Tell the user the report ID, the change ID, and what it
 does, and name any other track that touches the same files so they know to
 expect a conflict. Don't merge, push, or deliver it.
