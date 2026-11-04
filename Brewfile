@@ -1,4 +1,3 @@
-tap "kejadlen/tap", "https://git.kejadlen.dev/alpha/homebrew-tap.git"
 tap "felixkratz/formulae"
 tap "nikitabobko/tap"
 
@@ -29,6 +28,7 @@ brew "zsh"
 
 brew "ansible-language-server"
 brew "ansible-lint"
+brew "fennel-ls"
 brew "fnlfmt"
 brew "terraform-ls"
 brew "yaml-language-server"
@@ -43,7 +43,6 @@ brew "universal-ctags", args: ["HEAD"] # don't remember why this is installing f
 # install from taps
 
 brew "felixkratz/formulae/sketchybar"
-brew "kejadlen/tap/fennel-ls", args: ["HEAD"]
 
 cask "font-sauce-code-pro-nerd-font"
 cask "font-source-code-pro"
