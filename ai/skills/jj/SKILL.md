@@ -129,6 +129,16 @@ onto its former parents, so rewriting `mm` separately to add a destination
 hands `@` all of `mm`'s former parents, leaving a second near-identical
 megamerge beside the real one. `jj rebase -r @ -o mm` repairs it.
 
+`-A trunk` means *current* trunk. When `mm`'s other parents fork from an older
+trunk, the moved commit drags every newer trunk commit into the merge, and
+siblings that conflict with trunk start conflicting inside `mm`. Fix that
+by rebasing the sibling onto trunk, which its PR needs anyway. Resolving
+inside `mm` hides the conflict while the PR still conflicts with main.
+
+To add a branch that already exists, list `mm`'s parents and pass each one
+plus the new tip: `jj rebase -s mm -o <p1> -o <p2> … -o <tip>`. `-s` carries
+`@` along, and leaving a tip out of the list is how you drop a parent.
+
 The `jj stack` alias does this for a whole branch rather than one commit,
 defaulting to `mm+::@-` — everything between the merge and `@`. Read it with
 `jj config get aliases.stack`; `jj stack --help` doesn't work, because the
