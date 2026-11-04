@@ -2,7 +2,7 @@
 name: resolve-conflicts
 description: Use when resolving jj conflicts after rebase, squash, or merge — handles conflict markers, mergiraf automation, and file-by-file manual resolution, in place with `jj resolve -r` or in an isolated workspace
 argument-hint: [change-id]
-allowed-tools: [Bash(mkdir -p work), Bash(jj workspace add --name=resolve-* -r * work/resolve-*), Bash(cd work/resolve-*), Bash(jj status), Bash(jj resolve *), Bash(jj diff *), Bash(jj log *), Bash(jj op log *), Bash(jj op show *), Bash(jj squash *), Bash(jj workspace remove resolve-*), Bash(jj workspace update-stale)]
+allowed-tools: [Bash(mkdir -p work), Bash(jj workspace add --name=resolve-* -r * work/resolve-*), Bash(cd work/resolve-*), Bash(jj status), Bash(jj resolve *), Bash(jj diff *), Bash(jj log *), Bash(jj op log *), Bash(jj op show *), Bash(jj squash *), Bash(jj abandon *), Bash(jj bookmark list), Bash(jj workspace remove resolve-*), Bash(jj workspace update-stale)]
 ---
 
 # Resolve Conflicts
@@ -30,6 +30,27 @@ jj op log --limit 5                                # find the rebase that introd
 jj op show <op-id>                                 # commits it marked (conflict)
 jj log -r @ -T 'if(conflict, "CONFLICT", "clean")' # which commits are conflicted now
 ```
+
+**A conflict can mean the commit is dead, not that there is a merge to
+make.** After a `jj git fetch` plus a rebase onto the new trunk, a commit
+whose work already landed as a squash merge comes back as a live conflicted
+copy — the tell is two sides differing by a line or two with one of them
+matching trunk exactly. The usual `jj abandon 'trunk():: & empty() & mine()'`
+sweep misses it whenever a later commit in the same pull request touched the
+same line, because a cancelling pair leaves neither commit empty relative to
+its own parent. So check the tree, not the diff, before resolving anything:
+
+```
+jj diff --from 'trunk()' --to <rev> --stat    # `0 files changed` = trunk already has this tree
+```
+
+Run it over every mutable head rather than only the conflicted one, since one
+rebase produced all the siblings. When it comes back empty the resolution is
+`jj abandon`, and resolving the text instead is worse than slow — taking
+either side leaves the pair reverting each other, which `empty()` still will
+not sweep. Confirm `jj bookmark list` first: abandoning drops a bookmark
+pointing at the commit, and a later bare `jj git push` then tries to delete
+that branch on the remote.
 
 ## Step 1 — Pick the revision and the mechanism
 
@@ -82,6 +103,33 @@ Read the sides off the materialized markers first (`jj file show -r <rev>
 <path>`) to learn which number is which: the `+++++++ <change-id>` labelled
 `(rebased revision)` is your own commit's side.
 
+**"Whole" is the trap when the file survives on both sides.** `:ours` and
+`:theirs` replace the file with that side's entire content, so on a path where
+only one hunk conflicted, a side predating a `jj git fetch` silently reverts
+every other edit trunk made to it. Reserve them for a file whose intended result
+is "absent", and use the `cp` route below for one that survives. The marker names
+side #2's commit, so you can read exactly what `:theirs` would have written —
+still reachable by commit id after the resolution, since the commit is hidden
+rather than gone:
+
+```
+jj file show -r <side-2-commit-id> <path> | diff - <path>
+```
+
+Worth running once on any shared file. What it caught here was a repo-wide
+`* @owner` backstop line that side #2 still held at its pre-handover value —
+nothing in the conflict region, and it would have re-owned every path in the
+repo. Either way, verify the resolution stayed scoped by diffing the fixed
+commit against its own parent:
+
+```
+jj diff --from <parent-of-rev> --to <rev> --stat
+```
+
+Only what the commit means to change should appear. Unrelated churn in a shared
+file means a whole-file take ate someone else's edits — markers being gone does
+not catch it.
+
 **No merge tool takes a type conflict**, `:ours` and `:theirs` included — a
 side that adds a symlink fails with "Only conflicts that involve normal files
 (not symlinks, etc.) are supported." Recreate the winning side in the working
@@ -89,6 +137,12 @@ copy per step 3, then land it in the conflicted ancestor with `jj squash --into
 <rev> <path>`; the fileset keeps unrelated working-copy edits out, and jj
 rebases the descendants and reports `Existing conflicts were resolved or
 abandoned from N commits`.
+
+That squash only works when `@`'s parent carries the same conflict as the
+target. When `@-` holds a different one at that path — `@` sits below a
+megamerge or other descendants with their own sides — squashing applies
+`@-`→`@` onto the target and leaves it `3-sided`. `jj undo`, then open a step 1b
+workspace on the target, recreate the side there, and run a bare `jj squash`.
 
 For a file needing real merge judgment, resolve it as a temp file and hand
 that to `cp` as a merge tool — the same in-place rewrite, but with content
@@ -119,6 +173,11 @@ working copy (the conflict materializes there through ancestry) and then
 `jj squash --into <megamerge>`; that clears the megamerge and every
 descendant without moving `@` off it.
 
+Run a bare `jj restore` first. After a rebase, `@` can hold diffs that only
+relabel the markers, such as a dropped `(parents of rebased revision)`, and
+`jj st` reports those files as modified. When `@` holds uncommitted work, a
+bare restore discards it too — restore only the conflicted paths instead.
+
 When taking one side of a 3-sided materialization, don't splice the
 `+++++++` block in as-is — its region can overlap content that also appears
 after `>>>>>>>`, so a literal copy duplicates lines. Reconstruct the intended
@@ -146,6 +205,48 @@ module as the authority; read it. Land the fix with `jj squash --into <rev>
 <path>` on the commit that caused the break, which is the one that deleted the
 source, not the one that added the reader.
 
+**Taking the deletion side loses whatever trunk added to the dying file.**
+When a branch retires a registry, config, or any single source of truth and
+trunk kept editing it, `:theirs` is the correct resolution and still drops every
+entry trunk added in the meantime. No marker mentions it. Before taking the
+deletion, diff the dying file's names against the union of names from every
+surviving authority:
+
+```
+jj file show -r 'trunk()' <dying-file> | jq -r '.<entries>[].name' | sort > /tmp/was
+# ...and the replacement authority's names, however it is discovered, into /tmp/now
+comm -23 /tmp/was /tmp/now      # present only in the dying file
+```
+
+Everything that prints is either a deliberate retirement or a silent drop, and
+only the branch's intent tells them apart. The ones that bite are entries with
+no home in the replacement — a plugin sourced from a whole git repo has no
+directory for a directory-discovery scheme to find, so it survives only if
+something re-declares it. Land the re-declaration with `jj squash --into <rev>`
+on the commit that deleted the file, then re-run any generator that read it.
+Also diff field-by-field for entries present on both sides with changed values;
+the name set will not show those.
+
+**Compare against the authority, never against a generated artifact that
+filters.** The name-set check only means anything when both sides are the full
+set. A generated manifest is often a *subset* by design — one per target
+harness, each carrying only the entries whose `tools`-style field names that
+harness — so diffing the authority against one of them prints every entry the
+filter legitimately excluded. Sixteen entries read as silently dropped when
+nothing was. Compute the expected set with the same predicate the generator
+uses and compare against that instead:
+
+```
+jq -r --arg h claude '.plugins[] | select((.tools // ["claude","cursor"]) | index($h)) | .name'   <authority> | sort > /tmp/exp
+```
+
+The default for a missing field is part of the predicate and branches change it,
+so read it off the generator rather than assuming. Run the comparison for every
+artifact the generator writes, not just the one you happen to care about — and
+when the tool ships a `validate` subcommand, it already encodes the predicate
+correctly, so reach for that first and use the hand-rolled diff to find out
+*which* entries moved.
+
 **Check the files that *didn't* conflict.** When a rebase turns a linear stack
 into siblings under a merge — `jj rebase --insert-after 'trunk()'` on part of
 the stack — content that used to arrive from an ancestor now arrives through
@@ -160,8 +261,8 @@ line to remove — so hand-edit in the working copy and `jj squash --into <merge
 
 ## Step 1b — Set up an isolated resolution workspace
 
-Per `jj-workspaces`' "Creating a Workspace" recipe, but anchored on the
-conflicted revision instead of trunk (skip its DAG-placement rebase step —
+Per `jj-workspaces`' "Create" step, but anchored on the
+conflicted revision instead of trunk (skip adding it to `mm` —
 this workspace's working-copy commit belongs directly on `<change-id>`,
 not on trunk):
 
@@ -216,7 +317,9 @@ cannot write a symlink.
 On the conflicted revision that diff prints the `Conflict:` description rather
 than a mode change, so the symlink target isn't in it. Get the target from the
 pre-rebase commit — `jj evolog -r <rev>` names it, and `jj diff --git -r
-<old-commit-id> <path>` on that hidden commit shows the real change.
+<old-commit-id> <path>` on that hidden commit shows the real change. For
+scripting, evolog's template keyword is `commit`, not the log's `commit_id`:
+`jj evolog -r <rev> --no-graph -T 'commit.commit_id().short() ++ "\n"'`.
 
 For each text file still listed by `jj resolve --list -r @-`:
 
