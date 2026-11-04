@@ -5,7 +5,7 @@ description: Use when writing, reviewing, or debugging GitHub Actions or Gitea A
 
 # Actions workflows
 
-*This is a self-improving skill — see the `self-improving-skills` skill.*
+*This is a self-improving skill. If you used it and it came up short — a missing command, flag, gotcha, or workflow — invoke the `self-improving-skills` skill and follow it before you finish.*
 
 Gitea Actions is a GitHub Actions-compatible engine. Same YAML, same
 `${{ github.* }}` contexts, same `$GITHUB_OUTPUT`/`$GITHUB_ENV`
@@ -89,6 +89,29 @@ API. On Gitea, use `tea releases create` or a direct API call with a
 scoped token. If you truly need `git push` (for example, to push a
 tag), scope the credentials to the single step that needs them —
 don't leave them persistent for the whole job.
+
+`gh release create` creates the tag too when it doesn't exist yet, so a
+build workflow can cut its own release in one step. It needs `contents:
+write` and an explicit `GH_TOKEN` — the `gh` CLI does not pick up the
+job token on its own:
+
+```yaml
+- name: Create GitHub release
+  env:
+    GH_TOKEN: ${{ github.token }}
+    VERSION: ${{ github.event.inputs.version }}
+  run: |
+    gh release create "v$VERSION" \
+      --target "$GITHUB_SHA" \
+      --title "v$VERSION" \
+      --notes "Released from $GITHUB_SHA."
+```
+
+Keep backticks out of `--notes`. An unquoted heredoc or a double-quoted
+string runs them as command substitution, and quoting the heredoc
+delimiter to stop that also kills the variable expansion you wanted.
+Write the notes without code spans, or build a notes file and pass
+`--notes-file`.
 
 Indirect environment variable expansion. Never interpolate expressions
 directly in `run:` scripts — an attacker-controlled value (branch
