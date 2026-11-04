@@ -18,7 +18,7 @@ RUN ARCH=$(uname -m) && \
     curl -fsSL "https://codeberg.org/mergiraf/mergiraf/releases/download/v0.18.0/mergiraf_${MF_ARCH}-unknown-linux-gnu.tar.gz" \
     | tar xz -C /usr/local/bin mergiraf
 
-COPY bin/shellcheck .ramekin/bin/mergiraf .ramekin/bin/rex /usr/local/bin/
+COPY bin/shellcheck /usr/local/bin/shellcheck
 
 # lua5.4 + fennel to compile and load-check the Fennel configs (.hammerspoon,
 # .config/rex). Rex's init.lua prepends ~/.luarocks/share/lua/5.4/?.lua to its
