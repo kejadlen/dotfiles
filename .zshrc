@@ -79,6 +79,12 @@ zstyle ':z4h:*' fzf-command fzf
 # perform network I/O must be done above. Everything else is best done below.
 z4h init || return
 
+# /etc/zshrc is skipped because ~/.zshenv sets `no_global_rcs` (z4h), so
+# source the nix-daemon hook here, before anything checks $+commands.
+if [[ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
+
 # Extend PATH.
 path=(
   .git/safe/../../bin
