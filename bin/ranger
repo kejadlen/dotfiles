@@ -4,19 +4,37 @@
   "name": "ranger",
   "platforms": {
     "macos-aarch64": {
-      "size": 3280335,
+      "size": 3297723,
       "hash": "blake3",
-      "digest": "b1acc4f9c86d25d03adbec6568b65283d2eb6a1aec25dc0e3cd3671a979eb653",
+      "digest": "de838954e25bd54dd44c39e51a6f02c72ee1d5ca91d9f614d28ef8fd439221e8",
       "path": "ranger",
       "providers": [
         {
-          "url": "https://github.com/kejadlen/ranger/releases/download/v2026-10-15+85beda2/ranger-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/kejadlen/ranger/releases/download/v2026-11-04+875cca9/ranger-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/kejadlen/ranger",
-          "tag": "v2026-10-15+85beda2",
+          "tag": "v2026-11-04+875cca9",
           "name": "ranger-aarch64-apple-darwin.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-aarch64": {
+      "size": 3629972,
+      "hash": "blake3",
+      "digest": "2e8adc1b1c30f4ceba11fa6f55fabeb5f67517ef71dd4382a8f8f366ff0aa3f9",
+      "path": "ranger",
+      "providers": [
+        {
+          "url": "https://github.com/kejadlen/ranger/releases/download/v2026-11-04+875cca9/ranger-aarch64-unknown-linux-gnu.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/kejadlen/ranger",
+          "tag": "v2026-11-04+875cca9",
+          "name": "ranger-aarch64-unknown-linux-gnu.tar.gz"
         }
       ],
       "format": "tar.gz"

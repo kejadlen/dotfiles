@@ -4,19 +4,55 @@
   "name": "cq",
   "platforms": {
     "macos-aarch64": {
-      "size": 12708481,
+      "size": 13045210,
       "hash": "blake3",
-      "digest": "1458254deb97a5113d525e5370cd3ce90fbd08035f95e909c079eb3a73e0d8de",
-      "path": "cq-0.4.0-aarch64-apple-darwin/cq",
+      "digest": "c7cc03f951aa895bd466a34aa53e429ed8cf3927bc5ba7e38934af01bb3bbe66",
+      "path": "cq-0.11.0-aarch64-apple-darwin/cq",
       "providers": [
         {
-          "url": "https://github.com/technicalpickles/cq/releases/download/v0.4.0/cq-0.4.0-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/technicalpickles/cq/releases/download/v0.11.0/cq-0.11.0-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/technicalpickles/cq",
-          "tag": "v0.4.0",
-          "name": "cq-0.4.0-aarch64-apple-darwin.tar.gz"
+          "tag": "v0.11.0",
+          "name": "cq-0.11.0-aarch64-apple-darwin.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-aarch64": {
+      "size": 15371459,
+      "hash": "blake3",
+      "digest": "0018307132bcb9909b42b7b75df0c02dbda068d35a2bc95eaa761f116d76e0b1",
+      "path": "cq-0.11.0-aarch64-unknown-linux-gnu/cq",
+      "providers": [
+        {
+          "url": "https://github.com/technicalpickles/cq/releases/download/v0.11.0/cq-0.11.0-aarch64-unknown-linux-gnu.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/technicalpickles/cq",
+          "tag": "v0.11.0",
+          "name": "cq-0.11.0-aarch64-unknown-linux-gnu.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-x86_64": {
+      "size": 16405976,
+      "hash": "blake3",
+      "digest": "2692833967c593e04daeb77b683d6ac51c26aebe94513a19dd478011bb276b4e",
+      "path": "cq-0.11.0-x86_64-unknown-linux-gnu/cq",
+      "providers": [
+        {
+          "url": "https://github.com/technicalpickles/cq/releases/download/v0.11.0/cq-0.11.0-x86_64-unknown-linux-gnu.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/technicalpickles/cq",
+          "tag": "v0.11.0",
+          "name": "cq-0.11.0-x86_64-unknown-linux-gnu.tar.gz"
         }
       ],
       "format": "tar.gz"

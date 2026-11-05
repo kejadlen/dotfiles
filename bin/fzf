@@ -20,6 +20,42 @@
         }
       ],
       "format": "tar.gz"
+    },
+    "linux-aarch64": {
+      "size": 2078357,
+      "hash": "blake3",
+      "digest": "8c9f1b93a19ce6c6c9536bcdc585d943c09dd1b3b7a02029aa667725018bbc61",
+      "path": "fzf",
+      "providers": [
+        {
+          "url": "https://github.com/junegunn/fzf/releases/download/v0.74.5/fzf-0.74.5-linux_arm64.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/junegunn/fzf",
+          "tag": "v0.74.5",
+          "name": "fzf-0.74.5-linux_arm64.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-x86_64": {
+      "size": 2291079,
+      "hash": "blake3",
+      "digest": "936969d1cb9feab256180ede9c5ca58bd8b9bcea261b5e5d3d840a4f41bf2ac4",
+      "path": "fzf",
+      "providers": [
+        {
+          "url": "https://github.com/junegunn/fzf/releases/download/v0.74.5/fzf-0.74.5-linux_amd64.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/junegunn/fzf",
+          "tag": "v0.74.5",
+          "name": "fzf-0.74.5-linux_amd64.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
     }
   }
 }

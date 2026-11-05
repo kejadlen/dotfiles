@@ -19,6 +19,40 @@
           "name": "sops-v3.13.3.darwin.arm64"
         }
       ]
+    },
+    "linux-aarch64": {
+      "size": 48300194,
+      "hash": "blake3",
+      "digest": "9213c5ad5ce6b89d14b34c67191a4aa6887283b89b057950915f50db03312037",
+      "path": "sops",
+      "providers": [
+        {
+          "url": "https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.linux.arm64"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/getsops/sops",
+          "tag": "v3.13.3",
+          "name": "sops-v3.13.3.linux.arm64"
+        }
+      ]
+    },
+    "linux-x86_64": {
+      "size": 52121762,
+      "hash": "blake3",
+      "digest": "2e0d82a8f6389f7a5340c187bc86eeefc9b4cf06b7a4604bbdbc32a5346bb052",
+      "path": "sops",
+      "providers": [
+        {
+          "url": "https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.linux.amd64"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/getsops/sops",
+          "tag": "v3.13.3",
+          "name": "sops-v3.13.3.linux.amd64"
+        }
+      ]
     }
   }
 }

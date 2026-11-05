@@ -60,29 +60,35 @@ namespace :dotslash do
     nil
   end
 
-  def update_dotslash_release(name:, repo:, path: name, tag: nil, &asset)
+  # The block receives the tag and returns a hash of DotSlash platform to
+  # asset name. A `path` proc receives each asset name.
+  def update_dotslash_release(name:, repo:, path: name, tag: nil, &assets)
     unless tag
       tag = JSON.parse(`gh release view --repo #{repo} --json tagName`)["tagName"]
     end
-    asset_name = asset.call(tag)
-    resolved_path = path.respond_to?(:call) ? path.call(tag) : path
 
-    url = "https://github.com/#{repo}/releases/download/#{tag}/#{asset_name}"
-    entry = JSON.parse(`dotslash -- create-url-entry #{url}`)
+    platforms = assets.call(tag).transform_values do |asset_name|
+      url = "https://github.com/#{repo}/releases/download/#{tag}/#{asset_name}"
+      output = `dotslash -- create-url-entry #{url}`
+      raise "create-url-entry failed for #{url}" unless $?.success?
 
-    platform = {
-      size: entry["size"],
-      hash: "blake3",
-      digest: entry["digest"],
-      path: resolved_path,
-      providers: [
-        { url: url },
-        { type: "github-release", repo: "https://github.com/#{repo}", tag: tag, name: asset_name },
-      ],
-    }
-    platform[:format] = entry["format"] if entry["format"] && !entry["format"].start_with?("TODO")
+      entry = JSON.parse(output)
 
-    dotslash = { name: name, platforms: { "macos-aarch64" => platform } }
+      platform = {
+        size: entry["size"],
+        hash: "blake3",
+        digest: entry["digest"],
+        path: path.respond_to?(:call) ? path.call(asset_name) : path,
+        providers: [
+          { url: url },
+          { type: "github-release", repo: "https://github.com/#{repo}", tag: tag, name: asset_name },
+        ],
+      }
+      platform[:format] = entry["format"] if entry["format"] && !entry["format"].start_with?("TODO")
+      platform
+    end
+
+    dotslash = { name: name, platforms: platforms }
 
     file = "bin/#{name}"
     previous_tag = dotslash_tag(file)
@@ -103,67 +109,134 @@ namespace :dotslash do
 
   desc "Update jq"
   task(:jq) do
-    update_dotslash_release(name: "jq", repo: "jqlang/jq") { "jq-macos-arm64" }
+    update_dotslash_release(name: "jq", repo: "jqlang/jq") do
+      {
+        "macos-aarch64" => "jq-macos-arm64",
+        "linux-aarch64" => "jq-linux-arm64",
+        "linux-x86_64" => "jq-linux-amd64",
+      }
+    end
   end
 
   desc "Update jj"
   task(:jj) do
-    update_dotslash_release(name: "jj", repo: "jj-vcs/jj") { |tag| "jj-#{tag}-aarch64-apple-darwin.tar.gz" }
+    update_dotslash_release(name: "jj", repo: "jj-vcs/jj") do |tag|
+      {
+        "macos-aarch64" => "jj-#{tag}-aarch64-apple-darwin.tar.gz",
+        "linux-aarch64" => "jj-#{tag}-aarch64-unknown-linux-musl.tar.gz",
+        "linux-x86_64" => "jj-#{tag}-x86_64-unknown-linux-musl.tar.gz",
+      }
+    end
   end
 
   desc "Update just"
   task(:just) do
-      update_dotslash_release(name: "just", repo: "casey/just") { |tag| "just-#{tag}-aarch64-apple-darwin.tar.gz" }
+    update_dotslash_release(name: "just", repo: "casey/just") do |tag|
+      {
+        "macos-aarch64" => "just-#{tag}-aarch64-apple-darwin.tar.gz",
+        "linux-aarch64" => "just-#{tag}-aarch64-unknown-linux-musl.tar.gz",
+        "linux-x86_64" => "just-#{tag}-x86_64-unknown-linux-musl.tar.gz",
+      }
+    end
   end
 
   desc "Update fzf"
   task(:fzf) do
-    update_dotslash_release(name: "fzf", repo: "junegunn/fzf") { |tag| "fzf-#{tag.delete_prefix("v")}-darwin_arm64.tar.gz" }
+    update_dotslash_release(name: "fzf", repo: "junegunn/fzf") do |tag|
+      version = tag.delete_prefix("v")
+      {
+        "macos-aarch64" => "fzf-#{version}-darwin_arm64.tar.gz",
+        "linux-aarch64" => "fzf-#{version}-linux_arm64.tar.gz",
+        "linux-x86_64" => "fzf-#{version}-linux_amd64.tar.gz",
+      }
+    end
   end
 
   desc "Update zizmor"
   task(:zizmor) do
-    update_dotslash_release(name: "zizmor", repo: "zizmorcore/zizmor") { |tag| "zizmor-aarch64-apple-darwin.tar.gz" }
+    update_dotslash_release(name: "zizmor", repo: "zizmorcore/zizmor") do
+      {
+        "macos-aarch64" => "zizmor-aarch64-apple-darwin.tar.gz",
+        "linux-aarch64" => "zizmor-aarch64-unknown-linux-gnu.tar.gz",
+        "linux-x86_64" => "zizmor-x86_64-unknown-linux-gnu.tar.gz",
+      }
+    end
   end
 
   desc "Update sops"
   task(:sops) do
-    update_dotslash_release(name: "sops", repo: "getsops/sops") { |tag| "sops-#{tag}.darwin.arm64" }
+    update_dotslash_release(name: "sops", repo: "getsops/sops") do |tag|
+      {
+        "macos-aarch64" => "sops-#{tag}.darwin.arm64",
+        "linux-aarch64" => "sops-#{tag}.linux.arm64",
+        "linux-x86_64" => "sops-#{tag}.linux.amd64",
+      }
+    end
+  end
+
+  age_assets = lambda do |tag|
+    {
+      "macos-aarch64" => "age-#{tag}-darwin-arm64.tar.gz",
+      "linux-aarch64" => "age-#{tag}-linux-arm64.tar.gz",
+      "linux-x86_64" => "age-#{tag}-linux-amd64.tar.gz",
+    }
   end
 
   desc "Update age"
   task(:age) do
-    update_dotslash_release(name: "age", repo: "FiloSottile/age", path: "age/age") { |tag| "age-#{tag}-darwin-arm64.tar.gz" }
+    update_dotslash_release(name: "age", repo: "FiloSottile/age", path: "age/age", &age_assets)
   end
 
   desc "Update age-keygen"
   task("age-keygen") do
-    update_dotslash_release(name: "age-keygen", repo: "FiloSottile/age", path: "age/age-keygen") { |tag| "age-#{tag}-darwin-arm64.tar.gz" }
+    update_dotslash_release(name: "age-keygen", repo: "FiloSottile/age", path: "age/age-keygen", &age_assets)
   end
 
   desc "Update tree-sitter"
   task(:tree_sitter) do
-    update_dotslash_release(name: "tree-sitter", repo: "tree-sitter/tree-sitter") { "tree-sitter-macos-arm64.gz" }
+    update_dotslash_release(name: "tree-sitter", repo: "tree-sitter/tree-sitter") do
+      {
+        "macos-aarch64" => "tree-sitter-macos-arm64.gz",
+        "linux-aarch64" => "tree-sitter-linux-arm64.gz",
+        "linux-x86_64" => "tree-sitter-linux-x64.gz",
+      }
+    end
   end
 
   desc "Update ramekin"
   task(:ramekin) do
-    update_dotslash_release(name: "ramekin", repo: "kejadlen/ramekin") { "ramekin-aarch64-apple-darwin.tar.gz" }
+    update_dotslash_release(name: "ramekin", repo: "kejadlen/ramekin") do
+      { "macos-aarch64" => "ramekin-aarch64-apple-darwin.tar.gz" }
+    end
   end
 
   desc "Update cq"
   task(:cq) do
-    update_dotslash_release(name: "cq", repo: "technicalpickles/cq", path: ->(tag) { "cq-#{tag.delete_prefix("v")}-aarch64-apple-darwin/cq" }) { |tag| "cq-#{tag.delete_prefix("v")}-aarch64-apple-darwin.tar.gz" }
+    update_dotslash_release(name: "cq", repo: "technicalpickles/cq", path: ->(asset) { "#{asset.delete_suffix(".tar.gz")}/cq" }) do |tag|
+      version = tag.delete_prefix("v")
+      {
+        "macos-aarch64" => "cq-#{version}-aarch64-apple-darwin.tar.gz",
+        "linux-aarch64" => "cq-#{version}-aarch64-unknown-linux-gnu.tar.gz",
+        "linux-x86_64" => "cq-#{version}-x86_64-unknown-linux-gnu.tar.gz",
+      }
+    end
   end
 
   desc "Update ranger"
   task(:ranger) do
-    update_dotslash_release(name: "ranger", repo: "kejadlen/ranger") { "ranger-aarch64-apple-darwin.tar.gz" }
+    update_dotslash_release(name: "ranger", repo: "kejadlen/ranger") do
+      {
+        "macos-aarch64" => "ranger-aarch64-apple-darwin.tar.gz",
+        "linux-aarch64" => "ranger-aarch64-unknown-linux-gnu.tar.gz",
+      }
+    end
   end
 
   desc "Update frork"
   task(:frork) do
-    update_dotslash_release(name: "frork", repo: "kejadlen/frork") { "frork-aarch64-apple-darwin.tar.gz" }
+    update_dotslash_release(name: "frork", repo: "kejadlen/frork") do
+      { "macos-aarch64" => "frork-aarch64-apple-darwin.tar.gz" }
+    end
   end
 
   desc "Update all dotslash files"

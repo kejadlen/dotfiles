@@ -4,19 +4,55 @@
   "name": "tree-sitter",
   "platforms": {
     "macos-aarch64": {
-      "size": 6833180,
+      "size": 7372537,
       "hash": "blake3",
-      "digest": "1be7b8abb78b0fe9eb1fbd134360489bef631156001b6612d8908e7f355247f4",
+      "digest": "8a4f7bf32403b0feddb4f77789f0aeefb9fc17f859febf5372908d996e0d7a1a",
       "path": "tree-sitter",
       "providers": [
         {
-          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tree-sitter-macos-arm64.gz"
+          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.1/tree-sitter-macos-arm64.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/tree-sitter/tree-sitter",
-          "tag": "v0.26.12",
+          "tag": "v0.27.1",
           "name": "tree-sitter-macos-arm64.gz"
+        }
+      ],
+      "format": "gz"
+    },
+    "linux-aarch64": {
+      "size": 8102735,
+      "hash": "blake3",
+      "digest": "bdec51bb51e5300127f9c08bc8eb26c6946360136e4c14ee3a8b09255b2258ed",
+      "path": "tree-sitter",
+      "providers": [
+        {
+          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.1/tree-sitter-linux-arm64.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/tree-sitter/tree-sitter",
+          "tag": "v0.27.1",
+          "name": "tree-sitter-linux-arm64.gz"
+        }
+      ],
+      "format": "gz"
+    },
+    "linux-x86_64": {
+      "size": 8702418,
+      "hash": "blake3",
+      "digest": "ce36adfd68a41d37d97c2f7a9c9d73ea0382719b651a167e0c2365bafcf07bdb",
+      "path": "tree-sitter",
+      "providers": [
+        {
+          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.1/tree-sitter-linux-x64.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/tree-sitter/tree-sitter",
+          "tag": "v0.27.1",
+          "name": "tree-sitter-linux-x64.gz"
         }
       ],
       "format": "gz"

@@ -4,19 +4,55 @@
   "name": "zizmor",
   "platforms": {
     "macos-aarch64": {
-      "size": 8490680,
+      "size": 8597835,
       "hash": "blake3",
-      "digest": "117538f5115b97fffff03a478790a1c8e94f63716aabf34bf492ed4f7d7a9bac",
+      "digest": "4df47dd4232eec8e9c2c6c1ec16308a4250a4c95f88c253d72f659df65e45c6f",
       "path": "zizmor",
       "providers": [
         {
-          "url": "https://github.com/zizmorcore/zizmor/releases/download/v1.31.1/zizmor-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/zizmorcore/zizmor/releases/download/v1.32.0/zizmor-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/zizmorcore/zizmor",
-          "tag": "v1.31.1",
+          "tag": "v1.32.0",
           "name": "zizmor-aarch64-apple-darwin.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-aarch64": {
+      "size": 9004349,
+      "hash": "blake3",
+      "digest": "1dde7f7f1003d80ef285c5dbd9c1979d93a169d3db39f6d86b84436a320a7edb",
+      "path": "zizmor",
+      "providers": [
+        {
+          "url": "https://github.com/zizmorcore/zizmor/releases/download/v1.32.0/zizmor-aarch64-unknown-linux-gnu.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/zizmorcore/zizmor",
+          "tag": "v1.32.0",
+          "name": "zizmor-aarch64-unknown-linux-gnu.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-x86_64": {
+      "size": 9418466,
+      "hash": "blake3",
+      "digest": "2b26e9f38bb0bd636dceb7d95d54e056c5aaae4db2f65b27506d08d4c567c0df",
+      "path": "zizmor",
+      "providers": [
+        {
+          "url": "https://github.com/zizmorcore/zizmor/releases/download/v1.32.0/zizmor-x86_64-unknown-linux-gnu.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/zizmorcore/zizmor",
+          "tag": "v1.32.0",
+          "name": "zizmor-x86_64-unknown-linux-gnu.tar.gz"
         }
       ],
       "format": "tar.gz"

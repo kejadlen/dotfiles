@@ -4,19 +4,55 @@
   "name": "age-keygen",
   "platforms": {
     "macos-aarch64": {
-      "size": 9685129,
+      "size": 18106798,
       "hash": "blake3",
-      "digest": "d86f2a77816f81bf07ca2c983649b1a72d026f73aec09c3b80d42e1ac34e2b7b",
+      "digest": "ccb5b4e83bf4ef7ac6f0909b8a6bde008b8f2f865572acbc7205e618e7229813",
       "path": "age/age-keygen",
       "providers": [
         {
-          "url": "https://github.com/FiloSottile/age/releases/download/v1.3.1/age-v1.3.1-darwin-arm64.tar.gz"
+          "url": "https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-darwin-arm64.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/FiloSottile/age",
-          "tag": "v1.3.1",
-          "name": "age-v1.3.1-darwin-arm64.tar.gz"
+          "tag": "v1.3.2",
+          "name": "age-v1.3.2-darwin-arm64.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-aarch64": {
+      "size": 17771923,
+      "hash": "blake3",
+      "digest": "842df011003d958ab7ee045c8124d4d711eed3b88820bda4c95e1db2dfd89795",
+      "path": "age/age-keygen",
+      "providers": [
+        {
+          "url": "https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-linux-arm64.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/FiloSottile/age",
+          "tag": "v1.3.2",
+          "name": "age-v1.3.2-linux-arm64.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-x86_64": {
+      "size": 19405817,
+      "hash": "blake3",
+      "digest": "c823fc14e0c64b2f3358945fe7b61e4bef0805f45b83dee7f2e2995fccb55c62",
+      "path": "age/age-keygen",
+      "providers": [
+        {
+          "url": "https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-linux-amd64.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/FiloSottile/age",
+          "tag": "v1.3.2",
+          "name": "age-v1.3.2-linux-amd64.tar.gz"
         }
       ],
       "format": "tar.gz"

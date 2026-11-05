@@ -4,19 +4,55 @@
   "name": "jj",
   "platforms": {
     "macos-aarch64": {
-      "size": 10074305,
+      "size": 10642035,
       "hash": "blake3",
-      "digest": "7f1b8cc7da15cc098d7770e19d92beea222e51b0e03eaa3bb50981670948db76",
+      "digest": "8c41a11861940584cdb9c73f636d66893e0a05da81ca19c5921aa31b09c6439d",
       "path": "jj",
       "providers": [
         {
-          "url": "https://github.com/jj-vcs/jj/releases/download/v0.46.0/jj-v0.46.0-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/jj-vcs/jj/releases/download/v0.47.1/jj-v0.47.1-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/jj-vcs/jj",
-          "tag": "v0.46.0",
-          "name": "jj-v0.46.0-aarch64-apple-darwin.tar.gz"
+          "tag": "v0.47.1",
+          "name": "jj-v0.47.1-aarch64-apple-darwin.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-aarch64": {
+      "size": 10989474,
+      "hash": "blake3",
+      "digest": "93d913f0c1018a01db6c2c6518b63b77a4bb47aa3cac44a5db226ee0aa3f3be5",
+      "path": "jj",
+      "providers": [
+        {
+          "url": "https://github.com/jj-vcs/jj/releases/download/v0.47.1/jj-v0.47.1-aarch64-unknown-linux-musl.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/jj-vcs/jj",
+          "tag": "v0.47.1",
+          "name": "jj-v0.47.1-aarch64-unknown-linux-musl.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-x86_64": {
+      "size": 11743512,
+      "hash": "blake3",
+      "digest": "1eefd06a02a5c31382cad4f4f2a85ecb75e793213274d918978f643cd74b010e",
+      "path": "jj",
+      "providers": [
+        {
+          "url": "https://github.com/jj-vcs/jj/releases/download/v0.47.1/jj-v0.47.1-x86_64-unknown-linux-musl.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/jj-vcs/jj",
+          "tag": "v0.47.1",
+          "name": "jj-v0.47.1-x86_64-unknown-linux-musl.tar.gz"
         }
       ],
       "format": "tar.gz"
