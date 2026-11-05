@@ -110,8 +110,8 @@ label an obviously named function, or narrate the change for a reviewer
 rather than the next reader — that last one belongs in the commit
 message.
 
-Then imagine every comment deleted. Whatever would stop making sense
-is a hint the code should change instead — a clearer name, an
+Then assume I'll delete every comment you wrote. Whatever would stop
+making sense is a hint the code should change instead — a clearer name, an
 extracted function, a type that makes the invariant explicit. Make
 that change and drop the comment; keep only the ones code can't carry.
 
