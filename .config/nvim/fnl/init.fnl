@@ -148,8 +148,7 @@
                "https://github.com/tpope/vim-sleuth.git"
                "https://github.com/tpope/vim-speeddating.git"
                "https://github.com/tpope/vim-surround.git"
-               "https://github.com/tpope/vim-unimpaired.git"
-               "https://github.com/tpope/vim-vinegar.git"])
+               "https://github.com/tpope/vim-unimpaired.git"])
 
 (let [callback (fn [event]
                  (let [{:spec {: name} : kind} event.data]
@@ -193,11 +192,10 @@
 ;   (set vim.g.lightline {:colorscheme :alphabaster
 ;                         :component {:filename "%{expand(\"%:~:.\")}"}}))
 
-;;; netrw
+;;; directory browser
 
-;; https://github.com/tpope/vim-vinegar/issues/13
-(set vim.g.netrw_fastbrowse 0)
-(set vim.g.netrw_home "~/.nvim_tmp")
+;; The built-in only maps - inside directory buffers.
+(vim.keymap.set :n "-" "<Plug>(nvim-dir-up)")
 
 ;;; treesitter
 (require :treesitter)

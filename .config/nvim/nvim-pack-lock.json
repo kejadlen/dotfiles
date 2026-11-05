@@ -107,10 +107,6 @@
     "vim-unimpaired": {
       "rev": "db65482",
       "src": "https://github.com/tpope/vim-unimpaired.git"
-    },
-    "vim-vinegar": {
-      "rev": "bb1bcdd",
-      "src": "https://github.com/tpope/vim-vinegar.git"
     }
   }
 }
