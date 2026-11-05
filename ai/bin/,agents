@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-# Picker for running Claude Code and pi sessions, ranked so the ones blocked
-# on a human come first — barring any already jumped to and left blocked, which
-# ,agent-state sinks to the bottom of that group. Bound to prefix+A in
-# tmux.conf, where it runs in the same floating pane as ,z and ,tmux-grab.
-# State comes from ,agent-state, which the Claude Code mod and the pi extension
-# write to.
+# Picker for the Claude Code and pi sessions running in Rex, ranked so the ones
+# blocked on a human come first — barring any already jumped to and left
+# blocked, which ,agent-state sinks to the bottom of that group. Bound to
+# ctrl+b>shift+a in the Rex config, which runs it in a float like ,z.
 
 set -euo pipefail
 if [[ "${TRACE-0}" == "1" ]]; then
@@ -19,79 +17,70 @@ main() {
     local rows
     rows=$("$state_script" list)
     if [[ -z $rows ]]; then
-        tmux display-message 'No agent sessions tracked'
+        # The float closes as soon as this exits, so hold the message briefly.
+        echo 'No agent sessions running'
+        read -rsn1 -t 2 || true
         exit 0
     fi
 
     # Pad the display columns here rather than in ,agent-state, so that script
     # stays a plain data source. Colour is applied after padding, since escape
-    # bytes would otherwise count toward the field width. The pane id is left
-    # visible as the trailing field: hiding it with --with-nth would make {2}
-    # in --preview ambiguous about whether it indexes the original line or the
-    # displayed one, and seeing the pane is mildly useful anyway.
+    # bytes would otherwise count toward the field width. The session and block
+    # ids lead so --with-nth can hide them; --preview reads fields from the
+    # original line, so {1} and {2} still reach them.
     local lines
     lines=$(awk -F'\t' '
         {
             state = sprintf("%-7s", $1)
-            if      ($1 == "blocked") state = "\033[31m" state "\033[0m"
-            else if ($1 == "done")    state = "\033[33m" state "\033[0m"
-            else                      state = "\033[2m"  state "\033[0m"
+            if      ($1 == "blocked" || $1 == "error") state = "\033[31m" state "\033[0m"
+            else if ($1 == "done")                     state = "\033[33m" state "\033[0m"
+            else                                       state = "\033[2m"  state "\033[0m"
             # A blocked row without a message still says what it is waiting on.
             message = $5 != "" ? $5 : $8
-            # Pane id leads so the delimiting tab lands at a fixed column; after
-            # the variable-length message it would leave a ragged edge.
-            printf "%s\t%s %-11s %-16s %-14s %5s  %s\n", $6, state, $7, $2, $3, $4, message
+            printf "%s\t%s\t%s %-11s %-16s %-14s %5s  %s\n", $9, $6, state, $7, $2, $3, $4, message
         }
     ' <<<"$rows")
 
-    # Float via fzf's own tmux popup, unless the caller already gave us a
-    # floating container, where --tmux would stack a redundant popup on top.
-    # FZF_DEFAULT_OPTS (.zshrc) carries its own --tmux default, so it's cleared
-    # here too — otherwise it fires regardless of our own flag.
-    local tmux_opts=(--tmux "80%,60%")
-    [[ -n "${IN_TMUX_FLOAT:-}" ]] && tmux_opts=()
-
     local selection
-    # ${arr[@]+"${arr[@]}"} splices the array only when it has elements; a bare
-    # "${arr[@]}" aborts under `set -u` on macOS bash 3.2, which counts an
-    # empty array as unbound.
-    # No --select-1, unlike ,z and ,tmux-grab. The pane this runs from has a row
-    # too, so with a single session it would auto-jump to where the user already
-    # is: the float would blink and nothing would appear to happen.
+    # No --select-1, unlike ,z and ,tmux-grab. The block this runs from has a
+    # row too, so with a single session it would auto-jump to where the user
+    # already is: the float would blink and nothing would appear to happen.
     selection=$(printf '%s\n' "$lines" | FZF_DEFAULT_OPTS='' fzf --no-multi \
         --no-margin --no-padding \
-        ${tmux_opts[@]+"${tmux_opts[@]}"} \
         --ansi --no-sort \
         --layout reverse \
         --height 100% \
         --highlight-line --info inline-right \
-        --delimiter '\t' \
+        --delimiter '\t' --with-nth 3.. \
         --border-label ' agents ' \
         --header 'enter: jump to session' --header-first \
-        --preview 'tmux capture-pane -p -t {1} | tail -n 50' \
+        --preview 'rex capture -s {1} -b {2} --trim --unwrap | tail -n 50' \
         --bind 'ctrl-/:change-preview-window(down|hidden|)') || exit 0
 
-    local pane
-    pane=$(cut -f1 <<<"$selection")
-    [[ -n $pane ]] || exit 0
+    local session block
+    session=$(cut -f1 <<<"$selection")
+    block=$(cut -f2 <<<"$selection")
+    [[ -n $session && -n $block ]] || exit 0
 
-    # A pane target resolves to its session, window and pane in one step. The
-    # three-step form races: switch-client returns before the client has moved,
-    # so a follow-up select-window can land on the destination session's
-    # last-active window instead.
-    if ! tmux switch-client -t "$pane" 2>/dev/null; then
-        tmux display-message "agents: pane $pane is gone"
-        return 0
-    fi
-
-    # Recorded only once the jump lands, so a dead pane doesn't get demoted on
-    # the way out. A visit can turn done into idle, so sketchybar redraws too.
-    "$state_script" visited "$pane" || true
+    # A visit can turn done into idle, so sketchybar redraws too.
+    "$state_script" visited "$block" || true
     local sketchybar_bin
     sketchybar_bin=$(command -v sketchybar) ||
         sketchybar_bin=/opt/homebrew/opt/sketchybar/bin/sketchybar
     if [[ -x $sketchybar_bin ]]; then
         "$sketchybar_bin" --trigger agent_state_change >/dev/null 2>&1 || true
+    fi
+
+    # Selecting the session is what makes the app show it; focusing the block
+    # makes its window active. The focus is this float's last Rex call, which
+    # is what makes it stick through the float's teardown.
+    if ! rex "do" session.select session_id="$session" >/dev/null 2>&1; then
+        echo "agents: session $session is gone" >&2
+        exit 1
+    fi
+    if ! rex focus -s "$session" "$block" >/dev/null 2>&1; then
+        echo "agents: block $block is gone" >&2
+        exit 1
     fi
 }
 

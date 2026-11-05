@@ -92,3 +92,11 @@
     true))
 
 (rex.bind :ctrl+b>tab (grab))
+
+;; Agent session picker. tmux had it on prefix+A, but ctrl+b>shift+a never
+;; fired from the app, though the same key sent through client.key did.
+(fn agents []
+  (float :agents (.. (os.getenv :HOME) "/.dotfiles/ai/bin/,agents"))
+  true)
+
+(rex.bind :ctrl+b>a agents)

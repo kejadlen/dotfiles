@@ -1,27 +1,28 @@
 #!/usr/bin/env bash
 
-# The agents item: how many Claude Code sessions ,agent-state is tracking, and
-# a way into whichever one needs attention. Three roles in one script, picked by
-# the first argument, so the state colors and the tmux logic have one home:
+# The agents item: how many agent sessions ,agent-state finds in Rex, and a way
+# into whichever one needs attention. Three roles in one script, picked by the
+# first argument, so the state colors and the Rex logic have one home:
 #
-#   (none)      draw the item — most urgent state and its count, hidden if idle
-#   click       left jumps to the most urgent session, right opens the popup
-#   jump PANE   switch to that tmux pane and bring Ghostty forward
+#   (none)              draw the item — most urgent state and its count, hidden if idle
+#   click               left jumps to the most urgent session, right opens the popup
+#   jump SESSION BLOCK  focus that Rex block and bring Rex forward
 #
 # State is re-read on every invocation rather than cached, so a click lands on
-# what is true now instead of what the bar last drew.
+# what is true now instead of what the bar last drew. Nothing pushes state
+# changes here, so the item polls on update_freq.
 #
-# sketchybar runs under launchd with a minimal PATH, and ,agent-state needs tmux
-# to tell which panes are still alive. Without tmux its `list` prints nothing
-# rather than failing, so a missing PATH entry would leave this item permanently
-# hidden instead of visibly broken — hence the explicit PATH.
+# sketchybar runs under launchd with a minimal PATH, and ,agent-state needs rex
+# and sqlite3. Without them `list` fails and the item stays hidden instead of
+# visibly broken — hence the explicit PATH.
 
 set -uo pipefail
 if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
 fi
 
-export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+# Rex puts its CLI on PATH only inside its own blocks.
+export PATH="$HOME/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS:$HOME/.dotfiles/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 readonly STATE_SCRIPT="$HOME/.dotfiles/ai/bin/,agent-state"
 
@@ -39,7 +40,7 @@ readonly SELF="$self"
 item="${NAME:-agents}"
 readonly ITEM="${item%%.popup.*}"
 
-# The same colors prefix+A uses in ,agents, so the bar and the picker agree.
+# The same colors ,agents uses, so the bar and the picker agree.
 readonly COLOR_BLOCKED=0xffff5f5f
 readonly COLOR_DONE=0xffffd75f
 readonly COLOR_WORKING=0xff888888
@@ -62,7 +63,7 @@ state_rows() {
 
 color_for() {
     case ${1-} in
-        blocked) printf '%s' "$COLOR_BLOCKED" ;;
+        blocked | error) printf '%s' "$COLOR_BLOCKED" ;;
         done) printf '%s' "$COLOR_DONE" ;;
         *) printf '%s' "$COLOR_WORKING" ;;
     esac
@@ -70,7 +71,7 @@ color_for() {
 
 glyph_for() {
     case ${1-} in
-        blocked) printf '%s' "$GLYPH_BLOCKED" ;;
+        blocked | error) printf '%s' "$GLYPH_BLOCKED" ;;
         done) printf '%s' "$GLYPH_DONE" ;;
         idle) printf '%s' "$GLYPH_IDLE" ;;
         *) printf '%s' "$GLYPH_WORKING" ;;
@@ -112,10 +113,10 @@ cmd_click() {
 # group, so repeated clicks walk the blocked sessions instead of sticking on
 # whichever one has been blocked longest.
 jump_to_top() {
-    local pane
-    pane=$(state_rows | head -n 1 | cut -f 6)
-    [[ -n $pane ]] || return 0
-    cmd_jump "$pane"
+    local row
+    row=$(state_rows | head -n 1)
+    [[ -n $row ]] || return 0
+    cmd_jump "$(cut -f 9 <<<"$row")" "$(cut -f 6 <<<"$row")"
 }
 
 show_popup() {
@@ -143,16 +144,15 @@ show_popup() {
             label.padding_right=6
     else
         local index=0
-        local state _session dir age message pane _app kind
+        local state _label dir age message block _app kind session
         # Fields are re-joined on US (0x1f) before reading them. Tab counts as
         # IFS whitespace, so `read` collapses a run of tabs into one delimiter
         # and silently shifts every later field left — a session with no message
-        # would land its pane id in `message` and leave `pane` empty, which is
-        # the same trap ai/claude/hooks/agent-state.sh calls out. US is not
-        # whitespace, so empty fields survive.
-        # session:window is read but not shown: clicking a row goes to the pane
-        # directly, so the tmux coordinate is noise here. ,agents still lists it.
-        while IFS=$'\x1f' read -r state _session dir age message pane _app kind; do
+        # would land its block id in `message` and leave `block` empty. US is
+        # not whitespace, so empty fields survive.
+        # session:window is read but not shown: clicking a row goes to the block
+        # directly, so the coordinate is noise here. ,agents still lists it.
+        while IFS=$'\x1f' read -r state _label dir age message block _app kind session; do
             [[ -n $message ]] || message=$kind
             local row="$ITEM.popup.$index"
             # Padded here rather than in ,agent-state, which stays a plain data
@@ -165,7 +165,7 @@ show_popup() {
                 label.color="$(color_for "$state")" \
                 label.padding_left=6 \
                 label.padding_right=6 \
-                click_script="\"$SELF\" jump $pane"
+                click_script="\"$SELF\" jump $session $block"
             index=$((index + 1))
         done <<<"$(tr '\t' '\037' <<<"$rows")"
     fi
@@ -174,41 +174,24 @@ show_popup() {
 }
 
 cmd_jump() {
-    local pane=${1:-}
-    [[ -n $pane ]] || return 0
+    local session=${1:-} block=${2:-}
+    [[ -n $session && -n $block ]] || return 0
 
     # Harmless when the popup is already closed, which is the left-click case.
     sketchybar --set "$ITEM" popup.drawing=off >/dev/null 2>&1 || true
 
-    local session
-    session=$(tmux display-message -p -t "$pane" '#{session_name}' 2>/dev/null) || return 0
+    # Selecting the session is what makes the app show it; focusing the block
+    # makes its window active.
+    rex --autostart=false "do" session.select session_id="$session" >/dev/null 2>&1 || return 0
+    rex --autostart=false focus -s "$session" "$block" >/dev/null 2>&1 || return 0
 
-    # Prefer a client already looking at that session: switching a client that
-    # sits on some other session would yank that window away from whatever the
-    # user left in it. With no match, -c is omitted so tmux falls back to its
-    # own idea of the most recently active client.
-    local client
-    client=$(tmux list-clients -F '#{client_name}	#{client_session}' 2>/dev/null |
-        awk -F'\t' -v session="$session" '$2 == session { print $1; exit }')
-
-    local target=()
-    [[ -n $client ]] && target=(-c "$client")
-
-    # A pane target resolves session, window and pane in one step; the
-    # three-step form races, as ,agents' comment explains at more length.
-    tmux switch-client ${target[@]+"${target[@]}"} -t "$pane" 2>/dev/null || return 0
-
-    # Sinks a blocked pane to the bottom of its state group in `list`, so the
-    # next left click reaches for a different session, and turns a done pane
-    # idle. A visit can change the leading state, so the item redraws after.
-    [[ -x $STATE_SCRIPT ]] && "$STATE_SCRIPT" visited "$pane" 2>/dev/null
+    # Sinks a blocked session to the bottom of its state group in `list`, so the
+    # next left click reaches for a different one, and shows a done one as idle.
+    # A visit can change the leading state, so the item redraws after.
+    [[ -x $STATE_SCRIPT ]] && "$STATE_SCRIPT" visited "$block" 2>/dev/null
     cmd_status
 
-    # Raises the most recently used Ghostty window, which is the right one when
-    # a single window holds the tmux client. With several, macOS decides. The
-    # bundle id rather than -a Ghostty, since a name lookup can find the wrong
-    # copy.
-    open -b com.mitchellh.ghostty
+    open -b com.superlogical.rex
 }
 
 main() {
@@ -220,7 +203,7 @@ main() {
         click) cmd_click ;;
         jump) cmd_jump "$@" ;;
         *)
-            echo "usage: agents.sh <status|click|jump PANE>" >&2
+            echo "usage: agents.sh <status|click|jump SESSION BLOCK>" >&2
             return 2
             ;;
     esac

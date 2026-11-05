@@ -1,32 +1,3 @@
-# Agent State
-
-Reports the session's blocked/working/done/idle state to `,agent-state`, so
-pi sessions appear in the `,agents` picker (prefix+A) and the sketchybar
-agents item alongside Claude Code ones.
-
-## How it works
-
-Maps pi lifecycle events to states, following the design of herdr's
-bundled pi integration:
-
-| Event | State |
-|-------|-------|
-| `agent_start` | working |
-| `agent_settled` (when actually idle) | done, "turn finished" |
-| `session_start` | republish current state (reload-safe) |
-| `session_shutdown` | clear the pane's row |
-
-Active only in TUI mode inside tmux — RPC/JSON/print modes are headless,
-and the tmux pane is the row's identity. Writes go through a serial
-fire-and-forget queue to `~/.dotfiles/ai/bin/,agent-state`, then poke
-sketchybar to redraw.
-
-## Blocked state
-
-pi has no built-in permission prompt, so `permission-gate.ts` emits
-`agent-state:blocked` events on the shared extension event bus around its
-dialogs, and this extension records `blocked` for their duration.
-
 # Ask User
 
 Gives the agent an `ask_user` tool that asks the user a question without

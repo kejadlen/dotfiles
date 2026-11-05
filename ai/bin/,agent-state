@@ -1,30 +1,16 @@
 #!/usr/bin/env bash
 
-# Tracks the state of Claude Code and pi sessions, keyed by the tmux pane each
-# one runs in, so ,agents can rank them by who is waiting on a human.
+# Lists the Claude Code and pi sessions running in Rex, ranked so ,agents and
+# the sketchybar agents item can lead with whoever is waiting on a human.
 #
-# States, kind, and app follow the vocabulary of OSC 7501, the Program Status
-# Protocol (https://www.superlogical.com/rex/docs/build/program-status), so a
-# producer here can emit the sequence later without translating. Nothing in
-# this stack consumes it yet, which is why the record still lives here.
+# Rex is the source of truth: both agents report their state with OSC 7501, the
+# Program Status Protocol (https://www.superlogical.com/rex/docs/build/program-status),
+# and Rex keeps the latest report per block. This script only reads it back.
 #
-# Written by ai/skills/agent-state/hooks/register.ts and by the pi extension
-# ai/pi/extensions/agent-state.ts; read by ai/bin/,agents and by the sketchybar
-# agents plugin. Those two readers also write, through `visited`: jumping to a
-# blocked session records the visit so the picker can move on to the next one
-# instead of offering the same session again, and jumping to a done session
-# marks it idle.
-#
-# `list` is not read-only: it prunes rows whose pane is gone. The sketchybar
-# plugin runs it every time the hook reports a state change, so most pruning
-# happens there rather than when a human opens the picker. Nothing polls, so a
-# pane that dies without a SessionEnd stays listed until the next hook fires.
-#
-# State lives in a SQLite database, one row per pane. Hooks fire concurrently
-# across sessions, so the database opens in WAL mode with a busy timeout:
-# writers don't block the reader, and a writer that collides with another
-# retries instead of failing. Every value is interpolated into SQL through
-# sql_quote, never pasted raw.
+# The one thing Rex can't hold is whether a human has looked, so that lives in
+# a SQLite table of visits keyed by block. Jumping to a blocked session records
+# a visit so the picker moves on to the next one instead of offering the same
+# session again, and jumping to a done session shows it as idle from then on.
 
 set -euo pipefail
 if [[ "${TRACE-0}" == "1" ]]; then
@@ -33,19 +19,9 @@ fi
 
 STATE_DB="${AGENT_STATE_DB:-${XDG_STATE_HOME:-$HOME/.local/state}/agent-state/state.db}"
 
-# Applied to every connection. WAL and busy_timeout are the two that matter for
-# concurrent hooks; synchronous=NORMAL is safe under WAL and keeps a hook from
-# waiting on an fsync inside Claude's tool loop. journal_mode is persistent in
-# the file, but busy_timeout is per-connection, so this runs every time.
-#
-# The .output fencing is load-bearing: an assigning PRAGMA *returns a row*, so
-# without it `journal_mode = WAL` prints "wal" onto stdout, which corrupts the
-# tab-separated rows `list` emits and makes the hook write to stdout inside
-# Claude's tool loop.
-# busy_timeout MUST come first. Switching journal_mode takes an exclusive lock,
-# and with the default zero timeout a writer that collides with another fails
-# instantly with "database is locked" rather than waiting — which showed up as
-# roughly 1 in 15 dropped writes under concurrent hooks.
+# busy_timeout must come before journal_mode, which takes an exclusive lock and
+# otherwise fails instantly when two writers collide. The .output fencing keeps
+# the row an assigning PRAGMA returns off stdout, where it would corrupt `list`.
 readonly PRAGMAS="
 .output /dev/null
 PRAGMA busy_timeout = 3000;
@@ -54,26 +30,61 @@ PRAGMA synchronous = NORMAL;
 .output stdout
 "
 
-# Rows are rebuilt by the next hook to fire, so a schema change renames the
-# table and drops the old one rather than migrating it.
+# records held the hook-written state before Rex took that over.
 readonly SCHEMA="
 DROP TABLE IF EXISTS panes;
-CREATE TABLE IF NOT EXISTS records (
-  pane       TEXT PRIMARY KEY,
-  state      TEXT NOT NULL,
-  kind       TEXT NOT NULL DEFAULT '',
-  app        TEXT NOT NULL DEFAULT '',
-  updated_at INTEGER NOT NULL,
-  cwd        TEXT NOT NULL DEFAULT '',
-  message    TEXT NOT NULL DEFAULT ''
-);
--- Its own table rather than a column on records, so a records schema change
--- drops nothing a hook cannot rebuild.
+DROP TABLE IF EXISTS records;
 CREATE TABLE IF NOT EXISTS visits (
   pane       TEXT PRIMARY KEY,
   visited_at INTEGER NOT NULL
 );
 "
+
+# Prints one tab-separated row per block whose agent is still the one that
+# reported: state, session:window, cwd, updated_at (RFC 3339), message, block,
+# app, kind, session. A record outlives the program that wrote it, so a record
+# whose owner is neither the foreground process nor one of its ancestors
+# belongs to an agent that has exited.
+readonly GATHER_LUA='
+local function clean(value)
+  return (tostring(value or ""):gsub("[\t\n]", " "))
+end
+
+local function same(a, b)
+  return a and b and a.pid == b.pid and a.name == b.name
+end
+
+for _, session in ipairs(rex.call("session.list").sessions or {}) do
+  local view = rex.call("session.attach", {session_id = session.session_id}).view
+  for index, window in ipairs(view.windows or {}) do
+    for _, layer in ipairs(window.layers or {}) do
+      for _, block in ipairs(layer.blocks or {}) do
+        if block.creator_name == "com.superlogical.terminal" then
+          local target = {session_id = session.session_id, block_id = block.block_id}
+          target.method = "program_status"
+          local record = (rex.call("block.method", target).records or {})[1]
+          if record and record.id == nil then
+            target.method = "process"
+            local process = rex.call("block.method", target)
+            local alive = same(record.owner, process.foreground)
+            for _, ancestor in ipairs(process.ancestors or {}) do
+              alive = alive or same(record.owner, ancestor)
+            end
+            if alive then
+              print(table.concat({
+                clean(record.state), clean(session.label .. ":" .. index),
+                clean(process.foreground and process.foreground.cwd),
+                clean(record.updated_at), clean(record.msg), clean(block.block_id),
+                clean(record.effective_app), clean(record.kind), clean(session.session_id),
+              }, "\t"))
+            end
+          end
+        end
+      end
+    end
+  end
+end
+'
 
 # Renders a value as a SQL string literal. SQLite escapes a single quote by
 # doubling it, and that is the only escape a single-quoted literal needs.
@@ -87,155 +98,112 @@ db() {
     sqlite3 -batch -noheader "$STATE_DB"
 }
 
-readonly RECORD_USAGE="usage: ,agent-state record [--app APP] [--kind permission|question|auth] <blocked|done|idle|working> [cwd] [message]"
+gather() {
+    # The sketchybar poll runs this every few seconds; it must never start a server.
+    rex --autostart=false --timeout 3s "do" - <<<"$GATHER_LUA"
+}
 
-cmd_record() {
-    local app="" kind=""
-    while [[ ${1:-} == --* ]]; do
-        case $1 in
-            --app)  app=${2:-}; shift 2 || { echo "$RECORD_USAGE" >&2; return 2; } ;;
-            --kind) kind=${2:-}; shift 2 || { echo "$RECORD_USAGE" >&2; return 2; } ;;
-            *)      echo "$RECORD_USAGE" >&2; return 2 ;;
+# Turns gathered rows into a VALUES list for the `live` temp table. Block and
+# session ids are checked against Rex's shape before they reach SQL.
+live_values() {
+    local values=""
+    local state label cwd updated message block app kind session
+    # Fields are split on US (0x1f) because tab is IFS whitespace: `read`
+    # would collapse the empty fields an idle record leaves and shift the rest.
+    while IFS=$'\x1f' read -r state label cwd updated message block app kind session; do
+        [[ $block =~ ^block:[0-9a-f-]+$ && $session =~ ^session:[0-9a-f-]+$ ]] || continue
+        # The spec says to treat an unknown state as idle, and kind only means
+        # something on blocked.
+        case $state in
+            blocked|done|error|idle|working) ;;
+            *) state=idle ;;
         esac
-    done
-
-    local state=${1:-} cwd=${2:-$PWD} message=${3:-}
-
-    case $state in
-        blocked|done|idle|working) ;;
-        *) echo "$RECORD_USAGE" >&2; return 2 ;;
-    esac
-
-    # The spec gives kind meaning only on blocked.
-    case $kind in
-        "") ;;
-        permission|question|auth) [[ $state == blocked ]] || kind="" ;;
-        *) echo "$RECORD_USAGE" >&2; return 2 ;;
-    esac
-
-    [[ $app =~ ^[A-Za-z0-9_.+-]{0,32}$ ]] || { echo "$RECORD_USAGE" >&2; return 2; }
-
-    # The pane is the row identity, so outside tmux there is nothing to record.
-    [[ -n "${TMUX_PANE:-}" ]] || return 0
-
-    # Tab and newline are separators in this script's own output, so neither
-    # survives into a stored value.
-    cwd=$(printf '%s' "$cwd" | tr '\t\n' '  ')
-    message=$(printf '%s' "$message" | tr '\t\n' '  ')
-
-    db <<SQL >/dev/null
-$PRAGMAS
-$SCHEMA
-INSERT INTO records (pane, state, kind, app, updated_at, cwd, message)
-VALUES ($(sql_quote "$TMUX_PANE"), $(sql_quote "$state"), $(sql_quote "$kind"),
-        $(sql_quote "$app"), $(date +%s), $(sql_quote "$cwd"), $(sql_quote "$message"))
-ON CONFLICT(pane) DO UPDATE SET
-  state      = excluded.state,
-  kind       = excluded.kind,
-  app        = excluded.app,
-  updated_at = excluded.updated_at,
-  cwd        = excluded.cwd,
-  message    = excluded.message;
-SQL
+        [[ $state == blocked ]] || kind=""
+        values+="($(sql_quote "$block"), $(sql_quote "$session"), $(sql_quote "$state"),"
+        values+=" $(sql_quote "$label"), $(sql_quote "$cwd"), CAST(strftime('%s', $(sql_quote "$updated")) AS INTEGER),"
+        values+=" $(sql_quote "$message"), $(sql_quote "$app"), $(sql_quote "$kind")),"
+    done < <(tr '\t' '\037')
+    printf '%s' "${values%,}"
 }
 
-cmd_clear() {
-    [[ -n "${TMUX_PANE:-}" ]] || return 0
-    [[ -f $STATE_DB ]] || return 0
+readonly LIVE_TABLE="
+CREATE TEMP TABLE live (
+  pane TEXT PRIMARY KEY, session TEXT NOT NULL, state TEXT NOT NULL,
+  label TEXT NOT NULL, cwd TEXT NOT NULL, updated_at INTEGER,
+  message TEXT NOT NULL, app TEXT NOT NULL, kind TEXT NOT NULL
+);
+"
 
-    db <<SQL >/dev/null
-$PRAGMAS
-$SCHEMA
-DELETE FROM records WHERE pane = $(sql_quote "$TMUX_PANE");
-DELETE FROM visits WHERE pane = $(sql_quote "$TMUX_PANE");
-SQL
-}
-
-# Records that a human jumped to this pane. A blocked pane gets a visit, so
-# `list` can rank it below the blocked sessions they have not seen yet. A done
-# pane becomes idle, since done means the result is unseen and now it has been.
-# Called by the two places that switch a tmux client: ,agents and the sketchybar
-# agents item.
-#
-# The pane's state is read here rather than trusted from the caller. Switching
-# a client fires no Claude Code event, so the stored state is still current at the
-# moment of the jump, and a caller holding a stale row cannot demote a session
-# that has since gone back to working.
+# Records that a human jumped to this block. A blocked session sinks below the
+# blocked sessions not yet seen; a done or errored one shows as idle, since its
+# result is no longer unseen. The block's state is read here rather than
+# trusted from the caller, so a stale row can't demote a session that has since
+# gone back to working.
 cmd_visited() {
-    local pane=${1:-}
+    local block=${1:-}
+    [[ $block =~ ^block:[0-9a-f-]+$ ]] || return 0
 
-    [[ $pane =~ ^%[0-9]+$ ]] || return 0
-    [[ -f $STATE_DB ]] || return 0
+    local values
+    values=$(gather | live_values)
+    [[ -n $values ]] || return 0
 
-    # The WHERE clause is what lets this parse: in an INSERT ... SELECT, SQLite
-    # cannot otherwise tell ON CONFLICT from the ON of a join.
     db <<SQL >/dev/null
 $PRAGMAS
 $SCHEMA
+$LIVE_TABLE
+INSERT OR IGNORE INTO live VALUES $values;
+-- The WHERE clause is what lets this parse: in an INSERT ... SELECT, SQLite
+-- cannot otherwise tell ON CONFLICT from the ON of a join.
 INSERT INTO visits (pane, visited_at)
-SELECT pane, $(date +%s) FROM records
-WHERE pane = $(sql_quote "$pane") AND state = 'blocked'
+SELECT pane, $(date +%s) FROM live
+WHERE pane = $(sql_quote "$block") AND state IN ('blocked', 'done', 'error')
 ON CONFLICT(pane) DO UPDATE SET visited_at = excluded.visited_at;
--- updated_at stays put, so the age still counts from when the turn finished.
-UPDATE records SET state = 'idle'
-WHERE pane = $(sql_quote "$pane") AND state = 'done';
 SQL
 }
 
 # Emits one tab-separated row per live session:
-#   state  session:window  dir  age  message  pane  app  kind
+#   state  session:window  dir  age  message  block  app  kind  session
 #
-# Ordered by state (blocked, done, idle, then working) and, within a state,
-# oldest first — the session sitting in it longest is the one most likely to
-# have been forgotten.
+# Ordered by state (blocked, error, done, idle, then working) and, within a
+# state, oldest first — the session sitting in it longest is the one most
+# likely to have been forgotten.
 #
 # Except for sessions already visited while blocked, which sink below the rest
 # of their state, least recently visited first. Without that, jumping to a
 # blocked session and leaving it blocked would land on the same row the next
-# time the picker opens, since visiting a pane does not change its age.
+# time the picker opens, since visiting a block does not change its age.
 cmd_list() {
-    [[ -f $STATE_DB ]] || return 0
-
-    local live
-    live=$(tmux list-panes -a -F '#{pane_id}	#{session_name}:#{window_index}' 2>/dev/null) || return 0
-    [[ -n $live ]] || return 0
-
-    # The live pane list goes into a temp table so the join, the prune and the
-    # ordering all happen in one statement. A row whose pane is gone belongs to
-    # a session that died without firing SessionEnd.
-    local values=""
-    local pane label
-    while IFS=$'\t' read -r pane label; do
-        # tmux pane ids are always %<digits>; anything else is not something to
-        # interpolate into SQL.
-        [[ $pane =~ ^%[0-9]+$ ]] || continue
-        values+="($(sql_quote "$pane"), $(sql_quote "$label")),"
-    done <<<"$live"
+    local values
+    values=$(gather | live_values)
     [[ -n $values ]] || return 0
 
     db <<SQL | format_rows
 $PRAGMAS
 $SCHEMA
-CREATE TEMP TABLE live (pane TEXT PRIMARY KEY, label TEXT NOT NULL);
-INSERT OR IGNORE INTO live (pane, label) VALUES ${values%,};
-DELETE FROM records WHERE pane NOT IN (SELECT pane FROM live);
+$LIVE_TABLE
+INSERT OR IGNORE INTO live VALUES $values;
 DELETE FROM visits WHERE pane NOT IN (SELECT pane FROM live);
 .mode list
 .separator "\t"
 -- A visit counts only until the session next reports, so visited_at older than
--- updated_at means the pane has moved on and belongs back in the age ordering.
--- That also expires the demotion when a session blocks again: recording a state
--- bumps updated_at past the visit, and a fresh block is worth surfacing.
---
--- Sorting the demoted rows on the visit rather than the age is what makes them
--- rotate. max() picks whichever timestamp ranks the row, so both groups sort
--- with one expression: the visit for a demoted row, the age for every other.
-SELECT p.state, l.label, p.cwd, p.updated_at, p.message, p.pane, p.app, p.kind
-FROM records p JOIN live l ON l.pane = p.pane
-LEFT JOIN visits v ON v.pane = p.pane
-ORDER BY CASE p.state WHEN 'blocked' THEN 0 WHEN 'done' THEN 1 WHEN 'idle' THEN 2 ELSE 3 END,
-         CASE WHEN COALESCE(v.visited_at, 0) >= p.updated_at THEN 1 ELSE 0 END,
-         max(COALESCE(v.visited_at, 0), p.updated_at) ASC;
+-- updated_at means it has moved on and belongs back in the age ordering.
+WITH ranked AS (
+  SELECT l.*,
+         v.visited_at IS NOT NULL AND v.visited_at >= COALESCE(l.updated_at, 0) AS seen,
+         COALESCE(v.visited_at, 0) AS visited_at
+  FROM live l LEFT JOIN visits v ON v.pane = l.pane
+), shown AS (
+  SELECT *, CASE WHEN seen AND state IN ('done', 'error') THEN 'idle' ELSE state END AS shown_state
+  FROM ranked
+)
+-- max() picks whichever timestamp ranks the row, so demoted blocked rows rotate
+-- by visit while every other row sorts by age, in one expression.
+SELECT shown_state, label, cwd, COALESCE(updated_at, 0), message, pane, app, kind, session
+FROM shown
+ORDER BY CASE shown_state WHEN 'blocked' THEN 0 WHEN 'error' THEN 1 WHEN 'done' THEN 2
+                          WHEN 'idle' THEN 3 ELSE 4 END,
+         CASE WHEN shown_state = 'blocked' AND seen THEN 1 ELSE 0 END,
+         max(CASE WHEN seen THEN visited_at ELSE 0 END, COALESCE(updated_at, 0)) ASC;
 SQL
 }
 
@@ -251,7 +219,7 @@ format_rows() {
         }
         {
             n = split($3, parts, "/")
-            printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, parts[n], age(now - $4), $5, $6, $7, $8
+            printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, parts[n], age(now - $4), $5, $6, $7, $8, $9
         }
     '
 }
@@ -260,18 +228,19 @@ main() {
     local command=${1:-}
     shift || true
 
-    command -v sqlite3 >/dev/null 2>&1 || {
-        echo ",agent-state: sqlite3 not found" >&2
-        return 1
-    }
+    local tool
+    for tool in sqlite3 rex; do
+        command -v "$tool" >/dev/null 2>&1 || {
+            echo ",agent-state: $tool not found" >&2
+            return 1
+        }
+    done
 
     case $command in
-        record)  cmd_record "$@" ;;
-        clear)   cmd_clear ;;
         list)    cmd_list ;;
         visited) cmd_visited "$@" ;;
         *)
-            echo "usage: ,agent-state <record|clear|list|visited PANE>" >&2
+            echo "usage: ,agent-state <list|visited BLOCK>" >&2
             return 2
             ;;
     esac
