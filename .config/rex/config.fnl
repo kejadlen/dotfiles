@@ -94,3 +94,14 @@
     true))
 
 (rex.bind :ctrl+b>tab (grab))
+
+(local {: agents : agent-rows : jump} (require :agents))
+(rex.action {:name :agents :title "Jump to Agent…" :run agents})
+;; The sketchybar agents item lists and jumps through these, so its jumps
+;; count as visits too.
+(rex.action {:name :agent_list :title "List Agents" :run agent-rows})
+(rex.action {:name :agent_jump
+             :title "Jump to Agent Block"
+             :args {:session :string :block :string :window :string?}
+             :run #(jump $2)})
+(rex.bind :ctrl+b>a :agents)
