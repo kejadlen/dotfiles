@@ -6,11 +6,7 @@ brew "chruby"
 brew "curl"
 brew "docker"
 brew "dockutil"
-brew "dotslash"
-brew "entr"
-brew "eza"
 brew "ffmpeg"
-brew "git"
 brew "lua@5.4"
 brew "luarocks"
 brew "mas"
@@ -18,11 +14,9 @@ brew "restic"
 brew "ruby-install"
 brew "syncthing", restart_service: :changed
 brew "terraform"
-brew "tmux"
 brew "trurl"
 brew "ykman"
 brew "z3"
-brew "zsh"
 
 ## editor things
 
@@ -36,8 +30,6 @@ brew "yamllint"
 
 # install from head
 
-brew "tree-sitter", args: ["HEAD"] # install this before neovim
-brew "neovim", args: ["HEAD"]
 brew "universal-ctags", args: ["HEAD"] # don't remember why this is installing from head
 
 # install from taps
@@ -58,7 +50,6 @@ cask "ghostty"
 cask "glide-browser"
 cask "hammerspoon"
 cask "keyboardcleantool"
-cask "neovim-app"
 cask "obsidian"
 cask "orbstack"
 cask "sf-symbols"

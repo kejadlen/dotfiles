@@ -1,8 +1,8 @@
 # Moving the dotfiles to nix
 
 Status: `flake.nix` builds a package profile, and imperishable-night
-installs it for `alpha`. The Mac still uses its hand-installed
-`nix profile` entries (2026-11-05).
+installs it for `alpha`. The Mac installs it with `nix profile`, and its
+formulae are gone from the Brewfile (2026-11-05).
 
 This note records a plan to install packages with nix, so the dotfiles
 work on Linux hosts as well as the Mac. frork keeps creating the
@@ -133,7 +133,7 @@ packages.${system}.profile = pkgs.buildEnv {
 };
 ```
 
-With `nix profile`, install it once with `nix profile install .#profile`,
+With `nix profile`, install it once with `nix profile add .#profile`,
 then run `nix profile upgrade profile` after each edit.
 
 Every option except home-manager leaves frork and syncthing to a wrapper

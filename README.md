@@ -35,6 +35,29 @@ Other non-automatable things:
 - [ ] MailMate
 - [ ] Syncthing
 
+## Packages from nix
+
+CLI tools without a DotSlash file in `bin/` come from the `profile`
+package in `flake.nix`. Homebrew still provides the GUI apps and the
+formulae that haven't moved to nix.
+
+`bootstrap.sh` doesn't install nix. On a new machine, install it with
+the [upstream installer][nix], then add the profile:
+
+[nix]: https://nixos.org/download/
+
+```sh
+nix profile add ~/.dotfiles#profile
+```
+
+After editing `flake.nix` or running `nix flake update`, apply the
+change with `nix profile upgrade profile`. `nix profile rollback`
+returns to the previous generation.
+
+The flake only sees files that git tracks, and new files in a jj change
+aren't in the git index until they're committed. Commit a new `.nix`
+file before the flake refers to it.
+
 ## Hammerspoon and Fennel
 
 Hammerspoon embeds Lua 5.4, but Homebrew's `lua` formula tracks the latest
