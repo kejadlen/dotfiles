@@ -12,6 +12,8 @@
   ],
   "packages": [
     "git:github.com/hegeldev/hegel-skill",
+    "git:github.com/kejadlen/ranger.git",
+    "git:github.com/kejadlen/ramekin.git",
     {
       "source": "git:github.com/DrCatHicks/learning-opportunities",
       "skills": [
@@ -23,9 +25,7 @@
       "skills": [
         "plugins/playground/skills/**"
       ]
-    },
-    "ssh://quire/pkg/ranger.git",
-    "ssh://quire/pkg/ramekin.git"
+    }
   ],
   "theme": "dark"
 }
