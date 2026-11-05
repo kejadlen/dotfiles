@@ -53,7 +53,8 @@
     "rust-analyzer-lsp@claude-plugins-official": true,
     "superpowers-developing-for-claude-code@superpowers-marketplace": true,
     "typescript-lsp@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true
+    "swift-lsp@claude-plugins-official": true,
+    "hegel-skill@hegeldev": true
   },
   "extraKnownMarketplaces": {
     "ranger": {
@@ -61,9 +62,20 @@
         "source": "github",
         "repo": "kejadlen/ranger"
       }
+    },
+    "hegeldev": {
+      "source": {
+        "source": "github",
+        "repo": "hegeldev/hegel-skill"
+      }
     }
   },
   "outputStyle": "bars",
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
   "agentPushNotifEnabled": true
 }
