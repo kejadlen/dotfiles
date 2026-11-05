@@ -7,11 +7,7 @@
         :nvim_get_current_win nvim-get-current-win
         :nvim_set_hl nvim-set-hl} vim.api)
 
-;;; colorscheme (toggle between these to compare)
-;; Option 1: paramount
-(vim.pack.add ["https://git.kejadlen.dev/alpha/vim-colors-paramount.git"])
-; (vim.cmd.colorscheme :paramount)
-;; Option 2: alphabaster
+;;; colorscheme
 (vim.cmd.colorscheme :alphabaster)
 
 (set vim.o.cmdheight 0)

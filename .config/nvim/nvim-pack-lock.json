@@ -55,10 +55,6 @@
       "rev": "dcbfe06",
       "src": "https://github.com/tpope/vim-abolish.git"
     },
-    "vim-colors-paramount": {
-      "rev": "ceaed9d",
-      "src": "https://git.kejadlen.dev/alpha/vim-colors-paramount.git"
-    },
     "vim-context-commentstring": {
       "rev": "edcf56c",
       "src": "https://github.com/suy/vim-context-commentstring.git"
