@@ -90,6 +90,11 @@ Note: these short URLs appear verbatim in the lockfile, so other machines need t
 2. `:restart`
 3. `:lua vim.pack.del({"plugin-name"})` to delete from disk
 
+Don't skip step 3 or hand-edit the lockfile instead: on startup, vim.pack
+writes a lockfile entry for every directory in the pack dir, so the entry comes
+back. If `del` fails with "Some plugins are active", something still adds the
+plugin. Check for a stale compiled config, such as Hotpot's cache.
+
 ## add() Options
 
 - **`load`** — `false` (default during init.lua), `true` (default after), or custom function. Controls whether `plugin/` and `ftdetect/` files load.
