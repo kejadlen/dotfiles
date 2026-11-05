@@ -1,6 +1,8 @@
 # Moving the dotfiles to nix
 
-Status: exploring, nothing built yet (2026-11-03).
+Status: `flake.nix` builds a package profile, and imperishable-night
+installs it for `alpha`. The Mac still uses its hand-installed
+`nix profile` entries (2026-11-05).
 
 This note records a plan to install packages with nix, so the dotfiles
 work on Linux hosts as well as the Mac. frork keeps creating the
@@ -231,10 +233,9 @@ but `.hammerspoon/init.lua` would then need a nix store path on
 ## Risks
 
 Nix flakes in a git repo only see files that are in the git index. In a
-colocated jj repo, new files in `@` may be missing from the index, which
-would cause "path is not tracked by Git" errors right after adding a
-file to the flake. This is unverified with jj 0.46; test it before
-settling the layout. The `path:` flake URL skips the git check, but it
+colocated jj repo, new files in `@` are missing from the index, so
+evaluating fails with "path is not tracked by Git" until the file is
+committed. The `path:` flake URL skips the git check, but it
 copies the whole directory into the store, including untracked and
 ignored paths like `ai/claude/projects` and `.direnv`.
 
