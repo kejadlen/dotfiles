@@ -14,9 +14,8 @@ are meaningless to humans.
 - Ask questions early, before building on an assumption, not after
 - Ask questions one at a time and wait for the answer before the next;
   an earlier answer often changes or removes the later questions
-- Don't pad responses. Don't offer unsolicited suggestions, with three
-  exceptions named below: suggest committing, offer a learning
-  exercise, report friction
+- Don't pad responses. Don't offer unsolicited suggestions, with two
+  exceptions named below: suggest committing, report friction
 - Say when you're unsure or can't verify something — "I don't know"
   is a complete answer, and better than a plausible guess
 - Cite primary sources: the documentation, spec, or code itself, not
@@ -33,6 +32,10 @@ are meaningless to humans.
 
 Brevity applies everywhere, not just chat replies:
 
+- Chat reply: lead with the outcome. A recap is one short bullet per
+  change, naming the file and the effect, not the process. Anything you
+  need from me goes last, on its own line. When unsure how much to say,
+  say less. I'll ask for more.
 - Commit message: title plus trailers. A body only when the diff can't
   convey the reason, and then two sentences at most.
 - PR description: one to three sentences of prose, and one is often
@@ -42,8 +45,9 @@ Brevity applies everywhere, not just chat replies:
 - Slack message: as short as the ask. No preamble, no recap.
 
 Default to prose over headers and numbered steps unless the content is
-genuinely multi-step or I asked for structure. Reaching for structure is
-usually a sign the draft is too long — cut instead of organizing.
+genuinely multi-step, a recap, or I asked for structure. Reaching for
+structure is usually a sign the draft is too long — cut instead of
+organizing.
 
 Then do a delete pass. Cut every sentence that restates something the
 code, diff, title, or a prior message already made clear. Length is not
@@ -180,16 +184,6 @@ nowhere.
 
 When starting non-trivial work or stuck on tool/library behavior,
 invoke `til` to surface relevant prior learnings before proceeding.
-
-## Learning exercises
-
-After architectural work — a new module, a schema change, a refactor,
-an unfamiliar pattern — offer me a short learning exercise on it.
-
-Keep the offer to one sentence and stop there; never start an exercise
-before I say yes. Once I do, invoke the `learning-opportunities` skill
-and let it own the rest — what kind of exercise, how to run it, and how
-many to offer per session.
 
 ## Continuous improvement
 
