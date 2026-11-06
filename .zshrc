@@ -45,7 +45,6 @@ zstyle ':z4h:ssh:*'                   enable 'no'
 
 zstyle ':completion:*:ssh:argument-1:'       tag-order  hosts users
 zstyle ':completion:*:scp:argument-rest:'    tag-order  hosts files users
-zstyle ':completion:*:(ssh|scp|rdp):*:hosts' hosts
 
 zstyle ':z4h:term-title:ssh' preexec '%n@'${${${Z4H_SSH##*:}//\%/%%}:-%m}': ${1//\%/%%}'
 zstyle ':z4h:term-title:ssh' precmd  '%n@'${${${Z4H_SSH##*:}//\%/%%}:-%m}': %~'
@@ -188,6 +187,13 @@ function xman() { open x-man-page://$@ ; }
 if type brew &>/dev/null; then
   autoload -Uz compinit
   compinit
+fi
+
+# _ssh_hosts reads Include lines via `cd ~/.ssh` in a subshell, which fires
+# chpwd hooks (direnv, zoxide) on every ssh completion.
+if autoload -Uz +X _ssh_hosts 2>/dev/null; then
+  functions[-orig-_ssh_hosts]=$functions[_ssh_hosts]
+  _ssh_hosts() { local -a chpwd_functions; -orig-_ssh_hosts "$@" }
 fi
 
 # has to go after compinit
