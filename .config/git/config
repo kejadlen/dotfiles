@@ -80,8 +80,6 @@
 [commit]
 	verbose = true
 	gpgsign = true
-[filter "dash-prefs"]
-	clean = clean-dash-prefs
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
