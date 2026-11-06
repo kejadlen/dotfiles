@@ -80,8 +80,6 @@
 [commit]
 	verbose = true
 	gpgsign = true
-[filter "alfredworkflow"]
-	clean = alfredworkflow.clean
 [filter "dash-prefs"]
 	clean = clean-dash-prefs
 [filter "lfs"]

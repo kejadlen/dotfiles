@@ -1,22 +1,3 @@
-[submodule "src/giphy.alfredworkflow"]
-	path = src/giphy.alfredworkflow
-	url = https://github.com/kejadlen/giphy.alfredworkflow.git
-[submodule "src/dark-sky.alfredworkflow"]
-	path = src/pirate-weather.alfredworkflow
-	url = https://github.com/kejadlen/pirate-weather.alfredworkflow.git
-[submodule "faker.alfredworkflow"]
-	path = src/faker.alfredworkflow
-	url = https://github.com/kejadlen/faker.alfredworkflow.git
-[submodule "fast-user-switching.alfredworkflow"]
-	path = src/fast-user-switching.alfredworkflow
-	url = https://github.com/kejadlen/fast-user-switching.alfredworkflow.git
-[submodule "soulver.alfredworkflow"]
-	path = src/soulver.alfredworkflow
-	url = https://github.com/kejadlen/soulver.alfredworkflow.git
-	branch = main
-[submodule "frink.alfredworkflow"]
-	path = src/frink.alfredworkflow
-	url = https://github.com/kejadlen/frink.alfredworkflow
 [submodule "fzf-git.sh"]
 	path = src/fzf-git.sh
 	url = https://github.com/kejadlen/fzf-git.sh.git

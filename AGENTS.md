@@ -14,7 +14,7 @@ Key directories:
 - `ai/_AGENTS.md` — global agent conventions shared by both agents (symlinked in as `~/.pi/agent/AGENTS.md`; `ai/claude/CLAUDE.md` imports it)
 - `.ssh/` — SSH config
 - `.zsh/` — Zsh config
-- `src/` — git submodules (Alfred workflows, fzf-git, tpm)
+- `src/` — git submodules (fzf-git, tpm)
 - `Brewfile` — Homebrew dependencies
 
 ## Version Control
