@@ -32,6 +32,7 @@
               git
               neovim-nightly-overlay.packages.${system}.default
               nix-direnv
+              sqlite
               tmux
               zsh
             ];
