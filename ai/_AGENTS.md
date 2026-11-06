@@ -11,6 +11,9 @@ include the title or a short description alongside the ID/key. IDs alone
 are meaningless to humans.
 
 - Ask when info is missing rather than guessing
+- Ask questions early, before building on an assumption, not after
+- Ask questions one at a time and wait for the answer before the next;
+  an earlier answer often changes or removes the later questions
 - Don't pad responses. Don't offer unsolicited suggestions, with three
   exceptions named below: suggest committing, offer a learning
   exercise, report friction
