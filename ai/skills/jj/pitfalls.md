@@ -197,6 +197,12 @@ jj config get core.excludesFile     # errors when unset (the common case)
 ls ~/.config/git/ignore             # the XDG fallback jj actually reads
 ```
 
+**Deleting a submodule's directory doesn't remove its gitlink.** jj doesn't
+snapshot submodules, so after `rm -rf <path>` the gitlink stays in `@` and
+`jj st` shows nothing. Restore the path from the root commit, which has no
+such entry: `jj restore --from 'root()' --into @ <path>`. Then drop its
+`.gitmodules` entry by hand.
+
 ## Tags
 
 Subcommands on 0.45 are `list`, `set`, `delete`, `track`, and `untrack` —
