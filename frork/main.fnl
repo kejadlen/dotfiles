@@ -7,7 +7,10 @@
 (ok :directory "~/src")
 
 ;; dotfiles
-(require :_dotfiles)
+(ok :git "~/.dotfiles" "https://git.kejadlen.dev/alpha/dotfiles.git")
+((. (require :_dotfiles) :apply))
+;; for per-system configuration
+(ok :directory :$HOME/.config/jj/conf.d)
 
 (if (= platform :darwin) (require :_macos))
 

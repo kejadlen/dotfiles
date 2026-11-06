@@ -1,33 +1,38 @@
+;; Links are a map of ~/<dest> to ~/.dotfiles/<src>, so another entry point
+;; (like a work machine's overlay repo) can reshape them before applying.
 (local {: ok :utils {: dirname}} (require :frork))
 
-(ok :git "~/.dotfiles" "https://git.kejadlen.dev/alpha/dotfiles.git")
+(local links (doto (collect [_ path (ipairs [:.config
+                                             :.digrc
+                                             :.gemrc
+                                             :.git_templates
+                                             :.hammerspoon
+                                             :.inputrc
+                                             :.p10k.zsh
+                                             :.profile
+                                             :.ruby-version
+                                             :.ssh
+                                             :.zsh
+                                             :.zshenv
+                                             :.zshrc
+                                             :.bundle/config
+                                             :.cargo/config.toml])]
+                     path
+                     path)
+               (tset :.claude :ai/claude)
+               (tset :.pi/agent :ai/pi)))
 
-(let [dotfiles [:.config
-                :.digrc
-                :.gemrc
-                :.git_templates
-                :.hammerspoon
-                :.inputrc
-                :.p10k.zsh
-                :.profile
-                :.ruby-version
-                :.ssh
-                :.zsh
-                :.zshenv
-                :.zshrc
-                :.bundle/config
-                :.cargo/config.toml]]
-  (each [_ v (ipairs dotfiles)]
-    (let [src (.. :$HOME/.dotfiles/ v)
-          dest (.. :$HOME/ v)]
-      (when (v:match "/")
-        (ok :directory (dirname dest)))
-      (ok :symlink dest src))))
+(fn apply [?links]
+  (let [links (or ?links links)
+        dests (icollect [dest (pairs links)] dest)
+        dirs {}]
+    (table.sort dests) ; so the output is always in the same order
+    (each [_ dest (ipairs dests)]
+      (let [path (.. :$HOME/ dest)
+            dir (dirname path)]
+        (when (and (dest:match "/") (not (. dirs dir)))
+          (tset dirs dir true)
+          (ok :directory dir))
+        (ok :symlink path (.. :$HOME/.dotfiles/ (. links dest)))))))
 
-(ok :symlink "~/.claude" "~/.dotfiles/ai/claude")
-
-(ok :directory "~/.pi")
-(ok :symlink "~/.pi/agent" "~/.dotfiles/ai/pi")
-
-;; for per-system configuration
-(ok :directory :$HOME/.config/jj/conf.d)
+{: links : apply}
