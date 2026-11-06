@@ -174,6 +174,11 @@ credential, or setting is missing or broken, stop and say so — don't
 install a substitute, shim around it, or switch to a different tool to
 get unblocked. Changing the configuration is my call.
 
+Don't start servers or other long-running processes — dev servers,
+watchers, `serve` tasks — not even in the background. I run those
+myself so I know where they live. Build what's needed, then give me the
+command to run.
+
 ## Learning log
 
 When you discover something non-obvious during work — a gotcha,
