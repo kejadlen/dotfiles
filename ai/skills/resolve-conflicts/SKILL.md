@@ -52,6 +52,24 @@ not sweep. Confirm `jj bookmark list` first: abandoning drops a bookmark
 pointing at the commit, and a later bare `jj git push` then tries to delete
 that branch on the remote.
 
+**Conflicted `(divergent)` commits may be a stale copy of a branch another
+machine already fixed.** When the other machine rebases and pushes a branch,
+`jj git fetch` brings in its clean commits. The local auto-rebase then
+rewrites the old local copies too, so every change exists twice: `/0` is the
+local copy and conflicted, `/1` came from the remote and is clean. The
+bookmark goes conflicted as well. Diff each pair. If the only difference is
+conflict markers, there is nothing to merge:
+
+```
+jj diff --from <change>/1 --to <change>/0 --stat   # markers only = stale copy
+jj bookmark set <bookmark> -r <bookmark>@origin    # take the remote tip
+jj rebase -s mm -o <other-parent> -o <bookmark>    # repoint the megamerge
+jj abandon <commit ids of the /0 copies>           # commit IDs: change IDs are ambiguous
+```
+
+Collect the `/0` commit IDs up front with `jj log --no-graph -r
+'trunk()..<tip>/0' -T 'commit_id.short() ++ "\n"'`.
+
 ## Step 1 — Pick the revision and the mechanism
 
 If `$ARGUMENTS` contains a change ID, use it as the conflicted revision.

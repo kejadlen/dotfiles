@@ -211,7 +211,9 @@ There is no `--allow-new` on 0.45 — reaching for it is a git habit. 0.45
 auto-tracks on `-b` instead ("If a bookmark isn't tracking anything yet, the
 remote bookmark will be tracked automatically"); older versions refused with
 "Refusing to create new remote bookmark", which is the error `--allow-new`
-looks like it would fix.
+looks like it would fix. The auto-track covers only a bookmark that tracks
+nothing: on 0.46, `-b main --remote <new>` still refuses when `main` already
+tracks another remote, so run `jj bookmark track main@<new>` first.
 
 `-c` derives the name from the change ID (`push-<short-change-id>`).
 `jj git push --dry-run` exists and is cheap; `jj absorb --dry-run` does not.
