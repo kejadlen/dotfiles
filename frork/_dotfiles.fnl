@@ -20,9 +20,8 @@
   (each [_ v (ipairs dotfiles)]
     (let [src (.. :$HOME/.dotfiles/ v)
           dest (.. :$HOME/ v)]
-      ;; TODO fix this - it doesn't work
       (when (v:match "/")
-        (-?> dest dirname (partial #(ok :directory))))
+        (ok :directory (dirname dest)))
       (ok :symlink dest src))))
 
 (ok :symlink "~/.claude" "~/.dotfiles/ai/claude")
