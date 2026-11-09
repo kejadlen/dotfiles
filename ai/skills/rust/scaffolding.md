@@ -37,6 +37,13 @@ project/
 └── migrations/             # If using a database.
 ```
 
+Write `.gitignore` before `Cargo.toml`. `build.rs` runs `jj log`, which
+snapshots the working copy, and an editor's rust-analyzer starts
+building as soon as `Cargo.toml` appears. If `/target` isn't ignored
+yet, jj tracks all of it; recover by adding `/target` to `.gitignore`,
+then running `jj file untrack target`, which refuses paths that aren't
+ignored.
+
 ## Cargo.toml
 
 ```toml
@@ -96,6 +103,25 @@ Notes on this template:
 Cross-cutting choices (edition, lock file, fs-err, tracing, tokio
 features) are explained in `SKILL.md`.
 
+`just clippy` lints test targets too (`--all-targets`; plain `cargo
+clippy` checks only the lib and bins), so the panic-discipline lints
+would flag every `unwrap` in tests. Exempt
+test code at the top of `src/lib.rs`, and again in each `tests/*.rs`
+file that needs it, since every integration test is its own crate:
+
+```rust
+#![cfg_attr(
+    test,
+    allow(
+        clippy::unwrap_used,
+        clippy::expect_used,
+        clippy::panic,
+        clippy::indexing_slicing,
+        clippy::arithmetic_side_effects
+    )
+)]
+```
+
 ## Error pattern
 
 Template (rationale in `SKILL.md`):
@@ -131,7 +157,7 @@ check:
     cargo check --workspace
 
 clippy:
-    cargo clippy --workspace -- -D warnings
+    cargo clippy --workspace --all-targets -- -D warnings
 
 coverage:
     ./bin/coverage
