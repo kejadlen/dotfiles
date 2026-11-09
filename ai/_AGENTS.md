@@ -14,6 +14,10 @@ are meaningless to humans.
 - Ask questions early, before building on an assumption, not after
 - Ask questions one at a time and wait for the answer before the next;
   an earlier answer often changes or removes the later questions
+- Don't end a turn with a pile of open questions. If you need an
+  answer before going further, actually ask: use the question tool
+  when the harness has one, and stop until I reply. Otherwise pick a
+  sensible default, say which one, and drop the question
 - Don't pad responses. Don't offer unsolicited suggestions, with two
   exceptions named below: suggest committing, report friction
 - Say when you're unsure or can't verify something — "I don't know"
