@@ -177,6 +177,15 @@ remote is usually just a rebase, not lost work — compare the tips with
 A bookmark name that resolves to more than one commit errors `Name <x> is
 conflicted`; jj prints the commit IDs to disambiguate with.
 
+A git remote can't hold `foo` alongside `foo/*` bookmarks, because
+`refs/heads/foo` would be both a file and a directory. Check the remote's
+branch names before naming an integration bookmark, and nest it instead
+(`foo/main`).
+
+To list what one branch has that another lacks, put `::` on both sides:
+`::main@origin ~ ::feature`. Without the leading `::`, `main@origin ~
+::feature` tests only main's tip commit and undercounts.
+
 ### Advancing bookmarks after commit
 
 `jj bookmark advance` moves the nearest ancestor bookmark(s) forward — the
