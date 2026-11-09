@@ -4,16 +4,58 @@
   "name": "zoxide",
   "platforms": {
     "macos-aarch64": {
-      "size": 462196,
+      "size": 482696,
       "hash": "blake3",
-      "digest": "cdaae79e03974b0554a8fdd6102ac55740de2305adac97d5884c15d1abfdf2b2",
-      "format": "tar.gz",
+      "digest": "c802b38dd7f08e56fcc71622750b7cbb0dbefeb1a71ccdf8198c76e39eb43c67",
       "path": "zoxide",
       "providers": [
         {
-          "url": "https://github.com/ajeetdsouza/zoxide/releases/download/v0.9.9/zoxide-0.9.9-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-apple-darwin.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/ajeetdsouza/zoxide",
+          "tag": "v0.10.0",
+          "name": "zoxide-0.10.0-aarch64-apple-darwin.tar.gz"
         }
-      ]
+      ],
+      "format": "tar.gz"
+    },
+    "linux-aarch64": {
+      "size": 551084,
+      "hash": "blake3",
+      "digest": "3eb55def529ad5f57dea41c251a91248e9bfe31e566ed618f22db6009c4b565e",
+      "path": "zoxide",
+      "providers": [
+        {
+          "url": "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/ajeetdsouza/zoxide",
+          "tag": "v0.10.0",
+          "name": "zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-x86_64": {
+      "size": 591384,
+      "hash": "blake3",
+      "digest": "fe5883b404bffc32b9e71a471a9bc699ab317f9b1fe9b8cd88756b6960d2e3c0",
+      "path": "zoxide",
+      "providers": [
+        {
+          "url": "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-x86_64-unknown-linux-musl.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/ajeetdsouza/zoxide",
+          "tag": "v0.10.0",
+          "name": "zoxide-0.10.0-x86_64-unknown-linux-musl.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
     }
   }
 }

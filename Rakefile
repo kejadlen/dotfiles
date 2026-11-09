@@ -243,6 +243,18 @@ namespace :dotslash do
     end
   end
 
+  desc "Update zoxide"
+  task(:zoxide) do
+    update_dotslash_release(name: "zoxide", repo: "ajeetdsouza/zoxide") do |tag|
+      version = tag.delete_prefix("v")
+      {
+        "macos-aarch64" => "zoxide-#{version}-aarch64-apple-darwin.tar.gz",
+        "linux-aarch64" => "zoxide-#{version}-aarch64-unknown-linux-musl.tar.gz",
+        "linux-x86_64" => "zoxide-#{version}-x86_64-unknown-linux-musl.tar.gz",
+      }
+    end
+  end
+
   desc "Update all dotslash files"
   task all: %i[
     age
@@ -258,6 +270,7 @@ namespace :dotslash do
     sops
     tree_sitter
     zizmor
+    zoxide
   ]
 end
 
