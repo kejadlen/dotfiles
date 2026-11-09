@@ -31,10 +31,9 @@ zstyle ':z4h:autosuggestions' forward-char 'accept'
 zstyle ':z4h:fzf-complete' recurse-dirs 'yes'
 zstyle ':z4h:fzf-complete' fzf-bindings tab:repeat
 
-# Enable direnv to automatically source .envrc files.
-zstyle ':z4h:direnv'         enable 'yes'
-# Show "loading" and "unloading" notifications from direnv.
-zstyle ':z4h:direnv:success' notify 'yes'
+# direnv is hooked at the end instead: z4h loads it during `z4h init`, so
+# leaving an .envrc dir restores a PATH missing everything added below.
+zstyle ':z4h:direnv' enable 'no'
 
 # Enable ('yes') or disable ('no') automatic teleportation of z4h over
 # SSH when connecting to these hosts.
@@ -261,5 +260,10 @@ setopt auto_menu  # require an extra TAB press to open the completion menu
 [[ ! -v functions[command_not_found_handler] ]] || unfunction command_not_found_handler
 
 for file in ~/.config/zsh/*(N); z4h source $file
+
+# Last, so direnv's unload snapshot includes every PATH edit above.
+if (( $+commands[direnv] )); then
+  eval "$(direnv hook zsh)"
+fi
 
 [ -z "$ZPROF" ] || zprof
