@@ -115,3 +115,15 @@ fn thorough_check(tc: TestCase) {
     // ...
 }
 ```
+
+## The engine and the lockfile
+
+By default, hegeltest's `build.rs` compiles its engine (`hegeltest-c`) in a nested `cargo build` of a generated shim crate. That build has its own `[workspace]`, no lockfile, and no `--locked` or `--offline`. The engine is therefore invisible to `Cargo.lock` and `cargo deny`, and the first build may need the network. In a repo that builds `--locked` or offline, enable `static-engine`:
+
+```toml
+hegeltest = { version = "*", default-features = false, features = ["static-engine"] }
+```
+
+That links the engine as an ordinary dependency, so it is locked and checked. The cost is that the engine's dependency tree joins your feature unification, and that can change type inference elsewhere. For example, its `PartialEq<serde_json::Value>` impl makes `assert_eq!(true, ...)` ambiguous. `HEGEL_C_LIB_DIR` points the default build at a prebuilt engine instead.
+
+cargo-deny's `exclude-dev = true` skips dev-only crates, hegeltest included, so a passing `cargo deny check` says nothing about them. Turn it off, or reach them through a feature that `all-features = true` enables.
