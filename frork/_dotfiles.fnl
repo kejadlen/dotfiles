@@ -1,11 +1,11 @@
 ;; Links are a map of ~/<dest> to ~/.dotfiles/<src>, so another entry point
 ;; (like a work machine's overlay repo) can reshape them before applying.
 (local {: ok :utils {: dirname}} (require :frork))
+(require :types)
 
 (local links (doto (collect [_ path (ipairs [:.config
                                              :.digrc
                                              :.gemrc
-                                             :.git_templates
                                              :.hammerspoon
                                              :.inputrc
                                              :.p10k.zsh
@@ -22,6 +22,9 @@
                (tset :.claude :ai/claude)
                (tset :.pi/agent :ai/pi)))
 
+;; Paths earlier versions of these links created, cleared on every machine.
+(local retired [:.git_templates])
+
 (fn apply [?links]
   (let [links (or ?links links)
         dests (icollect [dest (pairs links)] dest)
@@ -33,6 +36,8 @@
         (when (and (dest:match "/") (not (. dirs dir)))
           (tset dirs dir true)
           (ok :directory dir))
-        (ok :symlink path (.. :$HOME/.dotfiles/ (. links dest)))))))
+        (ok :symlink path (.. :$HOME/.dotfiles/ (. links dest)))))
+    (each [_ dest (ipairs retired)]
+      (ok :absent (.. :$HOME/ dest)))))
 
 {: links : apply}
