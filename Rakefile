@@ -222,6 +222,19 @@ namespace :dotslash do
     end
   end
 
+  desc "Update gh"
+  task(:gh) do
+    path = ->(asset) { "#{asset.delete_suffix(".tar.gz").delete_suffix(".zip")}/bin/gh" }
+    update_dotslash_release(name: "gh", repo: "cli/cli", path:) do |tag|
+      version = tag.delete_prefix("v")
+      {
+        "macos-aarch64" => "gh_#{version}_macOS_arm64.zip",
+        "linux-aarch64" => "gh_#{version}_linux_arm64.tar.gz",
+        "linux-x86_64" => "gh_#{version}_linux_amd64.tar.gz",
+      }
+    end
+  end
+
   desc "Update ranger"
   task(:ranger) do
     update_dotslash_release(name: "ranger", repo: "kejadlen/ranger") do
@@ -262,6 +275,7 @@ namespace :dotslash do
     cq
     fzf
     frork
+    gh
     jj
     jq
     just

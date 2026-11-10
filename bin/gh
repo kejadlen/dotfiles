@@ -4,16 +4,58 @@
   "name": "gh",
   "platforms": {
     "macos-aarch64": {
-      "size": 13118103,
+      "size": 14106091,
       "hash": "blake3",
-      "digest": "db14b88675c84e234d5b14741c7e533605221768db6ad2bcb989e9393eeaa040",
-      "format": "zip",
-      "path": "gh_2.87.3_macOS_arm64/bin/gh",
+      "digest": "5268724952e35144b9ddcb47464064e9a0f5db1754778ed3597df41e390a7b28",
+      "path": "gh_2.103.3_macOS_arm64/bin/gh",
       "providers": [
         {
-          "url": "https://github.com/cli/cli/releases/download/v2.87.3/gh_2.87.3_macOS_arm64.zip"
+          "url": "https://github.com/cli/cli/releases/download/v2.103.3/gh_2.103.3_macOS_arm64.zip"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/cli/cli",
+          "tag": "v2.103.3",
+          "name": "gh_2.103.3_macOS_arm64.zip"
         }
-      ]
+      ],
+      "format": "zip"
+    },
+    "linux-aarch64": {
+      "size": 13661485,
+      "hash": "blake3",
+      "digest": "13b616cc44d55a0d8d7f5f5d24f7907ce1873bd9e1c562dfbfd631b974588ed8",
+      "path": "gh_2.103.3_linux_arm64/bin/gh",
+      "providers": [
+        {
+          "url": "https://github.com/cli/cli/releases/download/v2.103.3/gh_2.103.3_linux_arm64.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/cli/cli",
+          "tag": "v2.103.3",
+          "name": "gh_2.103.3_linux_arm64.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-x86_64": {
+      "size": 15031972,
+      "hash": "blake3",
+      "digest": "09a8c86c1b3ba32c83c86bf84e58fe3dfeab6aa8fcca5d0489acf638db8ea192",
+      "path": "gh_2.103.3_linux_amd64/bin/gh",
+      "providers": [
+        {
+          "url": "https://github.com/cli/cli/releases/download/v2.103.3/gh_2.103.3_linux_amd64.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/cli/cli",
+          "tag": "v2.103.3",
+          "name": "gh_2.103.3_linux_amd64.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
     }
   }
 }
