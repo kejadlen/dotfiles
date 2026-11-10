@@ -14,6 +14,7 @@ private
 !.config/direnv
 !.config/fish
 !.config/git
+.config/git/config.macos
 !.config/ghostty
 !.config/glide
 !.config/herdr
