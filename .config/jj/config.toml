@@ -118,7 +118,7 @@ log = '''
 
 [template-aliases]
 'in_branch(commit)' = 'commit.contained_in("immutable_heads()..bookmarks()")'
-'is_private(commit)' = 'commit.description().starts_with("private:") || commit.description().contains("#private")'
+'is_private(commit)' = 'commit.description().starts_with("private:") || commit.description().contains("#private") || commit.local_bookmarks().any(|b| b.name() == "private")'
 
 [ui]
 default-command = "st"
@@ -165,7 +165,7 @@ git-sign-on-push = "~signed() & mine()"
 'trunk' = 'trunk()'
 
 'wip()' = 'description("wip:*")'
-'private()' = 'description("private:*") | description("*#private*")'
+'private()' = 'description("private:*") | description("*#private*") | bookmarks(exact:"private")'
 
 [aliases]
 accuse = ["file", "annotate"]
