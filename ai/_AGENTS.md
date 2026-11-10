@@ -139,6 +139,11 @@ Required skills for jj operations:
 
 Use `jj commit` to commit the current change, not `jj describe`.
 
+Before editing, run `jj st`. If a file you plan to touch already has
+changes you didn't make, another agent is probably mid-edit in the same
+working copy. Stop and suggest doing the work in a separate workspace
+(`jj-workspaces`) instead of editing alongside it.
+
 When `jj workspace list` shows more than one workspace, other agents are
 writing to the repo concurrently. Only rewrite `@`, and run `jj st` after a
 batch of file edits — jj snapshots the working copy only when a command
