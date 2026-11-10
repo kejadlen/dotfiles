@@ -2,7 +2,6 @@
 [user]
 	email = alpha@kejadlen.dev
 	name = Alpha Chen
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINCttH8nEfk1uZ2291P4mbCoNcHxnr9iNBlbZckykeZ8
 
 # remotes
 [fetch]
@@ -79,7 +78,6 @@
 	recurse = true
 [commit]
 	verbose = true
-	gpgsign = true
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
@@ -127,12 +125,6 @@
 [mergetool "kaleidoscope"]
 	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
-
-# signing commits with 1Password
-[gpg]
-	format = ssh
-[gpg "ssh"]
-	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [include]
 	path = ~/.gitconfig.local
