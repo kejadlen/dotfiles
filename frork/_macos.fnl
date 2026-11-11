@@ -49,9 +49,11 @@
 ;; version. Configure luarocks to find lua@5.4 and install fennel there
 ;; so Hammerspoon can require it.
 (sh! :luarocks :--lua-version=5.4 :--local :config :variables.LUA
-     :/opt/homebrew/opt/lua@5.4/bin/lua)
+     "/opt/homebrew/opt/lua@5.4/bin/lua")
+
 (sh! :luarocks :--lua-version=5.4 :--local :config :variables.LUA_DIR
-     :/opt/homebrew/opt/lua@5.4)
+     "/opt/homebrew/opt/lua@5.4")
+
 (sh! :luarocks :--lua-version=5.4 :--local :install :fennel)
 
 ;; TODO
