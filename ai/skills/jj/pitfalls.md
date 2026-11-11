@@ -70,10 +70,10 @@ matching entries for paths" and then does the operation on an empty set, so
 `jj commit <fileset>` produces an empty commit rather than failing:
 
 ```bash
-cd ~/src/gusto/gists/kejadlen                  # workspace root is ~/src/gusto/gists
-jj diff --git                                  # prints a/kejadlen/config/claude.json
-jj diff --stat kejadlen/config                 # WRONG — no matching entries
-jj diff --stat config                          # correct — relative to cwd
+cd ~/src/monorepo/app      # workspace root is ~/src/monorepo
+jj diff --git              # prints a/app/config/settings.json
+jj diff --stat app/config  # WRONG — no matching entries
+jj diff --stat config      # correct — relative to cwd
 ```
 
 `jj st` prints cwd-relative paths, so it's the safe place to copy from. Use
@@ -85,8 +85,8 @@ that doesn't exist there fails with "Failed to parse fileset: Invalid file
 pattern" — nothing about the real problem. Prefix it `root:` instead:
 
 ```bash
-jj -R ~/src/alpha/dotfiles diff 'root:"ai/skills/jj/SKILL.md"'   # correct
-jj -R ~/src/alpha/dotfiles diff ai/skills/jj/SKILL.md            # WRONG
+jj -R ~/src/git.kejadlen.dev/alpha/dotfiles diff 'root:"ai/skills/jj/SKILL.md"'   # correct
+jj -R ~/src/git.kejadlen.dev/alpha/dotfiles diff ai/skills/jj/SKILL.md            # WRONG
 ```
 
 jj's own hint says this ("Consider using root:...") but only when it can
