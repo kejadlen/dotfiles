@@ -1,4 +1,18 @@
-(local {: register :utils {: chomp : sh}} (require :frork))
+(local {: register :utils {: chomp : expand-path : sh : sh!}} (require :frork))
+
+;; Stand-in until frork implements `no`, which would cover this directly.
+;; Inverted: :missing means something is still at the path, so install deletes it.
+(register :absent
+          (let [resolve #(let [path (expand-path $1)
+                               home (expand-path :$HOME)]
+                           (when (or (= path "") (= path "/") (= path home)
+                                     (= path (.. home "/")))
+                             (error (.. "refusing to remove " path)))
+                           path)]
+            {:status #(let [(_ rc) (sh :sh :-c "test -e \"$1\" || test -L \"$1\""
+                                       :sh (resolve $1))]
+                        (if (= rc 0) :missing :ok))
+             :install #(sh! :rm :-rf (resolve $1))}))
 
 (register :defaults (let [defaults #(let [(output rc) (sh :defaults $...)]
                                       (values (chomp output) rc))]
