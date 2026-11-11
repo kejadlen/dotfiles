@@ -38,6 +38,10 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/no-envrc.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/no-sops.sh"
           }
         ]
       }
