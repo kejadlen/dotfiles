@@ -307,6 +307,12 @@ namespace :dotslash do
 end
 
 namespace :nix do
+  desc "Add the nix profile from flake.nix"
+  task :install do
+    sh "nix", "profile", "add", "#{__dir__}#profile"
+    Rake::Task["nix:apps"].invoke
+  end
+
   desc "Rebuild the nix profile from flake.nix"
   task :upgrade do
     sh "nix profile upgrade profile"

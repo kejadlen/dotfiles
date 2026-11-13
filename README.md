@@ -47,11 +47,11 @@ the [upstream installer][nix], then add the profile:
 [nix]: https://nixos.org/download/
 
 ```sh
-nix profile add ~/.dotfiles#profile
+rake nix:install
 ```
 
 After editing `flake.nix` or running `nix flake update`, apply the
-change with `nix profile upgrade profile`. `nix profile rollback`
+change with `rake nix:upgrade`. `nix profile rollback`
 returns to the previous generation.
 
 The flake only sees files that git tracks, and new files in a jj change
