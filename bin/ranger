@@ -4,37 +4,55 @@
   "name": "ranger",
   "platforms": {
     "macos-aarch64": {
-      "size": 3297723,
+      "size": 3297721,
       "hash": "blake3",
-      "digest": "de838954e25bd54dd44c39e51a6f02c72ee1d5ca91d9f614d28ef8fd439221e8",
+      "digest": "503715b71882d39fc366a9713344df8a0df5b3af1368ea839fcdaa1bd36f521b",
       "path": "ranger",
       "providers": [
         {
-          "url": "https://github.com/kejadlen/ranger/releases/download/v2026-11-04+875cca9/ranger-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/kejadlen/ranger/releases/download/v2026-11-13+057c887/ranger-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/kejadlen/ranger",
-          "tag": "v2026-11-04+875cca9",
+          "tag": "v2026-11-13+057c887",
           "name": "ranger-aarch64-apple-darwin.tar.gz"
         }
       ],
       "format": "tar.gz"
     },
     "linux-aarch64": {
-      "size": 3629972,
+      "size": 3630252,
       "hash": "blake3",
-      "digest": "2e8adc1b1c30f4ceba11fa6f55fabeb5f67517ef71dd4382a8f8f366ff0aa3f9",
+      "digest": "ffda35bfd6e56b51d59e27ad9da21f577bcc261b6f27faa0669e6809744d7858",
       "path": "ranger",
       "providers": [
         {
-          "url": "https://github.com/kejadlen/ranger/releases/download/v2026-11-04+875cca9/ranger-aarch64-unknown-linux-gnu.tar.gz"
+          "url": "https://github.com/kejadlen/ranger/releases/download/v2026-11-13+057c887/ranger-aarch64-unknown-linux-gnu.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/kejadlen/ranger",
-          "tag": "v2026-11-04+875cca9",
+          "tag": "v2026-11-13+057c887",
           "name": "ranger-aarch64-unknown-linux-gnu.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-x86_64": {
+      "size": 3659599,
+      "hash": "blake3",
+      "digest": "ade69f54c9d6a425aa97f7d61bad516a99a76de8cd356dfb4b10835d731bdad5",
+      "path": "ranger",
+      "providers": [
+        {
+          "url": "https://github.com/kejadlen/ranger/releases/download/v2026-11-13+057c887/ranger-x86_64-unknown-linux-gnu.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/kejadlen/ranger",
+          "tag": "v2026-11-13+057c887",
+          "name": "ranger-x86_64-unknown-linux-gnu.tar.gz"
         }
       ],
       "format": "tar.gz"

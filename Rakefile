@@ -206,7 +206,11 @@ namespace :dotslash do
   desc "Update ramekin"
   task(:ramekin) do
     update_dotslash_release(name: "ramekin", repo: "kejadlen/ramekin") do
-      { "macos-aarch64" => "ramekin-aarch64-apple-darwin.tar.gz" }
+      {
+        "macos-aarch64" => "ramekin-aarch64-apple-darwin.tar.gz",
+        "linux-aarch64" => "ramekin-aarch64-unknown-linux-musl.tar.gz",
+        "linux-x86_64" => "ramekin-x86_64-unknown-linux-musl.tar.gz",
+      }
     end
   end
 
@@ -241,6 +245,7 @@ namespace :dotslash do
       {
         "macos-aarch64" => "ranger-aarch64-apple-darwin.tar.gz",
         "linux-aarch64" => "ranger-aarch64-unknown-linux-gnu.tar.gz",
+        "linux-x86_64" => "ranger-x86_64-unknown-linux-gnu.tar.gz",
       }
     end
   end
@@ -268,6 +273,18 @@ namespace :dotslash do
     end
   end
 
+  desc "Update prime-agent"
+  task(:"prime-agent") do
+    update_dotslash_release(name: "prime-agent", repo: "PrimeIntellect-ai/prime-agent") do |tag|
+      version = tag.delete_prefix("v")
+      {
+        "macos-aarch64" => "prime-agent-#{version}-darwin-arm64.tar.gz",
+        "linux-aarch64" => "prime-agent-#{version}-linux-arm64.tar.gz",
+        "linux-x86_64" => "prime-agent-#{version}-linux-x64.tar.gz",
+      }
+    end
+  end
+
   desc "Update all dotslash files"
   task all: %i[
     age
@@ -279,6 +296,7 @@ namespace :dotslash do
     jj
     jq
     just
+    prime-agent
     ramekin
     ranger
     sops

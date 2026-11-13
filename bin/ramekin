@@ -4,19 +4,55 @@
   "name": "ramekin",
   "platforms": {
     "macos-aarch64": {
-      "size": 1317941,
+      "size": 1317850,
       "hash": "blake3",
-      "digest": "6736e25f095e1bfc792884a7eeee92f54b42420aa0505ed736713ab5e3cf256f",
+      "digest": "8548f48e5caa821f7728e878b7d4ddcc7d989f34a049dcd38720a63095a8014b",
       "path": "ramekin",
       "providers": [
         {
-          "url": "https://github.com/kejadlen/ramekin/releases/download/v2026-11-04+f9b012c/ramekin-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/kejadlen/ramekin/releases/download/v2026-11-13+b692a7f/ramekin-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/kejadlen/ramekin",
-          "tag": "v2026-11-04+f9b012c",
+          "tag": "v2026-11-13+b692a7f",
           "name": "ramekin-aarch64-apple-darwin.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-aarch64": {
+      "size": 1471035,
+      "hash": "blake3",
+      "digest": "de7eeacf061ec58ae1c4d0903687fb6db57bb1a12dadd5397a86cbcade053735",
+      "path": "ramekin",
+      "providers": [
+        {
+          "url": "https://github.com/kejadlen/ramekin/releases/download/v2026-11-13+b692a7f/ramekin-aarch64-unknown-linux-musl.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/kejadlen/ramekin",
+          "tag": "v2026-11-13+b692a7f",
+          "name": "ramekin-aarch64-unknown-linux-musl.tar.gz"
+        }
+      ],
+      "format": "tar.gz"
+    },
+    "linux-x86_64": {
+      "size": 1536051,
+      "hash": "blake3",
+      "digest": "1c2d3a5bbe3cc6b4422029ac4d949b2d654907fbd580c9b3c1b944da085224d3",
+      "path": "ramekin",
+      "providers": [
+        {
+          "url": "https://github.com/kejadlen/ramekin/releases/download/v2026-11-13+b692a7f/ramekin-x86_64-unknown-linux-musl.tar.gz"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/kejadlen/ramekin",
+          "tag": "v2026-11-13+b692a7f",
+          "name": "ramekin-x86_64-unknown-linux-musl.tar.gz"
         }
       ],
       "format": "tar.gz"
