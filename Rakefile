@@ -306,6 +306,19 @@ namespace :dotslash do
   ]
 end
 
+namespace :nix do
+  desc "Rebuild the nix profile from flake.nix"
+  task :upgrade do
+    sh "nix profile upgrade profile"
+  end
+
+  desc "Update flake.lock and rebuild the nix profile"
+  task :update do
+    sh "nix flake update"
+    Rake::Task["nix:upgrade"].invoke
+  end
+end
+
 desc "Upgrade neovim"
 task :upgrade_neovim do
   # fetch.prunetags fetches tags despite brew's --no-tags, so the moving
