@@ -59,5 +59,11 @@
           };
         }
       );
+
+      devShells = forAllSystems (system: {
+        default = nixpkgs.legacyPackages.${system}.mkShellNoCC {
+          packages = [ nixpkgs.legacyPackages.${system}.ruby_3_4 ];
+        };
+      });
     };
 }
