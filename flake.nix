@@ -50,6 +50,7 @@
               ]
               ++ lib.optionals stdenv.hostPlatform.isDarwin [
                 discord
+                omniwm
                 signal-desktop
                 slack
                 telegram-desktop
