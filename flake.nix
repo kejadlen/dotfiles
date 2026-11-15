@@ -18,24 +18,32 @@
       packages = forAllSystems (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "slack" ];
+          };
         in
         {
           profile = pkgs.buildEnv {
             name = "profile";
-            paths = with pkgs; [
-              # nix-direnv needs bash 4 or later.
-              bash
-              dotslash
-              entr
-              eza
-              git
-              neovim-nightly-overlay.packages.${system}.default
-              nix-direnv
-              sqlite
-              tmux
-              zsh
-            ];
+            paths =
+              with pkgs;
+              [
+                # nix-direnv needs bash 4 or later.
+                bash
+                dotslash
+                entr
+                eza
+                git
+                neovim-nightly-overlay.packages.${system}.default
+                nix-direnv
+                sqlite
+                tmux
+                zsh
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                slack
+              ];
           };
         }
       );
