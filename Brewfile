@@ -53,7 +53,6 @@ cask "keyboardcleantool"
 cask "obsidian"
 cask "orbstack"
 cask "sf-symbols"
-cask "zoom"
 
 cask "nikitabobko/tap/aerospace"
 

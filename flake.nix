@@ -20,7 +20,14 @@
         let
           pkgs = import nixpkgs {
             inherit system;
-            config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "slack" ];
+            config.allowUnfreePredicate =
+              pkg:
+              builtins.elem (nixpkgs.lib.getName pkg) [
+                "discord"
+                "slack"
+                "whatsapp-for-mac"
+                "zoom"
+              ];
           };
         in
         {
@@ -42,7 +49,12 @@
                 zsh
               ]
               ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                discord
+                signal-desktop
                 slack
+                telegram-desktop
+                whatsapp-for-mac
+                zoom-us
               ];
           };
         }
