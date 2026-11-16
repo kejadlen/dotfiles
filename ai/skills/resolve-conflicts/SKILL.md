@@ -70,6 +70,13 @@ jj abandon <commit ids of the /0 copies>           # commit IDs: change IDs are 
 Collect the `/0` commit IDs up front with `jj log --no-graph -r
 'trunk()..<tip>/0' -T 'commit_id.short() ++ "\n"'`.
 
+The reverse case also happens. Sometimes `/0` is the clean local copy, rebased onto the new
+trunk, and `/1` is the remote copy left on the old trunk. Then the tree diff
+shows every file trunk changed in between (217 files here). Compare the
+patches instead. When `jj interdiff --from <change>/1 --to <change>/0 --stat`
+is empty, keep the rebased copy: `jj bookmark set <bookmark> -r <commit id of
+/0>`, then abandon `/1` by commit ID.
+
 ## Step 1 — Pick the revision and the mechanism
 
 If `$ARGUMENTS` contains a change ID, use it as the conflicted revision.
