@@ -63,7 +63,7 @@
 
       devShells = forAllSystems (system: {
         default = nixpkgs.legacyPackages.${system}.mkShellNoCC {
-          packages = [ nixpkgs.legacyPackages.${system}.ruby_3_4 ];
+          packages = [ nixpkgs.legacyPackages.${system}.ruby_4_0 ];
         };
       });
     };
