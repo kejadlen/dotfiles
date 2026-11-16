@@ -1761,7 +1761,7 @@
     local magenta='%5F'
 
     ## jj_add
-    jj --at-operation=@ debug snapshot
+    jj --at-operation=@ util snapshot
 
 
     ## jj_at
@@ -1878,9 +1878,21 @@
   }
 
   source ~/.config/zsh/async.zsh
-  async_start_worker        jj_status_worker -u
-  async_unregister_callback jj_status_worker
-  async_register_callback   jj_status_worker jj_status_callback
+
+  # Refork when exports change, since the worker keeps the env it forked with.
+  typeset -g _jj_status_worker_env
+  function jj_status_sync_worker() {
+    emulate -L zsh
+    local name env
+    for name in ${${(ok)parameters[(R)*export*]}:#(PWD|OLDPWD)}; do
+      env+="$name=${(P)name}"$'\0'
+    done
+    [[ $env == $_jj_status_worker_env ]] && return
+    async_stop_worker       jj_status_worker
+    async_start_worker      jj_status_worker -u
+    async_register_callback jj_status_worker jj_status_callback
+    _jj_status_worker_env=$env
+  }
 
   function prompt_jj() {
     emulate -L zsh -o extended_glob
@@ -1889,6 +1901,7 @@
     typeset -g p10k_jj_status_stale=1 p10k_jj_status_updated=
     p10k segment -f grey -c '$p10k_jj_status_stale' -e -t '$p10k_jj_status'
     p10k segment -c '$p10k_jj_status_updated' -e -t '$p10k_jj_status'
+    jj_status_sync_worker
     async_job jj_status_worker jj_status $PWD
   }
 
