@@ -310,6 +310,21 @@ namespace :nix do
   desc "Rebuild the nix profile from flake.nix"
   task :upgrade do
     sh "nix profile upgrade profile"
+    Rake::Task["nix:apps"].invoke
+  end
+
+  # Store paths change on every upgrade and Spotlight skips symlinks, so
+  # launchers need real copies at a fixed path. If this gets annoying, go
+  # back to Homebrew casks for macOS apps.
+  desc "Copy nix profile apps into ~/Applications/Nix Apps"
+  task :apps do
+    src = File.expand_path("~/.nix-profile/Applications")
+    dest = File.expand_path("~/Applications/Nix Apps")
+    # Only the profile's links into the store are "unsafe"; links inside a
+    # bundle stay links, which keeps code signatures valid.
+    sh "rsync", "-a", "--copy-unsafe-links", "--delete", "#{src}/", "#{dest}/"
+    # Store files are read-only, so the next --delete would fail without this.
+    sh "chmod", "-R", "u+w", dest
   end
 
   desc "Update flake.lock and rebuild the nix profile"
