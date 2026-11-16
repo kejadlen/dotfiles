@@ -17,7 +17,8 @@
                       :Miniflux
                       :Phanpy
                       :Obsidian
-                      :Safari]
+                      :Safari
+                      :Tuna]
                :timeouts {:Fusion [:minute 30]
                           :Music [:hour 1]
                           :Raindrop [:minute 15]
