@@ -24,6 +24,7 @@ private
 !.config/nvim
 !.config/neovide
 !.config/nix
+!.config/omniwm
 !.config/pip
 !.config/ramekin
 .config/ramekin/agent
