@@ -296,11 +296,23 @@ namespace :dotslash do
     end
   end
 
+  desc "Update direnv"
+  task(:direnv) do
+    update_dotslash_release(name: "direnv", repo: "direnv/direnv") do
+      {
+        "macos-aarch64" => "direnv.darwin-arm64",
+        "linux-aarch64" => "direnv.linux-arm64",
+        "linux-x86_64" => "direnv.linux-amd64",
+      }
+    end
+  end
+
   desc "Update all dotslash files"
   task all: %i[
     age
     age-keygen
     cq
+    direnv
     fzf
     frork
     gh

@@ -4,13 +4,53 @@
   "name": "direnv",
   "platforms": {
     "macos-aarch64": {
-      "size": 7899154,
+      "size": 8106530,
       "hash": "blake3",
-      "digest": "c6eabcde5fbd389aa0f0ca2a3ded9be347ecf1b937794aa98738feccbdcef8b0",
+      "digest": "762e807af3df76da345c476e2789e2c5bffe831b675fe49599ca1f86feb88fe3",
       "path": "direnv",
       "providers": [
         {
-          "url": "https://github.com/direnv/direnv/releases/download/v2.37.1/direnv.darwin-arm64"
+          "url": "https://github.com/direnv/direnv/releases/download/v2.38.2/direnv.darwin-arm64"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/direnv/direnv",
+          "tag": "v2.38.2",
+          "name": "direnv.darwin-arm64"
+        }
+      ]
+    },
+    "linux-aarch64": {
+      "size": 7930018,
+      "hash": "blake3",
+      "digest": "de6c0106c102c4554c9885faefbf3a2428a91692371314dc87ee9e0e7573983e",
+      "path": "direnv",
+      "providers": [
+        {
+          "url": "https://github.com/direnv/direnv/releases/download/v2.38.2/direnv.linux-arm64"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/direnv/direnv",
+          "tag": "v2.38.2",
+          "name": "direnv.linux-arm64"
+        }
+      ]
+    },
+    "linux-x86_64": {
+      "size": 8548514,
+      "hash": "blake3",
+      "digest": "c988e182e6ddd175ce5ecf0f0e359077fa205f18e3a59ae76a14e7df35b060e5",
+      "path": "direnv",
+      "providers": [
+        {
+          "url": "https://github.com/direnv/direnv/releases/download/v2.38.2/direnv.linux-amd64"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/direnv/direnv",
+          "tag": "v2.38.2",
+          "name": "direnv.linux-amd64"
         }
       ]
     }
