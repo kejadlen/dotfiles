@@ -285,6 +285,17 @@ namespace :dotslash do
     end
   end
 
+  desc "Update yt-dlp"
+  task(:"yt-dlp") do
+    update_dotslash_release(name: "yt-dlp", repo: "yt-dlp/yt-dlp") do
+      {
+        "macos-aarch64" => "yt-dlp_macos",
+        "linux-aarch64" => "yt-dlp_musllinux_aarch64",
+        "linux-x86_64" => "yt-dlp_musllinux",
+      }
+    end
+  end
+
   desc "Update all dotslash files"
   task all: %i[
     age
@@ -301,6 +312,7 @@ namespace :dotslash do
     ranger
     sops
     tree_sitter
+    yt-dlp
     zizmor
     zoxide
   ]

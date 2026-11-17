@@ -4,13 +4,53 @@
   "name": "yt-dlp",
   "platforms": {
     "macos-aarch64": {
-      "size": 36744560,
+      "size": 37466304,
       "hash": "blake3",
-      "digest": "7b4308bb0f9f1e9d4919a86bfc756e96a6c9772a67fc5639344e4bf22782806a",
+      "digest": "bb3518f27222eacb73666e9fc771102b25aec73bcbdef9fb4d550f0961e26ff9",
       "path": "yt-dlp",
       "providers": [
         {
-          "url": "https://github.com/yt-dlp/yt-dlp/releases/download/2026.02.21/yt-dlp_macos"
+          "url": "https://github.com/yt-dlp/yt-dlp/releases/download/2026.10.26/yt-dlp_macos"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/yt-dlp/yt-dlp",
+          "tag": "2026.10.26",
+          "name": "yt-dlp_macos"
+        }
+      ]
+    },
+    "linux-aarch64": {
+      "size": 40524824,
+      "hash": "blake3",
+      "digest": "9a3c56aa0b44ca197fbe4d7c12b0149c7dc992cebc7fa8010b166919fda975d7",
+      "path": "yt-dlp",
+      "providers": [
+        {
+          "url": "https://github.com/yt-dlp/yt-dlp/releases/download/2026.10.26/yt-dlp_musllinux_aarch64"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/yt-dlp/yt-dlp",
+          "tag": "2026.10.26",
+          "name": "yt-dlp_musllinux_aarch64"
+        }
+      ]
+    },
+    "linux-x86_64": {
+      "size": 41225600,
+      "hash": "blake3",
+      "digest": "c8e86fb21acd8d3c6c86e3196221089c8bfc74cc974b8d04b2dd368acd4566b5",
+      "path": "yt-dlp",
+      "providers": [
+        {
+          "url": "https://github.com/yt-dlp/yt-dlp/releases/download/2026.10.26/yt-dlp_musllinux"
+        },
+        {
+          "type": "github-release",
+          "repo": "https://github.com/yt-dlp/yt-dlp",
+          "tag": "2026.10.26",
+          "name": "yt-dlp_musllinux"
         }
       ]
     }
