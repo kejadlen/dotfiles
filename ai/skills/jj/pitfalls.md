@@ -85,8 +85,8 @@ that doesn't exist there fails with "Failed to parse fileset: Invalid file
 pattern" — nothing about the real problem. Prefix it `root:` instead:
 
 ```bash
-jj -R ~/src/git.kejadlen.dev/alpha/dotfiles diff 'root:"ai/skills/jj/SKILL.md"'   # correct
-jj -R ~/src/git.kejadlen.dev/alpha/dotfiles diff ai/skills/jj/SKILL.md            # WRONG
+jj -R ~/.dotfiles diff 'root:"ai/skills/jj/SKILL.md"'   # correct
+jj -R ~/.dotfiles diff ai/skills/jj/SKILL.md            # WRONG
 ```
 
 jj's own hint says this ("Consider using root:...") but only when it can
