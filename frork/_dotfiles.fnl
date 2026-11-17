@@ -3,24 +3,42 @@
 (local {: ok :utils {: dirname}} (require :frork))
 (require :types)
 
-(local links (doto (collect [_ path (ipairs [:.config
-                                             :.digrc
-                                             :.gemrc
-                                             :.hammerspoon
-                                             :.inputrc
-                                             :.p10k.zsh
-                                             :.profile
-                                             :.ruby-version
-                                             :.ssh
-                                             :.zsh
-                                             :.zshenv
-                                             :.zshrc
-                                             :.bundle/config
-                                             :.cargo/config.toml])]
-                     path
-                     path)
-               (tset :.claude :ai/claude)
-               (tset :.pi/agent :ai/pi)))
+(local links (collect [_ path (ipairs [:.config
+                                       :.digrc
+                                       :.gemrc
+                                       :.hammerspoon
+                                       :.inputrc
+                                       :.p10k.zsh
+                                       :.profile
+                                       :.ruby-version
+                                       :.ssh
+                                       :.zsh
+                                       :.zshenv
+                                       :.zshrc
+                                       :.bundle/config
+                                       :.cargo/config.toml])]
+               path
+               path))
+
+;; Agents keep their state beside their config, so only the tracked entries
+;; link in and the rest stays a real directory outside the repo.
+(each [dest [src names] (pairs {:.claude [:ai/claude
+                                          [:CLAUDE.md
+                                           :hooks
+                                           :output-styles
+                                           :rules
+                                           :settings.json
+                                           :skills
+                                           :statusline.sh]]
+                                :.pi/agent [:ai/pi
+                                            [:AGENTS.md
+                                             :extensions
+                                             :git
+                                             :keybindings.json
+                                             :models.json
+                                             :settings.json]]})]
+  (each [_ name (ipairs names)]
+    (tset links (.. dest "/" name) (.. src "/" name))))
 
 ;; Paths earlier versions of these links created, cleared on every machine.
 (local retired [:.git_templates])
