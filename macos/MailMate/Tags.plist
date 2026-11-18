@@ -58,6 +58,18 @@
 			<key>shortDisplayName</key>
 			<string>💵</string>
 		</dict>
+		<dict>
+			<key>displayName</key>
+			<string>muted</string>
+		</dict>
+		<dict>
+			<key>displayName</key>
+			<string>debug</string>
+			<key>gmail</key>
+			<string>debug</string>
+			<key>shortDisplayName</key>
+			<string>🐛</string>
+		</dict>
 	</array>
 </dict>
 </plist>
