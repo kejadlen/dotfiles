@@ -1,6 +1,9 @@
 #!/bin/sh
 
 CALENDAR=
+# An untracked local.sh can set CALENDAR.
+# shellcheck source=/dev/null
+[ -f "$CONFIG_DIR/local.sh" ] && . "$CONFIG_DIR/local.sh"
 PIN_FILE="${TMPDIR}meetingbar_pin"
 
 if [ "$BUTTON" = "right" ]; then
