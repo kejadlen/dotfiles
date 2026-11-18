@@ -4,54 +4,54 @@
   "name": "frork",
   "platforms": {
     "macos-aarch64": {
-      "size": 1907015,
+      "size": 1907018,
       "hash": "blake3",
-      "digest": "92b450db77457b7e78d184caf326ae0daf4423dea038ed34e109badb588a3e0e",
+      "digest": "34f48f4246dad1e345528d7154b7edea864d5d652cdbafa0be82ddce9bc09a77",
       "path": "frork",
       "providers": [
         {
-          "url": "https://github.com/kejadlen/frork/releases/download/v2026-11-05+980fbea/frork-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/kejadlen/frork/releases/download/v2026-11-19+48d198f/frork-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/kejadlen/frork",
-          "tag": "v2026-11-05+980fbea",
+          "tag": "v2026-11-19+48d198f",
           "name": "frork-aarch64-apple-darwin.tar.gz"
         }
       ],
       "format": "tar.gz"
     },
     "linux-aarch64": {
-      "size": 2122210,
+      "size": 2123441,
       "hash": "blake3",
-      "digest": "770490235667d3f2d803debed35f4801535aaee7569b9841b5f139413f44b18e",
+      "digest": "340e08ef4defab5c8fcda5d5bd2d1a17070e2684413de9c4f8697953b36a5e7b",
       "path": "frork",
       "providers": [
         {
-          "url": "https://github.com/kejadlen/frork/releases/download/v2026-11-05+980fbea/frork-aarch64-unknown-linux-gnu.tar.gz"
+          "url": "https://github.com/kejadlen/frork/releases/download/v2026-11-19+48d198f/frork-aarch64-unknown-linux-gnu.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/kejadlen/frork",
-          "tag": "v2026-11-05+980fbea",
+          "tag": "v2026-11-19+48d198f",
           "name": "frork-aarch64-unknown-linux-gnu.tar.gz"
         }
       ],
       "format": "tar.gz"
     },
     "linux-x86_64": {
-      "size": 2144395,
+      "size": 2150858,
       "hash": "blake3",
-      "digest": "54209de74cbcd7ba30d10fb910b42175e8c56cedb9cf76537c8075e669c4fe67",
+      "digest": "51f71b3d40bb236e67dbd868dde391331c0937c992d0efdc8b93749479554f71",
       "path": "frork",
       "providers": [
         {
-          "url": "https://github.com/kejadlen/frork/releases/download/v2026-11-05+980fbea/frork-x86_64-unknown-linux-gnu.tar.gz"
+          "url": "https://github.com/kejadlen/frork/releases/download/v2026-11-19+48d198f/frork-x86_64-unknown-linux-gnu.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/kejadlen/frork",
-          "tag": "v2026-11-05+980fbea",
+          "tag": "v2026-11-19+48d198f",
           "name": "frork-x86_64-unknown-linux-gnu.tar.gz"
         }
       ],

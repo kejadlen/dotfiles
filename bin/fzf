@@ -4,55 +4,55 @@
   "name": "fzf",
   "platforms": {
     "macos-aarch64": {
-      "size": 2154490,
+      "size": 2157108,
       "hash": "blake3",
-      "digest": "84f2045e949078fac38a9b5cb1b0d8da7b3986646d9b9d91ea8aaf540c2895e4",
+      "digest": "b1098d3e154275bcef5d1c7386f6504ec30caf8472c472dd44613fedb05ff691",
       "path": "fzf",
       "providers": [
         {
-          "url": "https://github.com/junegunn/fzf/releases/download/v0.74.5/fzf-0.74.5-darwin_arm64.tar.gz"
+          "url": "https://github.com/junegunn/fzf/releases/download/v0.75.0/fzf-0.75.0-darwin_arm64.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/junegunn/fzf",
-          "tag": "v0.74.5",
-          "name": "fzf-0.74.5-darwin_arm64.tar.gz"
+          "tag": "v0.75.0",
+          "name": "fzf-0.75.0-darwin_arm64.tar.gz"
         }
       ],
       "format": "tar.gz"
     },
     "linux-aarch64": {
-      "size": 2078357,
+      "size": 2080077,
       "hash": "blake3",
-      "digest": "8c9f1b93a19ce6c6c9536bcdc585d943c09dd1b3b7a02029aa667725018bbc61",
+      "digest": "62e79e30678853f696fa437bfb4944198d8e38f10d30778cf36acbe5338fdf40",
       "path": "fzf",
       "providers": [
         {
-          "url": "https://github.com/junegunn/fzf/releases/download/v0.74.5/fzf-0.74.5-linux_arm64.tar.gz"
+          "url": "https://github.com/junegunn/fzf/releases/download/v0.75.0/fzf-0.75.0-linux_arm64.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/junegunn/fzf",
-          "tag": "v0.74.5",
-          "name": "fzf-0.74.5-linux_arm64.tar.gz"
+          "tag": "v0.75.0",
+          "name": "fzf-0.75.0-linux_arm64.tar.gz"
         }
       ],
       "format": "tar.gz"
     },
     "linux-x86_64": {
-      "size": 2291079,
+      "size": 2294235,
       "hash": "blake3",
-      "digest": "936969d1cb9feab256180ede9c5ca58bd8b9bcea261b5e5d3d840a4f41bf2ac4",
+      "digest": "ce7be001516f72fcc62ffa4f7982ccd5a0fb35039daf8cf0acb7fc6fbfa57586",
       "path": "fzf",
       "providers": [
         {
-          "url": "https://github.com/junegunn/fzf/releases/download/v0.74.5/fzf-0.74.5-linux_amd64.tar.gz"
+          "url": "https://github.com/junegunn/fzf/releases/download/v0.75.0/fzf-0.75.0-linux_amd64.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/junegunn/fzf",
-          "tag": "v0.74.5",
-          "name": "fzf-0.74.5-linux_amd64.tar.gz"
+          "tag": "v0.75.0",
+          "name": "fzf-0.75.0-linux_amd64.tar.gz"
         }
       ],
       "format": "tar.gz"

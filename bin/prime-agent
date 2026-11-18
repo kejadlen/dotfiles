@@ -4,55 +4,55 @@
   "name": "prime-agent",
   "platforms": {
     "macos-aarch64": {
-      "size": 22180942,
+      "size": 22535325,
       "hash": "blake3",
-      "digest": "e554b9e131c82765380cec6c6b0867fe621abd606f7427a662dc0f30340d8e15",
+      "digest": "18e4313ecd5a591f68ce7a5daa3bfdcffea67869de68bf42bce9f75268d88d10",
       "path": "prime-agent",
       "providers": [
         {
-          "url": "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v0.10.3/prime-agent-0.10.3-darwin-arm64.tar.gz"
+          "url": "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v0.10.5/prime-agent-0.10.5-darwin-arm64.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/PrimeIntellect-ai/prime-agent",
-          "tag": "v0.10.3",
-          "name": "prime-agent-0.10.3-darwin-arm64.tar.gz"
+          "tag": "v0.10.5",
+          "name": "prime-agent-0.10.5-darwin-arm64.tar.gz"
         }
       ],
       "format": "tar.gz"
     },
     "linux-aarch64": {
-      "size": 23158032,
+      "size": 23529707,
       "hash": "blake3",
-      "digest": "6e8842af77a8daf9c933ba76e9edb7b6c7a1358edcf9ec39a9ae6d59c36f618a",
+      "digest": "b79156fee4be85b900854465003b5801386bf0f0f2a81c19bae73cd5fe5f890f",
       "path": "prime-agent",
       "providers": [
         {
-          "url": "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v0.10.3/prime-agent-0.10.3-linux-arm64.tar.gz"
+          "url": "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v0.10.5/prime-agent-0.10.5-linux-arm64.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/PrimeIntellect-ai/prime-agent",
-          "tag": "v0.10.3",
-          "name": "prime-agent-0.10.3-linux-arm64.tar.gz"
+          "tag": "v0.10.5",
+          "name": "prime-agent-0.10.5-linux-arm64.tar.gz"
         }
       ],
       "format": "tar.gz"
     },
     "linux-x86_64": {
-      "size": 22952649,
+      "size": 23421893,
       "hash": "blake3",
-      "digest": "7bf4ee67d9a2b1e7a8c4d4b3efe36455732620fa777147d1a43f8ee8930fb712",
+      "digest": "a8d4f1b61904d8ab4c9b09a805f7ccfa1fe3add60c727268421d59e4d33deb01",
       "path": "prime-agent",
       "providers": [
         {
-          "url": "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v0.10.3/prime-agent-0.10.3-linux-x64.tar.gz"
+          "url": "https://github.com/PrimeIntellect-ai/prime-agent/releases/download/v0.10.5/prime-agent-0.10.5-linux-x64.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/PrimeIntellect-ai/prime-agent",
-          "tag": "v0.10.3",
-          "name": "prime-agent-0.10.3-linux-x64.tar.gz"
+          "tag": "v0.10.5",
+          "name": "prime-agent-0.10.5-linux-x64.tar.gz"
         }
       ],
       "format": "tar.gz"

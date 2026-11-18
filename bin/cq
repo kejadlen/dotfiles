@@ -4,55 +4,55 @@
   "name": "cq",
   "platforms": {
     "macos-aarch64": {
-      "size": 13045210,
+      "size": 13152354,
       "hash": "blake3",
-      "digest": "c7cc03f951aa895bd466a34aa53e429ed8cf3927bc5ba7e38934af01bb3bbe66",
-      "path": "cq-0.11.0-aarch64-apple-darwin/cq",
+      "digest": "c4e322971de29fc4dbfbb39003b107a7200e1c56afb3076fb4fab83d9b58b4c8",
+      "path": "cq-0.11.2-aarch64-apple-darwin/cq",
       "providers": [
         {
-          "url": "https://github.com/technicalpickles/cq/releases/download/v0.11.0/cq-0.11.0-aarch64-apple-darwin.tar.gz"
+          "url": "https://github.com/technicalpickles/cq/releases/download/v0.11.2/cq-0.11.2-aarch64-apple-darwin.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/technicalpickles/cq",
-          "tag": "v0.11.0",
-          "name": "cq-0.11.0-aarch64-apple-darwin.tar.gz"
+          "tag": "v0.11.2",
+          "name": "cq-0.11.2-aarch64-apple-darwin.tar.gz"
         }
       ],
       "format": "tar.gz"
     },
     "linux-aarch64": {
-      "size": 15371459,
+      "size": 15490581,
       "hash": "blake3",
-      "digest": "0018307132bcb9909b42b7b75df0c02dbda068d35a2bc95eaa761f116d76e0b1",
-      "path": "cq-0.11.0-aarch64-unknown-linux-gnu/cq",
+      "digest": "b5a10b1e3a3e29003d97ed43d5ae73fb825784a44fb3f5a35547074d3b137d42",
+      "path": "cq-0.11.2-aarch64-unknown-linux-gnu/cq",
       "providers": [
         {
-          "url": "https://github.com/technicalpickles/cq/releases/download/v0.11.0/cq-0.11.0-aarch64-unknown-linux-gnu.tar.gz"
+          "url": "https://github.com/technicalpickles/cq/releases/download/v0.11.2/cq-0.11.2-aarch64-unknown-linux-gnu.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/technicalpickles/cq",
-          "tag": "v0.11.0",
-          "name": "cq-0.11.0-aarch64-unknown-linux-gnu.tar.gz"
+          "tag": "v0.11.2",
+          "name": "cq-0.11.2-aarch64-unknown-linux-gnu.tar.gz"
         }
       ],
       "format": "tar.gz"
     },
     "linux-x86_64": {
-      "size": 16405976,
+      "size": 16554078,
       "hash": "blake3",
-      "digest": "2692833967c593e04daeb77b683d6ac51c26aebe94513a19dd478011bb276b4e",
-      "path": "cq-0.11.0-x86_64-unknown-linux-gnu/cq",
+      "digest": "af293c3b35b28041c011f07472c6880ac891c01954c4bec8190c9e9bc1d5fe97",
+      "path": "cq-0.11.2-x86_64-unknown-linux-gnu/cq",
       "providers": [
         {
-          "url": "https://github.com/technicalpickles/cq/releases/download/v0.11.0/cq-0.11.0-x86_64-unknown-linux-gnu.tar.gz"
+          "url": "https://github.com/technicalpickles/cq/releases/download/v0.11.2/cq-0.11.2-x86_64-unknown-linux-gnu.tar.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/technicalpickles/cq",
-          "tag": "v0.11.0",
-          "name": "cq-0.11.0-x86_64-unknown-linux-gnu.tar.gz"
+          "tag": "v0.11.2",
+          "name": "cq-0.11.2-x86_64-unknown-linux-gnu.tar.gz"
         }
       ],
       "format": "tar.gz"

@@ -4,54 +4,54 @@
   "name": "tree-sitter",
   "platforms": {
     "macos-aarch64": {
-      "size": 7372537,
+      "size": 7369532,
       "hash": "blake3",
-      "digest": "8a4f7bf32403b0feddb4f77789f0aeefb9fc17f859febf5372908d996e0d7a1a",
+      "digest": "724fde4a36a03a48fd8d421f14123e977940bb4d8d95c1cb3a73a925ba7bfa1b",
       "path": "tree-sitter",
       "providers": [
         {
-          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.1/tree-sitter-macos-arm64.gz"
+          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.2/tree-sitter-macos-arm64.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/tree-sitter/tree-sitter",
-          "tag": "v0.27.1",
+          "tag": "v0.27.2",
           "name": "tree-sitter-macos-arm64.gz"
         }
       ],
       "format": "gz"
     },
     "linux-aarch64": {
-      "size": 8102735,
+      "size": 8120439,
       "hash": "blake3",
-      "digest": "bdec51bb51e5300127f9c08bc8eb26c6946360136e4c14ee3a8b09255b2258ed",
+      "digest": "27843f9ca8790fa72abc223542da46a1c0a3be96415da16fbe3df19ce8880a0a",
       "path": "tree-sitter",
       "providers": [
         {
-          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.1/tree-sitter-linux-arm64.gz"
+          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.2/tree-sitter-linux-arm64.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/tree-sitter/tree-sitter",
-          "tag": "v0.27.1",
+          "tag": "v0.27.2",
           "name": "tree-sitter-linux-arm64.gz"
         }
       ],
       "format": "gz"
     },
     "linux-x86_64": {
-      "size": 8702418,
+      "size": 8714728,
       "hash": "blake3",
-      "digest": "ce36adfd68a41d37d97c2f7a9c9d73ea0382719b651a167e0c2365bafcf07bdb",
+      "digest": "4b90d14b58104c1dcd7598dfd2a8494241092dbab54ef1cd1c241301c10e55bc",
       "path": "tree-sitter",
       "providers": [
         {
-          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.1/tree-sitter-linux-x64.gz"
+          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.27.2/tree-sitter-linux-x64.gz"
         },
         {
           "type": "github-release",
           "repo": "https://github.com/tree-sitter/tree-sitter",
-          "tag": "v0.27.1",
+          "tag": "v0.27.2",
           "name": "tree-sitter-linux-x64.gz"
         }
       ],
