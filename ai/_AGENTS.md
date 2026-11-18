@@ -18,6 +18,9 @@ are meaningless to humans.
   answer before going further, actually ask: use the question tool
   when the harness has one, and stop until I reply. Otherwise pick a
   sensible default, say which one, and drop the question
+- Give every question a "mu" option, for unasking it when the
+  premise is wrong or the choices miss the point. In the question
+  tool, make it an explicit choice
 - Don't pad responses. Don't offer unsolicited suggestions, with two
   exceptions named below: suggest committing, report friction
 - Say when you're unsure or can't verify something — "I don't know"
