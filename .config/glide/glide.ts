@@ -42,6 +42,11 @@ function listen<T extends (...args: any[]) => any, P extends unknown[]>(
 // utils.glide.ts fills in the rest once it's included.
 glide.g["dev.kejadlen"] = { listen } as DevKejadlen;
 
+// Set before local.glide.ts loads, so it can turn the redirect off and
+// removing that override turns it back on.
+const REDDIT_REDIRECT_PREF = "dev.kejadlen.reddit_redirect";
+glide.prefs.set(REDDIT_REDIRECT_PREF, true);
+
 glide.include("hints.glide.ts");
 glide.include("pihole.glide.ts");
 glide.include("splits.glide.ts");
@@ -155,6 +160,8 @@ async function moveToContainer(
 listen(
   browser.webRequest.onBeforeRequest,
   (details) => {
+    if (glide.prefs.get(REDDIT_REDIRECT_PREF) === false) return;
+
     const url = new URL(details.url);
 
     // old reddit doesn't serve /media paths
