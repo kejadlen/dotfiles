@@ -34,6 +34,12 @@
                           :zoom.us [:hour 1]}
                :default [:minute 5]})
 
+(let [{: keep : timeouts} (or (. (require :overrides) :quitter) {})]
+  (each [_ app-name (ipairs (or keep []))]
+    (table.insert config.keep app-name))
+  (each [app-name timeout (pairs (or timeouts {}))]
+    (tset config.timeouts app-name timeout)))
+
 (fn kill-delay [app-name]
   (let [[interval count] (or (?. config.timeouts app-name) config.default)
         seconds (. {:minute 60 :hour (* 60 60)} interval)]

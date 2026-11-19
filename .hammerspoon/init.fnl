@@ -3,7 +3,6 @@
 (local {: eventtap
         : execute
         :fnutils {: map}
-        : fs
         : hotkey
         : loadSpoon
         : logger
@@ -23,6 +22,7 @@
 (local {: mash : smash : modal-bind} (require :hotkey))
 (local {: chomp : debounce : paste : replace-selection : run} (require :utils))
 (local little-ff (require :little-ff))
+(local overrides (require :overrides))
 
 ;; debugging
 ; (hotkey.bind mash :d #(little-ff.open "https://google.com"))
@@ -136,8 +136,11 @@
       safari-patterns (icollect [_ domain (ipairs safari-domains)]
                         (.. "^https://(.*%.?)" (string.gsub domain "%." "%%.")
                             "/?"))
-      url-patterns [["^https://(.*%.?)zoom.us/j/%d+" handlers.zoom]
-                    [safari-patterns handlers.safari]]
+      url-patterns (doto (icollect [_ p (ipairs (or overrides.url-patterns []))]
+                           p)
+                     (table.insert ["^https://(.*%.?)zoom.us/./%d+"
+                                    handlers.zoom])
+                     (table.insert [safari-patterns handlers.safari]))
       url-redir-decoders [[:trurl-sanitize #(sanitize-url $4) nil true]
                           [:reddit "://www%.reddit%.com" "://old.reddit.com"]]]
   (Install:andUse :URLDispatcher {:config {:url_patterns url-patterns
@@ -147,10 +150,6 @@
                                   :start true}))
 
 (Install:andUse :ReloadConfiguration {:start true})
-
-;; Local overrides
-(when (fs.attributes :local.fnl)
-  (require :local))
 
 (let [n (notify.new {:title :Hammerspoon
                      :informativeText "Config loaded"
