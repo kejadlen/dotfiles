@@ -5,6 +5,11 @@ CALENDAR=
 # shellcheck source=/dev/null
 [ -f "$CONFIG_DIR/local.sh" ] && . "$CONFIG_DIR/local.sh"
 
+if [ -z "$CALENDAR" ]; then
+    sketchybar --set "$NAME" drawing=off
+    exit 0
+fi
+
 # On failure the swift script prints nothing, so jq emits no output and the
 # `//` default never fires — leaving a blank label that looks like a working
 # plugin with no meetings. Surface it instead; stderr lands in sketchybar's log.
