@@ -67,7 +67,9 @@ main() {
         return 1
     fi
 
-    echo "$email"
+    printf '%s' "$email" | pbcopy
+
+    echo "$email (in paste buffer)"
 }
 
 main "$@"
