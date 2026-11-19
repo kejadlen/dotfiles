@@ -20,6 +20,11 @@
                path
                path))
 
+;; 1Password's agent config has no include, so a machine swaps the whole file
+;; by dropping this link and pointing agent.toml somewhere else.
+(tset links :.config/1Password/ssh/agent.toml
+      :.config/1Password/ssh/agent.default.toml)
+
 ;; Agents keep their state beside their config, so only the tracked entries
 ;; link in and the rest stays a real directory outside the repo.
 (each [dest [src names] (pairs {:.claude [:ai/claude
