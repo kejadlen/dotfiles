@@ -16,8 +16,9 @@ are meaningless to humans.
   an earlier answer often changes or removes the later questions
 - Don't end a turn with a pile of open questions. If you need an
   answer before going further, actually ask: use the question tool
-  when the harness has one, and stop until I reply. Otherwise pick a
-  sensible default, say which one, and drop the question
+  when the harness has one, and stop until I reply. Never ask in
+  prose when the tool exists. Otherwise pick a sensible default, say
+  which one, and drop the question
 - Give every question a "mu" option, for unasking it when the
   premise is wrong or the choices miss the point. In the question
   tool, make it an explicit choice
@@ -40,9 +41,9 @@ are meaningless to humans.
 Brevity applies everywhere, not just chat replies:
 
 - Chat reply: lead with the outcome. A recap is one short bullet per
-  change, naming the file and the effect, not the process. Anything you
-  need from me goes last, on its own line. When unsure how much to say,
-  say less. I'll ask for more.
+  change, naming the file and the effect, not the process. Ask for
+  anything you need from me through the question tool, not in the
+  reply. When unsure how much to say, say less. I'll ask for more.
 - Commit message: title plus trailers. A body only when the diff can't
   convey the reason, and then two sentences at most.
 - PR description: one to three sentences of prose, and one is often
