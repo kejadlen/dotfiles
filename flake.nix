@@ -23,6 +23,7 @@
             config.allowUnfreePredicate =
               pkg:
               builtins.elem (nixpkgs.lib.getName pkg) [
+                "claude-code"
                 "discord"
                 "slack"
                 "whatsapp-for-mac"
@@ -38,12 +39,14 @@
               [
                 # nix-direnv needs bash 4 or later.
                 bash
+                claude-code
                 dotslash
                 entr
                 eza
                 git
                 neovim-nightly-overlay.packages.${system}.default
                 nix-direnv
+                pi-coding-agent
                 sqlite
                 tmux
                 zsh
