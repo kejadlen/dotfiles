@@ -148,68 +148,113 @@ the `#![cfg_attr(test, allow(...))]` panic-lint exemption from
 
 ## Release
 
-CalVer (`YYYY-MM-DD+SHORT_SHA`) with automatic releases on green
-main builds. Wire `<NAME>_VERSION` via `build.rs` — see
-`versioning.md`.
+CalVer (`YYYY-MM-DD-HHMM+SHORT_SHA`, UTC) with automatic releases on
+green main builds. `HHMM` keeps tags unique across several pushes in a
+day. Wire `<NAME>_VERSION` via `build.rs` — see `versioning.md`.
+
+Release is a reusable workflow that CI calls once its checks pass on a
+push to main:
+
+```yaml
+# .github/workflows/ci.yml, after the check jobs
+  release:
+    needs: [zizmor, checks]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write # create the release.
+    uses: $/.github/workflows/release.yml
+```
+
+Don't trigger it with `workflow_run` instead. zizmor fails it as a
+dangerous trigger, `github.sha` there is main's tip rather than the
+commit CI tested, and its `branches` filter also matches a fork PR's
+branch named `main`. `$/` is GitHub's self-repository syntax; zizmor's
+`self-repository` audit flags `./`.
 
 ```yaml
 # .github/workflows/release.yml
 name: Release
 
 on:
+  workflow_call:
   workflow_dispatch:
-  workflow_run:
-    workflows: [CI]
-    types: [completed]
-    branches: [main]
 
 permissions: {}
 
 jobs:
-  build:
-    if: >-
-      github.event_name == 'workflow_dispatch'
-      || github.event.workflow_run.conclusion == 'success'
-    runs-on: macos-latest
-    permissions:
-      contents: write # create GitHub release
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: actions/checkout@SHA # v4
-        with:
-          persist-credentials: false
-
+      # One job stamps the time so every matrix build agrees on it.
       - name: Calculate version
         id: version
-        run: |
-          CALVER=$(date -u +"%Y-%m-%d")
-          SHORT_SHA="${GITHUB_SHA::7}"
-          echo "version=${CALVER}+${SHORT_SHA}" >> $GITHUB_OUTPUT
+        run: echo "version=$(date -u +%Y-%m-%d-%H%M)+${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
+  build:
+    needs: version
+    strategy:
+      matrix:
+        include:
+          - target: aarch64-apple-darwin
+            runs-on: macos-latest
+          # musl links statically, so the binary doesn't depend on the runner's glibc.
+          - target: x86_64-unknown-linux-musl
+            runs-on: ubuntu-latest
+          - target: aarch64-unknown-linux-musl
+            runs-on: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runs-on }}
+    permissions:
+      contents: read # checkout.
+    steps:
+      - uses: actions/checkout@SHA # v6
+        with:
+          persist-credentials: false
       - name: Build
         run: |
-          <NAME>_VERSION="${STEPS_VERSION_OUTPUTS_VERSION}" cargo build --release
-          tar -czf <name>-aarch64-apple-darwin.tar.gz -C target/release <name>
+          rustup target add "${TARGET}"
+          cargo build --release --locked --target "${TARGET}"
+          tar -czf "<name>-${TARGET}.tar.gz" -C "target/${TARGET}/release" <name>
         env:
-          STEPS_VERSION_OUTPUTS_VERSION: ${{ steps.version.outputs.version }}
+          TARGET: ${{ matrix.target }}
+          <NAME>_VERSION: ${{ needs.version.outputs.version }}
+      - uses: actions/upload-artifact@SHA # v7
+        with:
+          name: <name>-${{ matrix.target }}
+          path: <name>-${{ matrix.target }}.tar.gz
+          if-no-files-found: error
 
+  publish:
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the release.
+    steps:
+      - uses: actions/download-artifact@SHA # v8
+        with:
+          # The run's artifacts include any CI uploaded.
+          pattern: <name>-*
+          merge-multiple: true
       - name: Publish
         run: |
-          VERSION="${STEPS_VERSION_OUTPUTS_VERSION}"
           gh release create "v${VERSION}" \
+            --repo "${GITHUB_REPOSITORY}" \
             --title "v${VERSION}" \
             --generate-notes \
             --target "${GITHUB_SHA}" \
-            <name>-aarch64-apple-darwin.tar.gz
+            <name>-*.tar.gz
         env:
           GH_TOKEN: ${{ github.token }}
-          STEPS_VERSION_OUTPUTS_VERSION: ${{ steps.version.outputs.version }}
+          VERSION: ${{ needs.version.outputs.version }}
 ```
 
-Adjust `runs-on` and archive name for target platform. Add matrix
-builds for cross-platform.
+When a dependency compiles C through `cc` (check with
+`cargo tree -e build -i cc`), add `sudo apt-get install -y
+musl-tools` on the Linux runners so a musl-targeting compiler exists.
 
-The build job exposes `outputs.version` so downstream jobs can
-reference the tag.
+Publishing in its own job means a failed build leaves no partial
+release. `gh` needs `--repo` because the publish job has no checkout.
 
 ### DotSlash
 
@@ -226,6 +271,14 @@ file and a second job to the release workflow.
         "macos-aarch64": {
           "regex": "^<name>-aarch64-apple-darwin\\.tar\\.gz$",
           "path": "<name>"
+        },
+        "linux-x86_64": {
+          "regex": "^<name>-x86_64-unknown-linux-musl\\.tar\\.gz$",
+          "path": "<name>"
+        },
+        "linux-aarch64": {
+          "regex": "^<name>-aarch64-unknown-linux-musl\\.tar\\.gz$",
+          "path": "<name>"
         }
       }
     }
@@ -233,27 +286,25 @@ file and a second job to the release workflow.
 }
 ```
 
-Add a `dotslash` job to `release.yml` after the build job:
+Add a `dotslash` job to `release.yml` after the publish job:
 
 ```yaml
   dotslash:
-    needs: build
+    needs: [version, publish]
     runs-on: ubuntu-latest
     permissions:
-      contents: write # upload release assets
+      contents: write # upload release assets.
     steps:
-      - uses: actions/checkout@SHA # v4
-        with:
-          persist-credentials: false
-
-      - name: Generate DotSlash file
-        uses: facebook/dotslash-publish-release@SHA # v1
+      - uses: facebook/dotslash-publish-release@SHA # v2
         with:
           config: .github/dotslash-config.json
-          tag: v${{ needs.build.outputs.version }}
+          tag: v${{ needs.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
 ```
+
+The job needs no checkout: the action fetches its config through the
+API at `GITHUB_SHA` and calls `gh` with `--repo`.
 
 This attaches a `<name>` DotSlash file to the release. Users download
 it, make it executable, and the binary self-updates from GitHub
