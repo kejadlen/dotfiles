@@ -1,6 +1,5 @@
 monitorBarOverrides = []
 monitorDwindleOverrides = []
-monitorGapOverrides = []
 monitorNiriOverrides = []
 monitorOrientationOverrides = []
 schemaVersion = 4
@@ -110,6 +109,20 @@ enabled = true
 hiddenBundleIDs = []
 rehideIntervalSeconds = 5.0
 
+[monitors]
+
+[[monitors.ranking]]
+displayUUID = "E4415FFB-C0CF-4CDE-ACF9-3429024FD643"
+name = "LG Ultra HD"
+
+[[monitors.ranking]]
+displayUUID = "EB27B755-C9B5-480D-9611-FD4965C53D95"
+name = "HP Z27"
+
+[[monitors.ranking]]
+displayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+name = "Built-in Retina Display"
+
 [mouseWarp]
 constrainToArrangement = false
 enabled = true
@@ -171,8 +184,28 @@ position = "center"
 widthPercent = 50.0
 
 [routing]
-arrangements = []
-mode = "macOS"
+mode = "custom"
+
+[[routing.arrangements]]
+id = "6A7A885E-28E2-4BB4-9348-DB901BA42ABD"
+
+[[routing.arrangements.monitors]]
+gridColumn = 1
+gridRow = 0
+monitorDisplayUUID = "E4415FFB-C0CF-4CDE-ACF9-3429024FD643"
+monitorName = "LG Ultra HD"
+
+[[routing.arrangements.monitors]]
+gridColumn = 2
+gridRow = 0
+monitorDisplayUUID = "EB27B755-C9B5-480D-9611-FD4965C53D95"
+monitorName = "HP Z27"
+
+[[routing.arrangements.monitors]]
+gridColumn = 0
+gridRow = 0
+monitorDisplayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+monitorName = "Built-in Retina Display"
 
 [scratchpads]
 
@@ -1082,13 +1115,23 @@ id = "toggleOverview"
 binding = "Unassigned"
 id = "toggleSystemStats"
 
+[[monitorGapOverrides]]
+id = "44EB8CB7-4DFC-422D-99E4-11A89244817E"
+monitorDisplayUUID = "E4415FFB-C0CF-4CDE-ACF9-3429024FD643"
+monitorName = "LG Ultra HD"
+outerGapTop = 45.0
+
 [[workspaces]]
 id = "AD36F001-C57E-41A5-AC1D-DF5249D007F0"
 layoutType = "niri"
 name = "1"
 
 [workspaces.monitorAssignment]
-type = "main"
+type = "specificDisplay"
+
+[workspaces.monitorAssignment.output]
+displayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+name = "Built-in Retina Display"
 
 [[workspaces]]
 id = "454CECD4-5E9D-4ED1-95D7-979D48817F5F"
@@ -1104,7 +1147,11 @@ layoutType = "niri"
 name = "3"
 
 [workspaces.monitorAssignment]
-type = "main"
+type = "specificDisplay"
+
+[workspaces.monitorAssignment.output]
+displayUUID = "EB27B755-C9B5-480D-9611-FD4965C53D95"
+name = "HP Z27"
 
 [[workspaces]]
 id = "A4A9DC07-97A5-4E2F-816C-AC68D7001C2E"
