@@ -54,8 +54,6 @@ cask "obsidian"
 cask "orbstack"
 cask "sf-symbols"
 
-cask "nikitabobko/tap/aerospace"
-
 # TODO Don't assume shared Apple accounts
 # mas "1Password for Safari", id: 1569813296
 # mas "GoodNotes", id: 1444383602

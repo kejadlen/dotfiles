@@ -71,7 +71,7 @@ frork needs two changes to run on Linux:
   without `_macos`.
 
 On Linux, the `~/.config` link also brings along Mac-only directories
-like `aerospace` and `sketchybar`. Nothing reads them there, so they
+like `omniwm` and `sketchybar`. Nothing reads them there, so they
 aren't worth splitting out.
 
 ## Packages from nix

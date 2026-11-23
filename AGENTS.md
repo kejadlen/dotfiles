@@ -6,7 +6,7 @@ This is a macOS dotfiles repo managed with [jj](https://martinvonz.github.io/jj/
 
 Key directories:
 
-- `.config/` — app configs (aerospace, ghostty, nvim, jj, etc.)
+- `.config/` — app configs (omniwm, ghostty, nvim, jj, etc.)
 - `.hammerspoon/` — Hammerspoon config in Fennel (`.fnl` files compiled to Lua)
 - `ai/claude/` — Claude Code config: `CLAUDE.md`, `rules/`, settings, and hooks (symlinked in as `~/.claude`)
 - `ai/pi/` — pi agent settings and extensions (symlinked in as `~/.pi/agent`)

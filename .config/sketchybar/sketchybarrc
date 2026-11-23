@@ -35,34 +35,6 @@ default=(
 )
 sketchybar --default "${default[@]}"
 
-### Aerospace
-
-sketchybar --add event aerospace_workspace_change
-
-if command -v aerospace >/dev/null 2>&1; then
-    aerospace list-monitors 2>/dev/null | while IFS= read -r monitor; do
-        monitor_id=$(echo "$monitor" | awk '{print $1}')
-        item_name="aerospace_$monitor_id"
-
-        initial_workspace=$(aerospace list-workspaces --monitor $monitor_id --focused 2>/dev/null)
-
-        sketchybar --add item $item_name left \
-            --subscribe $item_name aerospace_workspace_change \
-            --set $item_name \
-            label="$initial_workspace" \
-            icon.drawing=off \
-            background.color=0xffcccccc \
-            background.border_color=0xffcccccc \
-            background.corner_radius=6 \
-            background.height=26 \
-            label.padding_left=8 \
-            label.padding_right=8 \
-            padding_left=3 \
-            padding_right=3 \
-            script="$CONFIG_DIR/plugins/aerospace.sh"
-    done
-fi
-
 ##### Adding Left Items #####
 # We add some regular items to the left side of the bar, where
 # only the properties deviating from the current defaults need to be set
