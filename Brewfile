@@ -16,6 +16,7 @@ brew "syncthing", restart_service: :changed
 brew "terraform"
 brew "trurl"
 brew "ykman"
+brew "yq"
 brew "z3"
 
 ## editor things
@@ -37,6 +38,7 @@ brew "universal-ctags", args: ["HEAD"] # don't remember why this is installing f
 brew "felixkratz/formulae/sketchybar"
 
 cask "font-sauce-code-pro-nerd-font"
+cask "font-sketchybar-app-font"
 cask "font-source-code-pro"
 cask "font-symbols-only-nerd-font"
 

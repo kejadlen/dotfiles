@@ -35,6 +35,15 @@ default=(
 )
 sketchybar --default "${default[@]}"
 
+### Workspaces
+
+# Hammerspoon triggers omniwm_workspace_change from `omniwmctl watch`. This
+# hidden item only runs the script, which adds the workspace items after it.
+sketchybar --add event omniwm_workspace_change \
+           --add item workspaces left \
+           --set workspaces drawing=off updates=on script="$PLUGIN_DIR/workspaces.sh" \
+           --subscribe workspaces omniwm_workspace_change system_woke
+
 ##### Adding Left Items #####
 # We add some regular items to the left side of the bar, where
 # only the properties deviating from the current defaults need to be set

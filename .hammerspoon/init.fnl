@@ -67,6 +67,27 @@
 
 (_G.screen-watcher:start)
 
+;;; push omniwm workspace changes to sketchybar
+
+;; --reconnect rides out omniwm restarts, so this only restarts the watch when
+;; omniwmctl itself exits.
+(fn watch-omniwm []
+  (set _G.omniwm-watcher
+       (hs.task.new (.. (os.getenv :HOME) :/.nix-profile/bin/omniwmctl)
+                    (fn [rc _ err]
+                      (log:w "omniwmctl watch exited" rc err)
+                      (hs.timer.doAfter 5 watch-omniwm))
+                    [:watch
+                     "workspace-bar,active-workspace"
+                     :--reconnect
+                     :--exec
+                     :/opt/homebrew/bin/sketchybar
+                     :--trigger
+                     :omniwm_workspace_change]))
+  (_G.omniwm-watcher:start))
+
+(watch-omniwm)
+
 ;;; wm
 
 (let [{: init : step} (require :wm)]
